@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/main.dart';
+import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -1462,6 +1463,26 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                       ]),
                     ),
                   );
+                case PopupMenuActions.BELDEX_AI:
+                  return CustomPopupMenuItem<String>(
+                    enabled: true,
+                    value: choice,
+                    height: 35,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Row(children: [
+                        SvgPicture.asset('assets/images/private_http.svg',
+                            color: themeProvider.darkTheme
+                                ?const Color(0xffFFFFFF)
+                                :const Color(0xff282836)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: TextWidget(text:choice,
+                              style: theme.textTheme.bodySmall),
+                        ),
+                      ]),
+                    ),
+                  );
                 case PopupMenuActions.DOWNLOADS:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
@@ -1778,6 +1799,9 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
       case PopupMenuActions.WEB_ARCHIVES:
         showWebArchives(themeProvider,vpnStatusProvider);
         break;
+      case PopupMenuActions.BELDEX_AI:
+        goToBeldexAIPage();
+        break;
       case PopupMenuActions.FIND_ON_PAGE:
       if(!vpnStatusProvider.canShowHomeScreen){
         var isFindInteractionEnabled =
@@ -1836,6 +1860,11 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
         break;
     }
   }
+
+  void goToBeldexAIPage(){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>BeldexAIPage()));
+  }
+
 
   void navigateToBeldexNetwork(InAppWebViewController? webViewController)async{
       Navigator.push(
