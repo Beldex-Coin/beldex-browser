@@ -10,6 +10,7 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
@@ -201,7 +202,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
     getCurrentAppTheme();
     Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
      loadSwitchState(context);
-    checkAppUpdate(context);
+   // checkAppUpdate(context);
    
   }
 
@@ -214,8 +215,9 @@ Future<void> checkAppUpdate(context) async {
       });
       updateFunction();
     }).catchError((e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+       showMessage(e.toString());
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text(e.toString())));
     });
   }
 
