@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:beldex_browser/constants_key.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,10 +43,10 @@ if(extractedContent != null && extractedContent.isNotEmpty){
 
       // Step 3: Send content to OpenAI for summarization
       final openAiResponse = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
+        Uri.parse(APIClass.API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $apiKey',
+          'Authorization': 'Bearer ${APIClass.API_KEY}',
         },
         body: jsonEncode({
           'model': 'gpt-3.5-turbo',
