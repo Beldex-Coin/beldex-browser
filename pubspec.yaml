@@ -104,6 +104,10 @@ dependencies:
   
   installed_apps: ^1.5.1
 
+
+  velocity_x: ^4.2.1
+  
+
  
 dev_dependencies:
   flutter_test:

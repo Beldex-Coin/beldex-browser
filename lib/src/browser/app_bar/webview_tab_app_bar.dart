@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
+import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -1862,7 +1863,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
   }
 
   void goToBeldexAIPage(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>BeldexAIPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen()));
   }
 
 
