@@ -29,12 +29,12 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
 
 
 
-    String? extractedContent = await webViewModel.webViewController!.evaluateJavascript(
+    String? extractedContent = await webViewModel.webViewController?.evaluateJavascript(
                   source: "document.body.innerText");
  print('AI URL here --- $extractedContent');
 if(extractedContent != null && extractedContent.isNotEmpty){
    if(extractedContent.length > 4000){
-    extractedContent = extractedContent.substring(0, 4000);
+   // extractedContent = extractedContent.substring(0, 4000);
    }
 }
 
@@ -49,9 +49,9 @@ if(extractedContent != null && extractedContent.isNotEmpty){
           'Authorization': 'Bearer ${APIClass.API_KEY}',
         },
         body: jsonEncode({
-          'model': 'gpt-3.5-turbo',
+          'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
           'messages': [
-            {'role': 'system', 'content': 'Summarize the following content:'},
+            {'role': 'system', 'content': 'Summarize the following content in bullet dot points:'},
             {'role': 'user', 'content': extractedContent},
           ],
           'max_tokens': 300, // Adjust as needed
