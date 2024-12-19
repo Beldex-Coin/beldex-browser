@@ -108,7 +108,8 @@ dependencies:
   velocity_x: ^4.2.1
   
   flutter_markdown: any
-
+ 
+  typewritertext: ^3.0.9
  
 dev_dependencies:
   flutter_test:
@@ -139,6 +140,7 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/images/flags/
+    - assets/images/ai-icons/
     # - assets/images/Belnet_Text_White.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

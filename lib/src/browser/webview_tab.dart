@@ -309,7 +309,7 @@ bool _isValidUrl(String url) {
             }
           }
         }
-
+        _checkIsUrlSearchResult(url.toString(),vpnStatusProvider);
         if (isCurrentTab(currentWebViewModel)) {
           widget.webViewModel.needsToCompleteInitialLoad = false;
           currentWebViewModel.updateWithValue(widget.webViewModel);
@@ -988,6 +988,27 @@ String dNode = '';
       },
     );
   }
+
+
+// Show FAB when individual sites open
+void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
+    // Regex to match common search engine result page patterns
+    final searchEnginePattern = RegExp(
+      r'(\?|&)q=|search=|(\?|&)query=',
+      caseSensitive: false,
+    );
+    
+    setState(() {
+      vpnStatusProvider.updateFAB(!searchEnginePattern.hasMatch(url));
+     // showFAB = !searchEnginePattern.hasMatch(url);
+    });
+  }
+
+
+
+
+
+
 
 String getDownloadFile(String name){
  

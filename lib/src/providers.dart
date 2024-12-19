@@ -157,7 +157,16 @@ void updateThirdpartyCookies(bool value){
 
 
 
+//Show FAB for summaise 
 
+bool _showFAB = false;
+
+bool get showFAB => _showFAB;
+
+void updateFAB(bool value){
+  _showFAB = value;
+  notifyListeners();
+}
 
 
 

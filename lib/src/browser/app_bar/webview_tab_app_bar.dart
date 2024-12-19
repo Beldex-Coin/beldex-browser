@@ -1472,7 +1472,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Row(children: [
-                        SvgPicture.asset('assets/images/private_http.svg',
+                        SvgPicture.asset('assets/images/ai-icons/Group-1.svg',
                             color: themeProvider.darkTheme
                                 ?const Color(0xffFFFFFF)
                                 :const Color(0xff282836)),
@@ -1863,7 +1863,13 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
   }
 
   void goToBeldexAIPage(){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatScreen()));
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+          return BeldexAiScreen();
+     });
+    //Navigator.push(context, MaterialPageRoute(builder: (context)=>BeldexAiScreen()));
   }
 
 
