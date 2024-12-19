@@ -1,6 +1,7 @@
 import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
@@ -17,6 +18,7 @@ import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:upgrader/upgrader.dart';
@@ -396,25 +398,41 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
 
           // return browserModel.webViewTabs.isEmpty == true ? await _showDownloadConfirmationDialog(context) ?? false : false;  //browserModel.webViewTabs.isEmpty;
         },
-        child: Listener(
-          // onPointerUp: (_) {
-          //   FocusScopeNode currentFocus = FocusScope.of(context);
-          //   if (!currentFocus.hasPrimaryFocus &&
-          //       currentFocus.focusedChild != null) {
-          //     currentFocus.focusedChild!.unfocus();
-          //   }
-          // },
-          child: UpgradeAlert(
-            showIgnore: false,
-          showLater: false,
-            upgrader: Upgrader(
-              debugLogging: true
-            ),
-            child: Scaffold(
-                // backgroundColor: Color(0xff171720),
-                appBar: const BrowserAppBar(),
-                body: _buildWebViewTabsContent()),
+        child: UpgradeAlert(
+          showIgnore: false,
+        showLater: false,
+          upgrader: Upgrader(
+            debugLogging: true
           ),
+          child: Scaffold(
+              // backgroundColor: Color(0xff171720),
+              appBar: const BrowserAppBar(),
+              body: _buildWebViewTabsContent(),
+              floatingActionButton: vpnStatusProvider.showFAB ? FloatingActionButton(
+                onPressed: (){
+                   showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+          return SummariseUrlResult();
+     });
+              },
+              backgroundColor: Colors.transparent,
+              child: ClipOval(
+                child: Image.asset('assets/images/ai-icons/Ai-Button.png'),
+              )
+              // Container(
+              //   height: 50,
+              //   width: 50,
+              //   decoration: BoxDecoration(
+              //     color: Colors.green,
+              //     shape: BoxShape.circle
+              //   ),
+              // )
+
+              ): Container(),
+              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+              ),
         ));
   }
 
