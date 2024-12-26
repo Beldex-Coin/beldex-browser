@@ -318,9 +318,10 @@ void closeTabListPage(){
 
   Widget _buildWebViewTabs() {
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+          var browserModel = Provider.of<BrowserModel>(context, listen: false);
     return WillPopScope(
         onWillPop: () async {
-          var browserModel = Provider.of<BrowserModel>(context, listen: false);
+     
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
              // vpnStatusProvider.updateCanShowHomeScreen(false);
@@ -331,7 +332,9 @@ void closeTabListPage(){
          return false;
         }
 
-
+      if(vpnStatusProvider.showFAB){
+        vpnStatusProvider.updateFAB(false);
+      }
 
 if (vpnStatusProvider.canShowHomeScreen == true) {
             bool? result = await _showDownloadConfirmationDialog(context);
@@ -405,10 +408,11 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
             debugLogging: true
           ),
           child: Scaffold(
+            resizeToAvoidBottomInset: true,
               // backgroundColor: Color(0xff171720),
               appBar: const BrowserAppBar(),
               body: _buildWebViewTabsContent(),
-              floatingActionButton: vpnStatusProvider.showFAB ? FloatingActionButton(
+              floatingActionButton: vpnStatusProvider.showFAB && browserModel.webViewTabs.isNotEmpty  ? FloatingActionButton(
                 onPressed: (){
                    showModalBottomSheet(
       context: context,

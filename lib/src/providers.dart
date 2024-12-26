@@ -171,8 +171,16 @@ void updateFAB(bool value){
 
 
 
+// AI response 
 
+String _aiResponse = 'loading';
 
+String get aiResponse => _aiResponse;
+
+void updateAIResponse(String aiText)async{
+    _aiResponse = aiText;
+    notifyListeners();
+}
 
 
 

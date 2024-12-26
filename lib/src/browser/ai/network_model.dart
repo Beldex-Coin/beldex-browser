@@ -28,15 +28,15 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
     //   }
 
 
-
-    String? extractedContent = await webViewModel.webViewController?.evaluateJavascript(
-                  source: "document.body.innerText");
- print('AI URL here --- $extractedContent');
-if(extractedContent != null && extractedContent.isNotEmpty){
-   if(extractedContent.length > 4000){
-   // extractedContent = extractedContent.substring(0, 4000);
-   }
-}
+        
+    // String? extractedContent = await webViewModel.webViewController?.evaluateJavascript(
+    //               source: "document.body.innerText");
+//  print('AI URL here --- $extractedContent');
+// if(extractedContent != null && extractedContent.isNotEmpty){
+//    if(extractedContent.length > 4000){
+//    // extractedContent = extractedContent.substring(0, 4000);
+//    }
+// }
 
 
 
@@ -51,10 +51,11 @@ if(extractedContent != null && extractedContent.isNotEmpty){
         body: jsonEncode({
           'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
           'messages': [
-            {'role': 'system', 'content': 'Summarize the following content in bullet dot points:'},
-            {'role': 'user', 'content': extractedContent},
+            {'role': 'system', 'content': 'Summarize the following webpage in bullet dot points:'},
+            {'role': 'user', 'content': '${webViewModel.url} summarise this webpage' //extractedContent  
+            },
           ],
-          'max_tokens': 300, // Adjust as needed
+          'max_tokens': 4096, // Adjust as needed
         }),
       );
 
@@ -95,22 +96,22 @@ if(extractedContent != null && extractedContent.isNotEmpty){
 
 
   Future<String> sendMessage(String message) async {
-    const String apiUrl = 'https://api.openai.com/v1/chat/completions';
+   
 
     try {
       final response = await http.post(
-        Uri.parse(apiUrl),
+        Uri.parse(APIClass.API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer $apiKey',
+          'Authorization': 'Bearer ${APIClass.API_KEY}',
         },
         body: jsonEncode({
-          'model': 'gpt-3.5-turbo', // Or 'gpt-4' if you have access
+          'model': 'gpt-4o-mini', // Or 'gpt-4' if you have access
           'messages': [
             {'role': 'system', 'content': 'You are a helpful assistant.'},
             {'role': 'user', 'content': message},
           ],
-          'max_tokens': 200,
+          'max_tokens': 4096,
           'temperature': 0.7,
         }),
       );

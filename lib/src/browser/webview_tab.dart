@@ -621,6 +621,10 @@ bool _isValidUrl(String url) {
         }
 
 
+
+   vpnStatusProvider.updateFAB(false);
+
+
 // if(error.description == 'net::ERR_NAME_NOT_RESOLVED')
 //  _showBottomSheet(context,themeProvider);
 

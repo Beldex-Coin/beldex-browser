@@ -456,6 +456,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                        ?  GestureDetector(
                         onTap: ()async{
                           vpnStatusProvider.updateCanShowHomeScreen(true);
+                          vpnStatusProvider.updateFAB(false);
                   //            await webViewController?.evaluateJavascript(
                   // source: "document.activeElement.blur();");
                         if (await webViewController?.getSelectedText() != null) {
@@ -1867,7 +1868,13 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
       context: context,
       isScrollControlled: true,
      builder: (context){
-          return BeldexAiScreen();
+
+     return DraggableAISheet();
+
+
+
+
+          //return BeldexAiScreen();
      });
     //Navigator.push(context, MaterialPageRoute(builder: (context)=>BeldexAiScreen()));
   }

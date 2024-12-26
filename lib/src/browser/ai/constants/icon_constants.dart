@@ -15,5 +15,6 @@ class IconConstants{
   static const String bubbleLoaderWhite = "assets/images/ai-icons/bubble_white_theme.json";
   static const String copyIconDark = "assets/images/ai-icons/Copy_dark.svg";
   static const String copyIconWhite = "assets/images/ai-icons/Copy 1-1.svg";
-
+  static const String beldexAILogoWhiteColor = 'assets/images/ai-icons/beldex_ai_white.svg';
+  static const String chat = "Chat";
 }
