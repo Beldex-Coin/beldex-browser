@@ -622,7 +622,7 @@ bool _isValidUrl(String url) {
 
 
 
-   vpnStatusProvider.updateFAB(false);
+    vpnStatusProvider.updateFAB(false);
 
 
 // if(error.description == 'net::ERR_NAME_NOT_RESOLVED')
@@ -996,7 +996,8 @@ String dNode = '';
 
 // Show FAB when individual sites open
 void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
-    // Regex to match common search engine result page patterns
+  if(url.startsWith('http') || url.startsWith('https')){
+      // Regex to match common search engine result page patterns
     final searchEnginePattern = RegExp(
       r'(\?|&)q=|search=|(\?|&)query=',
       caseSensitive: false,
@@ -1004,8 +1005,13 @@ void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
     
     setState(() {
       vpnStatusProvider.updateFAB(!searchEnginePattern.hasMatch(url));
+
      // showFAB = !searchEnginePattern.hasMatch(url);
     });
+  }else{
+    vpnStatusProvider.updateFAB(false);
+  }
+    
   }
 
 

@@ -17,4 +17,12 @@ class IconConstants{
   static const String copyIconWhite = "assets/images/ai-icons/Copy 1-1.svg";
   static const String beldexAILogoWhiteColor = 'assets/images/ai-icons/beldex_ai_white.svg';
   static const String chat = "Chat";
+  static const String userIcon = 'assets/images/ai-icons/MaleUser1.svg';
+}
+
+
+class ImageConstants {
+  static const String demo = "assets/images/background.jpg";
+  static const String logo = "assets/images/logo.png";
+  static const String defaultWallpaper = "assets/images/default_wallpaper.png";
 }

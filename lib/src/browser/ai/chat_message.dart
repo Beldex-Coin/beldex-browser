@@ -1,5 +1,5 @@
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
-import 'package:beldex_browser/src/browser/ai/string_constants.dart';
+import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';

@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
+import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -139,7 +140,7 @@ void main() async {
   // await Permission.camera.request();
   // await Permission.microphone.request();
   // await Permission.storage.request();
-
+  setUpLocator(); // For AI
   runApp(
     MultiProvider(
       providers: [

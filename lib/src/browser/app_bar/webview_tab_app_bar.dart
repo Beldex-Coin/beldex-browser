@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
+import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -1471,14 +1472,16 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                     value: choice,
                     height: 35,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(children: [
                         SvgPicture.asset('assets/images/ai-icons/Group-1.svg',
                             color: themeProvider.darkTheme
                                 ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
+                                :const Color(0xff282836),
+                                height: 18,
+                                ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(text:choice,
                               style: theme.textTheme.bodySmall),
                         ),
@@ -1863,13 +1866,20 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
     }
   }
 
-  void goToBeldexAIPage(){
+  void goToBeldexAIPage()async{
+    bool showWelcomeMessage = true;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? hasSubmitted = prefs.getBool('hasSubmitted');
+    setState(() {});
+      showWelcomeMessage = !(hasSubmitted ?? false);
+    
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
      builder: (context){
 
-     return DraggableAISheet();
+     return BeldexAIScreen(isWelcomeShown: showWelcomeMessage); //DraggableAISheet();
 
 
 
