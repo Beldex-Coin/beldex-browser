@@ -100,16 +100,23 @@ void _startTypingAnimation() {
         ),
       ),
       child: widget.isLoading == true 
-          ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: LoadingAnimationWidget.waveDots(
-                color: ColorConstants.white,
-                size: 15,
-              ),
+          ?  md.Markdown(
+            data:textChars, //widget.message.text,
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            styleSheet: md.MarkdownStyleSheet.fromTheme(
+              Theme.of(context).copyWith(
+              textTheme: TextTheme(bodyMedium: TextStyle(color: ColorConstants.white,
+                fontSize: 14,
+                //fontWeight: FontWeight.w400,
+                )),
+            ),
+            )
+           ,
             )
           : 
           md.Markdown(
-            data:textChars, //widget.message.text,
+            data:widget.message.text,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             styleSheet: md.MarkdownStyleSheet.fromTheme(

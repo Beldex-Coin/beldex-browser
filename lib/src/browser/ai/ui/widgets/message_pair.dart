@@ -155,7 +155,7 @@ bool containsUrl(String text) {
                  modelMessage.text.isNotEmpty || modelMessage.image != null
                  ? 
                 MessageBody(
-                    isLoading: false,
+                    isLoading: true,
                     message: modelMessage,
                     topLeft: 20,
                     topRight: 20,
