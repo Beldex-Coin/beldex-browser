@@ -1,0 +1,3 @@
+FROM llama3.2:1b
+
+PARAMETER num_ctx 38000

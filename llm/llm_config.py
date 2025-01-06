@@ -6,7 +6,7 @@ LLM_TYPE = "ollama"  # Options: 'ollama', 'openai', 'anthropic'
 LLM_CONFIG_OLLAMA = {
     "llm_type": "ollama",
     "base_url": "http://localhost:11434",  # default Ollama server URL
-    "model_name": "custom-phi3-32k-Q4_K_M",  # Replace with your Ollama model name
+    "model_name": "Beldex-llama3.2:1b",  # Replace with your Ollama model name
     "temperature": 0.7,
     "top_p": 0.9,
     "n_ctx": 55000,
