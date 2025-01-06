@@ -14,7 +14,7 @@ class MessageBody extends StatefulWidget {
     required this.topLeft,
     required this.topRight,
     required this.bottomLeft,
-    required this.bottomRight,
+    required this.bottomRight, required this.canAnimate,
   });
 
   final bool isLoading;
@@ -24,6 +24,8 @@ class MessageBody extends StatefulWidget {
   final double bottomLeft;
   final double bottomRight;
 
+  final bool canAnimate;
+
   @override
   State<MessageBody> createState() => _MessageBodyState();
 }
@@ -32,7 +34,7 @@ class _MessageBodyState extends State<MessageBody> {
  String text = '';
  String textChars = "";
   Timer? typingTimer;
-
+bool canStop = false;
 
 @override
   void initState() {
@@ -50,18 +52,20 @@ void _parseResponse(String response) {
     // Extract title (assume the first non-empty line is the title)
     text = lines.join("\n");
        // lines.firstWhere((line) => line.trim().isNotEmpty, orElse: () => "");
+       if(widget.canAnimate)
     _startTypingAnimation();
   }
 
 void _startTypingAnimation() {
     int titleIndex = 0;
-
+  
     textChars = "";
-
+  
     typingTimer?.cancel();
-
+  
     typingTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-      // Type the title character by character
+      if(canStop == false){
+         // Type the title character by character
       if (titleIndex < text.length) {
         setState(() {
           textChars += text[titleIndex];
@@ -71,7 +75,12 @@ void _startTypingAnimation() {
        else {
         // Stop the timer once all text is typed
         timer.cancel();
+        setState(() {
+          canStop= true;
+        });
       }
+      }
+     
     });
   }
 

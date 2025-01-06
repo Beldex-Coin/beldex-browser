@@ -40,7 +40,7 @@ class MessageContent extends StatelessWidget {
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 20,
-                        bottomRight: 0,
+                        bottomRight: 0, canAnimate: false,
                       ),
                       const SizedBox(
                         height: 5,
@@ -67,13 +67,15 @@ class MessageContent extends StatelessWidget {
                     ],
                   )
                 : isUser
-                    ? MessageBody(
+                    ? 
+                    MessageBody(
                         isLoading: isLoading,
                         message: message,
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 20,
-                        bottomRight: 0,
+                        bottomRight: 0, canAnimate: false,
+
                       )
                     : MessageBody(
                         isLoading: isLoading,
@@ -81,7 +83,7 @@ class MessageContent extends StatelessWidget {
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 0,
-                        bottomRight: 20,
+                        bottomRight: 20, canAnimate: false,
                       ),
           ),
         ],

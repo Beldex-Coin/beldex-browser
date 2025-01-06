@@ -4,6 +4,8 @@ import 'package:beldex_browser/src/browser/ai/chat_message.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
+import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_preference.dart';
@@ -14,6 +16,8 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
+
+import 'package:flutter_markdown/flutter_markdown.dart' as md;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -252,7 +256,7 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
   List<String> bullets = [];
   final ChatGPTService _chatGPTService = ChatGPTService(apiKey: 'API_KEY');
   bool _isLoading = true;
-
+  ChatViewModel? model;
   String displayedTitle = "";
   String displayedParagraph = "";
   List<String> displayedBullets = [];
@@ -303,243 +307,307 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
 
     setState(() {});
 
-    _startTypingAnimation();
+    //_startTypingAnimation();
   }
 
-  void _startTypingAnimation() {
-    int titleIndex = 0;
-    int paragraphIndex = 0;
-    int bulletIndex = 0;
-    int bulletCharIndex = 0;
+  // void _startTypingAnimation() {
+  //   int titleIndex = 0;
+  //   int paragraphIndex = 0;
+  //   int bulletIndex = 0;
+  //   int bulletCharIndex = 0;
 
-    displayedTitle = "";
-    displayedParagraph = "";
-    displayedBullets = [];
+  //   displayedTitle = "";
+  //   displayedParagraph = "";
+  //   displayedBullets = [];
 
-    typingTimer?.cancel();
+  //   typingTimer?.cancel();
 
-    typingTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-      // Type the title character by character
-      if (titleIndex < title.length) {
-        setState(() {
-          displayedTitle += title[titleIndex];
-          titleIndex++;
-        });
-      }
-      // Type the paragraph character by character
-      else if (paragraphIndex < paragraph.length) {
-        setState(() {
-          displayedParagraph += paragraph[paragraphIndex];
-          paragraphIndex++;
-        });
-      }
-      // Type the bullets one by one
-      else if (bulletIndex < bullets.length) {
-        if (displayedBullets.length <= bulletIndex) {
-          displayedBullets.add(""); // Initialize the current bullet point
-        }
+  //   typingTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+  //     // Type the title character by character
+  //     if (titleIndex < title.length) {
+  //       setState(() {
+  //         displayedTitle += title[titleIndex];
+  //         titleIndex++;
+  //       });
+  //     }
+  //     // Type the paragraph character by character
+  //     else if (paragraphIndex < paragraph.length) {
+  //       setState(() {
+  //         displayedParagraph += paragraph[paragraphIndex];
+  //         paragraphIndex++;
+  //       });
+  //     }
+  //     // Type the bullets one by one
+  //     else if (bulletIndex < bullets.length) {
+  //       if (displayedBullets.length <= bulletIndex) {
+  //         displayedBullets.add(""); // Initialize the current bullet point
+  //       }
 
-        if (bulletCharIndex < bullets[bulletIndex].length) {
-          setState(() {
-            displayedBullets[bulletIndex] +=
-                bullets[bulletIndex][bulletCharIndex];
-            bulletCharIndex++;
-          });
-        } else {
-          bulletIndex++;
-          bulletCharIndex = 0;
-        }
-      } else {
-        // Stop the timer once all text is typed
-        timer.cancel();
-      }
-    });
-  }
+  //       if (bulletCharIndex < bullets[bulletIndex].length) {
+  //         setState(() {
+  //           displayedBullets[bulletIndex] +=
+  //               bullets[bulletIndex][bulletCharIndex];
+  //           bulletCharIndex++;
+  //         });
+  //       } else {
+  //         bulletIndex++;
+  //         bulletCharIndex = 0;
+  //       }
+  //     } else {
+  //       // Stop the timer once all text is typed
+  //       timer.cancel();
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
-    typingTimer?.cancel();
+   // typingTimer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
-    return DraggableScrollableSheet(
-      initialChildSize: 0.95, // Initial size of the sheet
-      minChildSize: 0.3, // Minimum size of the sheet
-      maxChildSize: 1.0, // Maximum size of the sheet
-      builder: (context, scrollController) {
-        return Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide(color: Color(0xff42425F), width: 0.7)),
-                color: Color(0xff45454E), // Background color of the sheet
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            IconConstants.beldexAILogoSvg,
-                            width: 20,
-                            height: 20,
-                          ),
+    final webViewModel = Provider.of<WebViewModel>(context);
+    return BaseView<ChatViewModel>(
+      onModelReady: (model){
+        this.model = model;
+       // model.getSummariseForFloatingActionButton(webViewModel);
+        //print('MODEL DATA FROM SUMMARISE ${model.sumResponse}');
+      },
+       builder: (context, model, child) {
+           return SafeArea(
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.95, // Initial size of the sheet
+          minChildSize: 0.3, // Minimum size of the sheet
+          maxChildSize: 0.95, // Maximum size of the sheet
+          builder: (context, scrollController) {
+            return Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                        top: BorderSide(color: Color(0xff42425F), width: 0.7)),
+                    color: Color(0xff45454E), // Background color of the sheet
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                IconConstants.beldexAILogoSvg,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                            Text(
+                              StringConstants.beldexAI,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                //fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () => Navigator.pop(context),
+                              child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 9.0, horizontal: 15.0),
+                                  margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff2C2C3B),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    children: [
+                                      Text(StringConstants.hideSummarise),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8.0),
+                                        child: SvgPicture.asset(
+                                            IconConstants.summariseIcon),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                          ],
                         ),
-                        Text(
-                          StringConstants.beldexAI,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            //fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 9.0, horizontal: 15.0),
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  color: Color(0xff2C2C3B),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Row(
-                                children: [
-                                  Text(StringConstants.hideSummarise),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: SvgPicture.asset(
-                                        IconConstants.summariseIcon),
+                      ),
+                      Divider(
+                        color: Color(0xff9B9B9B),
+                        height: 0.7,
+                      ),
+                      Expanded(
+                        child: RawScrollbar(
+                          controller: scrollController,
+                          thumbVisibility:
+                              true, //!_isLoading, //?? false, //: true,
+      
+                          thumbColor: Color(0xff45454E),
+                          trackColor: Color(0xff2C2C3B),
+                          trackVisibility: true,
+                          crossAxisMargin: 0.9,
+                          //thickness: 3.0,
+                          mainAxisMargin: 0.8,
+                          // minThumbLength: 20,
+                          padding: EdgeInsets.all(8.0),
+                          radius: Radius.circular(5),
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: _isLoading
+                                ? Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Lottie.asset(
+                                      IconConstants.bubbleLoaderDark,
+                                      //fit: BoxFit.fitWidth
+                                    ),
                                   )
-                                ],
+                                : Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      children: [
+                                        if (title.isNotEmpty)
+                                        md.Markdown(
+                                            data:title.startsWith('-')
+                                                ? title.substring(1).trim()
+                                                : '',
+                                            // title,
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.zero,
+                                            styleSheet:
+                                                md.MarkdownStyleSheet.fromTheme(
+                                              Theme.of(context).copyWith(
+                                                textTheme: TextTheme(
+                                                    bodyMedium: TextStyle(
+                                                  fontSize: 24,
+                                              fontWeight: FontWeight.bold
+                                                )),
+                                              ),
+                                            ),
+                                          ),
+                                          // Text(
+                                          //   title.startsWith('-')
+                                          //       ? title.substring(1).trim()
+                                          //       : '',
+                                          //   style: TextStyle(
+                                          //     fontSize: 24,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          // ),
+                                        // if (paragraph.isNotEmpty) ...[
+                                        //   SizedBox(height: 16),
+                                        //   md.Markdown(
+                                        //     data: paragraph,
+                                        //     shrinkWrap: true,
+                                        //     padding: EdgeInsets.zero,
+                                        //     styleSheet:
+                                        //         md.MarkdownStyleSheet.fromTheme(
+                                        //       Theme.of(context).copyWith(
+                                        //         textTheme: TextTheme(
+                                        //             bodyMedium: TextStyle(
+                                        //           //color: ColorConstants.white,
+                                        //           fontSize: 16,
+                                        //           //fontWeight: FontWeight.w400,
+                                        //         )),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        //   // Text(
+                                        //   //   paragraph.startsWith('-')
+                                        //   //       ? paragraph
+                                        //   //           .substring(1)
+                                        //   //           .trim()
+                                        //   //       : '',
+                                        //   //   style: TextStyle(fontSize: 16),
+                                        //   // ),
+                                        // ],
+                                        if (bullets.isNotEmpty) ...[
+                                          SizedBox(height: 16),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: bullets.map((bullet) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8.0),
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text("• ",
+                                                        style: TextStyle(
+                                                            fontSize: 16)),
+                                                    Expanded(
+                                                      child: md.Markdown(
+                                                        data: bullet,
+                                                        shrinkWrap: true,
+                                                        padding: EdgeInsets.zero,
+                                                        styleSheet:
+                                                            md.MarkdownStyleSheet
+                                                                .fromTheme(
+                                                          Theme.of(context)
+                                                              .copyWith(
+                                                            textTheme: TextTheme(
+                                                                bodyMedium:
+                                                                    TextStyle(
+                                                              //color: ColorConstants.white,
+                                                              fontSize: 16,
+                                                              //fontWeight: FontWeight.w400,
+                                                            )),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                !_isLoading
+                    ? Positioned(
+                        bottom: 30,
+                        right: 20,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                              height: 50,
+                              width: 50,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: const Color(0xff00B134),
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              child: SvgPicture.asset(
+                                IconConstants.copyIconDark,
+                                color: Colors.white,
                               )),
                         ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: Color(0xff9B9B9B),
-                    height: 0.7,
-                  ),
-                  Expanded(
-                    child: RawScrollbar(
-                      controller: scrollController,
-                      thumbVisibility: !_isLoading ?? false, //: true,
-                      thumbColor: Color(0xff45454E),
-                      trackColor: Color(0xff2C2C3B),
-                      trackVisibility: true,
-                      crossAxisMargin: 0.9,
-                      //thickness: 3.0,
-                      mainAxisMargin: 0.8,
-                      // minThumbLength: 20,
-                      padding: EdgeInsets.all(8.0),
-                      radius: Radius.circular(5),
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: _isLoading
-                            ? Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Lottie.asset(
-                                  IconConstants.bubbleLoaderDark,
-                                  //fit: BoxFit.fitWidth
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
-                                  children: [
-                                    if (displayedTitle.isNotEmpty)
-                                      Text(
-                                        displayedTitle.startsWith('-')
-                                            ? displayedTitle.substring(1).trim()
-                                            : '',
-                                        style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    if (displayedParagraph.isNotEmpty) ...[
-                                      SizedBox(height: 16),
-                                      Text(
-                                        displayedParagraph.startsWith('-')
-                                            ? displayedParagraph
-                                                .substring(1)
-                                                .trim()
-                                            : '',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                    ],
-                                    if (displayedBullets.isNotEmpty) ...[
-                                      SizedBox(height: 16),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children:
-                                            displayedBullets.map((bullet) {
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text("• ",
-                                                    style: TextStyle(
-                                                        fontSize: 16)),
-                                                Expanded(
-                                                  child: Text(
-                                                    bullet,
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            !_isLoading
-                ? Positioned(
-                    bottom: 30,
-                    right: 20,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                          height: 50,
-                          width: 50,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: const Color(0xff00B134),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: SvgPicture.asset(
-                            IconConstants.copyIconDark,
-                            color: Colors.white,
-                          )),
-                    ),
-                  )
-                : Container(),
-          ],
-        );
-      },
+                      )
+                    : Container(),
+              ],
+            );
+          },
+        ),
+      );
+
+       }
+      
+       
     );
   }
 }

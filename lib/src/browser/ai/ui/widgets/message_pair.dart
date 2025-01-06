@@ -17,12 +17,15 @@ class MessagePair extends StatelessWidget {
     super.key,
     required this.userMessage,
     required this.modelMessage,
-    required this.model,
+    required this.model, required this.currentResponseIndex, required this.lastResponseIndex,
+    
   });
 
   final ChatModel userMessage;
   final ChatModel modelMessage;
   final ChatViewModel model;
+  final int currentResponseIndex;
+  final int lastResponseIndex;
 
 bool containsUrl(String text) {
   // Regular expression for detecting URLs
@@ -111,15 +114,13 @@ bool containsUrl(String text) {
                   )
                 ],
                ):
-               
-               
                  MessageBody(
               isLoading: false,
               message: userMessage,
               topLeft: 20,
               topRight: 20,
               bottomLeft: 20,
-              bottomRight: 20,
+              bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
             )
                ],
              ),
@@ -160,7 +161,7 @@ bool containsUrl(String text) {
                     topLeft: 20,
                     topRight: 20,
                     bottomLeft: 20,
-                    bottomRight: 20,
+                    bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
                   )
                 : 
                 Container(

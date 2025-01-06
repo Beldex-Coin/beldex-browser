@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:beldex_browser/constants_key.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
+import 'package:beldex_browser/src/browser/models/webview_model.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -107,5 +108,63 @@ Future<String> sendTextForSummarise(String text) async {
 
    
   }
+
+
+
+// Summarise for floating action button
+
+Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
+  try {
+      // Step 3: Send content to OpenAI for summarization
+      final openAiResponse = await http.post(
+        Uri.parse(APIClass.API_URL),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${APIClass.API_KEY}',
+        },
+        body: jsonEncode({
+          'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
+          'messages': [
+            {'role': 'system', 'content': 'Summarize the following webpage in bullet dot points:'},
+            {'role': 'user', 'content': '${webViewModel.url} summarise this webpage' //extractedContent  
+            },
+          ],
+          'max_tokens': 4096, // Adjust as needed
+        }),
+      );
+
+      if (openAiResponse.statusCode == 200) {
+        final responseBody = json.decode(openAiResponse.body);
+        final choices = responseBody['choices'] as List;
+        if (choices.isNotEmpty) {
+          return choices[0]['message']['content'];
+        } else {
+          return 'No response from ChatGPT.';
+        }
+      } else {
+        // Parse and return error from OpenAI
+        final responseBody = json.decode(openAiResponse.body);
+        if (responseBody.containsKey('error')) {
+          return 'Error: ${responseBody['error']['message']}';
+        } else {
+          return 'Error: ${openAiResponse.statusCode} - ${openAiResponse.reasonPhrase}';
+        }
+      }
+
+    // } else {
+    //   throw Exception('Failed to fetch URL content.');
+    // }
+  } catch (e) {
+    return 'Error: ${e.toString()}';
+  }
+}
+
+
+
+
+
+
+
+
 
 }

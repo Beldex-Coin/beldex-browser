@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 class ChatViewModel extends BaseModel {
   final OpenAIRepository apiRepository = OpenAIRepository();
   final TextEditingController messageController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
+   ScrollController scrollController = ScrollController();
   late List<ChatModel> _messages;
+  late String _sumResponse;
+
   File? _imageFile;
   bool? _showEmoji;
   int? _modelResponseIndex;
@@ -57,6 +59,18 @@ bool get canshowWelcome => _canshowWelcome;
     updateUI();
   }
 
+
+ // Response for summarise in floating action button
+
+ String get sumResponse => _sumResponse;
+
+ set sumResponse(String value){
+  _sumResponse = value;
+  updateUI();
+ }
+
+
+
   File? get imageFile => _imageFile;
 
   set imageFile(File? value) {
@@ -80,7 +94,18 @@ bool get canshowWelcome => _canshowWelcome;
 
   ChatViewModel() {
     _messages = [];
+    _sumResponse = '';
   }
+
+
+// Summarise in floating action button
+Future<void> getSummariseForFloatingActionButton(WebViewModel webViewModel)async{
+   String response = await apiRepository.fetchAndSummarize('', webViewModel);
+   sumResponse = response;
+   updateUI();
+}
+
+
 
 
 // For summarise 
