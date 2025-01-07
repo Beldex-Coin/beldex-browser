@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
+import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
@@ -79,6 +81,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late List<ContextMenuButtonItem> buttonItems = [];
   late EditableTextState editableState = EditableTextState();
   late int duration;
+  String canShowSearchAI = '';
   @override
   void initState() {
     super.initState();
@@ -278,6 +281,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   flex: 4,
                   child: TextField(
+                    
                     onSubmitted: (value) {
                       var url = WebUri(formatUrl(value.trim()));
                       if (!url.scheme.startsWith("http") &&
@@ -448,9 +452,20 @@ class _SearchScreenState extends State<SearchScreen> {
                       );
                     },
                     onChanged: (value) {
+                       setState(() {
+                          canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+                        });
                       if (value.isEmpty) {
                         editableState.hideToolbar(true);
+                       
                       }
+                    },
+                    onEditingComplete: (){
+                      setState(() {
+                                                  print('BELDEX AI 2---------> $canShowSearchAI');
+
+                      });
                     },
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(
@@ -636,6 +651,37 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                 ),
+
+              canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  Container(
+                  height: 60,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+                  padding: EdgeInsets.symmetric(horizontal:15,vertical: 10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff42425F)),
+                      borderRadius: BorderRadius.circular(8)),
+
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(IconConstants.beldexAILogoSvg,
+                          height: 25,width: 25,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(canShowSearchAI),
+                                Text('Ask Beldex AI',style: TextStyle(color: Color(0xff00B134),fontSize: 10),)
+                              ],
+                            ),
+                          ),
+                          Spacer(),
+                         SvgPicture.asset('assets/images/ai-icons/arrow.svg')
+                        
+                        ],
+                      ),
+                ):SizedBox(),
         ],
       ),
     );
