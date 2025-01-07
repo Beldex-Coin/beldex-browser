@@ -158,6 +158,7 @@ void main() async {
                 SelectedItemsProvider()..initializeSelectedItems()),
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
+        ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
         ChangeNotifierProxyProvider<WebViewModel, BrowserModel>(
           update: (context, webViewModel, browserModel) {
             browserModel!.setCurrentWebViewModel(webViewModel);

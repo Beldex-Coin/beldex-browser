@@ -184,6 +184,7 @@ bool _isValidUrl(String url) {
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
      final themeProvider = Provider.of<DarkThemeProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+        final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -279,7 +280,7 @@ bool _isValidUrl(String url) {
         widget.webViewModel.url = url;
         widget.webViewModel.favicon = null;
         widget.webViewModel.loaded = true;
-
+        urlSummaryProvider.updateUrl(url.toString()); // for summarise with floating button
         var sslCertificateFuture = _webViewController?.getCertificate();
         var titleFuture = _webViewController?.getTitle();
         var faviconsFuture = _webViewController?.getFavicons();

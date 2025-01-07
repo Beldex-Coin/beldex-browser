@@ -8,9 +8,11 @@ import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_preference.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -266,14 +268,19 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     callSummaryApI(context);
   }
 
   void callSummaryApI(BuildContext context) async {
+     
+       final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+      final webViewModel = Provider.of<WebViewModel>(context);
+      urlSummaryProvider.fetchSummary(webViewModel);
     try {
-      final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-      final response =
-          await _chatGPTService.fetchAndSummarize('', webViewModel);
+      final response = urlSummaryProvider.summaryText;
+      print('BELDEX AI API CALL RESPONSE --- $response');
+         // await _chatGPTService.fetchAndSummarize('', webViewModel);
       if (response.isNotEmpty) {
         _parseResponse(response);
       }
@@ -370,13 +377,14 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final webViewModel = Provider.of<WebViewModel>(context);
-    return BaseView<ChatViewModel>(
-      onModelReady: (model){
-        this.model = model;
-       // model.getSummariseForFloatingActionButton(webViewModel);
-        //print('MODEL DATA FROM SUMMARISE ${model.sumResponse}');
-      },
-       builder: (context, model, child) {
+    final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+    // return BaseView<ChatViewModel>(
+    //   onModelReady: (model){
+    //     this.model = model;
+    //    // model.getSummariseForFloatingActionButton(webViewModel);
+    //     //print('MODEL DATA FROM SUMMARISE ${model.sumResponse}');
+    //   },
+    //    builder: (context, model, child) {
            return SafeArea(
         child: DraggableScrollableSheet(
           initialChildSize: 0.95, // Initial size of the sheet
@@ -460,7 +468,7 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                           radius: Radius.circular(5),
                           child: SingleChildScrollView(
                             controller: scrollController,
-                            child: _isLoading
+                            child: urlSummaryProvider.isLoading  //_isLoading
                                 ? Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Lottie.asset(
@@ -579,12 +587,16 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                     ],
                   ),
                 ),
-                !_isLoading
+                !urlSummaryProvider.isLoading //_isLoading
                     ? Positioned(
                         bottom: 30,
                         right: 20,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text:urlSummaryProvider.summaryText));
+                            showMessage('Copied');
+
+                          },
                           child: Container(
                               height: 50,
                               width: 50,
@@ -605,10 +617,10 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
         ),
       );
 
-       }
+    //    }
       
        
-    );
+    // );
   }
 }
 
