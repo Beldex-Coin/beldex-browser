@@ -14,6 +14,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -265,108 +266,120 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
 
   Timer? typingTimer;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
 
+
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     callSummaryApI(context);
-  }
+  });
+}
 
-  void callSummaryApI(BuildContext context) async {
-     
-       final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
-      final webViewModel = Provider.of<WebViewModel>(context);
-      urlSummaryProvider.fetchSummary(webViewModel);
-    try {
+
+
+
+
+
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+
+  //   callSummaryApI(context);
+  // }
+void callSummaryApI(BuildContext context) async {
+  final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context, listen: false);
+  final webViewModel = Provider.of<WebViewModel>(context, listen: false);
+
+  try {
+    await urlSummaryProvider.fetchSummary(webViewModel);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
       print('BELDEX AI API CALL RESPONSE --- $response');
-         // await _chatGPTService.fetchAndSummarize('', webViewModel);
+
       if (response.isNotEmpty) {
         _parseResponse(response);
       }
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    });
+  } catch (e) {
+    print(e);
   }
+}
 
-  void _parseResponse(String response) {
-    // Split response into lines
-    List<String> lines = response.split("\n");
-
-    // Extract title (assume the first non-empty line is the title)
-    title =
-        lines.firstWhere((line) => line.trim().isNotEmpty, orElse: () => "");
-
-    // Extract paragraph (assume the first full sentence block is the paragraph)
-    paragraph = lines
-        .skip(1)
-        .firstWhere((line) => line.trim().isNotEmpty, orElse: () => "");
-
-    // Extract bullet points (assume lines starting with "-", "•", or similar are bullets)
-    bullets = lines
-        .where((line) => line.trim().startsWith(RegExp(r"[-•]")))
-        .map((line) => line.trim().replaceFirst(RegExp(r"[-•]\s*"), ""))
-        .toList();
-
-    setState(() {});
-
-    //_startTypingAnimation();
-  }
-
-  // void _startTypingAnimation() {
-  //   int titleIndex = 0;
-  //   int paragraphIndex = 0;
-  //   int bulletIndex = 0;
-  //   int bulletCharIndex = 0;
-
-  //   displayedTitle = "";
-  //   displayedParagraph = "";
-  //   displayedBullets = [];
-
-  //   typingTimer?.cancel();
-
-  //   typingTimer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-  //     // Type the title character by character
-  //     if (titleIndex < title.length) {
-  //       setState(() {
-  //         displayedTitle += title[titleIndex];
-  //         titleIndex++;
-  //       });
+  // void callSummaryApI(BuildContext context) async {
+     
+  //      final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+  //     final webViewModel = Provider.of<WebViewModel>(context);
+  //     urlSummaryProvider.fetchSummary(webViewModel);
+  //   try {
+  //     final response = urlSummaryProvider.summaryText;
+  //     print('BELDEX AI API CALL RESPONSE --- $response');
+  //        // await _chatGPTService.fetchAndSummarize('', webViewModel);
+  //     if (response.isNotEmpty) {
+        
+  //       _parseResponse(response);
   //     }
-  //     // Type the paragraph character by character
-  //     else if (paragraphIndex < paragraph.length) {
-  //       setState(() {
-  //         displayedParagraph += paragraph[paragraphIndex];
-  //         paragraphIndex++;
-  //       });
-  //     }
-  //     // Type the bullets one by one
-  //     else if (bulletIndex < bullets.length) {
-  //       if (displayedBullets.length <= bulletIndex) {
-  //         displayedBullets.add(""); // Initialize the current bullet point
-  //       }
-
-  //       if (bulletCharIndex < bullets[bulletIndex].length) {
-  //         setState(() {
-  //           displayedBullets[bulletIndex] +=
-  //               bullets[bulletIndex][bulletCharIndex];
-  //           bulletCharIndex++;
-  //         });
-  //       } else {
-  //         bulletIndex++;
-  //         bulletCharIndex = 0;
-  //       }
-  //     } else {
-  //       // Stop the timer once all text is typed
-  //       timer.cancel();
-  //     }
-  //   });
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     // setState(() {
+  //     //   _isLoading = false;
+  //     // });
+  //   }
   // }
 
+
+
+void _parseResponse(String response) {
+  if (response.isEmpty) return;
+
+  // Split response into lines
+  List<String> lines = response.split("\n").map((line) => line.trim()).toList();
+
+  // Extract title (first non-empty line)
+  title = lines.firstWhere((line) => line.isNotEmpty, orElse: () => "");
+
+  // Extract bullet points (skip the first line, which is the title)
+  bullets = lines
+      .skip(1) // Skip the title line
+      .where((line) => line.isNotEmpty) // Ensure the line is not empty
+      .toList();
+
+  print('BELDEX AI API Title --- $title');
+  print('BELDEX AI API Bullets --- $bullets');
+
+  setState(() {});
+}
+
+
+
+  // void _parseResponse(String response) {
+  //   // Split response into lines
+  //   List<String> lines = response.split("\n");
+
+  //   // Extract title (assume the first non-empty line is the title)
+  //   title =
+  //       lines.firstWhere((line) => line.trim().isNotEmpty, orElse: () => "");
+
+  //   // Extract paragraph (assume the first full sentence block is the paragraph)
+  //   paragraph = lines
+  //       .skip(1)
+  //       .firstWhere((line) => line.trim().isNotEmpty, orElse: () => "");
+
+  //   // Extract bullet points (assume lines starting with "-", "•", or similar are bullets)
+  //   bullets = lines
+  //       .where((line) => line.trim().startsWith(RegExp(r"[-•]")))
+  //       .map((line) => line.trim().replaceFirst(RegExp(r"[-•]\s*"), ""))
+  //       .toList();
+
+  //   setState(() {});
+
+  //   //_startTypingAnimation();
+  // }
+
+  
   @override
   void dispose() {
    // typingTimer?.cancel();
@@ -397,7 +410,7 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                   decoration: BoxDecoration(
                     border: Border(
                         top: BorderSide(color: Color(0xff42425F), width: 0.7)),
-                    color: Color(0xff45454E), // Background color of the sheet
+                    color: themeProvider.darkTheme ? Color(0xff45454E) : Color(0xffF3F3F3), // Background color of the sheet
                     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   ),
                   child: Column(
@@ -418,9 +431,10 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                             Text(
                               StringConstants.beldexAI,
                               style: TextStyle(
-                                color: Colors.white,
+                               // color: Colors.white,
+                               fontFamily: 'Poppins',
                                 fontSize: 18,
-                                //fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                             Spacer(),
@@ -431,15 +445,15 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                                       vertical: 9.0, horizontal: 15.0),
                                   margin: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      color: Color(0xff2C2C3B),
+                                      color: themeProvider.darkTheme ? Color(0xff2C2C3B): Color(0xffFDFDFD),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Row(
                                     children: [
-                                      Text(StringConstants.hideSummarise),
+                                      Text(StringConstants.hideSummarise,style: TextStyle(fontFamily: 'Poppins',fontSize: 13),),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: SvgPicture.asset(
-                                            IconConstants.summariseIcon),
+                                            IconConstants.summariseIcon, color: themeProvider.darkTheme ? Colors.white:Colors.black,),
                                       )
                                     ],
                                   )),
@@ -448,7 +462,7 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                         ),
                       ),
                       Divider(
-                        color: Color(0xff9B9B9B),
+                        color: themeProvider.darkTheme ? Color(0xff9B9B9B): Color(0xff9B9B9B),
                         height: 0.7,
                       ),
                       Expanded(
@@ -457,8 +471,8 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                           thumbVisibility:
                               true, //!_isLoading, //?? false, //: true,
       
-                          thumbColor: Color(0xff45454E),
-                          trackColor: Color(0xff2C2C3B),
+                          thumbColor:themeProvider.darkTheme ? Color(0xff45454E) : Color(0xffC5C5C5),
+                          trackColor:themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffFBFBFB),
                           trackVisibility: true,
                           crossAxisMargin: 0.9,
                           //thickness: 3.0,
@@ -471,12 +485,34 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                             child: urlSummaryProvider.isLoading  //_isLoading
                                 ? Padding(
                                     padding: const EdgeInsets.all(15.0),
-                                    child: Lottie.asset(
-                                      IconConstants.bubbleLoaderDark,
-                                      //fit: BoxFit.fitWidth
-                                    ),
+                                    child: 
+                                    LoadingAnimationWidget.waveDots(
+                color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
+                size: 30,
+              ),
                                   )
-                                : Padding(
+                                : title.isNotEmpty && paragraph.isEmpty && bullets.isEmpty ?
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: md.Markdown(
+                                              data:
+                                              title,
+                                              shrinkWrap: true,
+                                              padding: EdgeInsets.zero,
+                                              styleSheet:
+                                                  md.MarkdownStyleSheet.fromTheme(
+                                                Theme.of(context).copyWith(
+                                                  textTheme: TextTheme(
+                                                      bodyMedium: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.normal
+                                                  )),
+                                                ),
+                                              ),
+                                            ),
+                                    )
+                               : Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Column(
                                       children: [
@@ -494,6 +530,7 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                                                 textTheme: TextTheme(
                                                     bodyMedium: TextStyle(
                                                   fontSize: 24,
+                                                  fontFamily: 'Poppins',
                                               fontWeight: FontWeight.bold
                                                 )),
                                               ),
@@ -548,9 +585,9 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text("• ",
-                                                        style: TextStyle(
-                                                            fontSize: 16)),
+                                                    // Text("• ",
+                                                    //     style: TextStyle(
+                                                    //         fontSize: 16)),
                                                     Expanded(
                                                       child: md.Markdown(
                                                         data: bullet,
@@ -1196,7 +1233,7 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
                   StringConstants.welcomeAIContent,
-                  style: TextStyle(color: Color(0xffEBEBEB), fontSize: 14),
+                  style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff222222), fontSize: 14),
                 ),
               )
             ],
