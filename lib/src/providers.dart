@@ -269,6 +269,25 @@ class UrlSummaryProvider with ChangeNotifier {
     }
   }
 
+
+
+  bool _isSummarise = false;
+  bool get isSummarise => _isSummarise;
+
+    void updateSummariser(bool newvalue){
+      _isSummarise = newvalue;
+      notifyListeners();
+    }
+
+
+  bool _canStopAndRegenerate = false;
+  bool get canStopAndRegenerate => _canStopAndRegenerate;
+
+    void updateCanStop(bool newvalue){
+      _canStopAndRegenerate = newvalue;
+      notifyListeners();
+    }
+ 
   // /// Calls OpenAI API to get a summary
   // Future<String> callOpenAiApi(String url) async {
   //   const openAiApiKey = "your_openai_api_key"; // Replace with your API key
