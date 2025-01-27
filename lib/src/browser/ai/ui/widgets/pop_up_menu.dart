@@ -53,3 +53,21 @@ class PopUpWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+class AIChatPopupMenuActions {
+  // ignore: constant_identifier_names
+  static const String COPY_CHAT = "Copy";
+  // ignore: constant_identifier_names
+  static const String SHARE_CHAT = "Share";
+  // ignore: constant_identifier_names
+  static const String DELETE_CHAT = "Delete";
+
+  static const List<String> choices = <String>[
+    COPY_CHAT,
+    SHARE_CHAT,
+    DELETE_CHAT
+   // NEW_INCOGNITO_TAB
+  ];
+}

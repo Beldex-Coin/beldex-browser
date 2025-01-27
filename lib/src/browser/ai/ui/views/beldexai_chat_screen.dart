@@ -5,21 +5,32 @@ import 'package:beldex_browser/src/browser/ai/enums/roles.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/message_pair.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/pop_up_menu.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
+import 'package:beldex_browser/src/browser/custom_popup_menu_item.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
+import 'package:beldex_browser/src/browser/tab_viewer_popup_menu_actions.dart';
+import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:velocity_x/velocity_x.dart';
 
+GlobalKey chatMenukey = GlobalKey();
 // ignore: must_be_immutable
 class BeldexAIScreen extends StatelessWidget {
   final bool isWelcomeShown;
-
-  BeldexAIScreen({super.key, required this.isWelcomeShown});
+  final String searchWord ;
+  BeldexAIScreen({super.key, required this.isWelcomeShown, this.searchWord=''});
 
   ChatViewModel? model;
 
@@ -45,6 +56,7 @@ class BeldexAIScreen extends StatelessWidget {
     } else {
       model.isSummariseAvailable = false;
     }
+   //getWordSearch(model);
   }
 
   Future<void> setWelcomeAIScreen() async {
@@ -52,11 +64,31 @@ class BeldexAIScreen extends StatelessWidget {
     await prefs.setBool('hasSubmitted', true);
   }
 
+
+ setDelayForWordSearch(ChatViewModel model){
+  Future.delayed(Duration(milliseconds: 250),(){
+    getWordSearch(model);
+  });
+ }
+
+
+ getWordSearch(ChatViewModel model){
+  if(searchWord.isNotEmpty || searchWord != ''){
+     //model.getTextFromAskAI(searchWord);
+    model.getTextFromAskBeldexAI(searchWord);
+    model.isSummariseAvailable = false;
+     model.messageController.clear();
+  }
+ }
+
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     var browserModel = Provider.of<BrowserModel>(context);
     final webViewModel = Provider.of<WebViewModel>(context);
+    final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     return BaseView<ChatViewModel>(
       onModelReady: (model) {
         this.model = model;
@@ -64,8 +96,12 @@ class BeldexAIScreen extends StatelessWidget {
         //_checkWelcomeMessageStatus();
         model.canshowWelcome = isWelcomeShown;
         checkSummariseString(webViewModel, model);
+        //getWordSearch(model);
+        setDelayForWordSearch(model);
+        //print('BASE MODEL READY>>>>');
       },
       builder: (context, model, child) {
+       // print('BASE MODEL BUILDER CALLING');
         return SafeArea(
           child: DraggableScrollableSheet(
               initialChildSize: 0.95,
@@ -77,10 +113,11 @@ class BeldexAIScreen extends StatelessWidget {
                   return Container(
                     padding: EdgeInsets.only(
                         bottom: MediaQuery.of(context).viewInsets.bottom),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20)),
-                        color: Color(0xff171720)),
+                        color: themeProvider.darkTheme ? Color(0xff171720) : Color(0xffFFFFFF)
+                        ),
                     child: Stack(
                       children: [
                         Padding(
@@ -131,11 +168,198 @@ class BeldexAIScreen extends StatelessWidget {
                                   Text(
                                     StringConstants.beldexAI,
                                     style: TextStyle(
-                                        color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                       // color: Colors.white,
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Spacer(),
+                                  SizedBox(
+                                    height: 48,
+                                   // color: Colors.yellow,
+                                    child:Icon(Icons.close,color: Colors.transparent,)
+                                  ),
+                                  Visibility(
+                                    visible: model.messages.isNotEmpty,
+                                    child: IconButton(
+                                      onPressed: (){
+                                      model.messages = [];
+                                      checkSummariseString(webViewModel,model);
+                                      model.messageController.clear();
+                                    },
+                                    //color: Colors.green,
+                                      //                                   padding: EdgeInsets.all(2),
+                                      //                                   constraints: BoxConstraints(
+                                      //   minWidth: 20, // Minimum width of the button
+                                      //   minHeight: 20, // Minimum height of the button
+                                      // ),
+                                     icon: SvgPicture.asset('assets/images/ai-icons/Erase _dark.svg',color: themeProvider.darkTheme ? Colors.white : Color(0xff333333))),
+                                  ),
+                                  Visibility(
+                                    visible: model.messages.isNotEmpty,
+                                    child: PopupMenuButton<String>(
+                                            color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+                                                  icon: Icon(Icons.more_horiz,
+                                                      color: themeProvider.darkTheme ? Colors.white : Colors.black),
+                                            onSelected:(value) {
+                                        // if(model.messages.isNotEmpty){
+                                            // Find the index of the last user message
+                                        final userMessageIndex = model.messages.lastIndexWhere((message) => message.role == Roles.user);
+                                        final userMessage = (userMessageIndex != -1) ? model.messages[userMessageIndex] : ChatModel(text: '', role: Roles.user);
+                                    
+                                        // Find the index of the last model message after the user message
+                                        final modelMessageIndex = model.messages.lastIndexWhere((message) {
+                                          return message.role == Roles.model && message.text.isNotEmpty;
+                                        });
+                                        final modelMessage = (modelMessageIndex != -1) ? model.messages[modelMessageIndex] : ChatModel(text: '', role: Roles.model);
+                                    
+                                        print('Last AI User Message: ${userMessage.text}');
+                                        print('Last AI Model Message: ${modelMessage.text}');
+                                    
+                                         //}
+                                    
+                                    
+                                                   switch(value){
+                                                    case AIChatPopupMenuActions.COPY_CHAT:
+                                                      Clipboard.setData(ClipboardData(text: modelMessage.text));
+                                                      showMessage('Copied');
+                                                    break;
+                                                    case AIChatPopupMenuActions.SHARE_CHAT:
+                                                     Share.share('${modelMessage.text}', subject:modelMessage.text);
+                                                    break;
+                                                    case AIChatPopupMenuActions.DELETE_CHAT:
+                                                    
+                                                      // Find the index of the last model message
+                                        final lastModelMessageIndex = model.messages.lastIndexWhere((message) {
+                                          return message.role == Roles.model && message.text.isNotEmpty;
+                                        });
+                                    
+                                        // Find the index of the last user message
+                                        final lastUserMessageIndex = model.messages.lastIndexWhere((message) => message.role == Roles.user);
+                                    
+                                        // Remove the last model message first (to avoid index shifting)
+                                        if (lastModelMessageIndex != -1) {
+                                          model.messages.removeAt(lastModelMessageIndex);
+                                        }
+                                    
+                                        // Remove the last user message
+                                        if (lastUserMessageIndex != -1) {
+                                          model.messages.removeAt(lastUserMessageIndex);
+                                        }
+                                               showMessage('essage Deleted');
+                                                    break;
+                                                   }
+                                            },
+                                            offset: Offset(0, 47),
+                                             surfaceTintColor:
+                                                      themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                                                  elevation: 2,
+                                            shape:const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.only(
+                                                      bottomLeft: Radius.circular(15.0),
+                                                      bottomRight: Radius.circular(15.0),
+                                                      topLeft: Radius.circular(15.0),
+                                                      topRight: Radius.circular(15.0),
+                                                    ),
+                                                  ),
+                                            itemBuilder: (popupMenuContext) {
+                                              var items = <PopupMenuEntry<String>>[];
+                                    
+                                              items.addAll(AIChatPopupMenuActions.choices.map((choice) {
+                                                switch (choice) {
+                                                  case AIChatPopupMenuActions.COPY_CHAT:
+                                                    return CustomPopupMenuItem<String>(
+                                                      enabled: model.messages.isNotEmpty,
+                                                      value: choice,
+                                                      height: 35,
+                                                      child: Row(
+                                                          children: [
+                                                           SvgPicture.asset(IconConstants.copyIconWhite ,color:model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
+                                                  ?const Color(0xffFFFFFF)
+                                                  :const Color(0xff282836)),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal:8.0),
+                                                              child: Text(choice, style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall?.copyWith( 
+                                                  color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                )),
+                                                            ),
+                                                          ]),
+                                                    );
+                                                  case AIChatPopupMenuActions.SHARE_CHAT:
+                                                    return CustomPopupMenuItem<String>(
+                                                      enabled: model.messages.isNotEmpty,
+                                                      value: choice,
+                                                      height: 35,
+                                                      child: Row(
+                                                          children: [
+                                                             SvgPicture.asset('assets/images/ai-icons/Share.svg' ,color:model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
+                                                ?const Color(0xffFFFFFF)
+                                                :const Color(0xff282836)),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal:5.0),
+                                                              child: Text(choice, style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall?.copyWith( 
+                                                  color: model.messages.isEmpty ?themeProvider.darkTheme ? Color(0xff6D6D81):  Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                )),
+                                                            ),
+                                                          ]),
+                                                    );
+                                                  case AIChatPopupMenuActions.DELETE_CHAT:
+                                                    return CustomPopupMenuItem<String>(
+                                                      enabled: model.messages.isNotEmpty,
+                                                      value: choice,
+                                                      height: 35,
+                                                      child: Row(
+                                                          children: [
+                                                            SvgPicture.asset('assets/images/ai-icons/Trash 1.svg', 
+                                                                     color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5)
+                                         : themeProvider.darkTheme
+                                                ?const Color(0xffFFFFFF)
+                                                :const Color(0xff282836)),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal:5.0),
+                                                              child: Text(choice,style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall?.copyWith( 
+                                                  color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81):Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                )),
+                                                            ),
+                                                          ]),
+                                                    );
+                                                  default:
+                                                    return CustomPopupMenuItem<String>(
+                                                      value: choice,
+                                                      child: Text(choice),
+                                                    );
+                                                }
+                                              }).toList());
+                                    
+                                              return items;
+                                            },
+                                          ),
+                                  ),
+                                     
+                                  Visibility(
+                                    visible: model.messages.isNotEmpty,
+                                    child: Container(
+                                      color:themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+                                      margin: EdgeInsets.only(right: 10),
+                                      child: VerticalDivider(
+                                        color: Colors.black,
+                                      width: 2,
+                                                                      indent: 12,
+                                      endIndent: 12,
+                                                                       ),
+                                    ),
+                                  ),
+                                  // VerticalDivider(
+                                  //   thickness: 1,
+                                  //   width: ,
+                                  //   color: Colors.black,
+                                  // ),
                                   Padding(
                                     padding:
                                         const EdgeInsets.only(right: 8.0),
@@ -156,8 +380,8 @@ class BeldexAIScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const Divider(
-                              color: Color(0xff42425F),
+                            Divider(
+                              color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),
                               height: 0.7,
                             ),
                            model.canshowWelcome 
@@ -166,7 +390,7 @@ class BeldexAIScreen extends StatelessWidget {
                               padding: EdgeInsets.all(15.0),
                               child: Row(children: [
                                 SvgPicture.asset(
-                                    IconConstants.beldexAILogoWhiteColor),
+                                    IconConstants.beldexAILogoWhiteColor,color: themeProvider.darkTheme ? Colors.white : Color(0xff333333),),
                                 Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 8.0),
@@ -174,69 +398,73 @@ class BeldexAIScreen extends StatelessWidget {
                                       IconConstants.chat,
                                       style: TextStyle(
                                           fontSize: 20,
+                                          fontFamily: 'Poppins',
+                                          color: themeProvider.darkTheme ? Colors.white : Color(0xff333333),
                                           fontWeight: FontWeight.w700),
                                     ))
                               ]),
                             ),
           
                             Expanded(
-                                child: Container(
-                                    //decoration: BoxDecoration(
+  child: Container(
+    child: ListView.builder(
+      controller: model.scrollController,
+      physics: ClampingScrollPhysics(), // Adjust physics
+      padding: const EdgeInsets.only(top: 10), // Add padding
+      itemCount: (model.messages.length / 2).ceil(),
+      itemBuilder: (context, index) {
+        final userMessage = model.messages[index * 2];
+        final modelMessage = (index * 2 + 1 < model.messages.length)
+            ? model.messages[index * 2 + 1]
+            : ChatModel(text: '', role: Roles.model);
+
+        int lastResponseIndex = model.messages.lastIndexWhere((message) {
+          return message.role == Roles.model && message.text.isNotEmpty;
+        });
+        final currentResponseIndex = index * 2 + 1;
+
+        print('User Message: ${userMessage.text}');
+        print('Model Message: ${modelMessage.text}');
+
+        return MessagePair(
+          key: ValueKey(index),
+          userMessage: userMessage,
+          modelMessage: modelMessage,
+          model: model,
+          currentResponseIndex: currentResponseIndex,
+          lastResponseIndex: lastResponseIndex,
+        );
+      },
+    ),
+  ),
+),
+
           
-                                    // border: Border.all(
-                                    //   color: Color(0xff42425F),
-                                    // ),
-                                    // borderRadius:
-                                    //     BorderRadius.circular(15)
-                                    //  ),
-                                    child: ListView.builder(
-                              controller:
-                                 model.scrollController, // scrollController,
-                             // reverse: true,
-                              itemCount: (model.messages.length / 2)
-                                  .ceil(), // Each pair is one item
-                              itemBuilder: (context, index) {
-                                final userMessage = model.messages[index * 2];
-                                final modelMessage = (index * 2 + 1 <
-                                        model.messages.length)
-                                    ? model.messages[index * 2 + 1]
-                                    : ChatModel(text: '', role: Roles.model);
-          
-          
-          
-                                // Calculate the last response index
-                       int lastResponseIndex = model.messages.lastIndexWhere((message) {
-                      return message.role == Roles.model && message.text.isNotEmpty;
-                           });
-          
-          
-                          final currentResponseIndex = index * 2 + 1;
-          
-                          print('The Current index value ---- $currentResponseIndex and the last index value --- $lastResponseIndex');
-          
-          
-          
-                                return MessagePair(
-                                  userMessage: userMessage,
-                                  modelMessage: modelMessage,
-                                  model: model, 
-                                  currentResponseIndex: currentResponseIndex,
-                                  lastResponseIndex: lastResponseIndex,
-                                  // isLoading: modelMessage.text.isEmpty && modelMessage.image == null, // Initially loading
-                                );
-                              },
-                            ))),
-          
-                            model.canshowWelcome
-                                ? InitialSummariseWelcomeWidget(
-                                    themeProvider: themeProvider,
-                                  )
-                                : SizedBox(),
-                            // Spacer(),
-                            model.canshowWelcome &&
+                            // model.canshowWelcome
+                            //     ? 
+                                Visibility(
+                                  visible: model.canshowWelcome,
+                                  child: InitialSummariseWelcomeWidget(
+                                      themeProvider: themeProvider,
+                                    ),
+                                ),
+                                //: SizedBox(),
+
+
+
+                            Builder(
+                              builder:(context){
+                                // Check if the keyboard is visible
+                        final isKeyboardVisible =
+                            MediaQuery.of(context).viewInsets.bottom > 0;
+                             return AnimatedOpacity(
+                              opacity: isKeyboardVisible ? 0.0 : 1.0,
+                              duration: Duration(milliseconds: 300),
+                              child: Visibility(
+                                visible: (model.canshowWelcome &&
                                     browserModel.webViewTabs.isNotEmpty &&
-                                    model.isSummariseAvailable
-                                ? Container(
+                                    model.isSummariseAvailable) && !isKeyboardVisible,
+                                child: Container(
                                     height:
                                         MediaQuery.of(context).size.height *
                                             0.23, // 180,
@@ -244,7 +472,7 @@ class BeldexAIScreen extends StatelessWidget {
                                     margin: EdgeInsets.all(8.0),
                                     padding: EdgeInsets.all(14),
                                     decoration: BoxDecoration(
-                                      color: Color(0xff282836),
+                                      color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Column(
@@ -252,12 +480,13 @@ class BeldexAIScreen extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                            StringConstants.needHelpWithSite),
+                                            StringConstants.needHelpWithSite,style: TextStyle(fontWeight: FontWeight.w600),),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0),
                                           child: Text(StringConstants
-                                              .iCanHelpYouSummarising),
+                                              .iCanHelpYouSummarising,style: TextStyle(fontWeight: FontWeight.w300)
+                                              ),
                                         ),
                                         Align(
                                           alignment: Alignment.bottomRight,
@@ -276,13 +505,25 @@ class BeldexAIScreen extends StatelessWidget {
                                               model.getTextAndSummariseInfo(
                                                   webViewModel);
                                               model.messageController.clear();
+
+
+                                          // Additionaly added
+                                          urlSummaryProvider.updateSummariser(true);
+                                          urlSummaryProvider.updateCanStop(true);
+                                          //model.isSummariseAvailable = false;
+                                          model.summariseText =
+                                              webViewModel.url.toString() ??
+                                                  '';
+                                          // model.getTextAndSummariseInfo(
+                                          //     webViewModel);
+                                          urlSummaryProvider.updateCanStop(false);
                                             },
                                             child: Container(
                                               padding: EdgeInsets.symmetric(
                                                   vertical: 12,
                                                   horizontal: 14),
                                               decoration: BoxDecoration(
-                                                  color: Color(0xff171720),
+                                                  color:themeProvider.darkTheme ? Color(0xff171720): Color(0xffFFFFFF),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           12)),
@@ -298,9 +539,96 @@ class BeldexAIScreen extends StatelessWidget {
                                       ],
                                     ),
                                   )
-                                : SizedBox(),
+                                )
+                              );
+                              }
+                              
+                               ),
+
+
+
+
+                            // Spacer(),
+                            // model.canshowWelcome &&
+                            //         browserModel.webViewTabs.isNotEmpty &&
+                            //         model.isSummariseAvailable
+                            //     ? Container(
+                            //         height:
+                            //             MediaQuery.of(context).size.height *
+                            //                 0.23, // 180,
+                            //         width: MediaQuery.of(context).size.width,
+                            //         margin: EdgeInsets.all(8.0),
+                            //         padding: EdgeInsets.all(14),
+                            //         decoration: BoxDecoration(
+                            //           color: Color(0xff282836),
+                            //           borderRadius: BorderRadius.circular(10),
+                            //         ),
+                            //         child: Column(
+                            //           crossAxisAlignment:
+                            //               CrossAxisAlignment.start,
+                            //           children: [
+                            //             Text(
+                            //                 StringConstants.needHelpWithSite),
+                            //             Padding(
+                            //               padding: const EdgeInsets.symmetric(
+                            //                   vertical: 8.0),
+                            //               child: Text(StringConstants
+                            //                   .iCanHelpYouSummarising),
+                            //             ),
+                            //             Align(
+                            //               alignment: Alignment.bottomRight,
+                            //               child: GestureDetector(
+                            //                 onTap: () async {
+                            //                   setWelcomeAIScreen();
+                            //                   //setState(() {
+                            //                   model.canshowWelcome = false;
+                            //                   // });
+                            //                   model.isSummariseAvailable =
+                            //                       false;
+                            //                   model.summariseText =
+                            //                       webViewModel.url
+                            //                               .toString() ??
+                            //                           '';
+                            //                   model.getTextAndSummariseInfo(
+                            //                       webViewModel);
+                            //                   model.messageController.clear();
+
+
+                            //               // Additionaly added
+                            //               urlSummaryProvider.updateSummariser(true);
+                            //               urlSummaryProvider.updateCanStop(true);
+                            //               //model.isSummariseAvailable = false;
+                            //               model.summariseText =
+                            //                   webViewModel.url.toString() ??
+                            //                       '';
+                            //               // model.getTextAndSummariseInfo(
+                            //               //     webViewModel);
+                            //               urlSummaryProvider.updateCanStop(false);
+                            //                 },
+                            //                 child: Container(
+                            //                   padding: EdgeInsets.symmetric(
+                            //                       vertical: 12,
+                            //                       horizontal: 14),
+                            //                   decoration: BoxDecoration(
+                            //                       color: Color(0xff171720),
+                            //                       borderRadius:
+                            //                           BorderRadius.circular(
+                            //                               12)),
+                            //                   child: Text(
+                            //                     StringConstants
+                            //                         .summariseThispage,
+                            //                     style: TextStyle(
+                            //                         color: Color(0xff01D001)),
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //             )
+                            //           ],
+                            //         ),
+                            //       )
+                            //     : SizedBox(),
                             browserModel.webViewTabs.isNotEmpty &&
-                                    model.isSummariseAvailable &&
+                                    model.isSummariseAvailable && vpnStatusProvider.canShowHomeScreen == false &&
                                     model.canshowWelcome == false
                                 ? Row(
                                     mainAxisAlignment:
@@ -308,12 +636,16 @@ class BeldexAIScreen extends StatelessWidget {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
+                                          urlSummaryProvider.updateSummariser(true);
+                                          urlSummaryProvider.updateCanStop(true);
                                           model.isSummariseAvailable = false;
                                           model.summariseText =
                                               webViewModel.url.toString() ??
                                                   '';
                                           model.getTextAndSummariseInfo(
                                               webViewModel);
+                                          urlSummaryProvider.updateCanStop(false);
+                                         // urlSummaryProvider.updateSummariser(true);
                                         },
                                         child: Container(
                                           //height: 40,
@@ -326,7 +658,7 @@ class BeldexAIScreen extends StatelessWidget {
                                                   BorderRadius.circular(12)),
                                           child: Row(
                                             children: [
-                                              Text('Summarise this page'),
+                                              Text('Summarise this page',style: TextStyle(color: Colors.white,fontFamily: 'Poppins',),),
                                               Padding(
                                                 padding:
                                                     const EdgeInsets.only(
@@ -352,9 +684,9 @@ class BeldexAIScreen extends StatelessWidget {
                                   horizontal: 16, vertical: 8),
           
                               decoration: BoxDecoration(
-                                color: Color(0xFF171720),
+                                color: themeProvider.darkTheme ? Color(0xFF171720) : Color(0xffffffff),
                                 border: Border.all(
-                                    color: Color(0xff42425F),
+                                    color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),
                                     width:
                                         0.6), // Background color of the TextField container
                                 borderRadius: BorderRadius.circular(10), //
@@ -371,6 +703,7 @@ class BeldexAIScreen extends StatelessWidget {
                                     child: TextField(
                                       //controller: _textController,
                                       onSubmitted: (value) {
+                                         urlSummaryProvider.updateSummariser(false);
                                         setWelcomeAIScreen();
                                             model.canshowWelcome = false;
                                             model.isSummariseAvailable =
@@ -385,7 +718,7 @@ class BeldexAIScreen extends StatelessWidget {
                                       controller: model.messageController,
                                       maxLines: null,
                                       style: TextStyle(
-                                          color: Colors.white,
+                                          //color: Colors.white,
                                           fontWeight: FontWeight.normal,
                                           fontSize: 14), // Text color
                                       cursorColor:
@@ -396,8 +729,8 @@ class BeldexAIScreen extends StatelessWidget {
                                           hintText: StringConstants
                                               .enterPromptHere, // Placeholder text
                                           hintStyle: TextStyle(
-                                            color: Colors
-                                                .white, // Placeholder text color
+                                            color: Color(0xff6D6D81), // Placeholder text color
+                                            fontFamily: 'Poppins',
                                           ),
                                           suffix: GestureDetector(
                                             onTap: () => model
@@ -419,9 +752,16 @@ class BeldexAIScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SvgPicture.asset(IconConstants.micDark),
+                                      SvgPicture.asset(IconConstants.micDark,color: themeProvider.darkTheme ? Colors.white:Colors.black,),
                                       IconButton(
-                                          onPressed: () {
+                                          onPressed: 
+                                          // urlSummaryProvider.canStopAndRegenerate
+                                          // ? (){
+                                            
+                                          // }  
+                                          // : 
+                                          () {
+                                            urlSummaryProvider.updateSummariser(false);
                                             FocusScope.of(context).unfocus();
                                             setWelcomeAIScreen();
                                             model.canshowWelcome = false;
@@ -435,7 +775,12 @@ class BeldexAIScreen extends StatelessWidget {
                                             }
                                           }, //()=>sendUserMessage(vpnStatusProvider),
                                           icon: SvgPicture.asset(
-                                              IconConstants.sendDark)),
+                                            //   urlSummaryProvider.canStopAndRegenerate || urlSummaryProvider.isLoading ?
+                                            //   'assets/images/ai-icons/Stop.svg'
+                                            //  : 
+                                             IconConstants.sendDark,
+                                             color: themeProvider.darkTheme ? Colors.white:Colors.black,
+                                             )),
                                     ],
                                   ),
                                 ],
@@ -452,4 +797,251 @@ class BeldexAIScreen extends StatelessWidget {
       },
     );
   }
+
+
+
+
+
+
+
+
+  Widget tabList(DarkThemeProvider themeProvider,ThemeData theme,BuildContext context) {
+    var browserModel = Provider.of<BrowserModel>(context, listen: true);
+     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+    return InkWell(
+      key: chatMenukey,
+      onLongPress: () {
+        final RenderBox? box =
+            chatMenukey.currentContext!.findRenderObject() as RenderBox?;
+        if (box == null) {
+          return;
+        }
+
+        Offset position = box.localToGlobal(Offset.zero);
+       
+         browserModel.webViewTabs.isEmpty ?
+          showMenu(
+                context: context,
+                 color: themeProvider.darkTheme ?const Color(0xff282836) : const Color(0xffF3F3F3),
+                // surfaceTintColor: Colors.green,
+               shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15.0),
+              bottomRight: Radius.circular(15.0),
+              topLeft: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),)
+              ),
+              surfaceTintColor: themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+                position: RelativeRect.fromLTRB(position.dx,
+                    position.dy + box.size.height+5, box.size.width, 0),
+                items: EmptyTabPopupMenuActions.choices.map((tabPopupMenuAction) {
+                  IconData? iconData;
+                  switch (tabPopupMenuAction) {
+                    // case TabPopupMenuActions.CLOSE_TABS:
+                    //   iconData = Icons.close;
+                    //   break;
+                    case EmptyTabPopupMenuActions.NEW_TAB:
+                      iconData = Icons.add;
+                      break;
+                    // case TabPopupMenuActions.NEW_INCOGNITO_TAB:
+                    //   iconData = MaterialCommunityIcons.incognito;
+                    //   break;
+                  }
+
+                  return PopupMenuItem<String>(
+                    value: tabPopupMenuAction,
+                    height: 35,
+                    //padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      
+                      children: [
+                    //  tabPopupMenuAction == 'New private tab' ?
+                    //  Padding(
+                    //    padding: const EdgeInsets.only(left:8.0),
+                    //    child: SvgPicture.asset('assets/images/private_tab.svg',
+                    //               color: themeProvider.darkTheme
+                    //                   ? const Color(0xffFFFFFF)
+                    //                   : const Color(0xff282836)),
+                    //  )
+                    //   : 
+                      Icon(iconData,
+                          color: themeProvider.darkTheme
+                              ? Colors.white
+                              : Colors.black //black,
+                          ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextWidget(text: tabPopupMenuAction,style:theme
+                                          .textTheme
+                                          .bodySmall ,),
+                      )
+                    ]),
+                  );
+                }).toList())
+            .then((value) {
+          switch (value) {
+            // case TabPopupMenuActions.CLOSE_TABS:
+            //   browserModel.closeAllTabs();
+            //   clearCookie();
+            //   break;
+            case EmptyTabPopupMenuActions.NEW_TAB:
+            vpnStatusProvider.updateCanShowHomeScreen(false);
+              //addNewTab();
+              break;
+            // case TabPopupMenuActions.NEW_INCOGNITO_TAB:
+            //   addNewIncognitoTab();
+            //   break;
+          }
+        })
+
+        :
+        showMenu(
+                context: context,
+                 color: themeProvider.darkTheme ?const Color(0xff282836) : const Color(0xffF3F3F3),
+                // surfaceTintColor: Colors.green,
+               shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15.0),
+              bottomRight: Radius.circular(15.0),
+              topLeft: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),)
+              ),
+              surfaceTintColor: themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+                position: RelativeRect.fromLTRB(position.dx,
+                    position.dy + box.size.height+5, box.size.width, 0),
+                items: TabPopupMenuActions.choices.map((tabPopupMenuAction) {
+                  IconData? iconData;
+                  switch (tabPopupMenuAction) {
+                    case TabPopupMenuActions.CLOSE_TABS:
+                      iconData = Icons.close;
+                      break;
+                    case TabPopupMenuActions.NEW_TAB:
+                      iconData = Icons.add;
+                      break;
+                    // case TabPopupMenuActions.NEW_INCOGNITO_TAB:
+                    //   iconData = MaterialCommunityIcons.incognito;
+                    //   break;
+                  }
+
+                  return PopupMenuItem<String>(
+                    value: tabPopupMenuAction,
+                    height: 35,
+                    //padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      
+                      children: [
+                    //  tabPopupMenuAction == 'New private tab' ?
+                    //  Padding(
+                    //    padding: const EdgeInsets.only(left:8.0),
+                    //    child: SvgPicture.asset('assets/images/private_tab.svg',
+                    //               color: themeProvider.darkTheme
+                    //                   ? const Color(0xffFFFFFF)
+                    //                   : const Color(0xff282836)),
+                    //  )
+                    //   : 
+                      Icon(iconData,
+                          color: themeProvider.darkTheme
+                              ? Colors.white
+                              : Colors.black //black,
+                          ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: TextWidget(text: tabPopupMenuAction,style:theme
+                                          .textTheme
+                                          .bodySmall ,),
+                      )
+                    ]),
+                  );
+                }).toList())
+            .then((value) {
+          switch (value) {
+            case TabPopupMenuActions.CLOSE_TABS:
+              browserModel.closeAllTabs();
+              clearCookie();
+              break;
+            case TabPopupMenuActions.NEW_TAB:
+            vpnStatusProvider.updateCanShowHomeScreen(false);
+              //addNewTab();
+              break;
+            // case TabPopupMenuActions.NEW_INCOGNITO_TAB:
+            //   addNewIncognitoTab();
+            //   break;
+          }
+        });
+      },
+      onTap: () async {
+        //Navigator.push(context,MaterialPageRoute(builder: ((context) => TabsList() )));
+  //       if (browserModel.webViewTabs.isNotEmpty) {
+  //         var webViewModel = browserModel.getCurrentTab()?.webViewModel;
+  //         var webViewController = webViewModel?.webViewController;
+  //          hideFooter(webViewController);
+  //         if (View.of(context).viewInsets.bottom > 0.0) {
+  //           SystemChannels.textInput.invokeMethod('TextInput.hide');
+  //           if (FocusManager.instance.primaryFocus != null) {
+  //             FocusManager.instance.primaryFocus!.unfocus();
+  //           }
+  //           if (webViewController != null) {
+  //             await webViewController.evaluateJavascript(
+  //                 source: "document.activeElement.blur();");
+  //           }
+  //           await Future.delayed(const Duration(milliseconds: 300));
+  //         }
+
+
+  //        if(vpnStatusProvider.canShowHomeScreen){
+  //    if (webViewModel != null && imageScreenshot != null){
+  //     webViewModel.screenshot = imageScreenshot;
+  //    }
+  //       vpnStatusProvider.updateCanShowHomeScreen(false);
+  //  }else if (webViewModel != null && webViewController != null) {
+  //           webViewModel.screenshot = await webViewController
+  //               .takeScreenshot(
+  //                   screenshotConfiguration: ScreenshotConfiguration(
+  //                       compressFormat: CompressFormat.JPEG, quality: 20))
+  //               .timeout(
+  //                 const Duration(milliseconds: 1500),
+  //                 onTimeout: () => null,
+  //               );
+  //         }
+
+  //         browserModel.showTabScroller = true;
+  //       }
+      },
+      child: Container(
+        width: 18,
+        height: 18,
+        margin: const EdgeInsets.only(
+            left: 10.0, top: 10.0, right: 5.0, bottom: 10.0),
+        decoration: BoxDecoration(
+            color:
+                themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
+            border: Border.all(
+                width: 1.0,
+                color: themeProvider.darkTheme ? Colors.white : Colors.black),
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(3.0)),
+        constraints: const BoxConstraints(minWidth: 18.0),
+        child: Center(
+          child: browserModel.webViewTabs.length >= 100
+              ? Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: SvgPicture.asset(
+                    'assets/images/Infinity_white_theme.svg',
+                    color:
+                        themeProvider.darkTheme ? Colors.white : Colors.black,
+                  ),
+                )
+              : TextWidget(
+                 text: browserModel.webViewTabs.length.toString(),
+                  style: TextStyle(
+                      color:
+                          themeProvider.darkTheme ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 12.0),
+                ),
+        ),
+      ),
+    );
+  }
+
 }

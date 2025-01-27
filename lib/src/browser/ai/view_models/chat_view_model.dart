@@ -60,6 +60,11 @@ bool get canshowWelcome => _canshowWelcome;
   }
 
 
+  deleteChatMessage(int index){
+    messages.removeAt(index);
+    updateUI();
+  }
+
  // Response for summarise in floating action button
 
  String get sumResponse => _sumResponse;
@@ -110,23 +115,58 @@ Future<void> getSummariseForFloatingActionButton(WebViewModel webViewModel)async
 
 // For summarise 
 Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
-    File? sendFile;
+    //File? sendFile;
     String? summariseUrlText;
     summariseUrlText = summariseText;
-    sendFile = imageFile;
+    //sendFile = imageFile;
     if(summariseUrlText != null){
   messages.add(ChatModel(
       text: "${webViewModel.title.toString()} - Summarise page",
       role: Roles.user,
-      image: sendFile,
+     // image: sendFile,
     ));
     }else{
       messages.add(ChatModel(
       text: messageController.text,
       role: Roles.user,
-      image: sendFile,
+     // image: sendFile,
     ));
     }
+   
+    imageFile = null;
+    summariseText = null;
+    messages.add(ChatModel(
+      role: Roles.model,
+      text: "",
+    ));
+    modelResponseIndex = messages.length;
+    scrollMessages();
+    updateUI();
+    String response = await apiRepository.sendTextForSummarise("${webViewModel.title.toString()} - Summarise this webpage"); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
+     
+    messages.removeAt(messages.length - 1);
+    messages.add(ChatModel(
+      role: Roles.model,
+      text: response,
+    ));
+    scrollMessages();
+    updateUI();
+  }
+
+
+
+
+// For Ask Beldex AI
+
+Future<void> getTextFromAskBeldexAI(String question) async {
+   // File? sendFile;
+   
+   // sendFile = imageFile;
+      messages.add(ChatModel(
+      text: question,
+      role: Roles.user,
+      //image: null,// sendFile,
+    ));
    
     imageFile = null;
     summariseText = null;
@@ -140,7 +180,7 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
     String response = 
    // summariseUrlText !=  null //sendFile != null
         //?
-         await apiRepository.sendTextForSummarise("${webViewModel.title.toString()} - Summarise this webpage"); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
+         await apiRepository.sendText(question); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
         //: await apiRepository.sendText(messageController.text);
     messages.removeAt(messages.length - 1);
     messages.add(ChatModel(
@@ -150,6 +190,12 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
     scrollMessages();
     updateUI();
   }
+
+
+
+
+
+
 
 
 
