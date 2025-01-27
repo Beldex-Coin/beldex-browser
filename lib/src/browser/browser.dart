@@ -319,11 +319,11 @@ void closeTabListPage(){
   Widget _buildWebViewTabs() {
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
           var browserModel = Provider.of<BrowserModel>(context, listen: false);
+          var webViewModel = browserModel.getCurrentTab()?.webViewModel;
+          var webViewController = webViewModel?.webViewController;
     return WillPopScope(
         onWillPop: () async {
      
-          var webViewModel = browserModel.getCurrentTab()?.webViewModel;
-          var webViewController = webViewModel?.webViewController;
              // vpnStatusProvider.updateCanShowHomeScreen(false);
       
 
@@ -413,13 +413,40 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
               appBar: const BrowserAppBar(),
               body: _buildWebViewTabsContent(),
               floatingActionButton: vpnStatusProvider.showFAB && browserModel.webViewTabs.isNotEmpty  ? FloatingActionButton(
-                onPressed: (){
+                onPressed: ()async{
+                   if(await webViewController?.getSelectedText() != null){
+                         await webViewController?.evaluateJavascript(source: """
+                    
+                    //Close keyboard if open
+                    document.activeElement.blur();
+
+                   // Close context menu
+                   window.getSelection().removeAllRanges();
+
+                  document.querySelectorAll('video').forEach(video => video.pause());
+
+                  // Pause all HTML5 audio elements
+                  document.querySelectorAll('audio').forEach(audio => audio.pause());
+
+                  // Pause YouTube videos
+                  var iframes = document.querySelectorAll('iframe');
+                  iframes.forEach(iframe => {
+                    var src = iframe.src;
+                    if (src.includes('youtube.com/embed')) {
+                      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                  });
+                """);
+              }
                    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
      builder: (context){
           return SummariseUrlResult();
      });
+              
+              vpnStatusProvider.updateFAB(false);
+              
               },
               backgroundColor: Colors.transparent,
               child: ClipOval(
