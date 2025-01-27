@@ -271,16 +271,19 @@ bool _isValidUrl(String url) {
       onLoadStop: (controller, url) async {
         try{
            _pullToRefreshController?.endRefreshing();
+            urlSummaryProvider.updateUrl(url.toString()); // for summarise with floating button
+           _checkIsUrlSearchResult(url.toString(),vpnStatusProvider); // for showing floating button
         if (widget.webViewModel.isDesktopMode) {
           String js =
               "document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));";
           controller.evaluateJavascript(source: js);
           controller.zoomOut();
         }
+         
         widget.webViewModel.url = url;
         widget.webViewModel.favicon = null;
         widget.webViewModel.loaded = true;
-        urlSummaryProvider.updateUrl(url.toString()); // for summarise with floating button
+       
         var sslCertificateFuture = _webViewController?.getCertificate();
         var titleFuture = _webViewController?.getTitle();
         var faviconsFuture = _webViewController?.getFavicons();
@@ -310,7 +313,7 @@ bool _isValidUrl(String url) {
             }
           }
         }
-        _checkIsUrlSearchResult(url.toString(),vpnStatusProvider);
+        
         if (isCurrentTab(currentWebViewModel)) {
           widget.webViewModel.needsToCompleteInitialLoad = false;
           currentWebViewModel.updateWithValue(widget.webViewModel);
