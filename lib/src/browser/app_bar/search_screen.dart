@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
+import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
@@ -281,7 +282,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 Expanded(
                   flex: 4,
                   child: TextField(
-                    
                     onSubmitted: (value) {
                       var url = WebUri(formatUrl(value.trim()));
                       if (!url.scheme.startsWith("http") &&
@@ -508,11 +508,12 @@ class _SearchScreenState extends State<SearchScreen> {
               : Container(
                   height: 55,
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
                   decoration: BoxDecoration(
-                      color: themeProvider.darkTheme
-                          ? const Color(0xff282836)
-                          : const Color(0xffF3F3F3),
+                    border: Border.all(color: themeProvider.darkTheme ? Color(0xff282836): Color(0xffDADADA)),
+                      // color: themeProvider.darkTheme
+                      //     ? const Color(0xff282836)
+                      //     : const Color(0xffF3F3F3),
                       borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     children: [
@@ -652,36 +653,77 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
 
-              canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  Container(
-                  height: 60,
-                  width: double.infinity,
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
-                  padding: EdgeInsets.symmetric(horizontal:15,vertical: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff42425F)),
-                      borderRadius: BorderRadius.circular(8)),
+              canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  GestureDetector(
+                onTap: ()async{
+                  Navigator.pop(context);
+                  bool showWelcomeMessage = true;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? hasSubmitted = prefs.getBool('hasSubmitted');
+    setState(() {});
+      showWelcomeMessage = !(hasSubmitted ?? false);
+    
 
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(IconConstants.beldexAILogoSvg,
-                          height: 25,width: 25,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(canShowSearchAI),
-                                Text('Ask Beldex AI',style: TextStyle(color: Color(0xff00B134),fontSize: 10),)
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                         SvgPicture.asset('assets/images/ai-icons/arrow.svg')
-                        
-                        ],
-                      ),
-                ):SizedBox(),
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return BeldexAIScreen(isWelcomeShown: showWelcomeMessage,searchWord:canShowSearchAI); //DraggableAISheet();
+
+
+
+
+          //return BeldexAiScreen();
+     });
+                },
+                child:
+                Container(
+  height: 60,
+  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+    ),
+    borderRadius: BorderRadius.circular(8),
+  ),
+  child: Row(
+    children: [
+      SvgPicture.asset(
+        IconConstants.beldexAILogoSvg,
+        height: 25,
+        width: 25,
+      ),
+      SizedBox(width: 8), // Add spacing between the icon and text
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              canShowSearchAI,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              'Ask Beldex AI',
+              style: TextStyle(
+                color: Color(0xff00B134),
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+      SvgPicture.asset(
+        'assets/images/ai-icons/arrow.svg',
+        width: 20, // Adjust width to ensure flexibility
+      ),
+    ],
+  ),
+),
+
+              ):SizedBox(),
         ],
       ),
     );
