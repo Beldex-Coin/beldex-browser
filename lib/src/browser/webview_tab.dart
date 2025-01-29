@@ -45,6 +45,8 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
       TextEditingController();
   bool checkUrl = false;
 
+  List<ContentBlocker>? contentBlockers = []; // Domain filter variable for ad blocks
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
