@@ -65,17 +65,17 @@ class BeldexAIScreen extends StatelessWidget {
   }
 
 
- setDelayForWordSearch(ChatViewModel model){
+ setDelayForWordSearch(ChatViewModel model,WebViewModel webViewModel){
   Future.delayed(Duration(milliseconds: 250),(){
-    getWordSearch(model);
+    getWordSearch(model,webViewModel);
   });
  }
 
 
- getWordSearch(ChatViewModel model){
+ getWordSearch(ChatViewModel model,WebViewModel webViewModel){
   if(searchWord.isNotEmpty || searchWord != ''){
      //model.getTextFromAskAI(searchWord);
-    model.getTextFromAskBeldexAI(searchWord);
+         model.getTextFromAskBeldexAI(searchWord,webViewModel);
     model.isSummariseAvailable = false;
      model.messageController.clear();
   }
@@ -97,7 +97,7 @@ class BeldexAIScreen extends StatelessWidget {
         model.canshowWelcome = isWelcomeShown;
         checkSummariseString(webViewModel, model);
         //getWordSearch(model);
-        setDelayForWordSearch(model);
+        setDelayForWordSearch(model,webViewModel);
         //print('BASE MODEL READY>>>>');
       },
       builder: (context, model, child) {
@@ -221,8 +221,8 @@ class BeldexAIScreen extends StatelessWidget {
                                     
                                                    switch(value){
                                                     case AIChatPopupMenuActions.COPY_CHAT:
-                                                      Clipboard.setData(ClipboardData(text: modelMessage.text));
-                                                      showMessage('Copied');
+                                                      // Clipboard.setData(ClipboardData(text: modelMessage.text));
+                                                      // showMessage('Copied');
                                                     break;
                                                     case AIChatPopupMenuActions.SHARE_CHAT:
                                                      Share.share('${modelMessage.text}', subject:modelMessage.text);

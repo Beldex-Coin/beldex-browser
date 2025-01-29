@@ -158,15 +158,32 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
 
 // For Ask Beldex AI
 
-Future<void> getTextFromAskBeldexAI(String question) async {
+Future<void> getTextFromAskBeldexAI(String question,WebViewModel webViewModel) async {
    // File? sendFile;
    
-   // sendFile = imageFile;
+final uri = Uri.parse(question);
+     if(uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')){
+      // sendFile = imageFile;
+      messages.add(ChatModel(
+      text: '$uri',
+      role: Roles.user,
+      //image: null,// sendFile,
+    ));
+   
+     }else{
+      // sendFile = imageFile;
       messages.add(ChatModel(
       text: question,
       role: Roles.user,
       //image: null,// sendFile,
     ));
+   
+     }
+
+
+
+
+
    
     imageFile = null;
     summariseText = null;
@@ -177,10 +194,9 @@ Future<void> getTextFromAskBeldexAI(String question) async {
     modelResponseIndex = messages.length;
     scrollMessages();
     updateUI();
-    String response = 
-   // summariseUrlText !=  null //sendFile != null
-        //?
-         await apiRepository.sendText(question); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
+    String response = uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') ?
+     await apiRepository.sendTextForSummarise("${uri.toString()} - Summarise this webpage")
+    : await apiRepository.sendText(question); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
         //: await apiRepository.sendText(messageController.text);
     messages.removeAt(messages.length - 1);
     messages.add(ChatModel(
