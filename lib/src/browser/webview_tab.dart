@@ -65,14 +65,26 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
   ];
 
 
+setAdBlocker() async {
+    for (final adUrlFilter in adUrlFilters) {
+      contentBlockers?.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
 
+   
+  }
 
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-
+    setAdBlocker();
     _pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
