@@ -176,7 +176,7 @@ setAdblocker() async {
             type: ContentBlockerActionType.CSS_DISPLAY_NONE,
             )));
   
-
+  _currentWebViewModel.settings?.contentBlockers = contentBlockers;
 
 
     for (var webViewTab in _webViewTabs) {
