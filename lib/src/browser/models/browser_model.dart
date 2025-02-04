@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/src/browser/models/favorite_model.dart';
 import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -154,9 +155,32 @@ void updateScreenSecurity(bool value)async{
 
 
 
+setAdblocker() async {
+     List<ContentBlocker>? contentBlockers = [];
+    for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
+      contentBlockers.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+    
+    
+
+}
+
+
+
+
+
+
+
 
   BrowserModel() {
     _currentWebViewModel = WebViewModel();
+    setAdblocker();
   }
 
   UnmodifiableListView<WebViewTab> get webViewTabs =>
