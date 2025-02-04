@@ -183,6 +183,23 @@ setAdblocker() async {
       webViewTab.webViewModel.settings?.contentBlockers = contentBlockers;
     }
 
+   try {
+      _currentWebViewModel.webViewController?.setSettings(
+          settings: _currentWebViewModel.settings ?? InAppWebViewSettings());
+    } catch (e) {}
+
+    
+    var webViewController = _currentWebViewModel.webViewController;
+
+    webViewController?.setSettings(
+        settings: _currentWebViewModel.settings ?? InAppWebViewSettings());
+    var webSet = await webViewController?.getSettings();
+    _currentWebViewModel.settings = webSet;
+    if (kDebugMode) {
+      print(
+          "### ADBLOCKER SETTINGS: ${_currentWebViewModel.settings?.contentBlockers}");
+    }
+
 
 }
 
