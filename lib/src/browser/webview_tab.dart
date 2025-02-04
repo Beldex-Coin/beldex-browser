@@ -65,6 +65,7 @@ setAdBlocker() async {
         ),
         action: ContentBlockerAction(
             type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector: ".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
     )));
    
   }
