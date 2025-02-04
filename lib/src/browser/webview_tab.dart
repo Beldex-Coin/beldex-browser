@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -47,26 +48,8 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
 
   List<ContentBlocker>? contentBlockers = []; // Domain filter variable for ad blocks
 
-
-   final adUrlFilters = [  
-    ".\*.doubleclick.net/.\*",  
-    ".\*.ads.pubmatic.com/.\*",  
-    ".\*.googlesyndication.com/.\*",  
-    ".\*.google-analytics.com/.\*",  
-    ".\*.adservice.google.\*/.\*",  
-    ".\*.adbrite.com/.\*",  
-    ".\*.exponential.com/.\*",  
-    ".\*.quantserve.com/.\*",  
-    ".\*.scorecardresearch.com/.\*",  
-    ".\*.zedo.com/.\*",  
-    ".\*.adsafeprotected.com/.\*",  
-    ".\*.teads.tv/.\*",  
-    ".\*.outbrain.com/.\*"  
-  ];
-
-
 setAdBlocker() async {
-    for (final adUrlFilter in adUrlFilters) {
+    for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
       contentBlockers?.add(ContentBlocker(
           trigger: ContentBlockerTrigger(
             urlFilter: adUrlFilter,
