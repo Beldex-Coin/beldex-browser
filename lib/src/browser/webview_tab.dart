@@ -58,7 +58,14 @@ setAdBlocker() async {
             type: ContentBlockerActionType.BLOCK,
           )));
     }
-
+    // Apply the "display: none" style to some HTML elements
+    contentBlockers?.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+    )));
    
   }
 
