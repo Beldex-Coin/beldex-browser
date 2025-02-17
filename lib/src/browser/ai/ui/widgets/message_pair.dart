@@ -129,6 +129,7 @@ copyText(String text){
               topLeft: 20,
               topRight: 20,
               bottomLeft: 20,
+              model: model,
               bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
             )
                ],
@@ -170,6 +171,7 @@ copyText(String text){
                     topLeft: 20,
                     topRight: 20,
                     bottomLeft: 20,
+                    model: model,
                     bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
                   )
                 : 

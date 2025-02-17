@@ -6,10 +6,24 @@ class ChatModel {
   String text;
   File? image;
   Roles role;
+  bool isTypingComplete;
+  bool isLoading;
+  bool isTypingStopped;
+  bool istyping;
+  bool canShowRegenerate;
+  String typingText;
+  bool isSummariseResult;
 
   ChatModel({
     required this.text,
     required this.role,
     this.image,
+    this.isTypingComplete = false,
+    this.isLoading = false,
+    this.isTypingStopped = false,
+    this.canShowRegenerate = false,
+    this.typingText ='',
+    this.istyping = false,
+    this.isSummariseResult = false
   });
 }

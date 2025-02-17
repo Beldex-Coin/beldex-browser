@@ -2,6 +2,7 @@ import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/enums/roles.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/message_body.dart';
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:flutter/material.dart';
 
 class MessageContent extends StatelessWidget {
@@ -40,6 +41,7 @@ class MessageContent extends StatelessWidget {
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 20,
+                        model: ChatViewModel(),
                         bottomRight: 0, canAnimate: false,
                       ),
                       const SizedBox(
@@ -74,6 +76,7 @@ class MessageContent extends StatelessWidget {
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 20,
+                        model: ChatViewModel(),
                         bottomRight: 0, canAnimate: false,
 
                       )
@@ -83,6 +86,7 @@ class MessageContent extends StatelessWidget {
                         topLeft: 20,
                         topRight: 20,
                         bottomLeft: 0,
+                        model: ChatViewModel(),
                         bottomRight: 20, canAnimate: false,
                       ),
           ),

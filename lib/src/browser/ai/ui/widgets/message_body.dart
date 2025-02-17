@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
@@ -16,6 +17,7 @@ class MessageBody extends StatefulWidget {
     required this.topLeft,
     required this.topRight,
     required this.bottomLeft,
+    required this.model,
     required this.bottomRight, required this.canAnimate,
   });
 
@@ -25,7 +27,7 @@ class MessageBody extends StatefulWidget {
   final double topRight;
   final double bottomLeft;
   final double bottomRight;
-
+  final ChatViewModel model;
   final bool canAnimate;
 
   @override
@@ -124,78 +126,121 @@ void _startTypingAnimation(BuildContext context) {
           bottomRight: Radius.circular(widget.bottomRight),
         ),
       ),
-      child:
-       
-       widget.isLoading && textChars.isNotEmpty && urlSummaryProvider.isSummarise == false
-          ? 
-           md.Markdown(
-            data:textChars, //widget.message.text,
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            styleSheet: md.MarkdownStyleSheet.fromTheme(
-              Theme.of(context).copyWith(
-              textTheme: TextTheme(bodyMedium: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w300,
-                //color: ColorConstants.white,
-                fontSize: 14,
-                //fontWeight: FontWeight.w400,
-                )),
-            ),
-            )
-           ,
-            )
-          : urlSummaryProvider.isSummarise == true ?
-            md.Markdown(
-            data:widget.message.text,
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            styleSheet: md.MarkdownStyleSheet.fromTheme(
-              Theme.of(context).copyWith(
-              textTheme: TextTheme(bodyMedium: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w300,
-                //color: ColorConstants.white,
-                fontSize: 14,
-                //fontWeight: FontWeight.w400,
-                )),
-            ),
-            )
-           ,
-            )
-          // : widget.canAnimate == false ?
-          //   md.Markdown(
-          //   data:widget.message.text,
-          //   shrinkWrap: true,
-          //   padding: EdgeInsets.zero,
-          //   styleSheet: md.MarkdownStyleSheet.fromTheme(
-          //     Theme.of(context).copyWith(
-          //     textTheme: TextTheme(bodyMedium: TextStyle(color: ColorConstants.white,
-          //       fontSize: 14,
-          //       //fontWeight: FontWeight.w400,
-          //       )),
-          //   ),
-          //   )
-          //  ,
-          //   )
-          :
+      child:Column(
+        children:[
           md.Markdown(
             data:widget.message.text,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
+            physics: NeverScrollableScrollPhysics(),
             styleSheet: md.MarkdownStyleSheet.fromTheme(
               Theme.of(context).copyWith(
-              textTheme: TextTheme(bodyMedium: TextStyle(
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w300,
-                //color: ColorConstants.white,
+              textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white, // Colors.yellow,
                 fontSize: 14,
+                fontFamily: 'Poppins'
                 //fontWeight: FontWeight.w400,
                 )),
             ),
-            )
-           ,
-            )
+            ),
+            ),
+            Visibility(
+              visible: widget.message.canShowRegenerate,
+              child:Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Center(   // if(widget.message.canShowRegenerate){
+
+        //_displayedText = '';
+                            child: ElevatedButton(
+              onPressed: () {
+                //regenerateResponse(typingProvider);
+                 // typingProvider.updateAITypingState(true);
+                 widget.model.regenerateResponse();
+               setState(() {
+                   widget.message.canShowRegenerate = false;
+                   widget.message.isTypingComplete = false;
+                  });
+                // Define button action here
+                print("Button clicked!");
+              },
+              child: Text("Regenerate"),
+                            ),
+                          ),
+                        )
+              
+               )
+        ]
+      )
+       
+      //  widget.isLoading && textChars.isNotEmpty && urlSummaryProvider.isSummarise == false
+      //     ? 
+      //      md.Markdown(
+      //       data:textChars, //widget.message.text,
+      //       shrinkWrap: true,
+      //       padding: EdgeInsets.zero,
+      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
+      //         Theme.of(context).copyWith(
+      //         textTheme: TextTheme(bodyMedium: TextStyle(
+      //           fontFamily: 'Poppins',
+      //           fontWeight: FontWeight.w300,
+      //           //color: ColorConstants.white,
+      //           fontSize: 14,
+      //           //fontWeight: FontWeight.w400,
+      //           )),
+      //       ),
+      //       )
+      //      ,
+      //       )
+      //     : urlSummaryProvider.isSummarise == true ?
+      //       md.Markdown(
+      //       data:widget.message.text,
+      //       shrinkWrap: true,
+      //       padding: EdgeInsets.zero,
+      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
+      //         Theme.of(context).copyWith(
+      //         textTheme: TextTheme(bodyMedium: TextStyle(
+      //           fontFamily: 'Poppins',
+      //           fontWeight: FontWeight.w300,
+      //           //color: ColorConstants.white,
+      //           fontSize: 14,
+      //           //fontWeight: FontWeight.w400,
+      //           )),
+      //       ),
+      //       )
+      //      ,
+      //       )
+      //     // : widget.canAnimate == false ?
+      //     //   md.Markdown(
+      //     //   data:widget.message.text,
+      //     //   shrinkWrap: true,
+      //     //   padding: EdgeInsets.zero,
+      //     //   styleSheet: md.MarkdownStyleSheet.fromTheme(
+      //     //     Theme.of(context).copyWith(
+      //     //     textTheme: TextTheme(bodyMedium: TextStyle(color: ColorConstants.white,
+      //     //       fontSize: 14,
+      //     //       //fontWeight: FontWeight.w400,
+      //     //       )),
+      //     //   ),
+      //     //   )
+      //     //  ,
+      //     //   )
+      //     :
+      //     md.Markdown(
+      //       data:widget.message.text,
+      //       shrinkWrap: true,
+      //       padding: EdgeInsets.zero,
+      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
+      //         Theme.of(context).copyWith(
+      //         textTheme: TextTheme(bodyMedium: TextStyle(
+      //           fontFamily: 'Poppins',
+      //           fontWeight: FontWeight.w300,
+      //           //color: ColorConstants.white,
+      //           fontSize: 14,
+      //           //fontWeight: FontWeight.w400,
+      //           )),
+      //       ),
+      //       )
+      //      ,
+      //       )
     );
   }
 }

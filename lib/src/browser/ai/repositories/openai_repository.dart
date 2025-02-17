@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:beldex_browser/constants_key.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:dio/dio.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -24,6 +26,96 @@ class OpenAIRepository {
   void setResponse(String? value) {
     _response = value;
   }
+
+
+
+
+Dio dio = Dio();
+  CancelToken cancelToken = CancelToken(); // Create a new cancel token
+
+  static StreamSubscription? _subscription;
+  // Function to cancel the request
+  cancelRequest() {
+    cancelToken.cancel("User canceled the request");
+  }
+
+
+Stream<String> sendTextForStream(String userMessage) async* {
+  cancelToken = CancelToken();
+
+  try {
+    final response = await dio.post<ResponseBody>(
+      "https://api.openai.com/v1/chat/completions",
+      options: Options(
+        headers: {
+          "Authorization": "Bearer ${APIClass.API_KEY}",
+          "Content-Type": "application/json",
+        },
+        responseType: ResponseType.stream,
+      ),
+      cancelToken: cancelToken,
+      data: jsonEncode({
+        "model": "gpt-4",
+        "messages": [
+          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "user", "content": userMessage}
+        ],
+        "stream": true,
+      }),
+    );
+
+
+if (cancelToken.isCancelled) {
+    print("🚨 Request was canceled: ");
+    yield "Request was canceled by the user."; // Send as single string
+  } 
+  // else {
+  //   print("❌ Network error: ");
+  //   yield "Network errors:";
+  // }
+    await for (var chunk in response.data!.stream) {
+      final decoded = utf8.decode(chunk);
+      
+      for (var line in decoded.split("\n")) {
+        if (line.isNotEmpty && line.startsWith("data: ")) {
+          String jsonString = line.substring(6).trim();
+          if (jsonString == "[DONE]") {
+            yield ''; // End of stream signal
+            return;
+          }
+
+          try {
+            Map<String, dynamic> jsonData = jsonDecode(jsonString);
+            String newText = jsonData["choices"][0]["delta"]["content"] ?? "";
+
+            // Emit words one by one with spaces
+            List<String> words = newText.split(" ");
+            for (int i = 0; i < words.length; i++) {
+              if (i > 0) yield " ";
+              yield words[i];
+            }
+          } catch (e) {
+            //yield _emitErrorMessage("Error decoding server response.");
+          }
+        }
+      }
+    }
+  } on DioException catch (e) {
+  if (CancelToken.isCancel(e)) {
+    print("🚨 Request was canceled: ${e.message}");
+    yield "Request was canceled by the user."; // Send as single string
+  } else {
+    print("❌ Network error: ${e.message}");
+    yield "Network error: ${e.message}";
+  }
+}
+catch (e) {
+  print("❌ Unexpected error: $e");
+  yield "An unexpected error occurred.";
+}
+}
+
+
 
   // Future<String> sendText(String text) async {
   // String responseText = "";

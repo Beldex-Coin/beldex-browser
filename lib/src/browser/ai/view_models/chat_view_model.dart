@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:beldex_browser/src/browser/ai/enums/roles.dart';
@@ -14,10 +15,12 @@ class ChatViewModel extends BaseModel {
   late List<ChatModel> _messages;
   late String _sumResponse;
 
+
   File? _imageFile;
   bool? _showEmoji;
   int? _modelResponseIndex;
 
+bool _isTyping = false; 
 
   String? _summariseText;
 
@@ -97,9 +100,20 @@ bool get canshowWelcome => _canshowWelcome;
     updateUI();
   }
 
+
+
+
+bool get isTyping => _isTyping;
+
+  set isTyping(bool value) {
+    _isTyping = value;
+    updateUI();
+  }
+
   ChatViewModel() {
     _messages = [];
     _sumResponse = '';
+    _isTyping = false;
   }
 
 
@@ -123,12 +137,18 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
   messages.add(ChatModel(
       text: "${webViewModel.title.toString()} - Summarise page",
       role: Roles.user,
+      isTypingComplete: true,
+      canShowRegenerate: false,
+      isSummariseResult: false,
      // image: sendFile,
     ));
     }else{
       messages.add(ChatModel(
       text: messageController.text,
       role: Roles.user,
+      isTypingComplete: true,
+      canShowRegenerate: false,
+      isSummariseResult: false,
      // image: sendFile,
     ));
     }
@@ -138,6 +158,10 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
     messages.add(ChatModel(
       role: Roles.model,
       text: "",
+      isTypingComplete: false,
+      canShowRegenerate: false,
+      isSummariseResult: false,
+      istyping: true
     ));
     modelResponseIndex = messages.length;
     scrollMessages();
@@ -148,10 +172,138 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel) async {
     messages.add(ChatModel(
       role: Roles.model,
       text: response,
+      isTypingComplete: true,
+      canShowRegenerate: false,
+      isSummariseResult: false,
+      istyping: false
     ));
     scrollMessages();
     updateUI();
   }
+
+
+
+/// get the stream type 
+
+ StreamSubscription<String>? _streamSubscription;
+ String? _lastUserMessage; // Store last user message
+
+//String? _lastUserMessage; // Store the last user message
+
+Future<void> getTextForUser({String? userMessage, bool isRegenerate = false}) async {
+  File? sendFile = _imageFile;
+
+  // Use the stored last message if regenerating, otherwise get from input field
+  String messageToSend = userMessage ?? messageController.text;
+  _lastUserMessage = messageToSend; // Save the last message
+
+  if (!isRegenerate) {
+    // Add a new user message only if it's a fresh request
+    messages.add(ChatModel(
+      text: messageToSend,
+      role: Roles.user,
+      image: sendFile,
+      isTypingComplete: true,
+      canShowRegenerate: false,
+      isSummariseResult: false,
+    ));
+  }
+
+  _imageFile = null;
+
+  if (!isRegenerate) {
+    // Add an empty AI response only if it's a fresh request
+    messages.add(ChatModel(
+      role: Roles.model,
+      text: "",
+      isTypingComplete: false,
+      canShowRegenerate: false,
+      isSummariseResult: false,
+      istyping: true
+    ));
+  }
+
+  modelResponseIndex = messages.length - 1;
+  scrollMessages();
+  updateUI();
+  
+  isTyping = true;
+  // ✅ Listen to the streaming response and update existing message
+  _streamSubscription = apiRepository.sendTextForStream(messageToSend).listen((word) {
+    print('onData coming ---$word');
+    if (modelResponseIndex == null) return;
+    messages[modelResponseIndex!].text += word; // Append words to existing text
+    updateUI();
+  }, onDone: () {
+    print('OnMessage Done--');
+    messages[modelResponseIndex!].isTypingComplete = true;
+    messages[modelResponseIndex!].canShowRegenerate = false;
+    messages[modelResponseIndex!].istyping = false;
+    isTyping = false;
+    updateUI();
+    _streamSubscription?.cancel();
+  }, onError: (error) {
+     if (modelResponseIndex != null) {
+    messages[modelResponseIndex!].istyping = false;
+    messages[modelResponseIndex!].text = error.toString(); // Ensure error message is captured
+  }
+  
+     isTyping = false;
+    print("Error streaming response: $error");
+    _streamSubscription?.cancel();
+  });
+}
+
+void stopResponse() {
+  _streamSubscription?.cancel();
+  if (modelResponseIndex != null) {
+    //isTyping = false;
+   // messages[modelResponseIndex!].canShowRegenerate = true;
+  }
+  updateUI();
+}
+
+void regenerateResponse() {
+  if (modelResponseIndex == null || _lastUserMessage == null) return;
+
+  // Reset only the last AI message instead of adding a new one
+  messages[modelResponseIndex!] = ChatModel(
+    role: Roles.model,
+    text: "",
+    isTypingComplete: false,
+    canShowRegenerate: false,
+    isLoading: true,
+    isSummariseResult: false,
+  );
+
+  updateUI();
+  getTextForUser(userMessage: _lastUserMessage!, isRegenerate: true); // Restart response
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
