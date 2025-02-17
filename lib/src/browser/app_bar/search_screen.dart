@@ -658,17 +658,18 @@ class _SearchScreenState extends State<SearchScreen> {
                   Navigator.pop(context);
                   bool showWelcomeMessage = true;
       SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSubmitted', true);
     bool? hasSubmitted = prefs.getBool('hasSubmitted');
     setState(() {});
-      showWelcomeMessage = !(hasSubmitted ?? false);
-    
-
+      showWelcomeMessage = (hasSubmitted ?? false);
+      print("Show welcome page ---------->$hasSubmitted -------  $showWelcomeMessage");
+   
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
      builder: (context){
 
-     return BeldexAIScreen(isWelcomeShown: showWelcomeMessage,searchWord:canShowSearchAI); //DraggableAISheet();
+     return BeldexAIScreen(isWelcomeShown:false ,searchWord:canShowSearchAI); //DraggableAISheet();
 
 
 
