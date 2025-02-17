@@ -6,6 +6,7 @@ import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
+import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
@@ -499,6 +500,7 @@ void _parseResponse(String response) {
                                               title,
                                               shrinkWrap: true,
                                               padding: EdgeInsets.zero,
+                                              physics: NeverScrollableScrollPhysics(),
                                               styleSheet:
                                                   md.MarkdownStyleSheet.fromTheme(
                                                 Theme.of(context).copyWith(
@@ -524,6 +526,7 @@ void _parseResponse(String response) {
                                             // title,
                                             shrinkWrap: true,
                                             padding: EdgeInsets.zero,
+                                            physics: NeverScrollableScrollPhysics(),
                                             styleSheet:
                                                 md.MarkdownStyleSheet.fromTheme(
                                               Theme.of(context).copyWith(
@@ -593,6 +596,7 @@ void _parseResponse(String response) {
                                                         data: bullet,
                                                         shrinkWrap: true,
                                                         padding: EdgeInsets.zero,
+                                                        physics: NeverScrollableScrollPhysics(),
                                                         styleSheet:
                                                             md.MarkdownStyleSheet
                                                                 .fromTheme(
@@ -1215,72 +1219,83 @@ class _DraggableAISheetState extends State<DraggableAISheet> {
 
 class InitialSummariseWelcomeWidget extends StatelessWidget {
   final DarkThemeProvider themeProvider;
-  const InitialSummariseWelcomeWidget({super.key, required this.themeProvider});
+  final ChatViewModel model;
+  final BrowserModel browserModel;
+  final UrlSummaryProvider urlSummaryProvider;
+  final WebViewModel webViewModel;
+  const InitialSummariseWelcomeWidget({super.key, required this.themeProvider, required this.model, required this.browserModel, required this.urlSummaryProvider, required this.webViewModel});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SvgPicture.asset(themeProvider.darkTheme
-                  ? IconConstants.welcomeBeldexAIDark
-                  : IconConstants.welcomeBeldexAIWhite),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Text(
-                  StringConstants.welcomeAIContent,
-                  style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff222222), fontSize: 14),
-                ),
-              )
-            ],
+    return Container(
+      //color: Colors.green,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SvgPicture.asset(themeProvider.darkTheme
+                    ? IconConstants.welcomeBeldexAIDark
+                    : IconConstants.welcomeBeldexAIWhite),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    StringConstants.welcomeAIContent,
+                    //textAlign: TextAlign.center,
+                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff222222),fontFamily: 'Poppins' , fontSize: 14),
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        // Container(
-        //   height: 180,
-        //   width: MediaQuery.of(context).size.width,
-        //   margin: EdgeInsets.all(8.0),
-        //   padding: EdgeInsets.all(16),
-        //   decoration: BoxDecoration(
-        //     color: Color(0xff282836),
-        //     borderRadius: BorderRadius.circular(10),
-        //   ),
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Text(StringConstants.needHelpWithSite),
-        //       Padding(
-        //         padding:
-        //             const EdgeInsets.symmetric(vertical: 8.0),
-        //         child: Text(
-        //             StringConstants.iCanHelpYouSummarising),
-        //       ),
-        //       Align(
-        //         alignment: Alignment.bottomRight,
-        //         child: Container(
-        //           padding: EdgeInsets.symmetric(
-        //               vertical: 12, horizontal: 14),
-        //           decoration: BoxDecoration(
-        //               color: Color(0xff171720),
-        //               borderRadius:
-        //                   BorderRadius.circular(12)),
-        //           child: Text(
-        //             StringConstants.summariseThispage,
-        //             style:
-        //                 TextStyle(color: Color(0xff01D001)),
-        //           ),
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // )
-      ],
+          SizedBox(
+            height: model.canshowWelcome &&
+                                    browserModel.webViewTabs.isNotEmpty &&
+                                    model.isSummariseAvailable ? 20 : 80,
+          ),
+          // Container(
+          //   height: 180,
+          //   width: MediaQuery.of(context).size.width,
+          //   margin: EdgeInsets.all(8.0),
+          //   padding: EdgeInsets.all(16),
+          //   decoration: BoxDecoration(
+          //     color: Color(0xff282836),
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text(StringConstants.needHelpWithSite),
+          //       Padding(
+          //         padding:
+          //             const EdgeInsets.symmetric(vertical: 8.0),
+          //         child: Text(
+          //             StringConstants.iCanHelpYouSummarising),
+          //       ),
+          //       Align(
+          //         alignment: Alignment.bottomRight,
+          //         child: Container(
+          //           padding: EdgeInsets.symmetric(
+          //               vertical: 12, horizontal: 14),
+          //           decoration: BoxDecoration(
+          //               color: Color(0xff171720),
+          //               borderRadius:
+          //                   BorderRadius.circular(12)),
+          //           child: Text(
+          //             StringConstants.summariseThispage,
+          //             style:
+          //                 TextStyle(color: Color(0xff01D001)),
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // )
+        ],
+      ),
     );
   }
 }
