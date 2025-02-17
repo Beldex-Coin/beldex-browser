@@ -2,9 +2,9 @@ class StringConstants {
 
 
   
-  static const String welcomeAIContent = "Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula consectetur, ultrices mauris. Maecenas vitae mattis tellus. Nullam quis imperdiet augue. Vestibulum auctor.";
-  static const String needHelpWithSite = "Need help with website?";
-  static const String iCanHelpYouSummarising = "I can help you summarising articles, expanding on a site's content and much more. Not sure where to start? Try this:";
+  static const String welcomeAIContent = "Beldex AI enhances the Beldex Browser with intelligent features for a seamless web experience. It summarizes page content for quick reading. By efficiently routing traffic through masternodes and exit nodes, it ensures confidentiality and faster browsing. Unlike subscription-based models, Beldex AI is free to use, delivering advanced functionality while prioritizing user convenience and a confidentiality-centered internet experience. Explore smarter, faster browsing with Beldex AI";
+  static const String needHelpWithSite = "Need help with this site?";
+  static const String iCanHelpYouSummarising = "BeldexAI can help you summarize articles, expand on a site's content and much more. Try this.";
   static const String summariseThispage = "Summarise this page";
   static const String enterPromptHere = "Enter prompt here..";
   static const String beldexAI = "Beldex AI";
