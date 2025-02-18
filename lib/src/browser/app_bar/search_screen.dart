@@ -494,6 +494,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               }
                               _searchController.text = '';
                               buttonItems.clear();
+                              canShowSearchAI = '';
                             });
                           },
                         ))
