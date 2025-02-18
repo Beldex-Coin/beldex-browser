@@ -53,7 +53,8 @@ copyText(String text){
     final webviewModel = Provider.of<WebViewModel>(context);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0
+      ),
       child: Container(
         decoration: BoxDecoration(
           //color: ColorConstants.grey7A8194,
@@ -66,13 +67,13 @@ copyText(String text){
           children: [
            
            Padding(
-             padding: const EdgeInsets.all(15.0),
+             padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                children: [
                  Row(
                   children: [
-                    SvgPicture.asset(IconConstants.userIcon),
+                    SvgPicture.asset(themeProvider.darkTheme ? IconConstants.userIconDark : IconConstants.userIconWhite),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(StringConstants.you,style: TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',),),
@@ -135,10 +136,16 @@ copyText(String text){
                ],
              ),
            ),
-            Divider(color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
+            SizedBox(
+              //color: Colors.green,
+              height: 2,
+              child: Divider(
+                
+                color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
+            ),
 
             Padding(
-             padding: const EdgeInsets.all(15.0),
+             padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                children: [
@@ -187,78 +194,10 @@ copyText(String text){
                 size: 30,
               ),
             ),
-
-            // Align(
-            //   alignment: Alignment.center,
-            //   child: GestureDetector(
-            //     onDoubleTap: (){
-
-            //     },
-            //     child: Container(
-            //       height: 40,
-            //       width: 130,
-            //       padding: EdgeInsets.symmetric(vertical: 5),
-            //       decoration: BoxDecoration(
-            //        borderRadius: BorderRadius.circular(12),
-            //               border: Border.all(color: Color(0xff42425F)),
-            //         boxShadow: [
-            //           BoxShadow(
-            //             color: Color(0xff42425F).withOpacity(0.2),
-            //             offset: const Offset(0, 4),
-            //             blurRadius: 6
-            //           )
-            //         ]
-            //       ),
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           Icon(Icons.refresh,size: 18,),
-            //           Text('Regenerate')
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // )
                ],
              ),
            ),
            
-           
-           
-            // // User Message
-            // MessageBody(
-            //   isLoading: false,
-            //   message: userMessage,
-            //   topLeft: 20,
-            //   topRight: 20,
-            //   bottomLeft: 20,
-            //   bottomRight: 20,
-            // ),
-            // const SizedBox(height: 10),
-            // // Model Response
-            // modelMessage.text.isNotEmpty || modelMessage.image != null
-            //     ? MessageBody(
-            //         isLoading: false,
-            //         message: modelMessage,
-            //         topLeft: 20,
-            //         topRight: 20,
-            //         bottomLeft: 20,
-            //         bottomRight: 20,
-            //       )
-            //     : const SizedBox(),
-            // // Model Image (if exists)
-            // if (modelMessage.image != null)
-            //   Padding(
-            //     padding: const EdgeInsets.only(top: 10.0),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(20),
-            //       child: Image(
-            //         height: 200,
-            //         image: FileImage(modelMessage.image!),
-            //         fit: BoxFit.fill,
-            //       ),
-            //     ),
-            //   ),
           ],
         ),
       ),
