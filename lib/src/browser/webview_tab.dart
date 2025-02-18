@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -45,11 +46,36 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
       TextEditingController();
   bool checkUrl = false;
 
+  List<ContentBlocker>? contentBlockers = []; // Domain filter variable for ad blocks
+
+setAdBlocker() async {
+    for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
+      contentBlockers?.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+    // Apply the "display: none" style to some HTML elements
+    contentBlockers?.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector: ".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
+    )));
+   
+  }
+
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-
+    setAdBlocker();
     _pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
@@ -203,7 +229,7 @@ bool _isValidUrl(String url) {
         "Mozilla/5.0 (Linux; Android 10; Pixel Build/QP1A.190711.019; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Mobile Safari/537.36";
     //"Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
     initialSettings.transparentBackground = true;
-
+    initialSettings.contentBlockers = contentBlockers; // for adblocker
     initialSettings.safeBrowsingEnabled = true;
     initialSettings.disableDefaultErrorPage = true;
     initialSettings.supportMultipleWindows = true;

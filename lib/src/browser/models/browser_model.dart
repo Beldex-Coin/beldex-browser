@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/src/browser/models/favorite_model.dart';
 import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -154,9 +155,65 @@ void updateScreenSecurity(bool value)async{
 
 
 
+setAdblocker() async {
+     List<ContentBlocker>? contentBlockers = [];
+    for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
+      contentBlockers.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+    
+     // Apply the "display: none" style to some HTML elements
+    contentBlockers.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector: ".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
+            )));
+  
+  _currentWebViewModel.settings?.contentBlockers = contentBlockers;
+
+
+    for (var webViewTab in _webViewTabs) {
+      webViewTab.webViewModel.settings?.contentBlockers = contentBlockers;
+    }
+
+   try {
+      _currentWebViewModel.webViewController?.setSettings(
+          settings: _currentWebViewModel.settings ?? InAppWebViewSettings());
+    } catch (e) {}
+
+    
+    var webViewController = _currentWebViewModel.webViewController;
+
+    webViewController?.setSettings(
+        settings: _currentWebViewModel.settings ?? InAppWebViewSettings());
+    var webSet = await webViewController?.getSettings();
+    _currentWebViewModel.settings = webSet;
+    if (kDebugMode) {
+      print(
+          "### ADBLOCKER SETTINGS: ${_currentWebViewModel.settings?.contentBlockers}");
+    }
+
+
+}
+
+
+
+
+
+
+
 
   BrowserModel() {
     _currentWebViewModel = WebViewModel();
+    setAdblocker();
   }
 
   UnmodifiableListView<WebViewTab> get webViewTabs =>
