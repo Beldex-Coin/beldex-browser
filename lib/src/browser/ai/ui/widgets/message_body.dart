@@ -4,8 +4,10 @@ import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -112,19 +114,20 @@ void _startTypingAnimation(BuildContext context) {
   @override
   Widget build(BuildContext context) {
     final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
-        horizontal: 15.0,
+        //horizontal: 8.0,
       ),
       decoration: BoxDecoration(
        // color: Colors.green, //ColorConstants.grey7A8194,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(widget.topLeft),
-          topRight: Radius.circular(widget.topRight),
-          bottomLeft: Radius.circular(widget.bottomLeft),
-          bottomRight: Radius.circular(widget.bottomRight),
-        ),
+        // borderRadius: BorderRadius.only(
+        //   topLeft: Radius.circular(widget.topLeft),
+        //   topRight: Radius.circular(widget.topRight),
+        //   bottomLeft: Radius.circular(widget.bottomLeft),
+        //   bottomRight: Radius.circular(widget.bottomRight),
+        // ),
       ),
       child:Column(
         children:[
@@ -135,7 +138,7 @@ void _startTypingAnimation(BuildContext context) {
             physics: NeverScrollableScrollPhysics(),
             styleSheet: md.MarkdownStyleSheet.fromTheme(
               Theme.of(context).copyWith(
-              textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white, // Colors.yellow,
+              textTheme: TextTheme(bodyMedium: TextStyle(//color: themeProvider.darkTheme ? Colors.white : Colors.black, // Colors.yellow,
                 fontSize: 14,
                 fontFamily: 'Poppins'
                 //fontWeight: FontWeight.w400,
@@ -145,14 +148,11 @@ void _startTypingAnimation(BuildContext context) {
             ),
             Visibility(
               visible: widget.message.canShowRegenerate,
-              child:Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          child: Center(   // if(widget.message.canShowRegenerate){
-
-        //_displayedText = '';
-                            child: ElevatedButton(
-              onPressed: () {
-                //regenerateResponse(typingProvider);
+              child:
+              
+              GestureDetector(
+                onTap: (){
+                      //regenerateResponse(typingProvider);
                  // typingProvider.updateAITypingState(true);
                  widget.model.regenerateResponse();
                setState(() {
@@ -160,87 +160,50 @@ void _startTypingAnimation(BuildContext context) {
                    widget.message.isTypingComplete = false;
                   });
                 // Define button action here
-                print("Button clicked!");
-              },
-              child: Text("Regenerate"),
-                            ),
-                          ),
-                        )
+                //print("Button clicked!");
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                   padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
+                   width: 127,
+                   decoration: BoxDecoration(
+                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                    borderRadius: BorderRadius.circular(12)
+                   ),
+                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                        SvgPicture.asset('assets/images/ai-icons/Vector.svg'),
+                         Text('Regenerate',style: TextStyle(fontFamily: 'Poppins'),),
+                       ],
+                     ),
+                ),
+              ),
+              
+              
+              // Padding(
+              //             padding: const EdgeInsets.symmetric(vertical: 20.0),
+              //             child: Center(   
+              //               child: ElevatedButton(
+              // onPressed: () {
+              //   //regenerateResponse(typingProvider);
+              //    // typingProvider.updateAITypingState(true);
+              //    widget.model.regenerateResponse();
+              //  setState(() {
+              //      widget.message.canShowRegenerate = false;
+              //      widget.message.isTypingComplete = false;
+              //     });
+              //   // Define button action here
+              //   print("Button clicked!");
+              // },
+              // child: Text("Regenerate"),
+              //               ),
+              //             ),
+              //           )
               
                )
         ]
       )
-       
-      //  widget.isLoading && textChars.isNotEmpty && urlSummaryProvider.isSummarise == false
-      //     ? 
-      //      md.Markdown(
-      //       data:textChars, //widget.message.text,
-      //       shrinkWrap: true,
-      //       padding: EdgeInsets.zero,
-      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
-      //         Theme.of(context).copyWith(
-      //         textTheme: TextTheme(bodyMedium: TextStyle(
-      //           fontFamily: 'Poppins',
-      //           fontWeight: FontWeight.w300,
-      //           //color: ColorConstants.white,
-      //           fontSize: 14,
-      //           //fontWeight: FontWeight.w400,
-      //           )),
-      //       ),
-      //       )
-      //      ,
-      //       )
-      //     : urlSummaryProvider.isSummarise == true ?
-      //       md.Markdown(
-      //       data:widget.message.text,
-      //       shrinkWrap: true,
-      //       padding: EdgeInsets.zero,
-      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
-      //         Theme.of(context).copyWith(
-      //         textTheme: TextTheme(bodyMedium: TextStyle(
-      //           fontFamily: 'Poppins',
-      //           fontWeight: FontWeight.w300,
-      //           //color: ColorConstants.white,
-      //           fontSize: 14,
-      //           //fontWeight: FontWeight.w400,
-      //           )),
-      //       ),
-      //       )
-      //      ,
-      //       )
-      //     // : widget.canAnimate == false ?
-      //     //   md.Markdown(
-      //     //   data:widget.message.text,
-      //     //   shrinkWrap: true,
-      //     //   padding: EdgeInsets.zero,
-      //     //   styleSheet: md.MarkdownStyleSheet.fromTheme(
-      //     //     Theme.of(context).copyWith(
-      //     //     textTheme: TextTheme(bodyMedium: TextStyle(color: ColorConstants.white,
-      //     //       fontSize: 14,
-      //     //       //fontWeight: FontWeight.w400,
-      //     //       )),
-      //     //   ),
-      //     //   )
-      //     //  ,
-      //     //   )
-      //     :
-      //     md.Markdown(
-      //       data:widget.message.text,
-      //       shrinkWrap: true,
-      //       padding: EdgeInsets.zero,
-      //       styleSheet: md.MarkdownStyleSheet.fromTheme(
-      //         Theme.of(context).copyWith(
-      //         textTheme: TextTheme(bodyMedium: TextStyle(
-      //           fontFamily: 'Poppins',
-      //           fontWeight: FontWeight.w300,
-      //           //color: ColorConstants.white,
-      //           fontSize: 14,
-      //           //fontWeight: FontWeight.w400,
-      //           )),
-      //       ),
-      //       )
-      //      ,
-      //       )
     );
   }
 }
