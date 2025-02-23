@@ -223,8 +223,8 @@ class BeldexAIScreen extends StatelessWidget {
                                     
                                                    switch(value){
                                                     case AIChatPopupMenuActions.COPY_CHAT:
-                                                      // Clipboard.setData(ClipboardData(text: modelMessage.text));
-                                                      // showMessage('Copied');
+                                                      Clipboard.setData(ClipboardData(text: modelMessage.text));
+                                                      showMessage('Copied');
                                                     break;
                                                     case AIChatPopupMenuActions.SHARE_CHAT:
                                                      Share.share('${modelMessage.text}', subject:modelMessage.text);
@@ -271,12 +271,12 @@ class BeldexAIScreen extends StatelessWidget {
                                                 switch (choice) {
                                                   case AIChatPopupMenuActions.COPY_CHAT:
                                                     return CustomPopupMenuItem<String>(
-                                                      enabled: model.messages.isNotEmpty,
+                                                      enabled: model.messages.isNotEmpty && !model.isTyping,
                                                       value: choice,
                                                       height: 35,
                                                       child: Row(
                                                           children: [
-                                                           SvgPicture.asset(IconConstants.copyIconWhite ,color:model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
+                                                           SvgPicture.asset(IconConstants.copyIconWhite ,color:model.messages.isEmpty ||  model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
                                                   ?const Color(0xffFFFFFF)
                                                   :const Color(0xff282836)),
                                                             Padding(
@@ -284,19 +284,19 @@ class BeldexAIScreen extends StatelessWidget {
                                                               child: Text(choice, style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall?.copyWith( 
-                                                  color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                  color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
                                                 )),
                                                             ),
                                                           ]),
                                                     );
                                                   case AIChatPopupMenuActions.SHARE_CHAT:
                                                     return CustomPopupMenuItem<String>(
-                                                      enabled: model.messages.isNotEmpty,
+                                                      enabled:model.messages.isNotEmpty && !model.isTyping,
                                                       value: choice,
                                                       height: 35,
                                                       child: Row(
                                                           children: [
-                                                             SvgPicture.asset('assets/images/ai-icons/Share.svg' ,color:model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
+                                                             SvgPicture.asset('assets/images/ai-icons/Share.svg' ,color:model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme
                                                 ?const Color(0xffFFFFFF)
                                                 :const Color(0xff282836)),
                                                             Padding(
@@ -304,20 +304,20 @@ class BeldexAIScreen extends StatelessWidget {
                                                               child: Text(choice, style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall?.copyWith( 
-                                                  color: model.messages.isEmpty ?themeProvider.darkTheme ? Color(0xff6D6D81):  Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                  color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81):  Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
                                                 )),
                                                             ),
                                                           ]),
                                                     );
                                                   case AIChatPopupMenuActions.DELETE_CHAT:
                                                     return CustomPopupMenuItem<String>(
-                                                      enabled: model.messages.isNotEmpty,
+                                                      enabled: model.messages.isNotEmpty && !model.isTyping,
                                                       value: choice,
                                                       height: 35,
                                                       child: Row(
                                                           children: [
                                                             SvgPicture.asset('assets/images/ai-icons/Trash 1.svg', 
-                                                                     color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5)
+                                                                     color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5)
                                          : themeProvider.darkTheme
                                                 ?const Color(0xffFFFFFF)
                                                 :const Color(0xff282836)),
@@ -326,7 +326,7 @@ class BeldexAIScreen extends StatelessWidget {
                                                               child: Text(choice,style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall?.copyWith( 
-                                                  color: model.messages.isEmpty ? themeProvider.darkTheme ? Color(0xff6D6D81):Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
+                                                  color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81):Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
                                                 )),
                                                             ),
                                                           ]),
@@ -688,42 +688,50 @@ class BeldexAIScreen extends StatelessWidget {
                                 : SizedBox(),
           
 
-
-
-
 Container(
-        margin: const EdgeInsets.only(bottom: 10, left: 8, right: 8, top: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding:  EdgeInsets.symmetric( horizontal:10),
-                decoration: BoxDecoration(
-                 // color: ColorConstants.grey3D4354,
-                 border: Border.all(color:themeProvider.darkTheme ? Color(0xff3D4354): Color(0xffDADADA)),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                      Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        // InputFieldButton(
-                        //   icon: Icons.emoji_emotions,
-                        //   onpressed: () {
-                        //     FocusScope.of(context).unfocus();
-                        //     widget.model?.setShowEmoji = true;
-                        //   },
-                        // ),
-                       // model.imageFile == null
-                           // ? 
-                            Flexible(
-                                child: TextField(
-              enabled: !model.isTyping, //(typingProvider.isTyping),
-              //controller: _textController,
-              onSubmitted: (value) {
+  margin: const EdgeInsets.only(bottom: 10, left: 8, right: 8, top: 10),
+  child: Row(
+    children: [
+      Expanded(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA),
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.2, // 40% of screen height
+                          ),
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              reverse: true,
+                              physics: const BouncingScrollPhysics(),
+                              child: TextField(
+                                enabled: !model.isTyping,
+                                controller: model.messageController,
+                                maxLength: 1000,
+                                 inputFormatters: [
+                                    LengthLimitingTextInputFormatter(1000), // Restrict input
+                                  ],
+                                maxLines: null, // Auto-expand with limit
+                                keyboardType: TextInputType.multiline,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
+                                 onSubmitted: (value) {
                 urlSummaryProvider.updateSummariser(false);
                 setWelcomeAIScreen();
                 model.canshowWelcome = false;
@@ -733,110 +741,291 @@ Container(
                   model.messageController.clear();
                 }
               },
-              controller: model.messageController,
-              maxLines: null,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14), // Text color
-              cursorColor: Colors.green, // Cursor color
-              decoration: InputDecoration(
-                  border: InputBorder.none, // No border for the TextField
-                  hintText: StringConstants.enterPromptHere, // Placeholder text
-                  hintStyle: TextStyle(
-                    color: Color(0xff6D6D81), //Colors.white, // Placeholder text color,
-                    fontFamily: 'Poppins'
-                  ),
-                  suffix: GestureDetector(
-                    onTap: () => model.messageController.clear(),
-                    child: SvgPicture.asset(themeProvider.darkTheme
-                        ? IconConstants.closeIconDark
-                        : IconConstants.closeIconWhite),
-                  )),
-            ),  
-                              //   TextFormFieldWidget(
-                              //   model: widget.model,
-                              // )
+                                cursorColor: Colors.green,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  counterText: '',
+                                  hintText: StringConstants.enterPromptHere,
+                                  hintStyle: const TextStyle(
+                                    color: Color(0xff6D6D81),
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
                               ),
-                      ],
-                    ),
-                                            IconButton(
-  onPressed: () {
-    final lastModelMessageIndex = model.messages.lastIndexWhere(
-      (message) => message.role == Roles.model && message.text.isNotEmpty,
-    );
-
-    final lastUserMessageIndex = model.messages.lastIndexWhere(
-  (message) => message.role == Roles.user,
-);
-    //messageBodyTimer?.cancel();
-
-    if (model.isTyping) {
-      // Stop typing state
-      model.isTyping = false;
-      //typingProvider.updateAITypingState(false);
-     model.stopResponse();
-       // Check if the last user message exists but its respective model message is empty
-  if (lastUserMessageIndex != -1 &&
-      lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
-      model.messages[lastUserMessageIndex + 1].role == Roles.model &&
-      model.messages[lastUserMessageIndex + 1].text.isEmpty) {
-       // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
-    print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
-    OpenAIRepository().cancelRequest();
-    model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted';
-    model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
-  }else if (lastModelMessageIndex != -1) {
-    
-        model.messages[lastModelMessageIndex].canShowRegenerate = true;
-         print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
-      }
-
-    } else {
-      // Check if there’s any input in the message controller
-      if (model.messageController.text.isNotEmpty) {
-        //MessageBodyState().updateTypingText();
-        urlSummaryProvider.updateSummariser(false);
-        //typingProvider.updateAITypingState(true);
-        model.isTyping = true;
-       
-        // Reset messages state and UI components
-         if (lastModelMessageIndex != -1) {
-           model.messages[lastModelMessageIndex].canShowRegenerate = false;
-        //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
-        //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
-           
-        //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
-        //   model.messages[lastModelMessageIndex].typingText = '';
-         }
-          
-        //   model.messages[lastModelMessageIndex].isTypingComplete = true;
-        //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
-        // }
-        FocusScope.of(context).unfocus();
-        setWelcomeAIScreen();
-        model.canshowWelcome = false;
-        model.isSummariseAvailable = false;
-
-        // Handle new message if text is present
-        model.getTextForUser(); //getTextAndImageInfo();
-        model.messageController.clear();
-      }
-    }
-  },
-  icon: SvgPicture.asset(
-    model.isTyping
-        ? 'assets/images/ai-icons/Stop.svg'
-        : IconConstants.sendDark,
-  ),
-)
-                  ],
-                ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical:5.0),
+                        child: SizedBox(
+                          //color: Colors.green,
+                          height: 35,width: 30,
+                          child: IconButton(
+                            visualDensity: VisualDensity.comfortable,
+                           // padding: EdgeInsets.symmetric(vertical: 5),
+                            onPressed: () {
+                               final lastModelMessageIndex = model.messages.lastIndexWhere(
+                              (message) => message.role == Roles.model && message.text.isNotEmpty,
+                            );
+                        
+                            final lastUserMessageIndex = model.messages.lastIndexWhere(
+                          (message) => message.role == Roles.user,
+                        );
+                            //messageBodyTimer?.cancel();
+                        
+                            if (model.isTyping) {
+                              // Stop typing state
+                              model.isTyping = false;
+                              //typingProvider.updateAITypingState(false);
+                             model.stopResponse();
+                               // Check if the last user message exists but its respective model message is empty
+                          if (lastUserMessageIndex != -1 &&
+                              lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
+                              model.messages[lastUserMessageIndex + 1].role == Roles.model &&
+                              model.messages[lastUserMessageIndex + 1].text.isEmpty) {
+                               // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
+                            print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
+                            OpenAIRepository().cancelRequest();
+                            model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted';
+                            model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
+                          }else if (lastModelMessageIndex != -1) {
+                            
+                                model.messages[lastModelMessageIndex].canShowRegenerate = true;
+                                 print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
+                              }
+                        
+                            } else {
+                              // Check if there’s any input in the message controller
+                              if (model.messageController.text.isNotEmpty) {
+                                //MessageBodyState().updateTypingText();
+                                urlSummaryProvider.updateSummariser(false);
+                                //typingProvider.updateAITypingState(true);
+                                model.isTyping = true;
+                               
+                                // Reset messages state and UI components
+                                 if (lastModelMessageIndex != -1) {
+                                   model.messages[lastModelMessageIndex].canShowRegenerate = false;
+                                //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
+                                //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
+                                   
+                                //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
+                                //   model.messages[lastModelMessageIndex].typingText = '';
+                                 }
+                                  
+                                //   model.messages[lastModelMessageIndex].isTypingComplete = true;
+                                //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
+                                // }
+                                FocusScope.of(context).unfocus();
+                                setWelcomeAIScreen();
+                                model.canshowWelcome = false;
+                                model.isSummariseAvailable = false;
+                        
+                                // Handle new message if text is present
+                                model.getTextForUser(); //getTextAndImageInfo();
+                                model.messageController.clear();
+                              }
+                            }
+                        
+                            },
+                            icon: SvgPicture.asset(
+                              model.isTyping
+                                  ? themeProvider.darkTheme
+                                      ? 'assets/images/ai-icons/Stop.svg'
+                                      : 'assets/images/ai-icons/Stop Circled 1.svg'
+                                  : themeProvider.darkTheme
+                                      ? IconConstants.sendDark
+                                      : IconConstants.sendWhite,
+                              // width: 20, // Ensure visibility
+                              // height: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ),
-          ],
+              Positioned(
+                right: -7,
+                child: Visibility(
+                  visible: model.messageController.text.isNotEmpty,
+                  child: GestureDetector(
+                                      onTap: () => model.messageController.clear(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(17.0),
+                                        child: SvgPicture.asset(
+                                          themeProvider.darkTheme
+                                              ? IconConstants.closeIconDark
+                                              : IconConstants.closeIconWhite,
+                                          width: 15, // Ensure visibility
+                                          height: 15,
+                                        ),
+                                      ),
+                                    ),
+                ),)
+            ],
+          ),
         ),
       ),
+    ],
+  ),
+),
+
+
+
+// Container(
+//         margin: const EdgeInsets.only(bottom: 10, left: 8, right: 8, top: 10),
+//         child: Row(
+//           children: [
+//             Expanded(
+//               child: Container(
+//                 padding:  EdgeInsets.symmetric( horizontal:10),
+//                 decoration: BoxDecoration(
+//                  // color: ColorConstants.grey3D4354,
+//                  border: Border.all(color:themeProvider.darkTheme ? Color(0xff3D4354): Color(0xffDADADA)),
+//                   borderRadius: BorderRadius.circular(10.0),
+//                 ),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.end,
+//                   children: [
+//                       Row(
+//                       mainAxisAlignment: MainAxisAlignment.end,
+//                       mainAxisSize: MainAxisSize.max,
+//                       children: [
+//                         // InputFieldButton(
+//                         //   icon: Icons.emoji_emotions,
+//                         //   onpressed: () {
+//                         //     FocusScope.of(context).unfocus();
+//                         //     widget.model?.setShowEmoji = true;
+//                         //   },
+//                         // ),
+//                        // model.imageFile == null
+//                            // ? 
+//                             Flexible(
+//                                 child: TextField(
+//               enabled: !model.isTyping, //(typingProvider.isTyping),
+//               //controller: _textController,
+//               onSubmitted: (value) {
+//                 urlSummaryProvider.updateSummariser(false);
+//                 setWelcomeAIScreen();
+//                 model.canshowWelcome = false;
+//                 model.isSummariseAvailable = false;
+//                 if (model.messageController.text.toString().isNotEmpty) {
+//                   model.getTextAndImageInfo();
+//                   model.messageController.clear();
+//                 }
+//               },
+//               controller: model.messageController,
+//               maxLines: null,
+//               style: TextStyle(
+//                   //color: Colors.white,
+//                   fontWeight: FontWeight.normal,
+//                   fontSize: 14), // Text color
+//               cursorColor: Colors.green, // Cursor color
+//               decoration: InputDecoration(
+//                   border: InputBorder.none, // No border for the TextField
+//                   hintText: StringConstants.enterPromptHere, // Placeholder text
+//                   hintStyle: TextStyle(
+//                     color: Color(0xff6D6D81), //Colors.white, // Placeholder text color,
+//                     fontFamily: 'Poppins'
+//                   ),
+//                   suffix: GestureDetector(
+//                     onTap: () => model.messageController.clear(),
+//                     child: SvgPicture.asset(themeProvider.darkTheme
+//                         ? IconConstants.closeIconDark
+//                         : IconConstants.closeIconWhite),
+//                   )),
+//             ),  
+//                               //   TextFormFieldWidget(
+//                               //   model: widget.model,
+//                               // )
+//                               ),
+//                       ],
+//                     ),
+//                                             IconButton(
+//   onPressed: () {
+//     final lastModelMessageIndex = model.messages.lastIndexWhere(
+//       (message) => message.role == Roles.model && message.text.isNotEmpty,
+//     );
+
+//     final lastUserMessageIndex = model.messages.lastIndexWhere(
+//   (message) => message.role == Roles.user,
+// );
+//     //messageBodyTimer?.cancel();
+
+//     if (model.isTyping) {
+//       // Stop typing state
+//       model.isTyping = false;
+//       //typingProvider.updateAITypingState(false);
+//      model.stopResponse();
+//        // Check if the last user message exists but its respective model message is empty
+//   if (lastUserMessageIndex != -1 &&
+//       lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
+//       model.messages[lastUserMessageIndex + 1].role == Roles.model &&
+//       model.messages[lastUserMessageIndex + 1].text.isEmpty) {
+//        // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
+//     print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
+//     OpenAIRepository().cancelRequest();
+//     model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted';
+//     model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
+//   }else if (lastModelMessageIndex != -1) {
+    
+//         model.messages[lastModelMessageIndex].canShowRegenerate = true;
+//          print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
+//       }
+
+//     } else {
+//       // Check if there’s any input in the message controller
+//       if (model.messageController.text.isNotEmpty) {
+//         //MessageBodyState().updateTypingText();
+//         urlSummaryProvider.updateSummariser(false);
+//         //typingProvider.updateAITypingState(true);
+//         model.isTyping = true;
+       
+//         // Reset messages state and UI components
+//          if (lastModelMessageIndex != -1) {
+//            model.messages[lastModelMessageIndex].canShowRegenerate = false;
+//         //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
+//         //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
+           
+//         //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
+//         //   model.messages[lastModelMessageIndex].typingText = '';
+//          }
+          
+//         //   model.messages[lastModelMessageIndex].isTypingComplete = true;
+//         //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
+//         // }
+//         FocusScope.of(context).unfocus();
+//         setWelcomeAIScreen();
+//         model.canshowWelcome = false;
+//         model.isSummariseAvailable = false;
+
+//         // Handle new message if text is present
+//         model.getTextForUser(); //getTextAndImageInfo();
+//         model.messageController.clear();
+//       }
+//     }
+//   },
+//   icon: SvgPicture.asset(
+//     model.isTyping
+//         ? themeProvider.darkTheme ? 'assets/images/ai-icons/Stop.svg' : 'assets/images/ai-icons/Stop Circled 1.svg'
+//         : themeProvider.darkTheme ? IconConstants.sendDark : IconConstants.sendWhite,
+      
+//   ),
+// )
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
 
 
 
