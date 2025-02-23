@@ -310,54 +310,96 @@ void regenerateResponse() {
 
 // For Ask Beldex AI
 
-Future<void> getTextFromAskBeldexAI(String question,WebViewModel webViewModel) async {
-   // File? sendFile;
-   
-final uri = Uri.parse(question);
-     if(uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')){
-      // sendFile = imageFile;
-      messages.add(ChatModel(
-      text: '$uri',
+Future<void> getTextFromAskBeldexAI(String question, WebViewModel webViewModel) async {
+  try {
+    // Strict URL detection regex (only detects URLs with "http://" or "https://")
+    final urlRegex = RegExp(
+      r'\b(https?|ftp):\/\/[^\s/$.?#].[^\s]*\b',
+      caseSensitive: false,
+    );
+
+    final match = urlRegex.firstMatch(question);
+    bool containsUrl = match != null;
+
+    String? extractedUrl = containsUrl ? match!.group(0) : null;
+
+    messages.add(ChatModel(
+      text: question, // Keep the original text without modification
       role: Roles.user,
-      //image: null,// sendFile,
     ));
-   
-     }else{
-      // sendFile = imageFile;
-      messages.add(ChatModel(
-      text: question,
-      role: Roles.user,
-      //image: null,// sendFile,
-    ));
-   
-     }
-
-
-
-
-
-   
+    print("The content contains url ? --> $containsUrl");
     imageFile = null;
     summariseText = null;
-    messages.add(ChatModel(
-      role: Roles.model,
-      text: "",
-    ));
+    messages.add(ChatModel(role: Roles.model, text: ""));
     modelResponseIndex = messages.length;
     scrollMessages();
     updateUI();
-    String response = uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') ?
-     await apiRepository.sendTextForSummarise("${uri.toString()} - Summarise this webpage")
-    : await apiRepository.sendText(question); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
-        //: await apiRepository.sendText(messageController.text);
+
+    String response = containsUrl
+        ? await apiRepository.sendTextForSummarise("$extractedUrl - provide some details regarding this url content in natural and human write artical in summarise form.please do not mention in the response that you cannot access this url")
+        : await apiRepository.sendText(question);
+
     messages.removeAt(messages.length - 1);
-    messages.add(ChatModel(
-      role: Roles.model,
-      text: response,
-    ));
+    messages.add(ChatModel(role: Roles.model, text: response));
+    
     scrollMessages();
     updateUI();
+  } catch (e) {
+    print("Exception in Beldex AI: $e");
   }
+}
+
+
+
+
+// Future<void> getTextFromAskBeldexAI(String question,WebViewModel webViewModel) async {
+//    // File? sendFile;
+   
+// final uri = Uri.parse(question);
+//      if(uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https')){
+//       // sendFile = imageFile;
+//       messages.add(ChatModel(
+//       text: '$uri',
+//       role: Roles.user,
+//       //image: null,// sendFile,
+//     ));
+   
+//      }else{
+//       // sendFile = imageFile;
+//       messages.add(ChatModel(
+//       text: question,
+//       role: Roles.user,
+//       //image: null,// sendFile,
+//     ));
+   
+//      }
+
+
+
+
+
+   
+//     imageFile = null;
+//     summariseText = null;
+//     messages.add(ChatModel(
+//       role: Roles.model,
+//       text: "",
+//     ));
+//     modelResponseIndex = messages.length;
+//     scrollMessages();
+//     updateUI();
+//     String response = uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') ?
+//      await apiRepository.sendTextForSummarise("${uri.toString()} - Summarise this webpage")
+//     : await apiRepository.sendText(question); //await apiRepository.sendTextAndImage(messageController.text, sendFile)
+//         //: await apiRepository.sendText(messageController.text);
+//     messages.removeAt(messages.length - 1);
+//     messages.add(ChatModel(
+//       role: Roles.model,
+//       text: response,
+//     ));
+//     scrollMessages();
+//     updateUI();
+//   }
 
 
 
