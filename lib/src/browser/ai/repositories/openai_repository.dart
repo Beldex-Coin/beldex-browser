@@ -55,9 +55,9 @@ Stream<String> sendTextForStream(String userMessage) async* {
       ),
       cancelToken: cancelToken,
       data: jsonEncode({
-        "model": "gpt-4",
+        "model": "gpt-4-turbo",
         "messages": [
-          {"role": "system", "content": "You are a helpful assistant."},
+          {"role": "system", "content": "You are a helpful assistant. provide in bullet points if response more than 2 sentences"},
           {"role": "user", "content": userMessage}
         ],
         "stream": true,
@@ -226,17 +226,18 @@ Future<String> sendTextForSummarise(String text) async {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${APIClass.API_KEY}',
       },
-      body: jsonEncode({
+      body:utf8.encode( jsonEncode({
         "model": "gpt-4o-mini", // Replace with the desired model
         "messages": [
           {"role": "user", "content": "$text summarise this webpage in bullet points"}
         ],
         'max_tokens': 4096,
         //"temperature": 0.7, // Adjust temperature for creativity
-      }),
+      })),
     );
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final decodeResponse = utf8.decode(response.bodyBytes);
+      final Map<String, dynamic> responseData = jsonDecode(decodeResponse);
       // Extracting the response content
       responseText = responseData["choices"]?[0]?["message"]?["content"] ?? "";
       log("OpenAI Chat - Content: $responseText");
