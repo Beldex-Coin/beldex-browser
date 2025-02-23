@@ -652,7 +652,7 @@ bool _isValidUrl(String url) {
 
 
 
-    vpnStatusProvider.updateFAB(false);
+    // vpnStatusProvider.updateFAB(false);
 
 
 // if(error.description == 'net::ERR_NAME_NOT_RESOLVED')
@@ -862,6 +862,7 @@ Future.delayed(const Duration(seconds: 3),(){
       print('ERROR TYPE HERE 222---- $checkUrl');
        _webViewController?.evaluateJavascript(source: "hideFooter();");
      }
+     vpnStatusProvider.updateFAB(false);
     });  
 
 
@@ -1026,6 +1027,15 @@ String dNode = '';
 
 // Show FAB when individual sites open
 void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
+
+  if(url.isEmpty || url == "about:blank" || url.startsWith("chrome-eeror") || url.startsWith("edge-error")){
+    vpnStatusProvider.updateFAB(false);
+    return;
+  }
+
+
+
+
   if(url.startsWith('http') || url.startsWith('https')){
       // Regex to match common search engine result page patterns
     final searchEnginePattern = RegExp(
@@ -1034,17 +1044,70 @@ void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
     );
     
     setState(() {
-      vpnStatusProvider.updateFAB(!searchEnginePattern.hasMatch(url));
+      if(searchEnginePattern.hasMatch(url)){
+        vpnStatusProvider.updateFAB(false);
+      }else{
+         if(!checkIsSearchEngineHome(url)){
+  print('This is Search engine checking ');
+      vpnStatusProvider.updateFAB(true);
+ }else{
+   print('This is Search engine checking Else part');
+  vpnStatusProvider.updateFAB(false);
+ }
+
+      }
+      
 
      // showFAB = !searchEnginePattern.hasMatch(url);
     });
-  }else{
-    vpnStatusProvider.updateFAB(false);
+  }
+  
+  
+  else{
+//  if(!checkIsSearchEngineHome(url)){
+//   print('This is Search engine checking ');
+//       vpnStatusProvider.updateFAB(true);
+//  }else{
+//    print('This is Search engine checking Else part');
+  vpnStatusProvider.updateFAB(false);
+ //}
+ 
   }
     
   }
 
+ bool checkIsSearchEngineHome(String url){
+  Uri? uri;
+  try {
+    uri = Uri.parse(url);
+  } catch (e) {
+    print("Invalid URL: $url");
+    //return false;
+  }
 
+  final List<String> searchEngines = [
+    "google.com",
+    "bing.com",
+    "yahoo.com",
+    "duckduckgo.com",
+    "baidu.com",
+    "yandex.com",
+    "ecosia.org",
+    "startpage.com",
+    "qwant.com",
+    "search.brave.com",
+    "youtube.com",
+    "m.youtube.com",
+    "m.facebook.com",
+    "facebook.com",
+    "twitter.com"
+  ];
+
+  String host = uri!.host.replaceFirst('www.', '');
+  print('This is Search engine Home Page ------------> ${searchEngines.contains(host) && (uri.path == '/' || uri.path.isEmpty)}');
+  return searchEngines.contains(host) && (uri.path == '/' || uri.path.isEmpty);
+
+ }
 
 
 
