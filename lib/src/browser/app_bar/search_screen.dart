@@ -338,6 +338,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   print(
                                       'text --> $text\n selection --> $selection\n newtext --> $newText');
                                   _searchController.text = newText;
+                                  canShowSearchAI = _searchController.text;
                                   final newSelection = TextSelection.collapsed(
                                     offset:
                                         selection.start + value.text!.length,
@@ -671,10 +672,6 @@ class _SearchScreenState extends State<SearchScreen> {
      builder: (context){
 
      return BeldexAIScreen(isWelcomeShown:false ,searchWord:canShowSearchAI); //DraggableAISheet();
-
-
-
-
           //return BeldexAiScreen();
      });
                 },
@@ -717,9 +714,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       ),
-      SvgPicture.asset(
-        'assets/images/ai-icons/arrow.svg',
-        width: 20, // Adjust width to ensure flexibility
+      Padding(
+        padding: const EdgeInsets.only(left: 9.0),
+        child: SvgPicture.asset(
+          'assets/images/ai-icons/arrow.svg',
+          width: 20, // Adjust width to ensure flexibility
+        ),
       ),
     ],
   ),
