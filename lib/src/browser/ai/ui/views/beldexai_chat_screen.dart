@@ -118,6 +118,7 @@ class BeldexAIScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(20)),
+                            border: Border(top: BorderSide(color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),width: 0.5)),
                         color: themeProvider.darkTheme ? Color(0xff171720) : Color(0xffFFFFFF)
                         ),
                     child: Stack(
@@ -183,20 +184,26 @@ class BeldexAIScreen extends StatelessWidget {
                                   ),
                                   Visibility(
                                     visible: model.messages.isNotEmpty,
-                                    child: IconButton(
-                                      onPressed: (){
-                                      model.messages = [];
-                                      model.isTyping = false;
-                                      checkSummariseString(webViewModel,model);
-                                      model.messageController.clear();
-                                    },
-                                    //color: Colors.green,
-                                      //                                   padding: EdgeInsets.all(2),
-                                      //                                   constraints: BoxConstraints(
-                                      //   minWidth: 20, // Minimum width of the button
-                                      //   minHeight: 20, // Minimum height of the button
-                                      // ),
-                                     icon: SvgPicture.asset('assets/images/ai-icons/Erase _dark.svg',color: themeProvider.darkTheme ? Colors.white : Color(0xff333333))),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                         model.messages = [];
+                                          model.isTyping = false;
+                                          checkSummariseString(webViewModel,model);
+                                          model.messageController.clear();
+                                      },
+                                      child: SizedBox(
+                                        //color: Colors.green,
+                                       // height: 36,width: 30,
+                                        // child: IconButton(
+                                        //   onPressed: (){
+                                        //   model.messages = [];
+                                        //   model.isTyping = false;
+                                        //   checkSummariseString(webViewModel,model);
+                                        //   model.messageController.clear();
+                                        // },
+                                         child: SvgPicture.asset('assets/images/ai-icons/Erase _dark.svg',color: themeProvider.darkTheme ? Colors.white : Color(0xff333333))),
+                                    ),
+                                   // ),
                                   ),
                                   Visibility(
                                     visible: model.messages.isNotEmpty,
@@ -763,12 +770,12 @@ Container(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical:5.0),
+                        padding: const EdgeInsets.symmetric(vertical:3.0),
                         child: SizedBox(
                           //color: Colors.green,
-                          height: 35,width: 30,
+                          height: 35,width: 35,
                           child: IconButton(
-                            visualDensity: VisualDensity.comfortable,
+                            //visualDensity: VisualDensity.comfortable,
                            // padding: EdgeInsets.symmetric(vertical: 5),
                             onPressed: () {
                                final lastModelMessageIndex = model.messages.lastIndexWhere(
@@ -836,10 +843,12 @@ Container(
                             },
                             icon: SvgPicture.asset(
                               model.isTyping
-                                  ? themeProvider.darkTheme
+                                  ? 
+                                  themeProvider.darkTheme
                                       ? 'assets/images/ai-icons/Stop.svg'
                                       : 'assets/images/ai-icons/Stop Circled 1.svg'
-                                  : themeProvider.darkTheme
+                                  : 
+                                  themeProvider.darkTheme
                                       ? IconConstants.sendDark
                                       : IconConstants.sendWhite,
                               // width: 20, // Ensure visibility
