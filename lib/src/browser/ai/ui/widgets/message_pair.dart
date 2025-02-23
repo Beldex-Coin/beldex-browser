@@ -124,15 +124,20 @@ copyText(String text){
                   )
                 ],
                ):
-                 MessageBody(
-              isLoading: false,
-              message: userMessage,
-              topLeft: 20,
-              topRight: 20,
-              bottomLeft: 20,
-              model: model,
-              bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
-            )
+               Padding(
+                 padding: const EdgeInsets.symmetric(vertical :8.0),
+                 child: Text(userMessage.text,style: TextStyle( fontSize: 14,
+                  fontFamily: 'Poppins'),),
+               ),
+            //      MessageBody(
+            //   isLoading: false,
+            //   message: userMessage,
+            //   topLeft: 20,
+            //   topRight: 20,
+            //   bottomLeft: 20,
+            //   model: model,
+            //   bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
+            // )
                ],
              ),
            ),
