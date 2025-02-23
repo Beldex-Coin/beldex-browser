@@ -186,6 +186,7 @@ class BeldexAIScreen extends StatelessWidget {
                                     child: IconButton(
                                       onPressed: (){
                                       model.messages = [];
+                                      model.isTyping = false;
                                       checkSummariseString(webViewModel,model);
                                       model.messageController.clear();
                                     },
