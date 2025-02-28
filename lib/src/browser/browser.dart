@@ -15,6 +15,7 @@ import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:belnet_lib/belnet_lib.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -39,6 +40,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
   var _isRestored = false;
 
+  late Connectivity _connectivity;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   String? _sharedUrl;
   StreamSubscription? _intentDataStreamSubscription;
@@ -51,6 +54,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
     super.initState();
     //getIntentData();
     
+    checkForNetwork();
 
      WidgetsBinding.instance.addObserver(this);
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
@@ -137,6 +141,16 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
   }
 
+
+checkForNetwork(){
+  _connectivity = Connectivity();
+    _connectivitySubscription = _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((event) {
+      if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
+         showMessage("Network Error. Please check Wifi or mobile data is on");
+      }
+    });
+}
 
 void openLink(String? _sharedUrl,isInitialLaunch)async {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
