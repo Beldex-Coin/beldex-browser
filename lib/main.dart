@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
+import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
@@ -159,6 +160,7 @@ void main() async {
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
         ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
+        ChangeNotifierProvider(create: (_)=> AIModelProvider()..initializeModel()),
         ChangeNotifierProxyProvider<WebViewModel, BrowserModel>(
           update: (context, webViewModel, browserModel) {
             browserModel!.setCurrentWebViewModel(webViewModel);
