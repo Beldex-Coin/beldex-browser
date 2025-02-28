@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
@@ -283,7 +284,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 4,
                   child: TextField(
                     onSubmitted: (value) {
-                      var url = WebUri(formatUrl(value.trim()));
+                      String trimmedValue = value.trim();
+                     if(trimmedValue.isNotEmpty){
+                       var url = WebUri(formatUrl(value.trim()));
                       if (!url.scheme.startsWith("http") &&
                           !Util.isLocalizedContent(url)) {
                         url = WebUri(
@@ -307,6 +310,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       Future.delayed(Duration(milliseconds: duration), () {
                         Navigator.pop(context, url);
                       });
+                     }
+
+                      
                     },
                     keyboardType: TextInputType.url,
                     focusNode: _focusNode,
@@ -338,7 +344,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   print(
                                       'text --> $text\n selection --> $selection\n newtext --> $newText');
                                   _searchController.text = newText;
-                                  canShowSearchAI = _searchController.text;
+                                  if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                    print("The User Message Contains Url 1");
+                                  canShowSearchAI= '';
+                                    }else
+                                      canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+        
+                                  //canShowSearchAI = _searchController.text;
                                   final newSelection = TextSelection.collapsed(
                                     offset:
                                         selection.start + value.text!.length,
@@ -454,6 +467,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                     onChanged: (value) {
                        setState(() {
+                        if(containsUrl(_searchController.text) || _searchController.text.trim().isEmpty){
+                          print("The User Message Contains url 22");
+                          canShowSearchAI= '';
+                        }else
                           canShowSearchAI= _searchController.text;
                          // print('BELDEX AI ---------> $canShowSearchAI');
                         });
@@ -462,12 +479,12 @@ class _SearchScreenState extends State<SearchScreen> {
                        
                       }
                     },
-                    onEditingComplete: (){
-                      setState(() {
-                                                  print('BELDEX AI 2---------> $canShowSearchAI');
+                    // onEditingComplete: (){
+                    //   setState(() {
+                    //                               print('BELDEX AI 2---------> $canShowSearchAI');
 
-                      });
-                    },
+                    //   });
+                    // },
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(
                             top: 5.0, right: 10.0, bottom: 10.0),
