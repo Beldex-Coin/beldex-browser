@@ -156,7 +156,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DownloadProvider()),
         ChangeNotifierProvider(
             create: (context) =>
-                SelectedItemsProvider()..initializeSelectedItems()),
+                SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
         ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
