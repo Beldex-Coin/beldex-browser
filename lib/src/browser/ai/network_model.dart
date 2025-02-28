@@ -43,10 +43,10 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
 
       // Step 3: Send content to OpenAI for summarization
       final openAiResponse = await http.post(
-        Uri.parse(APIClass.API_URL),
+        Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${APIClass.API_KEY}',
+          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
         },
         body: jsonEncode({
           'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
@@ -100,10 +100,10 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
 
     try {
       final response = await http.post(
-        Uri.parse(APIClass.API_URL),
+        Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${APIClass.API_KEY}',
+          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
         },
         body: jsonEncode({
           'model': 'gpt-4o-mini', // Or 'gpt-4' if you have access
