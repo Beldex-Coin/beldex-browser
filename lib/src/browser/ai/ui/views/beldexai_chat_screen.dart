@@ -753,6 +753,8 @@ Container(
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   counterText: '',
+                                  contentPadding: const EdgeInsets.only(
+                                 right: 29.0),
                                   hintText: StringConstants.enterPromptHere,
                                   hintStyle: const TextStyle(
                                     color: Color(0xff6D6D81),
