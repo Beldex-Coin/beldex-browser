@@ -694,485 +694,166 @@ class BeldexAIScreen extends StatelessWidget {
                                     ],
                                   )
                                 : SizedBox(),
-          
-
-Container(
-  margin: const EdgeInsets.only(bottom: 10, left: 8, right: 8, top: 10),
-  child: Row(
-    children: [
-      Expanded(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA),
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Stack(
+       LayoutBuilder(
+      builder: (context, constraints) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height * 0.2, // 40% of screen height
-                          ),
-                          child: Scrollbar(
-                            child: SingleChildScrollView(
-                              reverse: true,
-                              physics: const BouncingScrollPhysics(),
-                              child: TextField(
-                                enabled: !model.isTyping,
-                                controller: model.messageController,
-                                maxLength: 1000,
-                                 inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1000), // Restrict input
-                                  ],
-                                maxLines: null, // Auto-expand with limit
-                                keyboardType: TextInputType.multiline,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14,
-                                ),
-                                 onSubmitted: (value) {
-                urlSummaryProvider.updateSummariser(false);
-                setWelcomeAIScreen();
-                model.canshowWelcome = false;
-                model.isSummariseAvailable = false;
-                if (model.messageController.text.toString().isNotEmpty) {
-                  model.getTextAndImageInfo();
-                  model.messageController.clear();
-                }
-              },
-                                cursorColor: Colors.green,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  counterText: '',
-                                  contentPadding: const EdgeInsets.only(
-                                 right: 29.0),
-                                  hintText: StringConstants.enterPromptHere,
-                                  hintStyle: const TextStyle(
-                                    color: Color(0xff6D6D81),
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical:3.0),
-                        child: SizedBox(
-                          //color: Colors.green,
-                          height: 35,width: 35,
-                          child: IconButton(
-                            //visualDensity: VisualDensity.comfortable,
-                           // padding: EdgeInsets.symmetric(vertical: 5),
-                            onPressed: () {
-                               final lastModelMessageIndex = model.messages.lastIndexWhere(
-                              (message) => message.role == Roles.model && message.text.isNotEmpty,
-                            );
-                        
-                            final lastUserMessageIndex = model.messages.lastIndexWhere(
-                          (message) => message.role == Roles.user,
-                        );
-                            //messageBodyTimer?.cancel();
-                        
-                            if (model.isTyping) {
-                              // Stop typing state
-                              model.isTyping = false;
-                              //typingProvider.updateAITypingState(false);
-                             model.stopResponse();
-                               // Check if the last user message exists but its respective model message is empty
-                          if (lastUserMessageIndex != -1 &&
-                              lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
-                              model.messages[lastUserMessageIndex + 1].role == Roles.model &&
-                              model.messages[lastUserMessageIndex + 1].text.isEmpty) {
-                               // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
-                            print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
-                            OpenAIRepository().cancelRequest();
-                            model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted';
-                            model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
-                          }else if (lastModelMessageIndex != -1) {
-                            
-                                model.messages[lastModelMessageIndex].canShowRegenerate = true;
-                                 print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
-                              }
-                        
-                            } else {
-                              // Check if there’s any input in the message controller
-                              if (model.messageController.text.isNotEmpty) {
-                                //MessageBodyState().updateTypingText();
-                                urlSummaryProvider.updateSummariser(false);
-                                //typingProvider.updateAITypingState(true);
-                                model.isTyping = true;
-                               
-                                // Reset messages state and UI components
-                                 if (lastModelMessageIndex != -1) {
-                                   model.messages[lastModelMessageIndex].canShowRegenerate = false;
-                                //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
-                                //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
-                                   
-                                //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
-                                //   model.messages[lastModelMessageIndex].typingText = '';
-                                 }
-                                  
-                                //   model.messages[lastModelMessageIndex].isTypingComplete = true;
-                                //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
-                                // }
-                                FocusScope.of(context).unfocus();
-                                setWelcomeAIScreen();
-                                model.canshowWelcome = false;
-                                model.isSummariseAvailable = false;
-                        
-                                // Handle new message if text is present
-                                model.getTextForUser(); //getTextAndImageInfo();
-                                model.messageController.clear();
-                              }
-                            }
-                        
-                            },
-                            icon: SvgPicture.asset(
-                              model.isTyping
-                                  ? 
-                                  themeProvider.darkTheme
-                                      ? 'assets/images/ai-icons/Stop.svg'
-                                      : 'assets/images/ai-icons/Stop Circled 1.svg'
-                                  : 
-                                  themeProvider.darkTheme
-                                      ? IconConstants.sendDark
-                                      : IconConstants.sendWhite,
-                              // width: 20, // Ensure visibility
-                              // height: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Positioned(
-                right: -7,
-                child: Visibility(
-                  visible: model.messageController.text.isNotEmpty,
-                  child: GestureDetector(
-                                      onTap: () => model.messageController.clear(),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(17.0),
-                                        child: SvgPicture.asset(
-                                          themeProvider.darkTheme
-                                              ? IconConstants.closeIconDark
-                                              : IconConstants.closeIconWhite,
-                                          width: 15, // Ensure visibility
-                                          height: 15,
+              Container(
+                constraints: BoxConstraints(
+                  minHeight: screenHeight * 0.04, // 15% of screen height initially
+                  maxHeight: screenHeight * 0.25, // 40% of screen height maximum
+                ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                decoration: BoxDecoration(
+                  border: Border(top: BorderSide( color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),right: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),left: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA))),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0),topRight: Radius.circular(10.0))),
+                child: TextField(
+                 enabled: !model.isTyping,
+                                      controller: model.messageController,
+                                      maxLength: 1000,
+                                       inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1000), // Restrict input
+                                        ],
+                                      maxLines: null, // Auto-expand with limit
+                                      keyboardType: TextInputType.multiline,
+                                     //selectionControls: ClippedSelectionControls(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                       onSubmitted: (value) {
+                      urlSummaryProvider.updateSummariser(false);
+                      setWelcomeAIScreen();
+                      model.canshowWelcome = false;
+                      model.isSummariseAvailable = false;
+                      if (model.messageController.text.toString().isNotEmpty) {
+                        model.getTextAndImageInfo();
+                        model.messageController.clear();
+                      }
+                    },
+                  cursorColor: Colors.green,
+                  decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        counterText: '',
+                                        contentPadding: const EdgeInsets.only(
+                                       right: 29.0),
+                                        hintText: StringConstants.enterPromptHere,
+                                        hintStyle: const TextStyle(
+                                          color: Color(0xff6D6D81),
+                                          fontFamily: 'Poppins',
                                         ),
                                       ),
-                                    ),
-                ),)
+                  onChanged: (value) {
+                   // setState(() {}); // Rebuild when text changes
+                  },
+                ),
+              ),
+              Container(
+                   padding: const EdgeInsets.only(left: 15,right:15,bottom: 8.0),
+                   margin: EdgeInsets.only(bottom: 5.0),
+                decoration: BoxDecoration(
+                 // color: Colors.green,
+                  border: Border(bottom: BorderSide( color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),right: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),left: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA))),
+                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0),bottomRight: Radius.circular(10.0))),
+              
+              child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical:3.0),
+                          child: GestureDetector(
+                            onTap: (){
+                                      final lastModelMessageIndex = model.messages.lastIndexWhere(
+                                (message) => message.role == Roles.model && message.text.isNotEmpty,
+                              );
+                          
+                              final lastUserMessageIndex = model.messages.lastIndexWhere(
+                            (message) => message.role == Roles.user,
+                          );
+                             if(containsUrl(model.messageController.text)){
+                              return;
+                             }
+          
+                              if (model.isTyping) {
+                                // Stop typing state
+                                model.isTyping = false;
+                                //typingProvider.updateAITypingState(false);
+                               model.stopResponse();
+                                 // Check if the last user message exists but its respective model message is empty
+                            if (lastUserMessageIndex != -1 &&
+                                lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
+                                model.messages[lastUserMessageIndex + 1].role == Roles.model &&
+                                model.messages[lastUserMessageIndex + 1].text.isEmpty) {
+                                 // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
+                              print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
+                              OpenAIRepository().cancelRequest();
+                              model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted'; // If token cancelled before generating response
+                              model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
+                            }else if (lastModelMessageIndex != -1) {
+                              
+                                  model.messages[lastModelMessageIndex].canShowRegenerate = true;
+                                   print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
+                                }
+                          
+                              } else {
+                                // Check if there’s any input in the message controller
+                                if (model.messageController.text.isNotEmpty) {
+                                  //MessageBodyState().updateTypingText();
+                                  urlSummaryProvider.updateSummariser(false);
+                                  //typingProvider.updateAITypingState(true);
+                                  model.isTyping = true;
+                                 
+                                  // Reset messages state and UI components
+                                   if (lastModelMessageIndex != -1) {
+                                     model.messages[lastModelMessageIndex].canShowRegenerate = false;
+                                     model.messages[lastModelMessageIndex].isRetry = false;
+                                  //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
+                                  //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
+                                     
+                                  //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
+                                  //   model.messages[lastModelMessageIndex].typingText = '';
+                                   }
+                                    
+                                  //   model.messages[lastModelMessageIndex].isTypingComplete = true;
+                                  //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
+                                  // }
+                                  FocusScope.of(context).unfocus();
+                                  setWelcomeAIScreen();
+                                  model.canshowWelcome = false;
+                                  model.isSummariseAvailable = false;
+                          
+                                  // Handle new message if text is present
+                                  model.getTextForUser(modelType: aiModelProvider.selectedModel); //getTextAndImageInfo();
+                                  model.messageController.clear();
+                                }
+                              }
+                          
+                              },
+                            child: 
+                            SvgPicture.asset(
+                                model.isTyping
+                                    ? 
+                                    themeProvider.darkTheme
+                                        ? 'assets/images/ai-icons/Stop.svg'
+                                        : 'assets/images/ai-icons/Stop Circled 1.svg'
+                                    : 
+                                    themeProvider.darkTheme
+                                        ? IconConstants.sendDark
+                                        : IconConstants.sendWhite,
+                              ),
+                          ),
+                         
+                        ),
+                      ],
+                    ),
+              )
             ],
           ),
-        ),
-      ),
-    ],
-  ),
-),
-
-
-
-// Container(
-//         margin: const EdgeInsets.only(bottom: 10, left: 8, right: 8, top: 10),
-//         child: Row(
-//           children: [
-//             Expanded(
-//               child: Container(
-//                 padding:  EdgeInsets.symmetric( horizontal:10),
-//                 decoration: BoxDecoration(
-//                  // color: ColorConstants.grey3D4354,
-//                  border: Border.all(color:themeProvider.darkTheme ? Color(0xff3D4354): Color(0xffDADADA)),
-//                   borderRadius: BorderRadius.circular(10.0),
-//                 ),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.end,
-//                   children: [
-//                       Row(
-//                       mainAxisAlignment: MainAxisAlignment.end,
-//                       mainAxisSize: MainAxisSize.max,
-//                       children: [
-//                         // InputFieldButton(
-//                         //   icon: Icons.emoji_emotions,
-//                         //   onpressed: () {
-//                         //     FocusScope.of(context).unfocus();
-//                         //     widget.model?.setShowEmoji = true;
-//                         //   },
-//                         // ),
-//                        // model.imageFile == null
-//                            // ? 
-//                             Flexible(
-//                                 child: TextField(
-//               enabled: !model.isTyping, //(typingProvider.isTyping),
-//               //controller: _textController,
-//               onSubmitted: (value) {
-//                 urlSummaryProvider.updateSummariser(false);
-//                 setWelcomeAIScreen();
-//                 model.canshowWelcome = false;
-//                 model.isSummariseAvailable = false;
-//                 if (model.messageController.text.toString().isNotEmpty) {
-//                   model.getTextAndImageInfo();
-//                   model.messageController.clear();
-//                 }
-//               },
-//               controller: model.messageController,
-//               maxLines: null,
-//               style: TextStyle(
-//                   //color: Colors.white,
-//                   fontWeight: FontWeight.normal,
-//                   fontSize: 14), // Text color
-//               cursorColor: Colors.green, // Cursor color
-//               decoration: InputDecoration(
-//                   border: InputBorder.none, // No border for the TextField
-//                   hintText: StringConstants.enterPromptHere, // Placeholder text
-//                   hintStyle: TextStyle(
-//                     color: Color(0xff6D6D81), //Colors.white, // Placeholder text color,
-//                     fontFamily: 'Poppins'
-//                   ),
-//                   suffix: GestureDetector(
-//                     onTap: () => model.messageController.clear(),
-//                     child: SvgPicture.asset(themeProvider.darkTheme
-//                         ? IconConstants.closeIconDark
-//                         : IconConstants.closeIconWhite),
-//                   )),
-//             ),  
-//                               //   TextFormFieldWidget(
-//                               //   model: widget.model,
-//                               // )
-//                               ),
-//                       ],
-//                     ),
-//                                             IconButton(
-//   onPressed: () {
-//     final lastModelMessageIndex = model.messages.lastIndexWhere(
-//       (message) => message.role == Roles.model && message.text.isNotEmpty,
-//     );
-
-//     final lastUserMessageIndex = model.messages.lastIndexWhere(
-//   (message) => message.role == Roles.user,
-// );
-//     //messageBodyTimer?.cancel();
-
-//     if (model.isTyping) {
-//       // Stop typing state
-//       model.isTyping = false;
-//       //typingProvider.updateAITypingState(false);
-//      model.stopResponse();
-//        // Check if the last user message exists but its respective model message is empty
-//   if (lastUserMessageIndex != -1 &&
-//       lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
-//       model.messages[lastUserMessageIndex + 1].role == Roles.model &&
-//       model.messages[lastUserMessageIndex + 1].text.isEmpty) {
-//        // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
-//     print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
-//     OpenAIRepository().cancelRequest();
-//     model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted';
-//     model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
-//   }else if (lastModelMessageIndex != -1) {
-    
-//         model.messages[lastModelMessageIndex].canShowRegenerate = true;
-//          print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
-//       }
-
-//     } else {
-//       // Check if there’s any input in the message controller
-//       if (model.messageController.text.isNotEmpty) {
-//         //MessageBodyState().updateTypingText();
-//         urlSummaryProvider.updateSummariser(false);
-//         //typingProvider.updateAITypingState(true);
-//         model.isTyping = true;
-       
-//         // Reset messages state and UI components
-//          if (lastModelMessageIndex != -1) {
-//            model.messages[lastModelMessageIndex].canShowRegenerate = false;
-//         //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
-//         //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
-           
-//         //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
-//         //   model.messages[lastModelMessageIndex].typingText = '';
-//          }
-          
-//         //   model.messages[lastModelMessageIndex].isTypingComplete = true;
-//         //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
-//         // }
-//         FocusScope.of(context).unfocus();
-//         setWelcomeAIScreen();
-//         model.canshowWelcome = false;
-//         model.isSummariseAvailable = false;
-
-//         // Handle new message if text is present
-//         model.getTextForUser(); //getTextAndImageInfo();
-//         model.messageController.clear();
-//       }
-//     }
-//   },
-//   icon: SvgPicture.asset(
-//     model.isTyping
-//         ? themeProvider.darkTheme ? 'assets/images/ai-icons/Stop.svg' : 'assets/images/ai-icons/Stop Circled 1.svg'
-//         : themeProvider.darkTheme ? IconConstants.sendDark : IconConstants.sendWhite,
-      
-//   ),
-// )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            // Bottom TextField Section
-                            // Container(
-                            //   //  padding: const EdgeInsets.all(16.0),
-                            //   // margin: EdgeInsets.all(13),
-                            //   margin: const EdgeInsets.all(5),
-                            //   padding: const EdgeInsets.symmetric(
-                            //       horizontal: 16, vertical: 8),
-          
-                            //   decoration: BoxDecoration(
-                            //     color: themeProvider.darkTheme ? Color(0xFF171720) : Color(0xffffffff),
-                            //     border: Border.all(
-                            //         color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),
-                            //         width:
-                            //             0.6), // Background color of the TextField container
-                            //     borderRadius: BorderRadius.circular(10), //
-                            //     // (
-                            //     //  // top: BorderSide(color: Color(0xff42425F), width: 0.7),
-                            //     // ),
-                            //   ),
-                            //   height:
-                            //       MediaQuery.of(context).size.height * 0.18,
-                            //   child: Column(
-                            //     children: [
-                            //       // Spacing between icon and text field
-                            //       Expanded(
-                            //         child: TextField(
-                            //           //controller: _textController,
-                            //           onSubmitted: (value) {
-                            //              urlSummaryProvider.updateSummariser(false);
-                            //             setWelcomeAIScreen();
-                            //                 model.canshowWelcome = false;
-                            //                 model.isSummariseAvailable =
-                            //                     false;
-                            //                 if (model.messageController.text
-                            //                     .toString()
-                            //                     .isNotEmpty) {
-                            //                   model.getTextAndImageInfo();
-                            //                   model.messageController.clear();
-                            //                 }
-                            //           },
-                            //           controller: model.messageController,
-                            //           maxLines: null,
-                            //           style: TextStyle(
-                            //               //color: Colors.white,
-                            //               fontWeight: FontWeight.normal,
-                            //               fontSize: 14), // Text color
-                            //           cursorColor:
-                            //               Colors.green, // Cursor color
-                            //           decoration: InputDecoration(
-                            //               border: InputBorder
-                            //                   .none, // No border for the TextField
-                            //               hintText: StringConstants
-                            //                   .enterPromptHere, // Placeholder text
-                            //               hintStyle: TextStyle(
-                            //                 color: Color(0xff6D6D81), // Placeholder text color
-                            //                 fontFamily: 'Poppins',
-                            //               ),
-                            //               suffix: GestureDetector(
-                            //                 onTap: () => model
-                            //                     .messageController
-                            //                     .clear(),
-                            //                 child: SvgPicture.asset(
-                            //                     themeProvider.darkTheme
-                            //                         ? IconConstants
-                            //                             .closeIconDark
-                            //                         : IconConstants
-                            //                             .closeIconWhite),
-                            //               )),
-                            //         ),
-                            //       ),
-                            //       SizedBox(
-                            //           width:
-                            //               8), // Spacing between text field and send icon
-                            //       Row(
-                            //         mainAxisAlignment:
-                            //             MainAxisAlignment.spaceBetween,
-                            //         children: [
-                            //           SvgPicture.asset(IconConstants.micDark,color: themeProvider.darkTheme ? Colors.white:Colors.black,),
-                            //           IconButton(
-                            //               onPressed: 
-                            //               // urlSummaryProvider.canStopAndRegenerate
-                            //               // ? (){
-                                            
-                            //               // }  
-                            //               // : 
-                            //               () {
-                            //                 urlSummaryProvider.updateSummariser(false);
-                            //                 FocusScope.of(context).unfocus();
-                            //                 setWelcomeAIScreen();
-                            //                 model.canshowWelcome = false;
-                            //                 model.isSummariseAvailable =
-                            //                     false;
-                            //                 if (model.messageController.text
-                            //                     .toString()
-                            //                     .isNotEmpty) {
-                            //                   model.getTextAndImageInfo();
-                            //                   model.messageController.clear();
-                            //                 }
-                            //               }, //()=>sendUserMessage(vpnStatusProvider),
-                            //               icon: SvgPicture.asset(
-                            //                 //   urlSummaryProvider.canStopAndRegenerate || urlSummaryProvider.isLoading ?
-                            //                 //   'assets/images/ai-icons/Stop.svg'
-                            //                 //  : 
-                            //                  IconConstants.sendDark,
-                            //                  color: themeProvider.darkTheme ? Colors.white:Colors.black,
-                            //                  )),
-                            //         ],
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
+        );
+      },
+    )   
                           ],
                         )
                       ],
