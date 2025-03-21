@@ -319,6 +319,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     autofocus: true,
                     controller: _searchController,
                     textInputAction: TextInputAction.go,
+                    magnifierConfiguration: TextMagnifierConfiguration.disabled,
                     contextMenuBuilder: (context, editableTextState) {
                       //final List<ContextMenuButtonItem>
                       buttonItems = editableTextState.contextMenuButtonItems;
