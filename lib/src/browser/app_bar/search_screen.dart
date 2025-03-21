@@ -519,7 +519,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     : SizedBox()
               ],
             ),
-          )),
+          ),),
       body: Column(
         children: [
           widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen
@@ -707,7 +707,7 @@ class _SearchScreenState extends State<SearchScreen> {
     children: [
       SvgPicture.asset(
         IconConstants.beldexAILogoSvg,
-        height: 25,
+        height: 20,
         width: 25,
       ),
       SizedBox(width: 8), // Add spacing between the icon and text
@@ -735,6 +735,7 @@ class _SearchScreenState extends State<SearchScreen> {
         padding: const EdgeInsets.only(left: 9.0),
         child: SvgPicture.asset(
           'assets/images/ai-icons/arrow.svg',
+          height: 10,
           width: 20, // Adjust width to ensure flexibility
         ),
       ),
