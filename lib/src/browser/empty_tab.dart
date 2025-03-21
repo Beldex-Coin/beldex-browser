@@ -134,7 +134,7 @@ final List<Map<String, String>> items = [
                 const SizedBox(height: 40),
                  Expanded(
                    child: Container(
-                    height: 300,
+                    height: 310,
                    // color: Colors.green,
                     padding: EdgeInsets.only(top:8),
                      child: GridView.builder(
@@ -230,7 +230,7 @@ class ItemListWidget extends StatelessWidget {
                 // height: 50,
               ),
             ),
-          // SizedBox(height: 10),
+           SizedBox(height: 8),
             Expanded(
               child: Container(
                 //color: Colors.green,
