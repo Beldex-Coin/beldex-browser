@@ -457,6 +457,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                        ?  GestureDetector(
                         onTap: ()async{
                           vpnStatusProvider.updateCanShowHomeScreen(true);
+                          await webViewController?.stopLoading();
                           vpnStatusProvider.updateFAB(false);
                   //            await webViewController?.evaluateJavascript(
                   // source: "document.activeElement.blur();");
@@ -741,7 +742,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
         if (box == null) {
           return;
         }
-
+        vpnStatusProvider.updateFAB(false);
         Offset position = box.localToGlobal(Offset.zero);
        
          browserModel.webViewTabs.isEmpty ?
@@ -980,10 +981,12 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
   }
 
  
-Future onMenuOpen(InAppWebViewController? webViewController)async {
+Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vpnStatusProvider)async {
  hideFooter(webViewController);
             try {
+              
               checkCanGoforward = await webViewController?.canGoForward() ?? false;
+              vpnStatusProvider.updateFAB(false);
               await webViewController?.evaluateJavascript(
                   source: "document.activeElement.blur();");
               // ContextMenuController.removeAny();
@@ -1020,7 +1023,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
           offset:  Offset(width/13.0,width/7.6),
           color:
               themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
-          onOpened: () => onMenuOpen(webViewController),
+          onOpened: () => onMenuOpen(webViewController,vpnStatusProvider),
           // async {
           //   try {
           //     checkCanGoforward = await webViewController?.canGoForward() ?? false;
@@ -2433,7 +2436,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
     if (webViewController != null) {
       webViewModel?.isDesktopMode = !webViewModel.isDesktopMode;
       currentWebViewModel.isDesktopMode = webViewModel?.isDesktopMode ?? false;
-
+         await webViewController.reload();
       var currentSettings = await webViewController.getSettings();
       if (currentSettings != null) {
         currentSettings.preferredContentMode =
@@ -2442,6 +2445,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                 : UserPreferredContentMode.RECOMMENDED;
         await webViewController.setSettings(settings: currentSettings);
       }
+      
       //additionally added this code for dekstop mode
       if (currentSettings!.preferredContentMode ==
           UserPreferredContentMode.DESKTOP) {
@@ -2450,6 +2454,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
         await webViewController.evaluateJavascript(source: js);
         await webViewController.zoomOut();
       }
+     
 // this is removed by me
       // await webViewController.reload();
     }
