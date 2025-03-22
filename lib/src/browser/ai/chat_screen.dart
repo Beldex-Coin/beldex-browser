@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_message.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
@@ -248,7 +249,8 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class SummariseUrlResult extends StatefulWidget {
-  const SummariseUrlResult({super.key});
+  final AIModelProvider aiModelProvider;
+  const SummariseUrlResult({super.key, required this.aiModelProvider});
 
   @override
   State<SummariseUrlResult> createState() => _SummariseUrlResultState();
@@ -294,7 +296,8 @@ void callSummaryApI(BuildContext context) async {
   final webViewModel = Provider.of<WebViewModel>(context, listen: false);
 
   try {
-    await urlSummaryProvider.fetchSummary(webViewModel);
+    await urlSummaryProvider.fetchSummary(webViewModel,modelType: widget.aiModelProvider.selectedModel
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
@@ -308,30 +311,6 @@ void callSummaryApI(BuildContext context) async {
     print(e);
   }
 }
-
-  // void callSummaryApI(BuildContext context) async {
-     
-  //      final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
-  //     final webViewModel = Provider.of<WebViewModel>(context);
-  //     urlSummaryProvider.fetchSummary(webViewModel);
-  //   try {
-  //     final response = urlSummaryProvider.summaryText;
-  //     print('BELDEX AI API CALL RESPONSE --- $response');
-  //        // await _chatGPTService.fetchAndSummarize('', webViewModel);
-  //     if (response.isNotEmpty) {
-        
-  //       _parseResponse(response);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   } finally {
-  //     // setState(() {
-  //     //   _isLoading = false;
-  //     // });
-  //   }
-  // }
-
-
 
 void _parseResponse(String response) {
   if (response.isEmpty) return;
@@ -379,6 +358,39 @@ void _parseResponse(String response) {
 
   //   //_startTypingAnimation();
   // }
+ void setNewModel(AIModelProvider aiModelProvider)async{
+  await aiModelProvider..initializeModel();
+ }
+
+
+void callSummaryRetry(BuildContext context) async {
+  final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context, listen: false);
+  final webViewModel = Provider.of<WebViewModel>(context, listen: false);
+  final aiModelProvider = Provider.of<AIModelProvider>(context,listen: false);
+  print('New AI model before ---> ${aiModelProvider.selectedModel}');
+  try {
+    setNewModel(aiModelProvider);
+
+    print('New AI model after ---> ${aiModelProvider.selectedModel}');
+    await urlSummaryProvider.fetchSummary(webViewModel,modelType:aiModelProvider.selectedModel);
+
+   // WidgetsBinding.instance.addPostFrameCallback((_) {
+      final response = urlSummaryProvider.summaryText;
+      print('BELDEX AI API CALL RESPONSE --- $response');
+
+      if (response.isNotEmpty) {
+        _parseResponse(response);
+      }
+    //});
+  } catch (e) {
+    print(e);
+  }
+}
+
+
+
+
+
 
   
   @override
@@ -466,6 +478,60 @@ void _parseResponse(String response) {
                         color: themeProvider.darkTheme ? Color(0xff9B9B9B): Color(0xff9B9B9B),
                         height: 0.7,
                       ),
+                      title == 'Erroring' ?  Expanded(
+                        child: Center(
+                          child:Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical:10.0),
+                                child: Text(StringConstants.retryMessage,style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),),
+                              ),
+                              // Padding(
+                              //            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              //            child: Center(
+                              //              child: ElevatedButton(
+                              //               onPressed: () {
+                              //                  callSummaryRetry(context);
+                              //                  setState(() {
+                              //                    title = '';
+                              //                  });
+                                               
+                              //               },
+                              //               child: Text("Retry"),
+                              //              ),
+                              //            ),
+                              // ),
+                              GestureDetector(
+                onTap: (){
+                  callSummaryRetry(context);
+                  setState(() {
+                   title = '';
+                   });                              
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                   padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
+                   width: 93,
+                   decoration: BoxDecoration(
+                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                    borderRadius: BorderRadius.circular(12)
+                   ),
+                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children: [
+                        SvgPicture.asset('assets/images/ai-icons/retry.svg'),
+                         Text('Retry',style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
+                       ],
+                     ),
+                ),
+              ),
+                            ],
+                          )
+                        ),
+                      )
+                      :
                       Expanded(
                         child: RawScrollbar(
                           controller: scrollController,
@@ -484,14 +550,18 @@ void _parseResponse(String response) {
                           child: SingleChildScrollView(
                             controller: scrollController,
                             child: urlSummaryProvider.isLoading  //_isLoading
-                                ? Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: 
-                                    LoadingAnimationWidget.waveDots(
+                                ? Container(
+                  margin: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                   borderRadius: BorderRadius.circular(12.0)
+                  ),
+              padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+              child: LoadingAnimationWidget.waveDots(
                 color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
                 size: 30,
               ),
-                                  )
+            )
                                 : title.isNotEmpty && paragraph.isEmpty && bullets.isEmpty ?
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -605,8 +675,9 @@ void _parseResponse(String response) {
                                                             textTheme: TextTheme(
                                                                 bodyMedium:
                                                                     TextStyle(
+                                                                      fontFamily: 'Poppins',
                                                               //color: ColorConstants.white,
-                                                              fontSize: 16,
+                                                              fontSize: 15,
                                                               //fontWeight: FontWeight.w400,
                                                             )),
                                                           ),
@@ -628,7 +699,8 @@ void _parseResponse(String response) {
                     ],
                   ),
                 ),
-                !urlSummaryProvider.isLoading //_isLoading
+                //!urlSummaryProvider.isLoading || title != 'Erroring' //_isLoading
+                urlSummaryProvider.summaryText.isNotEmpty && urlSummaryProvider.summaryText != "Erroring"
                     ? Positioned(
                         bottom: 30,
                         right: 20,
@@ -641,7 +713,7 @@ void _parseResponse(String response) {
                           child: Container(
                               height: 50,
                               width: 50,
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                   color: const Color(0xff00B134),
                                   borderRadius: BorderRadius.circular(8.0)),
@@ -662,558 +734,6 @@ void _parseResponse(String response) {
       
        
     // );
-  }
-}
-
-class BeldexAiScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<DarkThemeProvider>(context);
-    return DraggableScrollableSheet(
-      initialChildSize: 0.95, // Initial size of the sheet
-      minChildSize: 0.3, // Minimum size of the sheet
-      maxChildSize: 1.0, // Maximum size of the sheet
-      builder: (context, scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            border:
-                Border(top: BorderSide(color: Color(0xff42425F), width: 0.7)),
-            color: Color(0xff171720), // Background color of the sheet
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.width * 0.5),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Transform.translate(
-                    offset: Offset(108,
-                        -90), // Adjust this offset to position the first image
-                    child: Image.asset(
-                      IconConstants.browserAITransparentPng,
-                      //'assets/images/box_element.svg', // Replace with your first image asset path
-                      fit: BoxFit.contain,
-                      width: MediaQuery.of(context).size.width *
-                          0.40, // Adjust width if necessary
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 100
-                    // MediaQuery.of(context).size.height /1
-                    ),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Transform.translate(
-                    offset: Offset(-65,
-                        -26), // Adjust this offset to position the first image
-                    child: Image.asset(IconConstants.browserAITransparentPng,
-                        //'assets/images/box_element.svg', // Replace with your first image asset path
-                        fit: BoxFit.contain,
-                        width: 140 //MediaQuery.of(context).size.width *
-                        // 0.40, // Adjust width if necessary
-                        ),
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                            IconConstants.beldexAILogoSvg,
-                            width: 20,
-                            height: 20,
-                          ),
-                        ),
-                        Text(
-                          StringConstants.beldexAI,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: SvgPicture.asset(
-                            themeProvider.darkTheme
-                                ? IconConstants.closeIconDark
-                                : IconConstants.closeIconWhite,
-                            width: 15,
-                            height: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: Color(0xff42425F),
-                    height: 0.7,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(IconConstants.beldexAILogoWhiteColor),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            IconConstants.chat,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color(0xff42425F),
-                                    ),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(13.0),
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(themeProvider
-                                                  .darkTheme
-                                              ? 'assets/images/ai-icons/MaleUser1.svg'
-                                              : 'assets/images/ai-icons/Male User 1.svg'),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Text('You',
-                                                style: TextStyle(
-                                                    color: Color(0xff9595B5))),
-                                          ),
-                                          Spacer(),
-                                          SvgPicture.asset(
-                                              IconConstants.copyIconDark),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(13.0),
-                                      child: Text(
-                                          'How much is BDX coin in 2030? How much is BDX coin in 2030?How much is BDX coin in 2030? How much is BDX coin in 2030?'),
-                                    ),
-                                    Divider(
-                                      color: Color(0xff42425F),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(13.0),
-                                      child: Row(
-                                        children: [
-                                          SvgPicture.asset(
-                                            IconConstants.beldexAILogoSvg,
-                                            height: 20,
-                                            width: 20,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Text(
-                                              StringConstants.beldexAI,
-                                              style: TextStyle(
-                                                  color: Color(0xff9595B5)),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          SvgPicture.asset(
-                                              IconConstants.copyIconDark),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                        //InitialSummariseWelcomeWidget(themeProvider: themeProvider),
-                        ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(5),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF171720),
-                      border: Border.all(
-                          color: Color(0xff42425F),
-                          width:
-                              0.6), // Background color of the TextField container
-                      borderRadius:
-                          BorderRadius.circular(10), // Rounded corners
-                    ),
-                    height: 100,
-                    child: Column(
-                      children: [
-                        // Spacing between icon and text field
-                        Expanded(
-                          child: TextField(
-                            onSubmitted: (value) {},
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14), // Text color
-                            cursorColor: Colors.green, // Cursor color
-                            decoration: InputDecoration(
-                                border: InputBorder
-                                    .none, // No border for the TextField
-                                hintText: StringConstants
-                                    .enterPromptHere, // Placeholder text
-                                hintStyle: TextStyle(
-                                  color: Colors.white, // Placeholder text color
-                                ),
-                                suffix: SvgPicture.asset(themeProvider.darkTheme
-                                    ? IconConstants.closeIconDark
-                                    : IconConstants.closeIconWhite)),
-                          ),
-                        ),
-                        SizedBox(
-                            width:
-                                8), // Spacing between text field and send icon
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(IconConstants.micDark),
-                            SvgPicture.asset(IconConstants.sendDark),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          //),
-        );
-      },
-    );
-    //);
-  }
-}
-
-class DraggableAISheet extends StatefulWidget {
-  const DraggableAISheet({super.key});
-
-  @override
-  State<DraggableAISheet> createState() => _DraggableAISheetState();
-}
-
-class _DraggableAISheetState extends State<DraggableAISheet> {
-  final TextEditingController _textController = TextEditingController();
-  final List<ChatMessage> _messages = [];
-  final ChatGPTService _chatGPTService = ChatGPTService(apiKey: "");
-
-  void sendUserMessage(VpnStatusProvider vpnStasProvider) async {
-    // final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
-    // String _response = 'loading';
-    // vpnStatusProvider.updateAIResponse(_response);
-    // final message = _textController.text.trim();
-    //   if(message.isEmpty) return;
-
-    //   ChatMessage uMessage = ChatMessage(text: _textController.text, sender: "user", ai: 'Beldex AI', aiResponse: vpnStatusProvider.aiResponse,);
-
-    //   setState(() {
-    //     _messages.insert(0, uMessage);
-    //   });
-    //   _textController.clear();
-    //    final response = await _chatGPTService.sendMessage(message);
-
-    //   setState(() {
-    //     _response = response;
-    //     vpnStatusProvider.updateAIResponse(_response);
-    //     print('The AI Response ----- ${vpnStatusProvider.aiResponse}');
-    //   //  _messages.insert(0, ChatMessage(text: _response.toString(), sender: "Beldex AI"));
-    //   });
-    //   _textController.clear();
-
-    final vpnStatusProvider =
-        Provider.of<VpnStatusProvider>(context, listen: false);
-
-    final message = _textController.text.trim();
-    if (message.isEmpty) return;
-
-    ChatMessage uMessage = ChatMessage(
-      text: message,
-      sender: "user",
-      ai: 'Beldex AI',
-      aiResponse: vpnStatusProvider.aiResponse,
-    );
-
-    setState(() {
-      _messages.insert(0, uMessage);
-    });
-
-    _textController.clear();
-
-    vpnStatusProvider.updateAIResponse('loading'); // Show the loading state
-
-    final response = await _chatGPTService.sendMessage(message);
-
-    vpnStatusProvider.updateAIResponse(response); // Update the response
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = Provider.of<DarkThemeProvider>(context);
-    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
-    return DraggableScrollableSheet(
-      initialChildSize: 0.95, // Initial size of the sheet
-      minChildSize: 0.3, // Minimum size of the sheet
-      maxChildSize: 1.0,
-      builder: (context, scrollController) {
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return Container(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context)
-                    .viewInsets
-                    .bottom, // Make space for the keyboard
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                color: Color(0xff171720),
-              ),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: MediaQuery.of(context).size.width * 0.5),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Transform.translate(
-                        offset: Offset(108,
-                            -90), // Adjust this offset to position the first image
-                        child: Image.asset(
-                          IconConstants.browserAITransparentPng,
-                          //'assets/images/box_element.svg', // Replace with your first image asset path
-                          fit: BoxFit.contain,
-                          width: MediaQuery.of(context).size.width *
-                              0.40, // Adjust width if necessary
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 100
-                        // MediaQuery.of(context).size.height /1
-                        ),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Transform.translate(
-                        offset: Offset(-65,
-                            -26), // Adjust this offset to position the first image
-                        child: Image.asset(
-                            IconConstants.browserAITransparentPng,
-                            //'assets/images/box_element.svg', // Replace with your first image asset path
-                            fit: BoxFit.contain,
-                            width: 140 //MediaQuery.of(context).size.width *
-                            // 0.40, // Adjust width if necessary
-                            ),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                IconConstants.beldexAILogoSvg,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                            Text(
-                              StringConstants.beldexAI,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: SvgPicture.asset(
-                                themeProvider.darkTheme
-                                    ? IconConstants.closeIconDark
-                                    : IconConstants.closeIconWhite,
-                                width: 15,
-                                height: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        color: Color(0xff42425F),
-                        height: 0.7,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                                IconConstants.beldexAILogoWhiteColor),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(
-                                IconConstants.chat,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w700),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      // Expanded(
-                      //   child: SingleChildScrollView(
-                      //     controller: scrollController, // Allow scrolling of content
-                      //     child: Column(
-                      //       children: [
-                      //        Padding(
-                      //      padding: const EdgeInsets.all(8.0),
-                      //      child: Container(
-                      //       decoration: BoxDecoration(
-                      //         border: Border.all(color: Color(0xff42425F),),
-                      //         borderRadius: BorderRadius.circular(15)
-                      //       ),
-                      //       child: ListView.builder(
-                      //         reverse: true,
-                      //         shrinkWrap: true,
-                      //         itemCount: _messages.length,
-                      //        // controller: scrollController,
-                      //         itemBuilder: (context, index) {
-                      //           return _messages[index];
-                      //         }),
-                      //      ),
-                      //                                )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xff42425F)),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ListView.builder(
-                            controller:
-                                ScrollController(), // Dedicated ScrollController
-                            reverse: true,
-                            itemCount: _messages.length,
-                            itemBuilder: (context, index) {
-                              return _messages[index];
-                            },
-                          ),
-                        ),
-                      ),
-
-                      // Bottom TextField Section
-                      Container(
-                        //  padding: const EdgeInsets.all(16.0),
-                        // margin: EdgeInsets.all(13),
-                        margin: const EdgeInsets.all(5),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-
-                        decoration: BoxDecoration(
-                          color: Color(0xFF171720),
-                          border: Border.all(
-                              color: Color(0xff42425F),
-                              width:
-                                  0.6), // Background color of the TextField container
-                          borderRadius: BorderRadius.circular(10), //
-                          // (
-                          //  // top: BorderSide(color: Color(0xff42425F), width: 0.7),
-                          // ),
-                        ),
-                        height: 100,
-                        child: Column(
-                          children: [
-                            // Spacing between icon and text field
-                            Expanded(
-                              child: TextField(
-                                controller: _textController,
-                                onSubmitted: (value) {},
-                                maxLines: null,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 14), // Text color
-                                cursorColor: Colors.green, // Cursor color
-                                decoration: InputDecoration(
-                                    border: InputBorder
-                                        .none, // No border for the TextField
-                                    hintText: StringConstants
-                                        .enterPromptHere, // Placeholder text
-                                    hintStyle: TextStyle(
-                                      color: Colors
-                                          .white, // Placeholder text color
-                                    ),
-                                    suffix: SvgPicture.asset(
-                                        themeProvider.darkTheme
-                                            ? IconConstants.closeIconDark
-                                            : IconConstants.closeIconWhite)),
-                              ),
-                            ),
-                            SizedBox(
-                                width:
-                                    8), // Spacing between text field and send icon
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SvgPicture.asset(IconConstants.micDark),
-                                IconButton(
-                                    onPressed: () =>
-                                        sendUserMessage(vpnStatusProvider),
-                                    icon: SvgPicture.asset(
-                                        IconConstants.sendDark)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 }
 
@@ -1254,7 +774,7 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
           SizedBox(
             height: model.canshowWelcome &&
                                     browserModel.webViewTabs.isNotEmpty &&
-                                    model.isSummariseAvailable ? 20 : 80,
+                                    model.isSummariseAvailable ? 15 : 80,
           ),
           // Container(
           //   height: 180,
