@@ -11,6 +11,7 @@ class ChatModel {
   bool isTypingStopped;
   bool istyping;
   bool canShowRegenerate;
+  bool isRetry;
   String typingText;
   bool isSummariseResult;
 
@@ -22,6 +23,7 @@ class ChatModel {
     this.isLoading = false,
     this.isTypingStopped = false,
     this.canShowRegenerate = false,
+    this.isRetry = false,
     this.typingText ='',
     this.istyping = false,
     this.isSummariseResult = false

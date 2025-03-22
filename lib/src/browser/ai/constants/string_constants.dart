@@ -19,6 +19,8 @@ class StringConstants {
   static const String noPageExists = "No Page exists...";
   static const String invalidQuery =
       "Sorry but I couldn't understand your query";
+  
+  static const String retryMessage = "There was an error generating response";
 
 static const String askSummaryForContent = "Summarize the following content in a structured and natural way. Start with a compelling title that captures the essence of the content. Then, write a short paragraph that provides an engaging and concise overview. After that, present the key points in a well-structured and natural manner, ensuring they flow smoothly rather than simply listing topics or subtitles. The summary should feel like it was written by a human, maintaining readability and coherence.";
 

@@ -2,6 +2,7 @@
 
 
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
+import 'package:beldex_browser/src/browser/ai/repositories/openai_repository.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -170,7 +171,13 @@ void updateFAB(bool value){
   notifyListeners();
 }
 
+bool _showErrorPage = false;
+bool get showErrorPage => _showErrorPage;
 
+void setErrorPage(bool value)async{
+_showErrorPage = value;
+notifyListeners();
+}
 
 
 // AI response 
@@ -246,19 +253,24 @@ class UrlSummaryProvider with ChangeNotifier {
   }
 
   /// Fetches summary for the current URL
-  Future<void> fetchSummary(WebViewModel webViewModel) async {
+  Future<void> fetchSummary(WebViewModel webViewModel,{String modelType = 'openai'}) async {
     if (currentUrl.isEmpty || cache.containsKey(currentUrl)) {
-      summaryText = cache[currentUrl] ?? summaryText;
+      if(cache[currentUrl] == 'Erroring'){
+        cache.remove(currentUrl);
+        notifyListeners();
+      }else{
+       summaryText = cache[currentUrl] ?? summaryText;
       print('BELDEX AI SUmmarise text $summaryText');
       notifyListeners();
       return;
+      }
     }
-
+   print('BELDEX CURRENTURL DATA -----> $currentUrl');
     isLoading = true;
     notifyListeners();
 
     try {
-      final response = await chatGPTService.fetchAndSummarize(currentUrl, webViewModel);  //callOpenAiApi(currentUrl);
+      final response = await OpenAIRepository().fetchAndSummarizeContent(currentUrl, webViewModel,modelType);  //callOpenAiApi(currentUrl);
       cache[currentUrl] = response;
       summaryText = response;
     } catch (e) {

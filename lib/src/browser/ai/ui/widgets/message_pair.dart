@@ -149,31 +149,35 @@ copyText(String text){
                 color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
             ),
 
-            Padding(
-             padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
-             child: Column(
+            // Padding(
+            //  padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
+            // child: 
+             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                children: [
-                 Row(
-                  children: [
-                    SvgPicture.asset(IconConstants.beldexAILogoSvg,
-                    width: 18,
-                    height: 18,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(StringConstants.beldexAI,style : TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',
-                      ),),
-                    ),
-                    Spacer(),
-                    GestureDetector(onTap: (){
-                   if(modelMessage.text.isNotEmpty){
-                    copyText(modelMessage.text);
-                   }
-                    },
-                     child: SvgPicture.asset(IconConstants.copyIconDark))
-                    
-                  ],
+                 Padding(
+                   padding:const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
+                   child: Row(
+                    children: [
+                      SvgPicture.asset(IconConstants.beldexAILogoSvg,
+                      width: 18,
+                      height: 18,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(StringConstants.beldexAI,style : TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',
+                        ),),
+                      ),
+                      Spacer(),
+                     modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage ? GestureDetector(onTap: (){
+                     if(modelMessage.text.isNotEmpty){
+                      copyText(modelMessage.text);
+                     }
+                      },
+                       child: SvgPicture.asset(IconConstants.copyIconDark)):SizedBox()
+                      
+                    ],
+                   ),
                  ),
                  modelMessage.text.isNotEmpty || modelMessage.image != null
                  ? 
@@ -187,21 +191,24 @@ copyText(String text){
                     bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
                   )
                 : 
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  decoration: BoxDecoration(
-                   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-                   borderRadius: BorderRadius.circular(12.0)
-                  ),
-              padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
-              child: LoadingAnimationWidget.waveDots(
-                color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
-                size: 30,
-              ),
-            ),
+                Padding(
+                  padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 15),
+                    decoration: BoxDecoration(
+                     color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                     borderRadius: BorderRadius.circular(12.0)
+                    ),
+                                padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+                                child: LoadingAnimationWidget.waveDots(
+                  color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
+                  size: 30,
+                                ),
+                              ),
+                ),
                ],
              ),
-           ),
+          // ),
            
           ],
         ),
