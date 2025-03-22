@@ -260,7 +260,8 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
   String title = "";
   String paragraph = "";
   List<String> bullets = [];
-  final ChatGPTService _chatGPTService = ChatGPTService(apiKey: 'API_KEY');
+  String copyResult ="";
+  //final ChatGPTService _chatGPTService = ChatGPTService(apiKey: 'API_KEY');
   bool _isLoading = true;
   ChatViewModel? model;
   String displayedTitle = "";
@@ -326,6 +327,10 @@ void _parseResponse(String response) {
       .skip(1) // Skip the title line
       .where((line) => line.isNotEmpty) // Ensure the line is not empty
       .toList();
+
+
+ copyResult = bullets.isNotEmpty ? "${bullets.join('\n')}" : '$title';
+
 
   print('BELDEX AI API Title --- $title');
   print('BELDEX AI API Bullets --- $bullets');
@@ -706,7 +711,7 @@ void callSummaryRetry(BuildContext context) async {
                         right: 20,
                         child: GestureDetector(
                           onTap: () {
-                            Clipboard.setData(ClipboardData(text:urlSummaryProvider.summaryText));
+                            Clipboard.setData(ClipboardData(text:copyResult));
                             showMessage('Copied');
 
                           },
