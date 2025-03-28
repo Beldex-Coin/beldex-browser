@@ -705,26 +705,16 @@ await _webViewController!.evaluateJavascript(source: """
       },
       onReceivedError: (controller, request, error) async {
         var isForMainFrame = request.isForMainFrame ?? false;
-        if (!isForMainFrame) {
-          return;
-        }
+        if (!isForMainFrame) return;
+
           getConnectedExitnode();
+          _pullToRefreshController?.setEnabled(true);
         _pullToRefreshController?.endRefreshing();
         await controller.stopLoading();
         if (Util.isIOS() && error.type == WebResourceErrorType.CANCELLED) {
           // NSURLErrorDomain
           return;
         }
-
-
-
-    // vpnStatusProvider.updateFAB(false);
-
-
-// if(error.description == 'net::ERR_NAME_NOT_RESOLVED')
-//  _showBottomSheet(context,themeProvider);
-
-
         var errorUrl = request.url;
         _webViewController?.loadData(data: """
 <!DOCTYPE html>
@@ -742,7 +732,6 @@ await _webViewController!.evaluateJavascript(source: """
     font-family: Arial, sans-serif;
     background-color: #fff;
 }
-
     .interstitial-wrapper {
         box-sizing: border-box;
         font-size: 1em;
@@ -768,17 +757,11 @@ await _webViewController!.evaluateJavascript(source: """
     background-color: #f1f1f1;
 }
 
-.time {
-    font-size: 16px;
-}
+.time {font-size: 16px;}
 
-.icons {
-    display: flex;
-}
+.icons {display: flex;}
 
-.icon {
-    margin-left: 10px;
-}
+.icon {margin-left: 10px;}
 
 .content {
     flex-grow: 1;
@@ -986,202 +969,172 @@ Future.delayed(const Duration(seconds: 3),(){
 
 
 
-void _showBottomSheet(BuildContext context,DarkThemeProvider themeProvider)async {
-   
-String dNode = '';
-  final prefs = await SharedPreferences.getInstance();
-  final node = prefs.getString('selectedExitNode') ?? '';
-  
 
-  if(node.length == 56){
-    String firstPart = node.substring(0, 4);
-      String lastPart = node.substring(node.length - 4);
-      dNode = '$firstPart...$lastPart';
-    // return '$firstPart...$lastPart';
-  }else{
-    dNode = node;
-  }
- // return node;
-
-
-    showModalBottomSheet(
-    
-      context: context,
-      barrierColor: Colors.transparent,
-      builder: (BuildContext context) {
-        // Start a timer to automatically dismiss the bottom sheet after 3 seconds
-        // Future.delayed(const Duration(seconds: 5),(){  
-        //   if(Navigator.canPop(context)){
-        //     Navigator.of(context).pop();}
-        //   }
-         
-        // );
-        
-
-        return Container(
-          height: 208,
-          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-          decoration: BoxDecoration(
-            color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-          ),
-          
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Change Node',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text:TextSpan(
-                    text: '',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: themeProvider.darkTheme ? Color(0xffEBEBEB) :Color(0xff222222),
-                      fontWeight: FontWeight.w600
-                    ),
-                    children:<TextSpan> [
-                       TextSpan(
-                        text: 'Exit node '
-                       ),
-                       TextSpan(
-                        text: '$dNode',
-                        style: TextStyle(
-                          color: Color(0xff00BD40)
-                        )
-                       ),
-                       TextSpan(
-                        text: ' has experienced unprecedented traffic. Please click on Change Node to switch exit node'
-                       ),
-                        TextSpan(
-                        text: ' Change Node',
-                        style: TextStyle(
-                          color: Color(0xff00BD40)
-                        )
-                       ),
-                        TextSpan(
-                        text: ' to switch exit node'
-                
-                       ),
-                    ]
-                  ),
-                  
-                  
-                   ),
-              ),
-              GestureDetector(
-                onTap: ()=> Navigator.push(context, MaterialPageRoute(builder:(context)=> NodeDropdownListPage(exitData: [], canChangeNode: true,) )),
-                child: Container(
-                  height: 49,
-                  width: 156,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff00BD40)
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Change Node',
-                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white),
-                    ),
-                  ),
-                ),
-              )
-              
-            ],
-          ),
-        );
-      },
-    );
-  }
 
 
 // Show FAB when individual sites open
 void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
-
-  if(url.isEmpty || url == "about:blank" || url.startsWith("chrome-eeror") || url.startsWith("edge-error")){
+  if(vpnStatusProvider.canShowHomeScreen){
     vpnStatusProvider.updateFAB(false);
+    print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB} inside showHome');
     return;
   }
 
-
-
-
-  if(url.startsWith('http') || url.startsWith('https')){
-      // Regex to match common search engine result page patterns
-    final searchEnginePattern = RegExp(
-      r'(\?|&)q=|search=|(\?|&)query=',
-      caseSensitive: false,
-    );
-    
-    setState(() {
-      if(searchEnginePattern.hasMatch(url)){
-        vpnStatusProvider.updateFAB(false);
-      }else{
-         if(!checkIsSearchEngineHome(url)){
-  print('This is Search engine checking ');
-      vpnStatusProvider.updateFAB(true);
- }else{
-   print('This is Search engine checking Else part');
-  vpnStatusProvider.updateFAB(false);
- }
-
-      }
-      
-
-     // showFAB = !searchEnginePattern.hasMatch(url);
-    });
+  if(url.isEmpty || url == "about:blank" || url.startsWith("chrome-error") || url.startsWith("edge-error") || url.startsWith("file:")){
+    vpnStatusProvider.updateFAB(false);
+    return;
   }
-  
-  
-  else{
-//  if(!checkIsSearchEngineHome(url)){
-//   print('This is Search engine checking ');
-//       vpnStatusProvider.updateFAB(true);
-//  }else{
-//    print('This is Search engine checking Else part');
-  vpnStatusProvider.updateFAB(false);
- //}
  
-  }
-    
-  }
 
- bool checkIsSearchEngineHome(String url){
-  Uri? uri;
-  try {
-    uri = Uri.parse(url);
-  } catch (e) {
-    print("Invalid URL: $url");
-    //return false;
+
+vpnStatusProvider.updateFAB(shouldShowFAB(url));
+    print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB}');
   }
 
-  final List<String> searchEngines = [
-    "google.com",
-    "bing.com",
-    "yahoo.com",
-    "duckduckgo.com",
-    "baidu.com",
-    "yandex.com",
-    "ecosia.org",
-    "startpage.com",
-    "qwant.com",
-    "search.brave.com",
-    "youtube.com",
-    "m.youtube.com",
-    "m.facebook.com",
-    "facebook.com",
-    "twitter.com"
-  ];
-
-  String host = uri!.host.replaceFirst('www.', '');
-  print('This is Search engine Home Page ------------> ${searchEngines.contains(host) && (uri.path == '/' || uri.path.isEmpty)}');
-  return searchEngines.contains(host) && (uri.path == '/' || uri.path.isEmpty);
-
- }
 
 
+bool shouldShowFAB(String url) {
+  Uri uri = Uri.parse(url);
+  String host = uri.host.toLowerCase();
+  String path = uri.path.split('#')[0]; // Modified to strip fragments after '#'
 
+  // List of search engines and social media platforms to exclude
+  Map<String, List<String>> blockedSites = {
+    'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
+    'bing': ['bing.com'],
+    'yahoo': ['yahoo.','consent.yahoo.','guce.yahoo.'],
+    'duckduckgo': ['duckduckgo.com'],
+    'baidu': ['baidu.com'],
+    'yandex': ['yandex.'], // juce
+    'ask': ['ask.com'],
+    'ecosia':['ecosia.org'],
+    'youtube': ['youtube.com'],
+    'reddit': ['reddit.com'],
+    'wikipedia': ['wikipedia.org'],
+    'twitter': ['twitter.com', 'x.com'],
+  };
+
+  // Check if the host matches any blocked site homepage
+  bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+      entry.value.any((domain) => host.contains(domain)) &&
+      (path == "/" || path.isEmpty));
+
+  // Check for search, video, or feed pages in search engines and social media
+  bool isBlockedSearchOrFeed = [
+    'search',      // Google, Bing, Yahoo, DuckDuckGo, Ask
+   // '/s',           // Baidu
+    'yandsearch',  // Yandex
+    'results',     // YouTube search results
+    'watch',       // YouTube videos (https://www.youtube.com/watch?v=xyz)
+    'explore',     // Twitter/X explore page
+    'trending',    // YouTube trending page
+  ].any((keyword) => path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+  // Check for Twitter authentication pages
+  bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+      (path.startsWith("/login") || path.startsWith("/i/flow/login") || path.startsWith("/signup"));
+
+  // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
+  bool isWikipedia = host.contains("wikipedia.org");
+  bool isWikipediaContentPage = isWikipedia &&
+      path.startsWith("/wiki/") && // Must be an article path
+      !path.startsWith("/wiki/Special:") && 
+      !path.startsWith("/wiki/Talk:") &&
+      !path.startsWith("/wiki/User:") &&
+      !path.startsWith("/wiki/Wikipedia:") &&
+      !path.startsWith("/wiki/Category:") &&
+      !path.startsWith("/wiki/File:") &&
+      !path.startsWith("/wiki/Help:") &&
+      !path.contains("search") && // Exclude search pages
+      !path.contains("index.php") && // Exclude index/search pages
+      !path.contains("#References"); // Exclude reference sections (though now redundant due to split)
+ // Only allow Wikipedia content pages
+  if (isWikipedia) {
+    print("The URL is coming inside wikipedia block");
+   // print("The Wikipedia 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")}");
+    return isWikipediaContentPage;
+  }
+
+bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
+//print("The Wikipedia $isWikipedia or $isWikiOne 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")} and the last one $isWikipediaContentPage");
+  if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage || isYahooConsentPage) {
+    print("The URL is coming inside block $isBlockedHomepage ----  $isBlockedSearchOrFeed ---- $isTwitterAuthPage");
+    return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
+  }
+
+ 
+
+  return true; // Show FAB only for actual webpages and valid Twitter/X posts
+}
+
+// bool shouldShowFAB(String url) {
+//   Uri uri = Uri.parse(url);
+//   String host = uri.host.toLowerCase();
+//   String path = uri.path;
+
+//   // List of search engines and social media platforms to exclude
+//   Map<String, List<String>> blockedSites = {
+//     'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
+//     'bing': ['bing.com'],
+//     'yahoo': ['yahoo.'],
+//     'duckduckgo': ['duckduckgo.com'],
+//     'baidu': ['baidu.com'],
+//     'yandex': ['yandex.'],
+//     'ask': ['ask.com'],
+//     'youtube': ['youtube.com'],
+//     'wikipedia':['wikipedia.org'],
+//     'twitter': ['twitter.com', 'x.com'],
+//   };
+
+//   // Check if the host matches any blocked site homepage
+//   bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+//       entry.value.any((domain) => host.contains(domain)) &&
+//       (path == "/" || path.isEmpty));
+
+//   // Check for search, video, or feed pages in search engines and social media
+//   bool isBlockedSearchOrFeed = [
+//     'search',      // Google, Bing, Yahoo, DuckDuckGo, Ask
+//     's',           // Baidu
+//     'yandsearch',  // Yandex
+//     'results',     // YouTube search results
+//     'watch',       // YouTube videos (https://www.youtube.com/watch?v=xyz)
+//     'explore',     // Twitter/X explore page
+//     'trending',    // YouTube trending page
+//   ].any((keyword) => path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+//   // Check for Twitter authentication pages
+//   bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+//       (path.startsWith("/login") || path.startsWith("/i/flow/login") || path.startsWith("/signup"));
+
+
+//    // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
+// bool isWikipedia = host.contains("wikipedia.org");
+//   bool isWikipediaContentPage = isWikipedia &&
+//       path.startsWith("/wiki/") && // Must be an article path
+//       !path.startsWith("/wiki/Special:") && 
+//       !path.startsWith("/wiki/Talk:") &&
+//       !path.startsWith("/wiki/User:") &&
+//       !path.startsWith("/wiki/Wikipedia:") &&
+//       !path.startsWith("/wiki/Category:") &&
+//       !path.startsWith("/wiki/File:") &&
+//       !path.startsWith("/wiki/Help:") &&
+//       !path.contains("search") && // Exclude search pages
+//       !path.contains("index.php") && // Exclude index/search pages
+//       !path.contains("#References"); // Exclude reference sections
+
+
+//   if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage) {
+//     return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
+//   }
+
+
+//   // Only allow Wikipedia content pages
+//   if (isWikipedia) {
+//     return isWikipediaContentPage;
+//   }
+
+//   return true; // Show FAB only for actual webpages and valid Twitter/X posts
+// }
 
 
 String getDownloadFile(String name){
