@@ -513,6 +513,7 @@ void callSummaryRetry(BuildContext context) async {
                   callSummaryRetry(context);
                   setState(() {
                    title = '';
+                   copyResult = '';
                    });                              
                 },
                 child: Container(
@@ -705,7 +706,8 @@ void callSummaryRetry(BuildContext context) async {
                   ),
                 ),
                 //!urlSummaryProvider.isLoading || title != 'Erroring' //_isLoading
-                urlSummaryProvider.summaryText.isNotEmpty && urlSummaryProvider.summaryText != "Erroring"
+               // urlSummaryProvider.summaryText.isNotEmpty 
+               copyResult.trim().isNotEmpty && copyResult != 'Erroring' && !urlSummaryProvider.isLoading
                     ? Positioned(
                         bottom: 30,
                         right: 20,
