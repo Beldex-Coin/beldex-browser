@@ -443,7 +443,7 @@ await _webViewController!.evaluateJavascript(source: """
         // widget.webViewModel.url = url;
         // widget.webViewModel.title = await _webViewController?.getTitle();
         setState(() {
-            vpnStatusProvider.updateIsUrlValid(_isValidUrl(url.toString()));
+            vpnStatusProvider.updateIsUrlValid(_isValidUrl(widget.webViewModel.url.toString()));
         });
         // if (isCurrentTab(currentWebViewModel)) {
         //   currentWebViewModel.updateWithValue(widget.webViewModel);
@@ -522,6 +522,7 @@ await _webViewController!.evaluateJavascript(source: """
         }
       },
       shouldOverrideUrlLoading: (controller, navigationAction) async {
+        vpnStatusProvider.setErrorPage(false);
         if (navigationAction.isForMainFrame) {
           print('navigation innnn----->');
           if (browserModel.isFindingOnPage) {
@@ -905,6 +906,10 @@ document.getElementById("footer").style.display = "none";
     historyUrl: errorUrl,
     );
 
+
+
+  vpnStatusProvider.updateFAB(false);
+ vpnStatusProvider.setErrorPage(true);
         widget.webViewModel.url = errorUrl;
        // widget.webViewModel.isSecure = false;
        // await _webViewController?.stopLoading();
@@ -928,6 +933,7 @@ Future.delayed(const Duration(seconds: 3),(){
        _webViewController?.evaluateJavascript(source: "hideFooter();");
      }
      vpnStatusProvider.updateFAB(false);
+     vpnStatusProvider.setErrorPage(true);
     });  
 
 
