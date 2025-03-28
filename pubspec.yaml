@@ -167,6 +167,7 @@ flutter:
       fonts:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-SemiBold.ttf
+        - asset: assets/fonts/Poppins-ExtraLight.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
