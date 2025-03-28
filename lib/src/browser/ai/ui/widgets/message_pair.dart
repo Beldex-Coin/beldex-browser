@@ -53,7 +53,7 @@ copyText(String text){
     final webviewModel = Provider.of<WebViewModel>(context);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0
+      padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0
       ),
       child: Container(
         decoration: BoxDecoration(
