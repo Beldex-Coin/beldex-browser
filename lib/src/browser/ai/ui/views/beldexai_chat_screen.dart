@@ -69,7 +69,6 @@ class BeldexAIScreen extends StatelessWidget {
   }
 
 
-
 bool shouldShowFAB(String url) {
   Uri uri = Uri.parse(url);
   String host = uri.host.toLowerCase();
@@ -79,14 +78,14 @@ bool shouldShowFAB(String url) {
   Map<String, List<String>> blockedSites = {
     'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
     'bing': ['bing.com'],
-    'yahoo': ['yahoo.'],
+    'yahoo': ['yahoo.','consent.yahoo.','guce.yahoo.'],
     'duckduckgo': ['duckduckgo.com'],
     'baidu': ['baidu.com'],
-    'yandex': ['yandex.'],
+    'yandex': ['yandex.'], // juce
     'ask': ['ask.com'],
-    'reddit':['reddit.com'],
     'ecosia':['ecosia.org'],
     'youtube': ['youtube.com'],
+    'reddit': ['reddit.com'],
     'wikipedia': ['wikipedia.org'],
     'twitter': ['twitter.com', 'x.com'],
   };
@@ -132,9 +131,9 @@ bool shouldShowFAB(String url) {
     return isWikipediaContentPage;
   }
 
-
+bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
 //print("The Wikipedia $isWikipedia or $isWikiOne 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")} and the last one $isWikipediaContentPage");
-  if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage) {
+  if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage || isYahooConsentPage) {
     print("The URL is coming inside block $isBlockedHomepage ----  $isBlockedSearchOrFeed ---- $isTwitterAuthPage");
     return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
   }
