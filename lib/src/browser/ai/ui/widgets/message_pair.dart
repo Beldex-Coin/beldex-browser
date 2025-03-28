@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MessagePair extends StatelessWidget {
   const MessagePair({
@@ -40,12 +41,54 @@ bool containsUrl(String text) {
 
 
 copyText(String text){
- Clipboard.setData(ClipboardData(text:text));
+ Clipboard.setData(ClipboardData(text:removeSpecialFormatting(text)));
   showMessage('Copied');
 }
 
+String removeSpecialFormatting(String text) {
+  String cleanText = text
+      // Remove bold (**text**)
+      .replaceAllMapped(RegExp(r'\*\*(.*?)\*\*'), (match) => match.group(1) ?? '')
+      // Remove italic (*text*)
+      .replaceAllMapped(RegExp(r'\*(.*?)\*'), (match) => match.group(1) ?? '')
+      // Remove only • bullet points (keeping - )
+      .replaceAll(RegExp(r'^•\s+', multiLine: true), '')
+      // Remove stray $1 that might have crept in
+      .replaceAll(RegExp(r'\$1'), '')
+      // Remove numbered list markers (e.g., "1. ", "2. ")
+      .replaceAll(RegExp(r'^\d+\.\s+', multiLine: true), '')
+      // Remove Markdown headers (#, ##, ###, etc.) at start of lines
+      .replaceAll(RegExp(r'^#+ ', multiLine: true), '')
+      // Remove extra newlines and trim whitespace
+      .replaceAll(RegExp(r'\n{2,}'), '\n')
+      .trim();
+  
+  return cleanText;
+}
 
+static bool _isSharing = false;
 
+  // Debounce function to handle share action
+  Future<void> _shareContent(String userMessage, String modelMessage) async {
+    if (_isSharing) return; // Ignore if already sharing
+
+    _isSharing = true; // Set flag to block further clicks
+ print("The UnFormatted text --->${removeSpecialFormatting(modelMessage)}");
+ ShareResult result = await Share.shareWithResult(
+      'You:\n${removeSpecialFormatting(userMessage)}\nBeldex AI:\n${removeSpecialFormatting(modelMessage)}',
+    );
+    // ShareResult result = await Share.shareWithResult(
+    //   'You:\n$userMessage\nBeldex AI:\n$modelMessage',
+    // );
+
+    _isSharing = false; // Reset flag after share completes
+
+    if (result.status == ShareResultStatus.success) {
+      print('Shared successfully');
+    } else if (result.status == ShareResultStatus.dismissed) {
+      print('Share dismissed');
+    }
+  }
 
 
   @override
@@ -79,13 +122,29 @@ copyText(String text){
                       child: Text(StringConstants.you,style: TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',),),
                     ),
                     Spacer(),
+
                     GestureDetector(
                       onTap: ()=> copyText(userMessage.text),
-                      child: SvgPicture.asset(IconConstants.copyIconDark))
+                      child: SvgPicture.asset(IconConstants.copyIconDark)),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left:10.0),
+                        child: Visibility(
+                          visible: userMessage.text.isNotEmpty && modelMessage.text.isNotEmpty ,
+                          child: GestureDetector(
+                          onTap: _isSharing ? null : ()=> _shareContent(userMessage.text, modelMessage.text),
+                        //   ()async{
+                        //     //Share.share('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}', subject:'');
+                        //  ShareResult result =  await Share.shareWithResult('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}');
+                         
+                        //   },
+                          child: SvgPicture.asset(IconConstants.shareIcon)),
+                        ),
+                      )
                   ],
                  ),
                
-             userMessage.text.contains(webviewModel.title.toString()) ? Column(
+             userMessage.text.contains(webviewModel.title.toString()) || userMessage.text.contains('null - Summarise page') ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
