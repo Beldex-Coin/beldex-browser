@@ -636,11 +636,15 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                   )));
         });
   }
+String currentUrl = '';
 
   Widget _buildWebViewTabsViewer() {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var themeProvider = Provider.of<DarkThemeProvider>(context);
+    var webviewmodel = browserModel.getCurrentTab()?.webViewModel;
+    var webviewController = webviewmodel?.webViewController;
     final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     return WillPopScope(
         onWillPop: () async {
           browserModel.showTabScroller = false;
@@ -668,6 +672,9 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                 );
                 webViewTab.webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.toInt();
                 var url = webViewTab.webViewModel.url;
+                setState(() {
+                  currentUrl = url.toString();
+                });
                 final faviconUrl = webViewTab.webViewModel.favicon != null
                     ? webViewTab.webViewModel.favicon!.url
                     : (url != null && ["http", "https"].contains(url.scheme)
@@ -736,8 +743,11 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                 );
               }).toList(),
               onTap: (index) async {
+                vpnStatusProvider.updateFAB(false);
                 browserModel.showTabScroller = false;
                 browserModel.showTab(index);
+               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString())));
+               // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
               },
             )));
   }
