@@ -520,7 +520,7 @@ void callSummaryRetry(BuildContext context) async {
                    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
                    width: 93,
                    decoration: BoxDecoration(
-                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
                     borderRadius: BorderRadius.circular(12)
                    ),
                      child: Row(
@@ -558,7 +558,7 @@ void callSummaryRetry(BuildContext context) async {
                                 ? Container(
                   margin: EdgeInsets.all(15),
                   decoration: BoxDecoration(
-                   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+                   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFDFDFD),
                    borderRadius: BorderRadius.circular(12.0)
                   ),
               padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
@@ -770,16 +770,17 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
                   child: Text(
                     StringConstants.welcomeAIContent,
                     //textAlign: TextAlign.center,
-                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff222222),fontFamily: 'Poppins' , fontSize: 14),
+                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 14,fontWeight: FontWeight.w300),
                   ),
                 )
               ],
             ),
           ),
           SizedBox(
-            height: model.canshowWelcome &&
-                                    browserModel.webViewTabs.isNotEmpty &&
-                                    model.isSummariseAvailable ? 15 : 80,
+            height: 10
+            // model.canshowWelcome &&
+            //                         browserModel.webViewTabs.isNotEmpty &&
+            //                         model.isSummariseAvailable ? 10 : 80,
           ),
           // Container(
           //   height: 180,
