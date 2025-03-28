@@ -206,8 +206,21 @@ checkInternet(ChatViewModel model)async{
    _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
-      if (!(event.contains(ConnectivityResult.wifi)) || !(event.contains(ConnectivityResult.mobile)) ) {
-        model.stopResponse();
+      if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile)) ) {
+         final lastUserMessageIndex = model.messages.lastIndexWhere((message) => message.role == Roles.user,);
+         if (lastUserMessageIndex != -1 &&
+                                    lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
+                                    model.messages[lastUserMessageIndex + 1].role == Roles.model &&
+                                    model.messages[lastUserMessageIndex + 1].text.isEmpty) {
+                                     // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
+                                  print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
+                                  OpenAIRepository().cancelRequest();
+                                  model.stopResponse();
+                                  model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted'; // If token cancelled before generating response
+                                  model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
+                                }
+       // openAIRepository.cancelRequest();
+        // model.stopResponse();
         model.isTyping = false;
       } 
     });
