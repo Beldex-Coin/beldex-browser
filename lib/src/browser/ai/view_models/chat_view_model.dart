@@ -590,7 +590,7 @@ void checkNetworkConnectivity()async{
   final connectivityResult = await Connectivity().checkConnectivity();
 
   if(connectivityResult == ConnectivityResult.none){
-    showMessage("Network error.Please check mobile data/Wifi is on and retry");
+    showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
     return;
   }else{
     // Step 2: Test Actual Internet Access

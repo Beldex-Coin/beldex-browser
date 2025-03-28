@@ -124,7 +124,7 @@ void checkNetworkConnectivity()async{
  // if(connectivityResult.contains(ConnectivityResult.vpn)){
    if(!(connectivityResult.contains(ConnectivityResult.mobile)) && !(connectivityResult.contains(ConnectivityResult.wifi))){
        print('mobile network not connected $connectivityResult');
-    showMessage("Network error. Please check if mobile data or Wi-Fi is enabled and try again.");
+    showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
     return;
    }
   else{
