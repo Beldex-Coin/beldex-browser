@@ -257,6 +257,54 @@ bool _isRestrictedUrl(String text) {
     previousExtent = currentExtent;
   }
 
+basicSetting(ChatViewModel model,WebViewModel webViewModel,AIModelProvider aiModelProvider)async{
+  openAIRepository.cancelRequest();
+   model.stopResponse();
+   Future.delayed(Duration(milliseconds: 100),(){
+      model.messages.clear();
+      model.messageController.clear();
+      openAIRepository.clearHistory();
+       model.canshowWelcome = isWelcomeShown;
+        checkSummariseString(webViewModel, model);
+        model.isTyping = false;
+        //getWordSearch(model);
+       // _controller.addListener(_onSheetDrag);
+        checkInternet(model);
+        setDelayForWordSearch(model,webViewModel,aiModelProvider);
+   });
+   
+}
+
+
+
+String removeSpecialFormatting(String text) {
+  String cleanText = text
+      // Remove bold (**text**)
+      .replaceAllMapped(RegExp(r'\*\*(.*?)\*\*'), (match) => match.group(1) ?? '')
+      // Remove italic (*text*)
+      .replaceAllMapped(RegExp(r'\*(.*?)\*'), (match) => match.group(1) ?? '')
+      // Remove only • bullet points (keeping - )
+      .replaceAll(RegExp(r'^•\s+', multiLine: true), '')
+      // Remove stray $1 that might have crept in
+      .replaceAll(RegExp(r'\$1'), '')
+      // Remove numbered list markers (e.g., "1. ", "2. ")
+      .replaceAll(RegExp(r'^\d+\.\s+', multiLine: true), '')
+      // Remove Markdown headers (#, ##, ###, etc.) at start of lines
+      .replaceAll(RegExp(r'^#+ ', multiLine: true), '')
+      // Remove extra newlines and trim whitespace
+      .replaceAll(RegExp(r'\n{2,}'), '\n')
+      .trim();
+  
+  return cleanText;
+}
+
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -270,16 +318,19 @@ bool _isRestrictedUrl(String text) {
     return BaseView<ChatViewModel>(
       onModelReady: (model) {
         this.model = model;
-        model.messages = [];
-        model.messageController.clear();
+
+
+        basicSetting(model,webViewModel,aiModelProvider);
+        // model.messages = [];
+        // model.messageController.clear();
         //_checkWelcomeMessageStatus();
-        model.canshowWelcome = isWelcomeShown;
-        checkSummariseString(webViewModel, model);
-        model.isTyping = false;
-        //getWordSearch(model);
-        _controller.addListener(_onSheetDrag);
-        checkInternet(model);
-        setDelayForWordSearch(model,webViewModel,aiModelProvider);
+      //   model.canshowWelcome = isWelcomeShown;
+      //   checkSummariseString(webViewModel, model);
+      //   model.isTyping = false;
+      //   //getWordSearch(model);
+      //  // _controller.addListener(_onSheetDrag);
+      //   checkInternet(model);
+      //   setDelayForWordSearch(model,webViewModel,aiModelProvider);
         //print('BASE MODEL READY>>>>');
       },
       builder: (context, model, child) {
