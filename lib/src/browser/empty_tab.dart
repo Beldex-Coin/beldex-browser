@@ -144,7 +144,7 @@ final List<Map<String, String>> items = [
                          crossAxisCount: 3,
                         // crossAxisSpacing: 15,
                          mainAxisSpacing: 10,
-                         mainAxisExtent: 120
+                         mainAxisExtent: 130
                        ),
                        itemBuilder: (context, index) {
                          return ItemListWidget(
