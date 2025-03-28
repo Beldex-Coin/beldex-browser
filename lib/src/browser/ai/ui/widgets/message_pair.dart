@@ -169,7 +169,7 @@ copyText(String text){
                         ),),
                       ),
                       Spacer(),
-                     modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage ? GestureDetector(onTap: (){
+                     modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
                      if(modelMessage.text.isNotEmpty){
                       copyText(modelMessage.text);
                      }
