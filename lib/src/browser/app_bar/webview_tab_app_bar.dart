@@ -896,6 +896,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
       },
       onTap: () async {
         //Navigator.push(context,MaterialPageRoute(builder: ((context) => TabsList() )));
+        
         if (browserModel.webViewTabs.isNotEmpty) {
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
@@ -912,7 +913,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
             await Future.delayed(const Duration(milliseconds: 300));
           }
 
-
+        vpnStatusProvider.updateFAB(false);
          if(vpnStatusProvider.canShowHomeScreen){
      if (webViewModel != null && imageScreenshot != null){
       webViewModel.screenshot = imageScreenshot;
@@ -1072,7 +1073,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                       FavoriteModel? favorite;
 
                       if (webViewModel.url != null &&
-                          webViewModel.url!.toString().isNotEmpty) {
+                          webViewModel.url!.toString().isNotEmpty && (webViewModel.url!.scheme == "http" || webViewModel.url!.scheme == "https")) {
                         favorite = FavoriteModel(
                             url: webViewModel.url,
                             title: webViewModel.title ?? "",
