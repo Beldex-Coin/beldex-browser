@@ -310,7 +310,8 @@ void closeTabListPage(){
   Widget _buildBrowser(BuildContext cxt) {
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
-
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+     print('The URL For the FAB ------------> ${vpnStatusProvider.showFAB}');
     browserModel.addListener(() {
       browserModel.save();
     });
@@ -333,6 +334,7 @@ void closeTabListPage(){
   Widget _buildWebViewTabs() {
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
           var browserModel = Provider.of<BrowserModel>(context, listen: false);
+          final aiModelProvider = Provider.of<AIModelProvider>(context,listen: false);
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
     return WillPopScope(
@@ -427,8 +429,39 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
               appBar: const BrowserAppBar(),
               body: _buildWebViewTabsContent(),
               floatingActionButton: vpnStatusProvider.showFAB && browserModel.webViewTabs.isNotEmpty  ? FloatingActionButton(
-                onPressed: ()async{
-                   if(await webViewController?.getSelectedText() != null){
+                onPressed: (){
+                 // if (!vpnStatusProvider.showFAB) return; // Prevent multiple taps
+                  vpnStatusProvider.updateFAB(false);
+                   hideContextMenu(webViewController);
+                   showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+          return SummariseUrlResult(aiModelProvider: aiModelProvider,);
+     });
+              },
+              backgroundColor: Colors.transparent,
+              child: ClipOval(
+                child: Image.asset('assets/images/ai-icons/Ai-Button.png'),
+              )
+              // Container(
+              //   height: 50,
+              //   width: 50,
+              //   decoration: BoxDecoration(
+              //     color: Colors.green,
+              //     shape: BoxShape.circle
+              //   ),
+              // )
+
+              ): Container(),
+              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+              ),
+        ));
+  }
+
+
+void hideContextMenu(InAppWebViewController? webViewController)async{
+ if(await webViewController?.getSelectedText() != null){
                          await webViewController?.evaluateJavascript(source: """
                     
                     //Close keyboard if open
@@ -452,34 +485,12 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                   });
                 """);
               }
-                   showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-     builder: (context){
-          return SummariseUrlResult();
-     });
-              
-              vpnStatusProvider.updateFAB(false);
-              
-              },
-              backgroundColor: Colors.transparent,
-              child: ClipOval(
-                child: Image.asset('assets/images/ai-icons/Ai-Button.png'),
-              )
-              // Container(
-              //   height: 50,
-              //   width: 50,
-              //   decoration: BoxDecoration(
-              //     color: Colors.green,
-              //     shape: BoxShape.circle
-              //   ),
-              // )
+}
 
-              ): Container(),
-              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-              ),
-        ));
-  }
+
+
+
+
 
   Future<bool?> _showDownloadConfirmationDialog(BuildContext context) {
     final themeProvider =
