@@ -1,6 +1,7 @@
 import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
@@ -12,6 +13,7 @@ import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:belnet_lib/belnet_lib.dart';
@@ -64,7 +66,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
        String? url = await platform.invokeMethod("getIntentData");
 
   if(url!.contains('browser_fallback_url')){
-    print('FALLBACK URL -----');
+   // print('FALLBACK URL -----');
   }
 
       setState(() {
@@ -84,9 +86,9 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
           //}
           
         }else{
-           print('IsExternal Link 2-------> $isExternalLink');
+          // print('IsExternal Link 2-------> $isExternalLink');
         }
-        print('IsExternal Link 3-------> $isExternalLink');
+        //print('IsExternal Link 3-------> $isExternalLink');
       });
     }, onError: (err) {
       print("getIntentDataStream error: $err");
@@ -98,19 +100,19 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
       await Future.delayed(Duration(milliseconds: 300)); // Add delay
       setState(() {
         _sharedFiles.clear();
-        print('Sample Shared File data ${_sharedFiles.length}');
+        //print('Sample Shared File data ${_sharedFiles.length}');
         _sharedFiles.addAll(value);
      
        if(resetValue == 1){
         resetValue = 0;
-        print('Reset Values From the variable ---------- $resetValue');
-          print(
-            'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
+        // print('Reset Values From the variable ---------- $resetValue');
+        //   print(
+        //     'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
         if (_sharedFiles.isNotEmpty) {
           _sharedUrl = _sharedFiles[0].path;
-           print('IsExternal Link 4-------> $_sharedUrl');
+          // print('IsExternal Link 4-------> $_sharedUrl');
            // if(_sharedUrl!.startsWith('/redirect') && url != null){
-              print('IsExternal Link inside thee condition');
+              //print('IsExternal Link inside thee condition');
               if( url != null){
                   openLink(url,true);
               }
@@ -121,8 +123,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
         }else if(_sharedFiles.isEmpty){
           if (url != null) {
         if (mounted) {
-          print('IsExternal Link 5-------> $_sharedUrl --$url');
-          print('Sample external from the link $url');
+          // print('IsExternal Link 5-------> $_sharedUrl --$url');
+          // print('Sample external from the link $url');
           openLink(url,true);
         }
       }
@@ -147,7 +149,7 @@ checkForNetwork(){
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
       if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
-         showMessage("Network Error. Please check Wifi or mobile data is on");
+         showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
       }
     });
 }
@@ -161,7 +163,7 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
     var webViewController = webViewModel.webViewController;
     var url = WebUri(formatUrl(_sharedUrl!.trim()));
     url ??= WebUri(settings.searchEngine.url);
-    print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
+   // print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
 
   vpnStatusProvider.updateCanShowHomeScreen(false);
     
