@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/ad_blocker_filter.dart';
@@ -7,6 +8,7 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:flutter/foundation.dart';
@@ -211,6 +213,7 @@ bool _isValidUrl(String url) {
      final themeProvider = Provider.of<DarkThemeProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+        final basicProvider = Provider.of<BasicProvider>(context);
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -229,7 +232,7 @@ bool _isValidUrl(String url) {
         "Mozilla/5.0 (Linux; Android 10; Pixel Build/QP1A.190711.019; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Mobile Safari/537.36";
     //"Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
     initialSettings.transparentBackground = true;
-    initialSettings.contentBlockers = contentBlockers; // for adblocker
+    initialSettings.contentBlockers = basicProvider.adblock ? contentBlockers : []; // for adblocker
     initialSettings.safeBrowsingEnabled = true;
     initialSettings.disableDefaultErrorPage = true;
     initialSettings.supportMultipleWindows = true;
@@ -280,14 +283,14 @@ bool _isValidUrl(String url) {
               });
 
       },
-
+     
       onLoadStart: (controller, url) async {
         widget.webViewModel.isSecure = Util.urlIsSecure(url!);
         widget.webViewModel.url = url;
         widget.webViewModel.loaded = false;
         widget.webViewModel.setLoadedResources([]);
         widget.webViewModel.setJavaScriptConsoleResults([]);
-
+        vpnStatusProvider.setErrorPage(false);
         if (isCurrentTab(currentWebViewModel)) {
           currentWebViewModel.updateWithValue(widget.webViewModel);
         } else if (widget.webViewModel.needsToCompleteInitialLoad) {
@@ -357,7 +360,69 @@ bool _isValidUrl(String url) {
         }catch(e){
           print(e);
         }
-       
+
+
+if(basicProvider.adblock){
+await _webViewController!.evaluateJavascript(source: """
+      function removeAdsAndFallbacks() {
+        try {
+          console.log('Running ad and fallback removal');
+
+          let adSelectors = [
+            /*'[id*="ad-"], [id*="ads-"], [id*="advert-"]',
+            '[class*="ad-"], [class*="ads-"], [class*="advert-"]',
+            'iframe[src*="ads"], iframe[src*="ad-"], iframe[src*="doubleclick"]',
+            '[aria-label="Advertisement"], [aria-label="Sponsored"]',
+            '.banner-ad, .ad-container, .advertisement, .sponsored, .promo' */
+            '.banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad, iframe[src*="doubleclick"] ,.doubleclick'
+          ];
+
+          let fallbackSelectors = [
+            'div:contains("webpage not available")',
+            'div:contains("Webpage not available")',
+            'div:contains("ad blocker")',
+            'div:contains("advertisement not loaded")',
+            'div:contains("please disable ad blocker")',
+            '[class*="ad-fallback"], [id*="ad-fallback"]',
+            '.ad-error, .ad-blocked-message'
+          ];
+
+          let allSelectors = adSelectors.concat(fallbackSelectors);
+
+          allSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+              if (!el.closest('header') && !el.closest('nav') && !el.closest('main') && !el.closest('footer')) {
+                let text = el.textContent.toLowerCase();
+                if (text.includes('webpage not available') || text.includes('Webpage not available') ||
+                    text.includes('ad blocker') || 
+                    text.includes('advertisement') || 
+                    text.includes('sponsored')) {
+                  console.log('Hiding fallback: ' + el.outerHTML.substring(0, 50));
+                  el.style.display = 'none';
+                } else if (el.matches(adSelectors.join(','))) {
+                  console.log('Hiding ad: ' + el.outerHTML.substring(0, 50));
+                  el.style.display = 'none';
+                }
+              }
+            });
+          });
+
+          document.querySelectorAll('div, section').forEach(el => {
+            if (!el.innerHTML.trim() && 
+                (el.className.includes('ad') || el.id.includes('ad') || el.className.includes('fallback'))) {
+              el.style.display = 'none';
+            }
+          });
+
+        } catch (e) {
+          console.log('Error in removal script: ' + e.toString());
+        }
+      }
+
+      removeAdsAndFallbacks();
+      setInterval(removeAdsAndFallbacks, 2000);
+    """);
+}
       },
       onProgressChanged: (controller, progress) {
         if (progress == 100) {
