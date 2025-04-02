@@ -9,6 +9,8 @@ class PopupMenuActions {
   static const String HISTORY = "History";
   // ignore: constant_identifier_names
   static const String WEB_ARCHIVES = "Web Archives";
+
+  static const String BELDEX_AI= "Beldex AI";
   // ignore: constant_identifier_names
   static const String SHARE = "Share";
   // ignore: constant_identifier_names
@@ -42,6 +44,7 @@ class PopupMenuActions {
     BELNET,
     SHARE,
     DIVIDER,
+    BELDEX_AI,
     WEB_ARCHIVES,
     FIND_ON_PAGE,
     DOWNLOADS,

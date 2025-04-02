@@ -72,6 +72,16 @@ class SelectedItemsProvider extends ChangeNotifier {
     await _prefs.setString('icon_value', newvalue);
   }
 
+void updateIconWhenNotSerchEngine() async {
+    final _prefs = await SharedPreferences.getInstance();
+    final value = _prefs.getString('icon_value');
+    if(value == 'assets/images/youtube.svg' ||value == 'assets/images/Reddit 1.svg' || value == 'assets/images/Wikipedia 1.svg' || value == 'assets/images/twitter 1.svg'){
+      _value = 'assets/images/Google 1.svg';
+      notifyListeners();
+     await _prefs.setString('icon_value', _value);
+    }
+   
+  }
   void initializeSelectedItems() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? selectedItemsStr = prefs.getStringList('selectedItems');

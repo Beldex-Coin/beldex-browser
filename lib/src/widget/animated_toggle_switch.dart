@@ -172,6 +172,7 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
                   await widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
                           url: WebUri(widget.searchController!.text)));
+                  vpnStatusProvider.updateFAB(true);
                 }
               } else {
                 setState(() {

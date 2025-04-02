@@ -4,12 +4,15 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
+import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
+import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
@@ -138,7 +141,7 @@ void main() async {
   // await Permission.camera.request();
   // await Permission.microphone.request();
   // await Permission.storage.request();
-
+  setUpLocator(); // For AI
   runApp(
     MultiProvider(
       providers: [
@@ -153,9 +156,11 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DownloadProvider()),
         ChangeNotifierProvider(
             create: (context) =>
-                SelectedItemsProvider()..initializeSelectedItems()),
+                SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
+        ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
+        ChangeNotifierProvider(create: (_)=> AIModelProvider()..initializeModel()),
         ChangeNotifierProxyProvider<WebViewModel, BrowserModel>(
           update: (context, webViewModel, browserModel) {
             browserModel!.setCurrentWebViewModel(webViewModel);
@@ -201,7 +206,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
     getCurrentAppTheme();
     Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
      loadSwitchState(context);
-    checkAppUpdate(context);
+   // checkAppUpdate(context);
    
   }
 
@@ -214,8 +219,9 @@ Future<void> checkAppUpdate(context) async {
       });
       updateFunction();
     }).catchError((e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+       showMessage(e.toString());
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text(e.toString())));
     });
   }
 

@@ -219,7 +219,19 @@ class AboutPage extends StatelessWidget {
                         ),
                         BulletItem(
                           text:
-                              """Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.""",
+                              """Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.\n""",
+                          mHeight: mHeight,
+                          fontSizeInDp: fontSizeInDp,
+                        ),
+                        BulletItem(
+                          text:
+                              """Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n""",
+                          mHeight: mHeight,
+                          fontSizeInDp: fontSizeInDp,
+                        ),
+                        BulletItem(
+                          text:
+                              """Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you're searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n""",
                           mHeight: mHeight,
                           fontSizeInDp: fontSizeInDp,
                         ),

@@ -1,6 +1,8 @@
 import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
+import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
@@ -11,12 +13,15 @@ import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:belnet_lib/belnet_lib.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:upgrader/upgrader.dart';
@@ -37,6 +42,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
   var _isRestored = false;
 
+  late Connectivity _connectivity;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   String? _sharedUrl;
   StreamSubscription? _intentDataStreamSubscription;
@@ -49,6 +56,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
     super.initState();
     //getIntentData();
     
+    checkForNetwork();
 
      WidgetsBinding.instance.addObserver(this);
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
@@ -58,7 +66,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
        String? url = await platform.invokeMethod("getIntentData");
 
   if(url!.contains('browser_fallback_url')){
-    print('FALLBACK URL -----');
+   // print('FALLBACK URL -----');
   }
 
       setState(() {
@@ -78,9 +86,9 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
           //}
           
         }else{
-           print('IsExternal Link 2-------> $isExternalLink');
+          // print('IsExternal Link 2-------> $isExternalLink');
         }
-        print('IsExternal Link 3-------> $isExternalLink');
+        //print('IsExternal Link 3-------> $isExternalLink');
       });
     }, onError: (err) {
       print("getIntentDataStream error: $err");
@@ -92,19 +100,19 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
       await Future.delayed(Duration(milliseconds: 300)); // Add delay
       setState(() {
         _sharedFiles.clear();
-        print('Sample Shared File data ${_sharedFiles.length}');
+        //print('Sample Shared File data ${_sharedFiles.length}');
         _sharedFiles.addAll(value);
      
        if(resetValue == 1){
         resetValue = 0;
-        print('Reset Values From the variable ---------- $resetValue');
-          print(
-            'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
+        // print('Reset Values From the variable ---------- $resetValue');
+        //   print(
+        //     'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
         if (_sharedFiles.isNotEmpty) {
           _sharedUrl = _sharedFiles[0].path;
-           print('IsExternal Link 4-------> $_sharedUrl');
+          // print('IsExternal Link 4-------> $_sharedUrl');
            // if(_sharedUrl!.startsWith('/redirect') && url != null){
-              print('IsExternal Link inside thee condition');
+              //print('IsExternal Link inside thee condition');
               if( url != null){
                   openLink(url,true);
               }
@@ -115,8 +123,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
         }else if(_sharedFiles.isEmpty){
           if (url != null) {
         if (mounted) {
-          print('IsExternal Link 5-------> $_sharedUrl --$url');
-          print('Sample external from the link $url');
+          // print('IsExternal Link 5-------> $_sharedUrl --$url');
+          // print('Sample external from the link $url');
           openLink(url,true);
         }
       }
@@ -136,6 +144,16 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   }
 
 
+checkForNetwork(){
+  _connectivity = Connectivity();
+    _connectivitySubscription = _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((event) {
+      if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
+         showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+      }
+    });
+}
+
 void openLink(String? _sharedUrl,isInitialLaunch)async {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
@@ -145,7 +163,7 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
     var webViewController = webViewModel.webViewController;
     var url = WebUri(formatUrl(_sharedUrl!.trim()));
     url ??= WebUri(settings.searchEngine.url);
-    print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
+   // print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
 
   vpnStatusProvider.updateCanShowHomeScreen(false);
     
@@ -294,7 +312,8 @@ void closeTabListPage(){
   Widget _buildBrowser(BuildContext cxt) {
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
-
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+     print('The URL For the FAB ------------> ${vpnStatusProvider.showFAB}');
     browserModel.addListener(() {
       browserModel.save();
     });
@@ -316,11 +335,13 @@ void closeTabListPage(){
 
   Widget _buildWebViewTabs() {
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
-    return WillPopScope(
-        onWillPop: () async {
           var browserModel = Provider.of<BrowserModel>(context, listen: false);
+          final aiModelProvider = Provider.of<AIModelProvider>(context,listen: false);
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
+    return WillPopScope(
+        onWillPop: () async {
+     
              // vpnStatusProvider.updateCanShowHomeScreen(false);
       
 
@@ -329,7 +350,9 @@ void closeTabListPage(){
          return false;
         }
 
-
+      if(vpnStatusProvider.showFAB){
+        vpnStatusProvider.updateFAB(false);
+      }
 
 if (vpnStatusProvider.canShowHomeScreen == true) {
             bool? result = await _showDownloadConfirmationDialog(context);
@@ -396,27 +419,80 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
 
           // return browserModel.webViewTabs.isEmpty == true ? await _showDownloadConfirmationDialog(context) ?? false : false;  //browserModel.webViewTabs.isEmpty;
         },
-        child: Listener(
-          // onPointerUp: (_) {
-          //   FocusScopeNode currentFocus = FocusScope.of(context);
-          //   if (!currentFocus.hasPrimaryFocus &&
-          //       currentFocus.focusedChild != null) {
-          //     currentFocus.focusedChild!.unfocus();
-          //   }
-          // },
-          child: UpgradeAlert(
-            showIgnore: false,
-          showLater: false,
-            upgrader: Upgrader(
-              debugLogging: true
-            ),
-            child: Scaffold(
-                // backgroundColor: Color(0xff171720),
-                appBar: const BrowserAppBar(),
-                body: _buildWebViewTabsContent()),
+        child: UpgradeAlert(
+          showIgnore: false,
+        showLater: false,
+          upgrader: Upgrader(
+            debugLogging: true
           ),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+              // backgroundColor: Color(0xff171720),
+              appBar: const BrowserAppBar(),
+              body: _buildWebViewTabsContent(),
+              floatingActionButton: vpnStatusProvider.showFAB && browserModel.webViewTabs.isNotEmpty  ? FloatingActionButton(
+                onPressed: (){
+                 // if (!vpnStatusProvider.showFAB) return; // Prevent multiple taps
+                  vpnStatusProvider.updateFAB(false);
+                   hideContextMenu(webViewController);
+                   showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+          return SummariseUrlResult(aiModelProvider: aiModelProvider,);
+     });
+              },
+              backgroundColor: Colors.transparent,
+              child: ClipOval(
+                child: Image.asset('assets/images/ai-icons/Ai-Button.png'),
+              )
+              // Container(
+              //   height: 50,
+              //   width: 50,
+              //   decoration: BoxDecoration(
+              //     color: Colors.green,
+              //     shape: BoxShape.circle
+              //   ),
+              // )
+
+              ): Container(),
+              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+              ),
         ));
   }
+
+
+void hideContextMenu(InAppWebViewController? webViewController)async{
+ if(await webViewController?.getSelectedText() != null){
+                         await webViewController?.evaluateJavascript(source: """
+                    
+                    //Close keyboard if open
+                    document.activeElement.blur();
+
+                   // Close context menu
+                   window.getSelection().removeAllRanges();
+
+                  document.querySelectorAll('video').forEach(video => video.pause());
+
+                  // Pause all HTML5 audio elements
+                  document.querySelectorAll('audio').forEach(audio => audio.pause());
+
+                  // Pause YouTube videos
+                  var iframes = document.querySelectorAll('iframe');
+                  iframes.forEach(iframe => {
+                    var src = iframe.src;
+                    if (src.includes('youtube.com/embed')) {
+                      iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                  });
+                """);
+              }
+}
+
+
+
+
+
 
   Future<bool?> _showDownloadConfirmationDialog(BuildContext context) {
     final themeProvider =
@@ -573,11 +649,15 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                   )));
         });
   }
+String currentUrl = '';
 
   Widget _buildWebViewTabsViewer() {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var themeProvider = Provider.of<DarkThemeProvider>(context);
+    var webviewmodel = browserModel.getCurrentTab()?.webViewModel;
+    var webviewController = webviewmodel?.webViewController;
     final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     return WillPopScope(
         onWillPop: () async {
           browserModel.showTabScroller = false;
@@ -605,6 +685,9 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                 );
                 webViewTab.webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.toInt();
                 var url = webViewTab.webViewModel.url;
+                setState(() {
+                  currentUrl = url.toString();
+                });
                 final faviconUrl = webViewTab.webViewModel.favicon != null
                     ? webViewTab.webViewModel.favicon!.url
                     : (url != null && ["http", "https"].contains(url.scheme)
@@ -673,8 +756,11 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                 );
               }).toList(),
               onTap: (index) async {
+                vpnStatusProvider.updateFAB(false);
                 browserModel.showTabScroller = false;
                 browserModel.showTab(index);
+               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString())));
+               // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
               },
             )));
   }

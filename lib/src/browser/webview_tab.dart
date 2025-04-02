@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:flutter/foundation.dart';
@@ -45,11 +48,36 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
       TextEditingController();
   bool checkUrl = false;
 
+  List<ContentBlocker>? contentBlockers = []; // Domain filter variable for ad blocks
+
+setAdBlocker() async {
+    for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
+      contentBlockers?.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+    // Apply the "display: none" style to some HTML elements
+    contentBlockers?.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector: ".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
+    )));
+   
+  }
+
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-
+    setAdBlocker();
     _pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
@@ -184,6 +212,8 @@ bool _isValidUrl(String url) {
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
      final themeProvider = Provider.of<DarkThemeProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+        final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+        final basicProvider = Provider.of<BasicProvider>(context);
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -202,7 +232,7 @@ bool _isValidUrl(String url) {
         "Mozilla/5.0 (Linux; Android 10; Pixel Build/QP1A.190711.019; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Mobile Safari/537.36";
     //"Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
     initialSettings.transparentBackground = true;
-
+    initialSettings.contentBlockers = basicProvider.adblock ? contentBlockers : []; // for adblocker
     initialSettings.safeBrowsingEnabled = true;
     initialSettings.disableDefaultErrorPage = true;
     initialSettings.supportMultipleWindows = true;
@@ -253,14 +283,14 @@ bool _isValidUrl(String url) {
               });
 
       },
-
+     
       onLoadStart: (controller, url) async {
         widget.webViewModel.isSecure = Util.urlIsSecure(url!);
         widget.webViewModel.url = url;
         widget.webViewModel.loaded = false;
         widget.webViewModel.setLoadedResources([]);
         widget.webViewModel.setJavaScriptConsoleResults([]);
-
+        vpnStatusProvider.setErrorPage(false);
         if (isCurrentTab(currentWebViewModel)) {
           currentWebViewModel.updateWithValue(widget.webViewModel);
         } else if (widget.webViewModel.needsToCompleteInitialLoad) {
@@ -270,16 +300,19 @@ bool _isValidUrl(String url) {
       onLoadStop: (controller, url) async {
         try{
            _pullToRefreshController?.endRefreshing();
+            urlSummaryProvider.updateUrl(url.toString()); // for summarise with floating button
+           _checkIsUrlSearchResult(url.toString(),vpnStatusProvider); // for showing floating button
         if (widget.webViewModel.isDesktopMode) {
           String js =
               "document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));";
           controller.evaluateJavascript(source: js);
           controller.zoomOut();
         }
+         
         widget.webViewModel.url = url;
         widget.webViewModel.favicon = null;
         widget.webViewModel.loaded = true;
-
+       
         var sslCertificateFuture = _webViewController?.getCertificate();
         var titleFuture = _webViewController?.getTitle();
         var faviconsFuture = _webViewController?.getFavicons();
@@ -309,7 +342,7 @@ bool _isValidUrl(String url) {
             }
           }
         }
-
+        
         if (isCurrentTab(currentWebViewModel)) {
           widget.webViewModel.needsToCompleteInitialLoad = false;
           currentWebViewModel.updateWithValue(widget.webViewModel);
@@ -327,7 +360,69 @@ bool _isValidUrl(String url) {
         }catch(e){
           print(e);
         }
-       
+
+
+if(basicProvider.adblock){
+await _webViewController!.evaluateJavascript(source: """
+      function removeAdsAndFallbacks() {
+        try {
+          console.log('Running ad and fallback removal');
+
+          let adSelectors = [
+            /*'[id*="ad-"], [id*="ads-"], [id*="advert-"]',
+            '[class*="ad-"], [class*="ads-"], [class*="advert-"]',
+            'iframe[src*="ads"], iframe[src*="ad-"], iframe[src*="doubleclick"]',
+            '[aria-label="Advertisement"], [aria-label="Sponsored"]',
+            '.banner-ad, .ad-container, .advertisement, .sponsored, .promo' */
+            '.banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad, iframe[src*="doubleclick"] ,.doubleclick'
+          ];
+
+          let fallbackSelectors = [
+            'div:contains("webpage not available")',
+            'div:contains("Webpage not available")',
+            'div:contains("ad blocker")',
+            'div:contains("advertisement not loaded")',
+            'div:contains("please disable ad blocker")',
+            '[class*="ad-fallback"], [id*="ad-fallback"]',
+            '.ad-error, .ad-blocked-message'
+          ];
+
+          let allSelectors = adSelectors.concat(fallbackSelectors);
+
+          allSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+              if (!el.closest('header') && !el.closest('nav') && !el.closest('main') && !el.closest('footer')) {
+                let text = el.textContent.toLowerCase();
+                if (text.includes('webpage not available') || text.includes('Webpage not available') ||
+                    text.includes('ad blocker') || 
+                    text.includes('advertisement') || 
+                    text.includes('sponsored')) {
+                  console.log('Hiding fallback: ' + el.outerHTML.substring(0, 50));
+                  el.style.display = 'none';
+                } else if (el.matches(adSelectors.join(','))) {
+                  console.log('Hiding ad: ' + el.outerHTML.substring(0, 50));
+                  el.style.display = 'none';
+                }
+              }
+            });
+          });
+
+          document.querySelectorAll('div, section').forEach(el => {
+            if (!el.innerHTML.trim() && 
+                (el.className.includes('ad') || el.id.includes('ad') || el.className.includes('fallback'))) {
+              el.style.display = 'none';
+            }
+          });
+
+        } catch (e) {
+          console.log('Error in removal script: ' + e.toString());
+        }
+      }
+
+      removeAdsAndFallbacks();
+      setInterval(removeAdsAndFallbacks, 2000);
+    """);
+}
       },
       onProgressChanged: (controller, progress) {
         if (progress == 100) {
@@ -348,7 +443,7 @@ bool _isValidUrl(String url) {
         // widget.webViewModel.url = url;
         // widget.webViewModel.title = await _webViewController?.getTitle();
         setState(() {
-            vpnStatusProvider.updateIsUrlValid(_isValidUrl(url.toString()));
+            vpnStatusProvider.updateIsUrlValid(_isValidUrl(widget.webViewModel.url.toString()));
         });
         // if (isCurrentTab(currentWebViewModel)) {
         //   currentWebViewModel.updateWithValue(widget.webViewModel);
@@ -427,6 +522,7 @@ bool _isValidUrl(String url) {
         }
       },
       shouldOverrideUrlLoading: (controller, navigationAction) async {
+        vpnStatusProvider.setErrorPage(false);
         if (navigationAction.isForMainFrame) {
           print('navigation innnn----->');
           if (browserModel.isFindingOnPage) {
@@ -609,22 +705,16 @@ bool _isValidUrl(String url) {
       },
       onReceivedError: (controller, request, error) async {
         var isForMainFrame = request.isForMainFrame ?? false;
-        if (!isForMainFrame) {
-          return;
-        }
+        if (!isForMainFrame) return;
+
           getConnectedExitnode();
+          _pullToRefreshController?.setEnabled(true);
         _pullToRefreshController?.endRefreshing();
         await controller.stopLoading();
         if (Util.isIOS() && error.type == WebResourceErrorType.CANCELLED) {
           // NSURLErrorDomain
           return;
         }
-
-
-// if(error.description == 'net::ERR_NAME_NOT_RESOLVED')
-//  _showBottomSheet(context,themeProvider);
-
-
         var errorUrl = request.url;
         _webViewController?.loadData(data: """
 <!DOCTYPE html>
@@ -642,7 +732,6 @@ bool _isValidUrl(String url) {
     font-family: Arial, sans-serif;
     background-color: #fff;
 }
-
     .interstitial-wrapper {
         box-sizing: border-box;
         font-size: 1em;
@@ -668,17 +757,11 @@ bool _isValidUrl(String url) {
     background-color: #f1f1f1;
 }
 
-.time {
-    font-size: 16px;
-}
+.time {font-size: 16px;}
 
-.icons {
-    display: flex;
-}
+.icons {display: flex;}
 
-.icon {
-    margin-left: 10px;
-}
+.icon {margin-left: 10px;}
 
 .content {
     flex-grow: 1;
@@ -806,6 +889,10 @@ document.getElementById("footer").style.display = "none";
     historyUrl: errorUrl,
     );
 
+
+
+  vpnStatusProvider.updateFAB(false);
+ vpnStatusProvider.setErrorPage(true);
         widget.webViewModel.url = errorUrl;
        // widget.webViewModel.isSecure = false;
        // await _webViewController?.stopLoading();
@@ -828,6 +915,8 @@ Future.delayed(const Duration(seconds: 3),(){
       print('ERROR TYPE HERE 222---- $checkUrl');
        _webViewController?.evaluateJavascript(source: "hideFooter();");
      }
+     vpnStatusProvider.updateFAB(false);
+     vpnStatusProvider.setErrorPage(true);
     });  
 
 
@@ -880,114 +969,173 @@ Future.delayed(const Duration(seconds: 3),(){
 
 
 
-void _showBottomSheet(BuildContext context,DarkThemeProvider themeProvider)async {
-   
-String dNode = '';
-  final prefs = await SharedPreferences.getInstance();
-  final node = prefs.getString('selectedExitNode') ?? '';
-  
 
-  if(node.length == 56){
-    String firstPart = node.substring(0, 4);
-      String lastPart = node.substring(node.length - 4);
-      dNode = '$firstPart...$lastPart';
-    // return '$firstPart...$lastPart';
-  }else{
-    dNode = node;
+
+
+// Show FAB when individual sites open
+void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
+  if(vpnStatusProvider.canShowHomeScreen){
+    vpnStatusProvider.updateFAB(false);
+    print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB} inside showHome');
+    return;
   }
- // return node;
 
-
-    showModalBottomSheet(
-    
-      context: context,
-      barrierColor: Colors.transparent,
-      builder: (BuildContext context) {
-        // Start a timer to automatically dismiss the bottom sheet after 3 seconds
-        // Future.delayed(const Duration(seconds: 5),(){  
-        //   if(Navigator.canPop(context)){
-        //     Navigator.of(context).pop();}
-        //   }
-         
-        // );
-        
-
-        return Container(
-          height: 208,
-          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
-          decoration: BoxDecoration(
-            color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-          ),
-          
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Change Node',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700),),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal:8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text:TextSpan(
-                    text: '',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: themeProvider.darkTheme ? Color(0xffEBEBEB) :Color(0xff222222),
-                      fontWeight: FontWeight.w600
-                    ),
-                    children:<TextSpan> [
-                       TextSpan(
-                        text: 'Exit node '
-                       ),
-                       TextSpan(
-                        text: '$dNode',
-                        style: TextStyle(
-                          color: Color(0xff00BD40)
-                        )
-                       ),
-                       TextSpan(
-                        text: ' has experienced unprecedented traffic. Please click on Change Node to switch exit node'
-                       ),
-                        TextSpan(
-                        text: ' Change Node',
-                        style: TextStyle(
-                          color: Color(0xff00BD40)
-                        )
-                       ),
-                        TextSpan(
-                        text: ' to switch exit node'
-                
-                       ),
-                    ]
-                  ),
-                  
-                  
-                   ),
-              ),
-              GestureDetector(
-                onTap: ()=> Navigator.push(context, MaterialPageRoute(builder:(context)=> NodeDropdownListPage(exitData: [], canChangeNode: true,) )),
-                child: Container(
-                  height: 49,
-                  width: 156,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff00BD40)
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Change Node',
-                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.white),
-                    ),
-                  ),
-                ),
-              )
-              
-            ],
-          ),
-        );
-      },
-    );
+  if(url.isEmpty || url == "about:blank" || url.startsWith("chrome-error") || url.startsWith("edge-error") || url.startsWith("file:")){
+    vpnStatusProvider.updateFAB(false);
+    return;
   }
+ 
+
+
+vpnStatusProvider.updateFAB(shouldShowFAB(url));
+    print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB}');
+  }
+
+
+
+bool shouldShowFAB(String url) {
+  Uri uri = Uri.parse(url);
+  String host = uri.host.toLowerCase();
+  String path = uri.path.split('#')[0]; // Modified to strip fragments after '#'
+
+  // List of search engines and social media platforms to exclude
+  Map<String, List<String>> blockedSites = {
+    'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
+    'bing': ['bing.com'],
+    'yahoo': ['yahoo.','consent.yahoo.','guce.yahoo.'],
+    'duckduckgo': ['duckduckgo.com'],
+    'baidu': ['baidu.com'],
+    'yandex': ['yandex.'], // juce
+    'ask': ['ask.com'],
+    'ecosia':['ecosia.org'],
+    'youtube': ['youtube.com'],
+    'reddit': ['reddit.com'],
+    'wikipedia': ['wikipedia.org'],
+    'twitter': ['twitter.com', 'x.com'],
+  };
+
+  // Check if the host matches any blocked site homepage
+  bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+      entry.value.any((domain) => host.contains(domain)) &&
+      (path == "/" || path.isEmpty));
+
+  // Check for search, video, or feed pages in search engines and social media
+  bool isBlockedSearchOrFeed = [
+    'search',      // Google, Bing, Yahoo, DuckDuckGo, Ask
+   // '/s',           // Baidu
+    'yandsearch',  // Yandex
+    'results',     // YouTube search results
+    'watch',       // YouTube videos (https://www.youtube.com/watch?v=xyz)
+    'explore',     // Twitter/X explore page
+    'trending',    // YouTube trending page
+  ].any((keyword) => path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+  // Check for Twitter authentication pages
+  bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+      (path.startsWith("/login") || path.startsWith("/i/flow/login") || path.startsWith("/signup"));
+
+  // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
+  bool isWikipedia = host.contains("wikipedia.org");
+  bool isWikipediaContentPage = isWikipedia &&
+      path.startsWith("/wiki/") && // Must be an article path
+      !path.startsWith("/wiki/Special:") && 
+      !path.startsWith("/wiki/Talk:") &&
+      !path.startsWith("/wiki/User:") &&
+      !path.startsWith("/wiki/Wikipedia:") &&
+      !path.startsWith("/wiki/Category:") &&
+      !path.startsWith("/wiki/File:") &&
+      !path.startsWith("/wiki/Help:") &&
+      !path.contains("search") && // Exclude search pages
+      !path.contains("index.php") && // Exclude index/search pages
+      !path.contains("#References"); // Exclude reference sections (though now redundant due to split)
+ // Only allow Wikipedia content pages
+  if (isWikipedia) {
+    print("The URL is coming inside wikipedia block");
+   // print("The Wikipedia 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")}");
+    return isWikipediaContentPage;
+  }
+
+bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
+//print("The Wikipedia $isWikipedia or $isWikiOne 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")} and the last one $isWikipediaContentPage");
+  if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage || isYahooConsentPage) {
+    print("The URL is coming inside block $isBlockedHomepage ----  $isBlockedSearchOrFeed ---- $isTwitterAuthPage");
+    return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
+  }
+
+ 
+
+  return true; // Show FAB only for actual webpages and valid Twitter/X posts
+}
+
+// bool shouldShowFAB(String url) {
+//   Uri uri = Uri.parse(url);
+//   String host = uri.host.toLowerCase();
+//   String path = uri.path;
+
+//   // List of search engines and social media platforms to exclude
+//   Map<String, List<String>> blockedSites = {
+//     'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
+//     'bing': ['bing.com'],
+//     'yahoo': ['yahoo.'],
+//     'duckduckgo': ['duckduckgo.com'],
+//     'baidu': ['baidu.com'],
+//     'yandex': ['yandex.'],
+//     'ask': ['ask.com'],
+//     'youtube': ['youtube.com'],
+//     'wikipedia':['wikipedia.org'],
+//     'twitter': ['twitter.com', 'x.com'],
+//   };
+
+//   // Check if the host matches any blocked site homepage
+//   bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+//       entry.value.any((domain) => host.contains(domain)) &&
+//       (path == "/" || path.isEmpty));
+
+//   // Check for search, video, or feed pages in search engines and social media
+//   bool isBlockedSearchOrFeed = [
+//     'search',      // Google, Bing, Yahoo, DuckDuckGo, Ask
+//     's',           // Baidu
+//     'yandsearch',  // Yandex
+//     'results',     // YouTube search results
+//     'watch',       // YouTube videos (https://www.youtube.com/watch?v=xyz)
+//     'explore',     // Twitter/X explore page
+//     'trending',    // YouTube trending page
+//   ].any((keyword) => path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+//   // Check for Twitter authentication pages
+//   bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+//       (path.startsWith("/login") || path.startsWith("/i/flow/login") || path.startsWith("/signup"));
+
+
+//    // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
+// bool isWikipedia = host.contains("wikipedia.org");
+//   bool isWikipediaContentPage = isWikipedia &&
+//       path.startsWith("/wiki/") && // Must be an article path
+//       !path.startsWith("/wiki/Special:") && 
+//       !path.startsWith("/wiki/Talk:") &&
+//       !path.startsWith("/wiki/User:") &&
+//       !path.startsWith("/wiki/Wikipedia:") &&
+//       !path.startsWith("/wiki/Category:") &&
+//       !path.startsWith("/wiki/File:") &&
+//       !path.startsWith("/wiki/Help:") &&
+//       !path.contains("search") && // Exclude search pages
+//       !path.contains("index.php") && // Exclude index/search pages
+//       !path.contains("#References"); // Exclude reference sections
+
+
+//   if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage) {
+//     return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
+//   }
+
+
+//   // Only allow Wikipedia content pages
+//   if (isWikipedia) {
+//     return isWikipediaContentPage;
+//   }
+
+//   return true; // Show FAB only for actual webpages and valid Twitter/X posts
+// }
+
 
 String getDownloadFile(String name){
  
