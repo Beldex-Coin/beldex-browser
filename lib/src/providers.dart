@@ -1,6 +1,9 @@
 
 
 
+import 'package:beldex_browser/src/browser/ai/network_model.dart';
+import 'package:beldex_browser/src/browser/ai/repositories/openai_repository.dart';
+import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -157,13 +160,36 @@ void updateThirdpartyCookies(bool value){
 
 
 
+//Show FAB for summaise 
+
+bool _showFAB = false;
+
+bool get showFAB => _showFAB;
+
+void updateFAB(bool value){
+  _showFAB = value;
+  notifyListeners();
+}
+
+bool _showErrorPage = false;
+bool get showErrorPage => _showErrorPage;
+
+void setErrorPage(bool value)async{
+_showErrorPage = value;
+notifyListeners();
+}
 
 
+// AI response 
 
+String _aiResponse = 'loading';
 
+String get aiResponse => _aiResponse;
 
-
-
+void updateAIResponse(String aiText)async{
+    _aiResponse = aiText;
+    notifyListeners();
+}
 
 
 
@@ -205,6 +231,100 @@ void updateThirdpartyCookies(bool value){
 CookieManager cookieManager = CookieManager.instance();
  await cookieManager.deleteAllCookies();
  print('Cookies deleted');
+}
+
+
+// For Floating Action button
+class UrlSummaryProvider with ChangeNotifier {
+  ChatGPTService chatGPTService = ChatGPTService(apiKey: '');
+
+  String currentUrl = "";
+  bool isLoading = false;
+  String summaryText = "";
+  Map<String, String> cache = {}; // Cache for storing summaries
+
+  /// Updates the current URL
+  void updateUrl(String url) {
+    if (currentUrl != url) {
+      currentUrl = url;
+      summaryText = ""; // Clear previous summary
+      notifyListeners();
+    }
+  }
+
+  /// Fetches summary for the current URL
+  Future<void> fetchSummary(WebViewModel webViewModel,{String modelType = 'openai'}) async {
+    if (currentUrl.isEmpty || cache.containsKey(currentUrl)) {
+      if(cache[currentUrl] == 'Erroring'){
+        cache.remove(currentUrl);
+        notifyListeners();
+      }else{
+       summaryText = cache[currentUrl] ?? summaryText;
+      print('BELDEX AI SUmmarise text $summaryText');
+      notifyListeners();
+      return;
+      }
+    }
+   print('BELDEX CURRENTURL DATA -----> $currentUrl');
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final response = await OpenAIRepository().fetchAndSummarizeContent(currentUrl, webViewModel,modelType);  //callOpenAiApi(currentUrl);
+      cache[currentUrl] = response;
+      summaryText = response;
+    } catch (e) {
+      summaryText = "Failed to fetch summary: $e";
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+
+  bool _isSummarise = false;
+  bool get isSummarise => _isSummarise;
+
+    void updateSummariser(bool newvalue){
+      _isSummarise = newvalue;
+      notifyListeners();
+    }
+
+
+  bool _canStopAndRegenerate = false;
+  bool get canStopAndRegenerate => _canStopAndRegenerate;
+
+    void updateCanStop(bool newvalue){
+      _canStopAndRegenerate = newvalue;
+      notifyListeners();
+    }
+ 
+  // /// Calls OpenAI API to get a summary
+  // Future<String> callOpenAiApi(String url) async {
+  //   const openAiApiKey = "your_openai_api_key"; // Replace with your API key
+  //   final apiEndpoint = "https://api.openai.com/v1/completions";
+
+  //   final response = await http.post(
+  //     Uri.parse(apiEndpoint),
+  //     headers: {
+  //       "Authorization": "Bearer $openAiApiKey",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: jsonEncode({
+  //       "model": "text-davinci-003",
+  //       "prompt": "Summarize the content of this URL: $url",
+  //       "max_tokens": 100,
+  //     }),
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     final data = jsonDecode(response.body);
+  //     return data['choices'][0]['text'].trim();
+  //   } else {
+  //     throw Exception("Error: ${response.statusCode}");
+  //   }
+  // }
 }
 
 

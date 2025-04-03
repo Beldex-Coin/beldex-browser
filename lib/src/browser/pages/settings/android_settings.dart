@@ -1,8 +1,10 @@
+import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +110,7 @@ String getPercentage(double value) {
     var settings = browserModel.getSettings();
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = currentWebViewModel.webViewController;
-
+    final basicProvider = Provider.of<BasicProvider>(context);
     final width = MediaQuery.of(context).size.width;
     var widgets = <Widget>[
       Column(
@@ -198,6 +200,121 @@ String getPercentage(double value) {
             // ),
           )
         ],
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: SizedBox(
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  children: [
+                    TextWidget(text:"Ad Blocker",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                        // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
+                        // fontWeight: FontWeight.w600),
+                        ),
+                    TextWidget(
+                        text:'Toggle to block intrusive ads while browsing and enhance your browsing experience',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                        // TextStyle(
+                        //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
+                        //   fontWeight: FontWeight.w400,
+                        // )
+                        ),
+                  ],
+                ),
+              ),
+             const SizedBox(
+                width: 30,
+              ),
+              FlutterSwitch(
+                  value: basicProvider.adblock, //isSwitched,
+                  inactiveColor: themeProvider.darkTheme
+                      ? const Color(0xff363645)
+                      : const Color(0xffFFFFFF),
+                  inactiveToggleColor: themeProvider.darkTheme
+                      ? const Color(0xff9595B5)
+                      : const Color(0xffC5C5C5),
+                  activeColor: themeProvider.darkTheme
+                      ? const Color(0xff363645)
+                      : const Color(0xffFFFFFF),
+                    width:widget.widthInDp,
+                    height: widget.heightInDp,
+                  toggleSize: widget.toggleSizeInDp,
+                  padding: 2.0, // width: width / 7.9, //50,
+                  // height: height / 28.8, //29,
+                  // toggleSize: height / 36.2, //20
+                  activeToggleColor: Color(0xff00BD40),
+                  onToggle: (value) async {
+                    //var basicProvider = Provider.of<BasicProvider>(context,listen: false);
+                    basicProvider.updateAdblock(value);
+                    // var browserModel = Provider.of<BrowserModel>(context, listen: false);
+                    // browserModel.updateScreenSecurity(value);
+                    setState(() {
+                     // isSwitched = value;
+                    });
+                    if (basicProvider.adblock) {
+                      List<ContentBlocker>? contentBlockers = [];
+                     for (final adUrlFilter in AdBlockerFilter.adUrlFilters) {
+                     contentBlockers.add(ContentBlocker(
+                        trigger: ContentBlockerTrigger(
+                           urlFilter: adUrlFilter,
+                      ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+            //selector: //".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
+            //".ad ,.ads ,.advert ,.banner ,.banners ,.advertisement ,.promo ,.promotion ,.sponsored ,.sponsored-content ,.ad-container ,.ad-wrapper ,.ad-box ,.ad-slot,.ad-banner,.ad-image ,.ad-text ,video-ad,.interstitial,.sticky-ad,.floating-ad,.sidebar-ad,.footer-ad,.header-ad,.content-ad,.inline-ad,.content-recommendation,#google_ads,#adsense,.google-ad,.fb-ad (for Facebook ads),.twitter-ad (for Twitter ads),.native-ad,.outbrain,.taboola"
+          )));
+    }
+
+    // Apply the "display: none" style to some HTML elements
+    contentBlockers.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector: //selectors.join(', ') 
+            ".banner, .banners, .ads, .ad, .advert, .ad-container, .advertisement, .sponsored, .promo, .overlay-ad"
+                      //  ".ad ,.ads ,.advert ,.banner ,.banners ,.advertisement ,.promo ,.promotion ,.sponsored ,.sponsored-content ,.ad-container ,.ad-wrapper ,.ad-box ,.ad-slot,.ad-banner,.ad-image ,.ad-text ,video-ad,.interstitial,.sticky-ad,.floating-ad,.sidebar-ad,.footer-ad,.header-ad,.content-ad,.inline-ad,.content-recommendation,#google_ads,#adsense,.google-ad,.fb-ad,.twitter-ad,.native-ad,.outbrain,.taboola"
+
+            )));
+
+           currentWebViewModel.settings?.contentBlockers = contentBlockers;
+
+                    } else {
+                     currentWebViewModel.settings?.contentBlockers = [];
+                    }
+                    try {
+              webViewController!.setSettings(
+                  settings:
+                      currentWebViewModel.settings ?? InAppWebViewSettings());
+              var webSet = await webViewController.getSettings();
+              currentWebViewModel.settings = webSet;
+              vpnStatusProvider.updateFAB(false);
+             // await webViewController.reload();
+             await webViewController.loadUrl(urlRequest: URLRequest(url: currentWebViewModel.url));
+
+            } catch (e) {}
+
+            setState(() {
+              
+            });
+                    // await saveSwitchState(value);
+                  }),
+            ],
+          ),
+        ),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),

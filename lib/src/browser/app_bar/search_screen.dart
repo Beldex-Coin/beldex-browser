@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
+import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
+import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
@@ -79,6 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late List<ContextMenuButtonItem> buttonItems = [];
   late EditableTextState editableState = EditableTextState();
   late int duration;
+  String canShowSearchAI = '';
   @override
   void initState() {
     super.initState();
@@ -279,7 +284,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   flex: 4,
                   child: TextField(
                     onSubmitted: (value) {
-                      var url = WebUri(formatUrl(value.trim()));
+                      String trimmedValue = value.trim();
+                     if(trimmedValue.isNotEmpty){
+                       var url = WebUri(formatUrl(value.trim()));
                       if (!url.scheme.startsWith("http") &&
                           !Util.isLocalizedContent(url)) {
                         url = WebUri(
@@ -303,12 +310,16 @@ class _SearchScreenState extends State<SearchScreen> {
                       Future.delayed(Duration(milliseconds: duration), () {
                         Navigator.pop(context, url);
                       });
+                     }
+
+                      
                     },
                     keyboardType: TextInputType.url,
                     focusNode: _focusNode,
                     autofocus: true,
                     controller: _searchController,
                     textInputAction: TextInputAction.go,
+                    magnifierConfiguration: TextMagnifierConfiguration.disabled,
                     contextMenuBuilder: (context, editableTextState) {
                       //final List<ContextMenuButtonItem>
                       buttonItems = editableTextState.contextMenuButtonItems;
@@ -334,6 +345,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   print(
                                       'text --> $text\n selection --> $selection\n newtext --> $newText');
                                   _searchController.text = newText;
+                                  if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                    print("The User Message Contains Url 1");
+                                  canShowSearchAI= '';
+                                    }else
+                                      canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+        
+                                  //canShowSearchAI = _searchController.text;
                                   final newSelection = TextSelection.collapsed(
                                     offset:
                                         selection.start + value.text!.length,
@@ -448,10 +467,25 @@ class _SearchScreenState extends State<SearchScreen> {
                       );
                     },
                     onChanged: (value) {
+                       setState(() {
+                        if(containsUrl(_searchController.text) || _searchController.text.trim().isEmpty){
+                          print("The User Message Contains url 22");
+                          canShowSearchAI= '';
+                        }else
+                          canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+                        });
                       if (value.isEmpty) {
                         editableState.hideToolbar(true);
+                       
                       }
                     },
+                    // onEditingComplete: (){
+                    //   setState(() {
+                    //                               print('BELDEX AI 2---------> $canShowSearchAI');
+
+                    //   });
+                    // },
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(
                             top: 5.0, right: 10.0, bottom: 10.0),
@@ -479,13 +513,14 @@ class _SearchScreenState extends State<SearchScreen> {
                               }
                               _searchController.text = '';
                               buttonItems.clear();
+                              canShowSearchAI = '';
                             });
                           },
                         ))
                     : SizedBox()
               ],
             ),
-          )),
+          ),),
       body: Column(
         children: [
           widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen
@@ -493,11 +528,12 @@ class _SearchScreenState extends State<SearchScreen> {
               : Container(
                   height: 55,
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
                   decoration: BoxDecoration(
-                      color: themeProvider.darkTheme
-                          ? const Color(0xff282836)
-                          : const Color(0xffF3F3F3),
+                    border: Border.all(color: themeProvider.darkTheme ? Color(0xff282836): Color(0xffDADADA)),
+                      // color: themeProvider.darkTheme
+                      //     ? const Color(0xff282836)
+                      //     : const Color(0xffF3F3F3),
                       borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     children: [
@@ -636,6 +672,79 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                 ),
+
+              canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  GestureDetector(
+                onTap: ()async{
+                  Navigator.pop(context);
+                  bool showWelcomeMessage = true;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSubmitted', true);
+    bool? hasSubmitted = prefs.getBool('hasSubmitted');
+    setState(() {});
+      showWelcomeMessage = (hasSubmitted ?? false);
+      print("Show welcome page ---------->$hasSubmitted -------  $showWelcomeMessage");
+   
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return BeldexAIScreen(isWelcomeShown:false ,searchWord:canShowSearchAI); //DraggableAISheet();
+          //return BeldexAiScreen();
+     });
+                },
+                child:
+                Container(
+  height: 60,
+  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+    ),
+    borderRadius: BorderRadius.circular(8),
+  ),
+  child: Row(
+    children: [
+      SvgPicture.asset(
+        IconConstants.beldexAILogoSvg,
+        height: 20,
+        width: 25,
+      ),
+      SizedBox(width: 8), // Add spacing between the icon and text
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              canShowSearchAI,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              'Ask Beldex AI',
+              style: TextStyle(
+                color: Color(0xff00B134),
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 9.0),
+        child: SvgPicture.asset(
+          'assets/images/ai-icons/arrow.svg',
+          height: 10,
+          width: 20, // Adjust width to ensure flexibility
+        ),
+      ),
+    ],
+  ),
+),
+
+              ):SizedBox(),
         ],
       ),
     );

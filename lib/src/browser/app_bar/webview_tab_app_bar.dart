@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/main.dart';
+import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
+import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
+import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -454,6 +457,8 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                        ?  GestureDetector(
                         onTap: ()async{
                           vpnStatusProvider.updateCanShowHomeScreen(true);
+                          await webViewController?.stopLoading();
+                          vpnStatusProvider.updateFAB(false);
                   //            await webViewController?.evaluateJavascript(
                   // source: "document.activeElement.blur();");
                         if (await webViewController?.getSelectedText() != null) {
@@ -737,7 +742,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
         if (box == null) {
           return;
         }
-
+        vpnStatusProvider.updateFAB(false);
         Offset position = box.localToGlobal(Offset.zero);
        
          browserModel.webViewTabs.isEmpty ?
@@ -891,6 +896,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
       },
       onTap: () async {
         //Navigator.push(context,MaterialPageRoute(builder: ((context) => TabsList() )));
+        
         if (browserModel.webViewTabs.isNotEmpty) {
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
@@ -907,7 +913,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
             await Future.delayed(const Duration(milliseconds: 300));
           }
 
-
+        vpnStatusProvider.updateFAB(false);
          if(vpnStatusProvider.canShowHomeScreen){
      if (webViewModel != null && imageScreenshot != null){
       webViewModel.screenshot = imageScreenshot;
@@ -976,10 +982,12 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
   }
 
  
-Future onMenuOpen(InAppWebViewController? webViewController)async {
+Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vpnStatusProvider)async {
  hideFooter(webViewController);
             try {
+              
               checkCanGoforward = await webViewController?.canGoForward() ?? false;
+              vpnStatusProvider.updateFAB(false);
               await webViewController?.evaluateJavascript(
                   source: "document.activeElement.blur();");
               // ContextMenuController.removeAny();
@@ -1016,7 +1024,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
           offset:  Offset(width/13.0,width/7.6),
           color:
               themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
-          onOpened: () => onMenuOpen(webViewController),
+          onOpened: () => onMenuOpen(webViewController,vpnStatusProvider),
           // async {
           //   try {
           //     checkCanGoforward = await webViewController?.canGoForward() ?? false;
@@ -1065,7 +1073,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                       FavoriteModel? favorite;
 
                       if (webViewModel.url != null &&
-                          webViewModel.url!.toString().isNotEmpty) {
+                          webViewModel.url!.toString().isNotEmpty && (webViewModel.url!.scheme == "http" || webViewModel.url!.scheme == "https")) {
                         favorite = FavoriteModel(
                             url: webViewModel.url,
                             title: webViewModel.title ?? "",
@@ -1462,6 +1470,28 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                       ]),
                     ),
                   );
+                case PopupMenuActions.BELDEX_AI:
+                  return CustomPopupMenuItem<String>(
+                    enabled: true,
+                    value: choice,
+                    height: 35,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(children: [
+                        SvgPicture.asset('assets/images/ai-icons/Group-1.svg',
+                            color: themeProvider.darkTheme
+                                ?const Color(0xffFFFFFF)
+                                :const Color(0xff282836),
+                                height: 18,
+                                ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: TextWidget(text:choice,
+                              style: theme.textTheme.bodySmall),
+                        ),
+                      ]),
+                    ),
+                  );
                 case PopupMenuActions.DOWNLOADS:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
@@ -1778,6 +1808,9 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
       case PopupMenuActions.WEB_ARCHIVES:
         showWebArchives(themeProvider,vpnStatusProvider);
         break;
+      case PopupMenuActions.BELDEX_AI:
+        goToBeldexAIPage();
+        break;
       case PopupMenuActions.FIND_ON_PAGE:
       if(!vpnStatusProvider.canShowHomeScreen){
         var isFindInteractionEnabled =
@@ -1836,6 +1869,30 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
         break;
     }
   }
+
+  void goToBeldexAIPage()async{
+    bool showWelcomeMessage = true;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? hasSubmitted = prefs.getBool('hasSubmitted');
+    setState(() {});
+      showWelcomeMessage = !(hasSubmitted ?? false);
+    
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return BeldexAIScreen(isWelcomeShown: showWelcomeMessage); //DraggableAISheet();
+
+
+
+
+          //return BeldexAiScreen();
+     });
+    //Navigator.push(context, MaterialPageRoute(builder: (context)=>BeldexAiScreen()));
+  }
+
 
   void navigateToBeldexNetwork(InAppWebViewController? webViewController)async{
       Navigator.push(
@@ -2380,7 +2437,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
     if (webViewController != null) {
       webViewModel?.isDesktopMode = !webViewModel.isDesktopMode;
       currentWebViewModel.isDesktopMode = webViewModel?.isDesktopMode ?? false;
-
+         await webViewController.reload();
       var currentSettings = await webViewController.getSettings();
       if (currentSettings != null) {
         currentSettings.preferredContentMode =
@@ -2389,6 +2446,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
                 : UserPreferredContentMode.RECOMMENDED;
         await webViewController.setSettings(settings: currentSettings);
       }
+      
       //additionally added this code for dekstop mode
       if (currentSettings!.preferredContentMode ==
           UserPreferredContentMode.DESKTOP) {
@@ -2397,6 +2455,7 @@ Future onMenuOpen(InAppWebViewController? webViewController)async {
         await webViewController.evaluateJavascript(source: js);
         await webViewController.zoomOut();
       }
+     
 // this is removed by me
       // await webViewController.reload();
     }

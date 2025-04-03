@@ -36,6 +36,13 @@ migrate_working_dir/
 # Web related
 lib/generated_plugin_registrant.dart
 
+
+#api key gen
+lib/constants_key.dart
+
+#ad blocker domain filter list
+lib/ad_blocker_filter.dart
+
 # Symbolication related
 app.*.symbols
 
