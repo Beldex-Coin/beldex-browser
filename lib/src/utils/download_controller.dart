@@ -10,7 +10,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+//import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

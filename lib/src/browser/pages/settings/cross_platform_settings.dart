@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+//import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -582,11 +582,13 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                       isSwitched = value;
                     });
                     if (basicProvider.scrnSecurity) {
-                      await FlutterWindowManager.addFlags(
-                          FlutterWindowManager.FLAG_SECURE);
+                     await BelnetLib.enableScreenSecurity();
+                      // await FlutterWindowManager.addFlags(
+                      //     FlutterWindowManager.FLAG_SECURE);
                     } else {
-                      await FlutterWindowManager.clearFlags(
-                          FlutterWindowManager.FLAG_SECURE);
+                      await BelnetLib.disableScreenSecurity();
+                      // await FlutterWindowManager.clearFlags(
+                      //     FlutterWindowManager.FLAG_SECURE);
                     }
 
                     // await saveSwitchState(value);

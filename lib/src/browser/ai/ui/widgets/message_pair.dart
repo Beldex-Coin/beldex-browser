@@ -74,8 +74,8 @@ static bool _isSharing = false;
 
     _isSharing = true; // Set flag to block further clicks
  print("The UnFormatted text --->${removeSpecialFormatting(modelMessage)}");
- ShareResult result = await Share.shareWithResult(
-      'You:\n${removeSpecialFormatting(userMessage)}\nBeldex AI:\n${removeSpecialFormatting(modelMessage)}',
+ ShareResult result = await SharePlus.instance.share(ShareParams(text:
+      'You:\n${removeSpecialFormatting(userMessage)}\nBeldex AI:\n${removeSpecialFormatting(modelMessage)}')
     );
     // ShareResult result = await Share.shareWithResult(
     //   'You:\n$userMessage\nBeldex AI:\n$modelMessage',

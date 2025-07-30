@@ -21,10 +21,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
-import 'package:in_app_update/in_app_update.dart';
+//import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,33 +49,33 @@ const double TAB_VIEWER_TOP_SCALE_TOP_OFFSET = 250.0;
 // ignore: constant_identifier_names
 const double TAB_VIEWER_TOP_SCALE_BOTTOM_OFFSET = 230.0;
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin(); // global instance
+// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin(); // global instance
 
-void showProgressNotification(String id, int progress) {
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    'beldex_browser', // Channel ID
-    'Beldex Browser',
-    channelShowBadge: false,
-    importance: Importance.low,
-    priority: Priority.low,
-    onlyAlertOnce: true,
-    showProgress: true,
-    maxProgress: 100,
-    progress: progress,
-  );
+// void showProgressNotification(String id, int progress) {
+//   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//     'beldex_browser', // Channel ID
+//     'Beldex Browser',
+//     channelShowBadge: false,
+//     importance: Importance.low,
+//     priority: Priority.low,
+//     onlyAlertOnce: true,
+//     showProgress: true,
+//     maxProgress: 100,
+//     progress: progress,
+//   );
 
-  var platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+//   var platformChannelSpecifics =
+//       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  flutterLocalNotificationsPlugin.show(
-    0, // Notification ID
-    'Download Progress', // Title
-    'Downloading file $id', // Body
-    platformChannelSpecifics,
-    payload: 'item x',
-  );
-}
+//   flutterLocalNotificationsPlugin.show(
+//     0, // Notification ID
+//     'Download Progress', // Title
+//     'Downloading file $id', // Body
+//     platformChannelSpecifics,
+//     payload: 'item x',
+//   );
+// }
 
 void downloadCallback(String id, int status, int progress) {
   if (kDebugMode) {
@@ -86,40 +86,40 @@ void downloadCallback(String id, int status, int progress) {
       IsolateNameServer.lookupPortByName('downloader_send_port')!;
   send.send([id, status, progress]);
 
-  showProgressNotification(id, progress);
+ // showProgressNotification(id, progress);
 }
 
 const String channelId = 'beldex_browser';
 const String channelName = 'Beldex Browser';
 const String channelDescription = 'Beldex Browser';
 
-Future<void> setupNotificationChannel() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+// Future<void> setupNotificationChannel() async {
+//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//       FlutterLocalNotificationsPlugin();
 
-  // Define Android and iOS initialization settings
-  var initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+//   // Define Android and iOS initialization settings
+//   var initializationSettingsAndroid =
+//       const AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  var initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
+//   var initializationSettings = InitializationSettings(
+//     android: initializationSettingsAndroid,
+//   );
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  // Define Android notification channel
-  var androidChannel = const AndroidNotificationChannel(
-    channelId,
-    channelName,
-    importance: Importance.high,
-  );
+//   // Define Android notification channel
+//   var androidChannel = const AndroidNotificationChannel(
+//     channelId,
+//     channelName,
+//     importance: Importance.high,
+//   );
 
-  // Set the channel
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(androidChannel);
-}
+//   // Set the channel
+//   await flutterLocalNotificationsPlugin
+//       .resolvePlatformSpecificImplementation<
+//           AndroidFlutterLocalNotificationsPlugin>()
+//       ?.createNotificationChannel(androidChannel);
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -188,7 +188,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   StreamSubscription<bool>? _isConnectedEventSubscription;
   // late VpnStatusProvider vpnStatusProvider;
 
-  AppUpdateInfo? updateInfo;
+  //AppUpdateInfo? updateInfo;
   bool _isUpdating = false;
 
 
@@ -211,30 +211,30 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   }
 
  
-Future<void> checkAppUpdate(context) async {
-    print('this function is calling for update');
-    InAppUpdate.checkForUpdate().then((info) {
-      setState(() {
-        updateInfo = info;
-      });
-      updateFunction();
-    }).catchError((e) {
-       showMessage(e.toString());
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(SnackBar(content: Text(e.toString())));
-    });
-  }
+// Future<void> checkAppUpdate(context) async {
+//     print('this function is calling for update');
+//     InAppUpdate.checkForUpdate().then((info) {
+//       setState(() {
+//         updateInfo = info;
+//       });
+//       updateFunction();
+//     }).catchError((e) {
+//        showMessage(e.toString());
+//       // ScaffoldMessenger.of(context)
+//       //     .showSnackBar(SnackBar(content: Text(e.toString())));
+//     });
+//   }
 
-  updateFunction() {
-    if (updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
-      print('update is available');
-      InAppUpdate.performImmediateUpdate().catchError((e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
-        return AppUpdateResult.inAppUpdateFailed;
-      });
-    }
-  }
+//   updateFunction() {
+//     if (updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+//       print('update is available');
+//       InAppUpdate.performImmediateUpdate().catchError((e) {
+//         ScaffoldMessenger.of(context)
+//             .showSnackBar(SnackBar(content: Text(e.toString())));
+//         return AppUpdateResult.inAppUpdateFailed;
+//       });
+//     }
+//   }
 
 
 
@@ -289,9 +289,11 @@ Future<void> checkAppUpdate(context) async {
    // final webViewModel = Provider.of<WebViewModel>(context,listen: false);
     //print('screen security 3---->${basicProvider.scrnSecurity}');
     if (basicProvider.scrnSecurity) {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+     await BelnetLib.enableScreenSecurity();
+      //await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
     } else {
-      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+      await BelnetLib.disableScreenSecurity();
+      //await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
     }
     selectedItemsProvider.updateFontSize(8.0);
     //print('The WEBView fontSize ---> fontSize ${selectedItemsProvider.fontSize} ${webViewModel.settings?.minimumFontSize}');

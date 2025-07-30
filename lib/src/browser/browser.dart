@@ -23,7 +23,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+//import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:upgrader/upgrader.dart';
 // import 'app_bar/sample_webview_tab_app_bar.dart';
 import 'empty_tab.dart';
@@ -47,7 +47,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
   String? _sharedUrl;
   StreamSubscription? _intentDataStreamSubscription;
-  final _sharedFiles = <SharedMediaFile>[];
+  //final _sharedFiles = <SharedMediaFile>[];
   bool isExternalLink = false;
   int resetValue = 1;
   
@@ -61,84 +61,87 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
      WidgetsBinding.instance.addObserver(this);
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
     // Listen for incoming text or URL when the app is running or resumed
-    _intentDataStreamSubscription =
-        ReceiveSharingIntent.instance.getMediaStream().listen((value)async {
-       String? url = await platform.invokeMethod("getIntentData");
+   
+   
+   
+  //   _intentDataStreamSubscription =
+  //       ReceiveSharingIntent.instance.getMediaStream().listen((value)async {
+  //      String? url = await platform.invokeMethod("getIntentData");
 
-  if(url!.contains('browser_fallback_url')){
-   // print('FALLBACK URL -----');
-  }
+  // if(url!.contains('browser_fallback_url')){
+  //  // print('FALLBACK URL -----');
+  // }
 
-      setState(() {
-        _sharedFiles.clear();
-        _sharedFiles.addAll(value);
-           print('Sample External link ----${_sharedFiles.map((f) => f.toMap())} ------ $url');
-        if (_sharedFiles.isNotEmpty) {
-          _sharedUrl = _sharedFiles[0].path;
-          print('IsExternal Link 1-------> $isExternalLink');
-          //if(_sharedUrl!.startsWith('/redirect') && url != null){
-           if(url != null){
-            openLink(url,false);
-           }
-           // openLink(url,false);
-         // }else{
-          //  openLink(_sharedUrl,false);
-          //}
+  //     setState(() {
+  //       _sharedFiles.clear();
+  //       _sharedFiles.addAll(value);
+  //          print('Sample External link ----${_sharedFiles.map((f) => f.toMap())} ------ $url');
+  //       if (_sharedFiles.isNotEmpty) {
+  //         _sharedUrl = _sharedFiles[0].path;
+  //         print('IsExternal Link 1-------> $isExternalLink');
+  //         //if(_sharedUrl!.startsWith('/redirect') && url != null){
+  //          if(url != null){
+  //           openLink(url,false);
+  //          }
+  //          // openLink(url,false);
+  //        // }else{
+  //         //  openLink(_sharedUrl,false);
+  //         //}
           
-        }else{
-          // print('IsExternal Link 2-------> $isExternalLink');
-        }
-        //print('IsExternal Link 3-------> $isExternalLink');
-      });
-    }, onError: (err) {
-      print("getIntentDataStream error: $err");
-    });
+  //       }else{
+  //         // print('IsExternal Link 2-------> $isExternalLink');
+  //       }
+  //       //print('IsExternal Link 3-------> $isExternalLink');
+  //     });
+  //   }, onError: (err) {
+  //     print("getIntentDataStream error: $err");
+  //   });
 
-    // Get the media sharing coming from outside the app while the app is closed.
-    ReceiveSharingIntent.instance.getInitialMedia().then((value)async {
-      String? url = await platform.invokeMethod("getIntentData");
-      await Future.delayed(Duration(milliseconds: 300)); // Add delay
-      setState(() {
-        _sharedFiles.clear();
-        //print('Sample Shared File data ${_sharedFiles.length}');
-        _sharedFiles.addAll(value);
+  //   // Get the media sharing coming from outside the app while the app is closed.
+  //   ReceiveSharingIntent.instance.getInitialMedia().then((value)async {
+  //     String? url = await platform.invokeMethod("getIntentData");
+  //     await Future.delayed(Duration(milliseconds: 300)); // Add delay
+  //     setState(() {
+  //       _sharedFiles.clear();
+  //       //print('Sample Shared File data ${_sharedFiles.length}');
+  //       _sharedFiles.addAll(value);
      
-       if(resetValue == 1){
-        resetValue = 0;
-        // print('Reset Values From the variable ---------- $resetValue');
-        //   print(
-        //     'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
-        if (_sharedFiles.isNotEmpty) {
-          _sharedUrl = _sharedFiles[0].path;
-          // print('IsExternal Link 4-------> $_sharedUrl');
-           // if(_sharedUrl!.startsWith('/redirect') && url != null){
-              //print('IsExternal Link inside thee condition');
-              if( url != null){
-                  openLink(url,true);
-              }
-            //openLink(url,true);
-          // }else{
-          // openLink(_sharedUrl,true);
-          // }
-        }else if(_sharedFiles.isEmpty){
-          if (url != null) {
-        if (mounted) {
-          // print('IsExternal Link 5-------> $_sharedUrl --$url');
-          // print('Sample external from the link $url');
-          openLink(url,true);
-        }
-      }
-           print('IsExternal Link 5-------> $isExternalLink');
-        }
-       } 
+  //      if(resetValue == 1){
+  //       resetValue = 0;
+  //       // print('Reset Values From the variable ---------- $resetValue');
+  //       //   print(
+  //       //     'Sample External link1 ----${_sharedFiles.map((f) => f.toMap())}');
+  //       if (_sharedFiles.isNotEmpty) {
+  //         _sharedUrl = _sharedFiles[0].path;
+  //         // print('IsExternal Link 4-------> $_sharedUrl');
+  //          // if(_sharedUrl!.startsWith('/redirect') && url != null){
+  //             //print('IsExternal Link inside thee condition');
+  //             if( url != null){
+  //                 openLink(url,true);
+  //             }
+  //           //openLink(url,true);
+  //         // }else{
+  //         // openLink(_sharedUrl,true);
+  //         // }
+  //       }else if(_sharedFiles.isEmpty){
+  //         if (url != null) {
+  //       if (mounted) {
+  //         // print('IsExternal Link 5-------> $_sharedUrl --$url');
+  //         // print('Sample external from the link $url');
+  //         openLink(url,true);
+  //       }
+  //     }
+  //          print('IsExternal Link 5-------> $isExternalLink');
+  //       }
+  //      } 
         
-        // Tell the library that we are done processing the intent.
-       // ReceiveSharingIntent.instance.reset();
-      });
-    },onError: (err){
-       print("getIntentDataStream error: $err");
-    }  
-    );
+  //       // Tell the library that we are done processing the intent.
+  //      // ReceiveSharingIntent.instance.reset();
+  //     });
+  //   },onError: (err){
+  //      print("getIntentDataStream error: $err");
+  //   }  
+  //   );
 
 
   }
@@ -227,20 +230,20 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
     
     super.didChangeAppLifecycleState(state);
     if(state == AppLifecycleState.resumed){
-      print('INSIDE THE APPLIFECYCLE SHARED ${_sharedFiles.map((f) => f.toMap())}');
-      if(_sharedFiles.isNotEmpty){
-        print('INSIDE THE RESUMED STATE  -----');
+      //print('INSIDE THE APPLIFECYCLE SHARED ${_sharedFiles.map((f) => f.toMap())}');
+      // if(_sharedFiles.isNotEmpty){
+      //   print('INSIDE THE RESUMED STATE  -----');
         
-        Navigator.popUntil(context, (route) => route.isFirst);
-        setState(() {
-          _sharedFiles.clear();
-        });
-        closeTabListPage();
-        // while (Navigator.canPop(context)) {
-        //        Navigator.pop(context);
-        //       }
-       // Navigator.push(context, MaterialPageRoute(builder: (context)=> Browser()));
-      }
+      //   Navigator.popUntil(context, (route) => route.isFirst);
+      //   setState(() {
+      //     _sharedFiles.clear();
+      //   });
+      //   closeTabListPage();
+      //   // while (Navigator.canPop(context)) {
+      //   //        Navigator.pop(context);
+      //   //       }
+      //  // Navigator.push(context, MaterialPageRoute(builder: (context)=> Browser()));
+      // }
     }
   }
 

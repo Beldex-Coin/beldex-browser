@@ -45,7 +45,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:share_extend/share_extend.dart';
+//import 'package:share_extend/share_extend.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../custom_popup_dialog.dart';
@@ -2576,7 +2576,8 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                 18.0), // Adjust the radius as needed
                           ),
                           onPressed: () async {
-                            await ShareExtend.share(file.path, "image");
+                            SharePlus.instance.share(ShareParams(files: [XFile(file.path)],text: 'image'));
+                           // await ShareExtend.share(file.path, "image");
                           },
                         ),
                       ),
