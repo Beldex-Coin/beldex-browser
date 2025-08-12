@@ -634,25 +634,51 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
       children: stackChildren,
     );
   }
+Widget _createProgressIndicator() {
+  return Selector<WebViewModel, double>(
+    selector: (context, webViewModel) => webViewModel.progress,
+    builder: (context, progress, child) {
+      final clampedProgress = progress.clamp(0.0, 1.0);
+      print("Building progress indicator: $clampedProgress");
 
-  Widget _createProgressIndicator() {
-    return Selector<WebViewModel, double>(
-        selector: (context, webViewModel) => webViewModel.progress,
-        builder: (context, progress, child) {
-          if (progress >= 1.0) {
-            return Container();
-          }
-          return PreferredSize(
-              preferredSize: const Size(double.infinity, 4.0),
-              child: SizedBox(
-                  height: 3.0,
-                  child: LinearProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(const Color(0xff00B134)),
-                    value: progress,
-                  )));
-        });
-  }
+      if (clampedProgress >= 1.0) {
+        return SizedBox.shrink(); // No progress bar at 100%
+      }
+
+      return PreferredSize(
+        preferredSize: const Size(double.infinity, 4.0),
+        child: SizedBox(
+          height: 3.0,
+          child: LinearProgressIndicator(
+            value: clampedProgress,
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00B134)),
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+  // Widget _createProgressIndicator() {
+  //   return Selector<WebViewModel, double>(
+  //       selector: (context, webViewModel) => webViewModel.progress,
+  //       builder: (context, progress, child) {
+  //             print("Building progress indicator: $progress");
+  //         if (progress >= 1.0) {
+  //           return Container();
+  //         }
+  //         return PreferredSize(
+  //             preferredSize: const Size(double.infinity, 4.0),
+  //             child: SizedBox(
+  //                 height: 3.0,
+  //                 child: LinearProgressIndicator(
+  //                   valueColor:
+  //                       AlwaysStoppedAnimation<Color>(const Color(0xff00B134)),
+  //                   value: progress,
+  //                 )));
+  //       });
+  // }
 String currentUrl = '';
 
   Widget _buildWebViewTabsViewer() {
