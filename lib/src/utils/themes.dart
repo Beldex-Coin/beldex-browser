@@ -50,10 +50,10 @@ class Themes {
       color: Colors.grey,//Palette.lightGrey
     ),
     cardColor: Palette.cardBackgroundColor,
-    cardTheme: CardTheme(
-      color: Palette.cardColor,
-      shadowColor: Palette.cardButtonColor,
-    ),
+    // cardTheme: CardTheme(
+    //   color: Palette.cardColor,
+    //   shadowColor: Palette.cardButtonColor,
+    // ),
     primaryIconTheme: IconThemeData(
       color: Colors.white
     ), //colorScheme: ColorScheme(background: Palette.lightThemeBackground, brightness: null, primary: null
@@ -108,10 +108,10 @@ class Themes {
       color: PaletteDark.darkThemeGreyWithOpacity
     ),
     cardColor: PaletteDark.cardBackgroundColor,
-    cardTheme: CardTheme(
-      color: PaletteDark.cardColor,
-      shadowColor: PaletteDark.cardButtonColor,
-    ),
+    // cardTheme: CardTheme(
+    //   color: PaletteDark.cardColor,
+    //   shadowColor: PaletteDark.cardButtonColor,
+    // ),
     primaryIconTheme: IconThemeData(
       color: PaletteDark.darkThemeViolet
     ), //colorScheme: ColorScheme(background: PaletteDark.darkThemeBackground),

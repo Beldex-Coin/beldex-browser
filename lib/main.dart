@@ -19,6 +19,7 @@ import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -76,7 +77,7 @@ const double TAB_VIEWER_TOP_SCALE_BOTTOM_OFFSET = 230.0;
 //     payload: 'item x',
 //   );
 // }
-
+@pragma('vm:entry-point')
 void downloadCallback(String id, int status, int progress) {
   if (kDebugMode) {
     print(

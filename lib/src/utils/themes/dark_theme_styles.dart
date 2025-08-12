@@ -49,7 +49,7 @@ import 'package:flutter/material.dart';
       modalBackgroundColor: Colors.transparent,
       modalElevation: 0,
     ),
-    dialogTheme: const DialogTheme(elevation: 0),
+    dialogTheme: DialogThemeData(elevation: 0),// const DialogTheme(elevation: 0),
     hintColor: isDarkTheme ? Color(0xff280C0B) : Color(0xffEECED3),
     hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
     focusColor: isDarkTheme ? Color(0xff0B2512) : Color(0xffA8DAB5),
