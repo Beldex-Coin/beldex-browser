@@ -164,10 +164,10 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
   Widget findOnPageAppBar(DarkThemeProvider themeProvider,ThemeData theme) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var webViewModel = browserModel.getCurrentTab()?.webViewModel;
-    var webViewModelPro = Provider.of<WebViewModel>(context, listen: true);
+    var webViewModelPro = Provider.of<WebViewModel>(context, listen: false);
     var webViewController = webViewModelPro.webViewController;
     var findInteractionController = webViewModel?.findInteractionController;
-    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+   // final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     isFullScreen(webViewController);
     return PreferredSize(
         preferredSize: Size.fromHeight(90),
@@ -181,13 +181,15 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                       ? Color(0xff282836)
                       : Color(0xffF3F3F3),
               borderRadius: BorderRadius.circular(8)),
-          child: LayoutBuilder(builder: (context, constraint) {
+          child: 
+          LayoutBuilder(builder: (context, constraint) {
             return Row(
               children: [
                 Container(
                   width: constraint.maxWidth / 1.5,
                   // color: Colors.yellow,
                   child: TextField(
+                    key: const ValueKey('findOnPageField'),
                     onSubmitted: (value) {
                       findInteractionController?.findAll(find: value);
                     },
@@ -196,10 +198,15 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                     autofocus: true,
                     controller: findOnPageController,
                     textInputAction: TextInputAction.go,
+                                        magnifierConfiguration: TextMagnifierConfiguration.disabled,
+                    // contextMenuBuilder: (context, editableTextState) {
+                    //   return Text('TEXTEEEEES');
+                    // },
                     contextMenuBuilder: (context, editableTextState) {
-                      //final List<ContextMenuButtonItem>
-                      editableState = editableTextState;
                       buttonItems = editableTextState.contextMenuButtonItems;
+
+                      editableState = editableTextState;
+
                       buttonItems.clear(); // Clear all default options
                       if (findOnPageController!.text
                               .isEmpty //|| _searchController.selection != TextSelection.collapsed(offset: _searchController.selection.baseOffset)
@@ -522,10 +529,11 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                           browserModel: browserModel,
                           browserSettings: settings,
                         ),
-                        VerticalDivider(
+                         VerticalDivider(
                           width: 1,
-                          indent: 6,
-                          endIndent: 6,
+                          indent: 10,
+                          endIndent: 10,
+                          color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
                         ),
                         Visibility(
                           visible: vpnStatusProvider.canShowHomeScreen ? false: webViewModel.url != null ? true : false,
@@ -708,10 +716,11 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                       children: [
                         tabList(themeProvider,theme),
                         // SearchSettingsPopupList(browserModel: browserModel, browserSettings: settings,),
-                        VerticalDivider(
+                         VerticalDivider(
                           width: 1,
-                          indent: 6,
-                          endIndent: 6,
+                          indent: 10,
+                          endIndent: 10,
+                          color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
                         ),
                         //   IconButton(icon:Icon(Icons.ads_click),
                         //  onPressed: ()async {
