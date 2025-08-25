@@ -662,16 +662,27 @@ String fullContent = '';
     "Content-Type": "application/json",
   };
 
+requestData = {
+  "model": _getModelName(modelType),
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI assistant that always responds in English, even if the user input is meaningless"
+    },
+    ...?_history["deepseek"], // keep your conversation history
+  ],
+  "stream": true,
+};
 
 
-  requestData = {
-    "model": _getModelName(modelType),
-    "messages":_history["deepseek"],
-    // [
-    //       {"role": "user", "content": "$userMessage"}
-    //     ],
-    "stream": true,  // Ensure streaming is enabled
-  };
+  // requestData = {
+  //   "model": _getModelName(modelType),
+  //   "messages":_history["deepseek"],
+  //   // [
+  //   //       {"role": "user", "content": "$userMessage"}
+  //   //     ],
+  //   "stream": true,  // Ensure streaming is enabled
+  // };
      try {
     final response = await _dio.post<ResponseBody>(
       apiUrl,
