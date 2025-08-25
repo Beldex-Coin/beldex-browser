@@ -59,7 +59,7 @@ rootProject.allprojects {
 android {
 	compileSdkVersion 35
     namespace 'io.beldex.belnet_lib'
-	ndkVersion '21.3.6528147'
+	ndkVersion '28.1.13356709'
 	sourceSets {
 		main.java.srcDirs += "src/main/java"
 		main.java.srcDirs += "src/main/kotlin"

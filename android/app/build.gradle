@@ -22,11 +22,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
+// def keystoreProperties = new Properties()
+// def keystorePropertiesFile = rootProject.file('key.properties')
+// if (keystorePropertiesFile.exists()) {
+//     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+// }
 
 android {
     compileSdkVersion 35
@@ -36,7 +36,7 @@ android {
     }
 
     lintOptions {
-        disable 'InvalidPackage'
+        disable 'Instantiatable', 'InvalidPackage'
     }
 
     defaultConfig {
@@ -86,7 +86,7 @@ android {
 
 		
 
-    ndkVersion '25.1.8937393'	//Installed//'21.3.6528147'
+    ndkVersion '28.1.13356709'	//Installed//'21.3.6528147'
     //buildToolsVersion '35.0.0'
 }
 
@@ -95,6 +95,10 @@ flutter {
 }
 
 dependencies {
+    //  implementation project(':belnet_lib') // Include belnet_lib module
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.20" // Updated to support Java 17
+    // implementation "com.airbnb.android:lottie:6.4.0"
+    // implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 }
 
 
