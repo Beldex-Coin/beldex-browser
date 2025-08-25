@@ -75,3 +75,46 @@ class PriceValueProvider with ChangeNotifier {
     });
   }
 }
+
+
+
+
+
+
+class VpnStatusNotifier with ChangeNotifier {
+  bool _isConnected = false;
+
+  bool get isConnected => _isConnected;
+
+  void update(bool newStatus) {
+    if (_isConnected != newStatus) {
+      _isConnected = newStatus;
+      notifyListeners();
+    }
+  }
+
+
+/// counter flag
+
+int _count = 0;
+
+int get count => _count;
+
+void updateCount(int value){
+  _count = value;
+  notifyListeners();
+}
+
+
+  bool _isRunning = false;
+
+  bool get isRunning => _isRunning;
+
+  void updateIsRunning(bool newStatus) {
+    //if (_isConnected != newStatus) {
+      _isRunning = newStatus;
+      notifyListeners();
+    //}
+  }
+
+}

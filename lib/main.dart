@@ -122,6 +122,27 @@ const String channelDescription = 'Beldex Browser';
 //       ?.createNotificationChannel(androidChannel);
 // }
 
+
+
+// void main(){
+//   runApp(
+//     MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//         child:  TextField()
+//         ),
+//       ),
+//     )
+//   );
+// }
+
+
+
+
+
+
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
@@ -132,7 +153,7 @@ void main() async {
   TAB_VIEWER_BOTTOM_OFFSET_1 = 130.0;
   TAB_VIEWER_BOTTOM_OFFSET_2 = 140.0;
   TAB_VIEWER_BOTTOM_OFFSET_3 = 150.0;
-
+  //debugPrintRebuildDirtyWidgets = true;
   // await FlutterDownloader.initialize(
   //   debug: kDebugMode,ignoreSsl: true
   // );
@@ -169,9 +190,21 @@ void main() async {
           },
           create: (BuildContext context) => BrowserModel(),
         ),
-         ChangeNotifierProvider(create: (context) => PriceValueProvider()..startFetching())
+         ChangeNotifierProvider(create: (context) => PriceValueProvider()..startFetching()
+         ),
+                  ChangeNotifierProvider(create: (context) => VpnStatusNotifier()
+         ),
+
+        
       ],
-      child: const BeldexBrowserApp(),
+      child:
+      // MaterialApp(
+      // home: Scaffold(
+      //   body: Center(
+      //   child:  TextField()
+      //   ),
+      // ),
+     const BeldexBrowserApp(),
     ),
   );
 }
@@ -197,17 +230,23 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   @override
   void initState() {
     super.initState();
-    clearCookie();
-    WidgetsBinding.instance.addObserver(this);
+    // clearCookie();
+     WidgetsBinding.instance.addObserver(this);
     _isConnectedEventSubscription = BelnetLib.isConnectedEventStream
-        .listen((bool isConnected) => setState(() {
-              print('is belnet app connected ? $isConnected');
-              setVPNStatus(context, isConnected);
-            }));
+        .listen((bool isConnected) {
+           Provider.of<VpnStatusNotifier>(context,listen: false).update(isConnected);
+           setVPNStatus(context,Provider.of<VpnStatusNotifier>(context,listen: false).isConnected,Provider.of<VpnStatusNotifier>(context,listen: false));
+
+        } 
+        //setState(() {
+              //print('is belnet app connected ? $isConnected')
+             // setVPNStatus(context, isConnected);
+          //  })
+            );
     getCurrentAppTheme();
-    Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
-     loadSwitchState(context);
-   // checkAppUpdate(context);
+     Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
+      loadSwitchState(context);
+   
    
   }
 
@@ -243,34 +282,45 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
 
     int count = 0;
-  void setVPNStatus(BuildContext context, bool isConnected) async {
+  void setVPNStatus(BuildContext context, bool isConnected,VpnStatusNotifier vpnStatusNotifier) async {
+      //final vpnStatusNotifier = Provider.of<VpnStatusNotifier>(context,listen: false);
+      vpnStatusNotifier.updateIsRunning(await BelnetLib.isRunning);
          bool running = await BelnetLib.isRunning; 
     print('this function is called because vpn diconnected');
     final vpnStatusProvider =
         Provider.of<VpnStatusProvider>(context, listen: false);
-    setState(() {
+   // setState(() {
       if (vpnStatusProvider.value =='Connected') {
         Future.delayed(Duration(milliseconds: 300), () {
           if (isConnected == false) {
             print('belnet vpn is disconnected');
-             SystemNavigator.pop();
+            SystemNavigator.pop();
           }
         });
       }else if(vpnStatusProvider.value == 'Connecting...'&& vpnStatusProvider.isChangeNode == false){
         print('belnet is running $running');
-              // Future.delayed(Duration(milliseconds: 600), () {
-          if (running == true) {
+        if (vpnStatusNotifier.isRunning == true) {
             print('belnet is disconnected111');
-             count = 1;
+            vpnStatusNotifier.updateCount(1);
+            // count = 1;
           }
-          if(count == 1){
-            if(running == false){
+          if(vpnStatusNotifier.count == 1){
+            if(vpnStatusNotifier.isRunning == false){
               SystemNavigator.pop();
             }
           }
+          //  if (running == true) {
+          //   print('belnet is disconnected111');
+          //    count = 1;
+          // }
+          // if(count == 1){
+          //   if(running == false){
+          //     SystemNavigator.pop();
+          //   }
+          // }
         //});
       }
-    });
+   // });
   }
 
   void getCurrentAppTheme() async {
@@ -323,14 +373,27 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
   @override
   void dispose() {
+        WidgetsBinding.instance.removeObserver(this);
+         _isConnectedEventSubscription!.cancel();
     super.dispose();
-    _isConnectedEventSubscription!.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+   
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) {
+    //final themProvider = Provider.of<DarkThemeProvider>(context);
+// return MaterialApp(
+//              scaffoldMessengerKey: scaffoldMessengerKey,
+//         title: 'Beldex Browser',
+//         debugShowCheckedModeBanner: false,
+//         theme: Styles.themeData(true, context),
+// home:Scaffold(
+//         body: Center(
+//         child:  TextField()
+//         ), ),
+// );
+ return ChangeNotifierProvider(create: (_) {
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(
       builder: (context, value, child) {
@@ -345,7 +408,83 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           },
         );
       },
-    )
+    ));
+//  ChangeNotifierProvider(
+//   create: (_) => DarkThemeProvider(),
+//   child: Consumer<DarkThemeProvider>(
+//     builder: (context, themeProvider, _) {
+//       return MaterialApp(
+//         scaffoldMessengerKey: scaffoldMessengerKey,
+//         title: 'Beldex Browser',
+//         debugShowCheckedModeBanner: false,
+//         theme: Styles.themeData(themeProvider.darkTheme, context),
+//         home:
+//         // Scaffold(
+//         // body: Center(
+//         // child:  TextField()
+//         // ), ),
+//          const ConnectVpnHome(),
+//       );
+//     },
+//   ),
+// );
+
+
+    // return MaterialApp(
+    //    title: 'Beldex Browser',
+    // debugShowCheckedModeBanner: false,
+    // home: ,
+    //   initialRoute: '/',
+    // routes: {
+    //   '/': (context) => Scaffold(
+    //     body: Center(
+    //     child:  TextField()
+    //     ), ),
+    // },
+    // );
+  //   ChangeNotifierProvider(
+  // create: (_) => themeChangeProvider,
+  // child: MaterialApp(
+  //   scaffoldMessengerKey: scaffoldMessengerKey,
+  //   title: 'Beldex Browser',
+  //   debugShowCheckedModeBanner: false,
+  //   theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+  //   initialRoute: '/',
+  //   routes: {
+  //     '/': (context) => Scaffold(
+  //       body: Center(
+  //       child:  TextField()
+  //       ), ),
+  //   },
+  //   builder: (context, child) {
+  //     return Consumer<DarkThemeProvider>(
+  //       builder: (context, value, _) {
+  //         return child!;
+  //       },
+  //     );
+  //   },
+  // ),
+//);
+
+    // return ChangeNotifierProvider(create: (_) {
+    //   return themeChangeProvider;
+    // }, child: Consumer<DarkThemeProvider>(
+    //   builder: (context, value, child) {
+    //     return GetMaterialApp(
+    //       scaffoldMessengerKey: scaffoldMessengerKey,
+    //       title: 'Beldex Browser',
+    //       debugShowCheckedModeBanner: false,
+    //       theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+    //       initialRoute: '/',
+    //       routes: {
+    //         '/': (context) =>Scaffold(
+    //     body: Center(
+    //     child:  TextField()
+    //     ), )//const ConnectVpnHome() //Browser(),
+    //       },
+    //     );
+    //   },
+    // )
         // Consumer<DarkThemeProvider>(
         //   builder: (BuildContext context, value, Widget child) {
         //     // return MaterialApp(
@@ -363,6 +502,6 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
         //   }
         // )
 
-        );
+       // );
   }
 }
