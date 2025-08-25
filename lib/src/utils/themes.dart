@@ -44,16 +44,29 @@ class Themes {
       color: Palette.switchBackground,
       borderColor: Palette.switchBorder
     ),
-   // selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
+
+
+    // Replace selectedRowColor with dataTableTheme
+  dataTableTheme: DataTableThemeData(
+    dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+      (states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.grey; // Selected row color
+        }
+        return null; // Default
+      },
+    ),
+  ),
+  //  selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
     dividerColor: Colors.black,//Palette.lightGrey,
     dividerTheme: DividerThemeData(
       color: Colors.grey,//Palette.lightGrey
     ),
     cardColor: Palette.cardBackgroundColor,
-    // cardTheme: CardTheme(
-    //   color: Palette.cardColor,
-    //   shadowColor: Palette.cardButtonColor,
-    // ),
+    cardTheme: CardTheme(
+      color: Palette.cardColor,
+      shadowColor: Palette.cardButtonColor,
+    ),
     primaryIconTheme: IconThemeData(
       color: Colors.white
     ), //colorScheme: ColorScheme(background: Palette.lightThemeBackground, brightness: null, primary: null
@@ -102,16 +115,26 @@ class Themes {
       color: PaletteDark.switchBackground,
       borderColor: PaletteDark.darkThemeMidGrey
     ),
+    dataTableTheme: DataTableThemeData(
+    dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+      (states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.grey; // Selected row color
+        }
+        return null; // Default
+      },
+    ),
+  ),
    // selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
     dividerColor: Colors.white,//PaletteDark.darkThemeDarkGrey,
     dividerTheme: DividerThemeData(
       color: PaletteDark.darkThemeGreyWithOpacity
     ),
     cardColor: PaletteDark.cardBackgroundColor,
-    // cardTheme: CardTheme(
-    //   color: PaletteDark.cardColor,
-    //   shadowColor: PaletteDark.cardButtonColor,
-    // ),
+    cardTheme: CardTheme(
+      color: PaletteDark.cardColor,
+      shadowColor: PaletteDark.cardButtonColor,
+    ),
     primaryIconTheme: IconThemeData(
       color: PaletteDark.darkThemeViolet
     ), //colorScheme: ColorScheme(background: PaletteDark.darkThemeBackground),

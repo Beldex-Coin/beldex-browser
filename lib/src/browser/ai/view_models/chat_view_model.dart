@@ -485,7 +485,7 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
     ///"Note: If this content contains only url then provide general information about the domain from the given URL as summarise, such as its purpose, industry, or key features." 
   isTyping = true;
   String wrd = '';
-  // ✅ Listen to the streaming response and update existing message
+  // Listen to the streaming response and update existing message
   _streamSubscription = apiRepository.sendTextForStreamWithModel(modelType,messageToSend).listen((word) {
     print('onData coming ---$word');
     if (modelResponseIndex == null) return;
