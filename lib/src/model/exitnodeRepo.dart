@@ -1,5 +1,5 @@
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
-import 'package:get/get_connect/http/src/_http/interface/request_base.dart';
+//import 'package:get/get_connect/http/src/_http/interface/request_base.dart';
 
 import 'exitnodeModel.dart';
 import 'package:http/http.dart' as http;

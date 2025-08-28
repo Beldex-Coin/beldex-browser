@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/opt/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/usr/bin/ninja",
+      "-C",
+      "/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/android/app/.cxx/RelWithDebInfo/2z3y4x4j/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/usr/bin/ninja",
+    "-C",
+    "/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/android/app/.cxx/RelWithDebInfo/2z3y4x4j/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

@@ -19,12 +19,13 @@ import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
-import 'package:in_app_update/in_app_update.dart';
+//import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,34 +50,34 @@ const double TAB_VIEWER_TOP_SCALE_TOP_OFFSET = 250.0;
 // ignore: constant_identifier_names
 const double TAB_VIEWER_TOP_SCALE_BOTTOM_OFFSET = 230.0;
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin(); // global instance
+// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin(); // global instance
 
-void showProgressNotification(String id, int progress) {
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-    'beldex_browser', // Channel ID
-    'Beldex Browser',
-    channelShowBadge: false,
-    importance: Importance.low,
-    priority: Priority.low,
-    onlyAlertOnce: true,
-    showProgress: true,
-    maxProgress: 100,
-    progress: progress,
-  );
+// void showProgressNotification(String id, int progress) {
+//   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//     'beldex_browser', // Channel ID
+//     'Beldex Browser',
+//     channelShowBadge: false,
+//     importance: Importance.low,
+//     priority: Priority.low,
+//     onlyAlertOnce: true,
+//     showProgress: true,
+//     maxProgress: 100,
+//     progress: progress,
+//   );
 
-  var platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+//   var platformChannelSpecifics =
+//       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  flutterLocalNotificationsPlugin.show(
-    0, // Notification ID
-    'Download Progress', // Title
-    'Downloading file $id', // Body
-    platformChannelSpecifics,
-    payload: 'item x',
-  );
-}
-
+//   flutterLocalNotificationsPlugin.show(
+//     0, // Notification ID
+//     'Download Progress', // Title
+//     'Downloading file $id', // Body
+//     platformChannelSpecifics,
+//     payload: 'item x',
+//   );
+// }
+@pragma('vm:entry-point')
 void downloadCallback(String id, int status, int progress) {
   if (kDebugMode) {
     print(
@@ -86,40 +87,61 @@ void downloadCallback(String id, int status, int progress) {
       IsolateNameServer.lookupPortByName('downloader_send_port')!;
   send.send([id, status, progress]);
 
-  showProgressNotification(id, progress);
+ // showProgressNotification(id, progress);
 }
 
 const String channelId = 'beldex_browser';
 const String channelName = 'Beldex Browser';
 const String channelDescription = 'Beldex Browser';
 
-Future<void> setupNotificationChannel() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+// Future<void> setupNotificationChannel() async {
+//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//       FlutterLocalNotificationsPlugin();
 
-  // Define Android and iOS initialization settings
-  var initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+//   // Define Android and iOS initialization settings
+//   var initializationSettingsAndroid =
+//       const AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  var initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
+//   var initializationSettings = InitializationSettings(
+//     android: initializationSettingsAndroid,
+//   );
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  // Define Android notification channel
-  var androidChannel = const AndroidNotificationChannel(
-    channelId,
-    channelName,
-    importance: Importance.high,
-  );
+//   // Define Android notification channel
+//   var androidChannel = const AndroidNotificationChannel(
+//     channelId,
+//     channelName,
+//     importance: Importance.high,
+//   );
 
-  // Set the channel
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(androidChannel);
-}
+//   // Set the channel
+//   await flutterLocalNotificationsPlugin
+//       .resolvePlatformSpecificImplementation<
+//           AndroidFlutterLocalNotificationsPlugin>()
+//       ?.createNotificationChannel(androidChannel);
+// }
+
+
+
+// void main(){
+//   runApp(
+//     MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//         child:  TextField()
+//         ),
+//       ),
+//     )
+//   );
+// }
+
+
+
+
+
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -131,7 +153,7 @@ void main() async {
   TAB_VIEWER_BOTTOM_OFFSET_1 = 130.0;
   TAB_VIEWER_BOTTOM_OFFSET_2 = 140.0;
   TAB_VIEWER_BOTTOM_OFFSET_3 = 150.0;
-
+  //debugPrintRebuildDirtyWidgets = true;
   // await FlutterDownloader.initialize(
   //   debug: kDebugMode,ignoreSsl: true
   // );
@@ -168,9 +190,21 @@ void main() async {
           },
           create: (BuildContext context) => BrowserModel(),
         ),
-         ChangeNotifierProvider(create: (context) => PriceValueProvider()..startFetching())
+         ChangeNotifierProvider(create: (context) => PriceValueProvider()..startFetching()
+         ),
+                  ChangeNotifierProvider(create: (context) => VpnStatusNotifier()
+         ),
+
+        
       ],
-      child: const BeldexBrowserApp(),
+      child:
+      // MaterialApp(
+      // home: Scaffold(
+      //   body: Center(
+      //   child:  TextField()
+      //   ),
+      // ),
+     const BeldexBrowserApp(),
     ),
   );
 }
@@ -188,7 +222,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   StreamSubscription<bool>? _isConnectedEventSubscription;
   // late VpnStatusProvider vpnStatusProvider;
 
-  AppUpdateInfo? updateInfo;
+  //AppUpdateInfo? updateInfo;
   bool _isUpdating = false;
 
 
@@ -196,45 +230,51 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   @override
   void initState() {
     super.initState();
-    clearCookie();
-    WidgetsBinding.instance.addObserver(this);
+    // clearCookie();
+     WidgetsBinding.instance.addObserver(this);
     _isConnectedEventSubscription = BelnetLib.isConnectedEventStream
-        .listen((bool isConnected) => setState(() {
-              print('is belnet app connected ? $isConnected');
-              setVPNStatus(context, isConnected);
-            }));
+        .listen((bool isConnected) {
+           Provider.of<VpnStatusNotifier>(context,listen: false).update(isConnected);
+           setVPNStatus(context,Provider.of<VpnStatusNotifier>(context,listen: false).isConnected,Provider.of<VpnStatusNotifier>(context,listen: false));
+
+        } 
+        //setState(() {
+              //print('is belnet app connected ? $isConnected')
+             // setVPNStatus(context, isConnected);
+          //  })
+            );
     getCurrentAppTheme();
-    Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
-     loadSwitchState(context);
-   // checkAppUpdate(context);
+     Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
+      loadSwitchState(context);
+   
    
   }
 
  
-Future<void> checkAppUpdate(context) async {
-    print('this function is calling for update');
-    InAppUpdate.checkForUpdate().then((info) {
-      setState(() {
-        updateInfo = info;
-      });
-      updateFunction();
-    }).catchError((e) {
-       showMessage(e.toString());
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(SnackBar(content: Text(e.toString())));
-    });
-  }
+// Future<void> checkAppUpdate(context) async {
+//     print('this function is calling for update');
+//     InAppUpdate.checkForUpdate().then((info) {
+//       setState(() {
+//         updateInfo = info;
+//       });
+//       updateFunction();
+//     }).catchError((e) {
+//        showMessage(e.toString());
+//       // ScaffoldMessenger.of(context)
+//       //     .showSnackBar(SnackBar(content: Text(e.toString())));
+//     });
+//   }
 
-  updateFunction() {
-    if (updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
-      print('update is available');
-      InAppUpdate.performImmediateUpdate().catchError((e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
-        return AppUpdateResult.inAppUpdateFailed;
-      });
-    }
-  }
+//   updateFunction() {
+//     if (updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+//       print('update is available');
+//       InAppUpdate.performImmediateUpdate().catchError((e) {
+//         ScaffoldMessenger.of(context)
+//             .showSnackBar(SnackBar(content: Text(e.toString())));
+//         return AppUpdateResult.inAppUpdateFailed;
+//       });
+//     }
+//   }
 
 
 
@@ -242,34 +282,45 @@ Future<void> checkAppUpdate(context) async {
 
 
     int count = 0;
-  void setVPNStatus(BuildContext context, bool isConnected) async {
+  void setVPNStatus(BuildContext context, bool isConnected,VpnStatusNotifier vpnStatusNotifier) async {
+      //final vpnStatusNotifier = Provider.of<VpnStatusNotifier>(context,listen: false);
+      vpnStatusNotifier.updateIsRunning(await BelnetLib.isRunning);
          bool running = await BelnetLib.isRunning; 
     print('this function is called because vpn diconnected');
     final vpnStatusProvider =
         Provider.of<VpnStatusProvider>(context, listen: false);
-    setState(() {
+   // setState(() {
       if (vpnStatusProvider.value =='Connected') {
         Future.delayed(Duration(milliseconds: 300), () {
           if (isConnected == false) {
             print('belnet vpn is disconnected');
-             SystemNavigator.pop();
+            SystemNavigator.pop();
           }
         });
       }else if(vpnStatusProvider.value == 'Connecting...'&& vpnStatusProvider.isChangeNode == false){
         print('belnet is running $running');
-              // Future.delayed(Duration(milliseconds: 600), () {
-          if (running == true) {
+        if (vpnStatusNotifier.isRunning == true) {
             print('belnet is disconnected111');
-             count = 1;
+            vpnStatusNotifier.updateCount(1);
+            // count = 1;
           }
-          if(count == 1){
-            if(running == false){
+          if(vpnStatusNotifier.count == 1){
+            if(vpnStatusNotifier.isRunning == false){
               SystemNavigator.pop();
             }
           }
+          //  if (running == true) {
+          //   print('belnet is disconnected111');
+          //    count = 1;
+          // }
+          // if(count == 1){
+          //   if(running == false){
+          //     SystemNavigator.pop();
+          //   }
+          // }
         //});
       }
-    });
+   // });
   }
 
   void getCurrentAppTheme() async {
@@ -289,9 +340,11 @@ Future<void> checkAppUpdate(context) async {
    // final webViewModel = Provider.of<WebViewModel>(context,listen: false);
     //print('screen security 3---->${basicProvider.scrnSecurity}');
     if (basicProvider.scrnSecurity) {
-      await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+     await BelnetLib.enableScreenSecurity();
+      //await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
     } else {
-      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+      await BelnetLib.disableScreenSecurity();
+      //await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
     }
     selectedItemsProvider.updateFontSize(8.0);
     //print('The WEBView fontSize ---> fontSize ${selectedItemsProvider.fontSize} ${webViewModel.settings?.minimumFontSize}');
@@ -320,14 +373,27 @@ Future<void> checkAppUpdate(context) async {
 
   @override
   void dispose() {
+        WidgetsBinding.instance.removeObserver(this);
+         _isConnectedEventSubscription!.cancel();
     super.dispose();
-    _isConnectedEventSubscription!.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+   
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create: (_) {
+    //final themProvider = Provider.of<DarkThemeProvider>(context);
+// return MaterialApp(
+//              scaffoldMessengerKey: scaffoldMessengerKey,
+//         title: 'Beldex Browser',
+//         debugShowCheckedModeBanner: false,
+//         theme: Styles.themeData(true, context),
+// home:Scaffold(
+//         body: Center(
+//         child:  TextField()
+//         ), ),
+// );
+ return ChangeNotifierProvider(create: (_) {
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(
       builder: (context, value, child) {
@@ -342,7 +408,83 @@ Future<void> checkAppUpdate(context) async {
           },
         );
       },
-    )
+    ));
+//  ChangeNotifierProvider(
+//   create: (_) => DarkThemeProvider(),
+//   child: Consumer<DarkThemeProvider>(
+//     builder: (context, themeProvider, _) {
+//       return MaterialApp(
+//         scaffoldMessengerKey: scaffoldMessengerKey,
+//         title: 'Beldex Browser',
+//         debugShowCheckedModeBanner: false,
+//         theme: Styles.themeData(themeProvider.darkTheme, context),
+//         home:
+//         // Scaffold(
+//         // body: Center(
+//         // child:  TextField()
+//         // ), ),
+//          const ConnectVpnHome(),
+//       );
+//     },
+//   ),
+// );
+
+
+    // return MaterialApp(
+    //    title: 'Beldex Browser',
+    // debugShowCheckedModeBanner: false,
+    // home: ,
+    //   initialRoute: '/',
+    // routes: {
+    //   '/': (context) => Scaffold(
+    //     body: Center(
+    //     child:  TextField()
+    //     ), ),
+    // },
+    // );
+  //   ChangeNotifierProvider(
+  // create: (_) => themeChangeProvider,
+  // child: MaterialApp(
+  //   scaffoldMessengerKey: scaffoldMessengerKey,
+  //   title: 'Beldex Browser',
+  //   debugShowCheckedModeBanner: false,
+  //   theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+  //   initialRoute: '/',
+  //   routes: {
+  //     '/': (context) => Scaffold(
+  //       body: Center(
+  //       child:  TextField()
+  //       ), ),
+  //   },
+  //   builder: (context, child) {
+  //     return Consumer<DarkThemeProvider>(
+  //       builder: (context, value, _) {
+  //         return child!;
+  //       },
+  //     );
+  //   },
+  // ),
+//);
+
+    // return ChangeNotifierProvider(create: (_) {
+    //   return themeChangeProvider;
+    // }, child: Consumer<DarkThemeProvider>(
+    //   builder: (context, value, child) {
+    //     return GetMaterialApp(
+    //       scaffoldMessengerKey: scaffoldMessengerKey,
+    //       title: 'Beldex Browser',
+    //       debugShowCheckedModeBanner: false,
+    //       theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+    //       initialRoute: '/',
+    //       routes: {
+    //         '/': (context) =>Scaffold(
+    //     body: Center(
+    //     child:  TextField()
+    //     ), )//const ConnectVpnHome() //Browser(),
+    //       },
+    //     );
+    //   },
+    // )
         // Consumer<DarkThemeProvider>(
         //   builder: (BuildContext context, value, Widget child) {
         //     // return MaterialApp(
@@ -360,6 +502,6 @@ Future<void> checkAppUpdate(context) async {
         //   }
         // )
 
-        );
+       // );
   }
 }

@@ -1,26 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 ThemeData buildLightTheme() {
-  final ThemeData base = ThemeData.light();
+  final ThemeData base = ThemeData.light(useMaterial3: true);
   return base.copyWith(
+    colorScheme: base.colorScheme.copyWith(
+      background: const Color(0xffF9F9F9),
+      primary: Colors.red,
+    ),
     cardColor: Colors.white,
-    backgroundColor: Color(0xffF9F9F9),
-    primaryColor: Colors.red,
-    textTheme: TextTheme(headline6: TextStyle(color:Colors.black,fontWeight: FontWeight.w900,
-      fontFamily: 'Poppins',)),
-    scaffoldBackgroundColor: Color(0xffF9F9F9),
+    scaffoldBackgroundColor: const Color(0xffF9F9F9),
+    textTheme: base.textTheme.copyWith(
+      titleLarge: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.w900,
+        fontFamily: 'Poppins',
+      ),
+    ),
   );
 }
 
 ThemeData buildDarkTheme() {
-  final ThemeData base = ThemeData.dark();
+  final ThemeData base = ThemeData.dark(useMaterial3: true);
   return base.copyWith(
+    colorScheme: base.colorScheme.copyWith(
+      background: const Color(0xff242430),
+      primary: Colors.blue,
+    ),
     cardColor: Colors.grey[800],
-    backgroundColor: Color(0xff242430),
-    primaryColor: Colors.blue[900],
-    textTheme: TextTheme(headline6: TextStyle(color:Colors.white,fontWeight: FontWeight.w900,
-      fontFamily: 'Poppins',)),
     scaffoldBackgroundColor: Colors.grey[900],
+    textTheme: base.textTheme.copyWith(
+      titleLarge: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w900,
+        fontFamily: 'Poppins',
+      ),
+    ),
   );
 }
 

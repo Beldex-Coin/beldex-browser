@@ -240,7 +240,7 @@ Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider
      final prefs = await SharedPreferences.getInstance();
       await prefs.setString('selectedExitNode', '$exitNode');
       await prefs.setString('selectedCountryIcon', '$exitIcon');
-    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel);
+    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel); 
    }
     
   }

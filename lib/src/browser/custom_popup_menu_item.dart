@@ -48,7 +48,7 @@ class CustomPopupMenuItemState<T, W extends CustomPopupMenuItem<T>>
     final PopupMenuThemeData popupMenuTheme = PopupMenuTheme.of(context);
     TextStyle style = (widget.textStyle ??
         popupMenuTheme.textStyle ??
-        theme.textTheme.subtitle1)!;
+        theme.textTheme.titleMedium)!;
 
     if (!widget.enabled) style = style.copyWith(color: theme.disabledColor);
 

@@ -3,13 +3,10 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:beldex_browser/src/widget/downloads/download_task_model.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:square_percent_indicater/square_percent_indicater.dart';
 import 'package:square_progress_indicator/square_progress_indicator.dart';
 
 class DownloadUI extends StatefulWidget {

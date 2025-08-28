@@ -12,10 +12,11 @@ import 'package:beldex_browser/src/widget/aboutpage.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+//import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,6 +38,9 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
       TextEditingController();
   final TextEditingController _customUserAgentController =
       TextEditingController();
+
+      late List<ContextMenuButtonItem> buttonItems = [];
+  late EditableTextState editableState = EditableTextState();
   bool isSwitched = true;
   //final dynamicTextSizeWidget = DynamicTextSizeWidget();
   @override
@@ -445,6 +449,154 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                                   ),
                                                   controller:
                                                       _customHomePageController,
+                                                      magnifierConfiguration:TextMagnifierConfiguration.disabled,
+                                                contextMenuBuilder: (context, editableTextState) {
+                      //final List<ContextMenuButtonItem>
+                      buttonItems = editableTextState.contextMenuButtonItems;
+
+                      editableState = editableTextState;
+
+                      buttonItems.clear(); // Clear all default options
+                      if (_customHomePageController.text.isEmpty) {
+                        buttonItems.add(ContextMenuButtonItem(
+                            label: 'Paste',
+                            onPressed: () {
+                              Clipboard.getData('text/plain').then((value) {
+                                if (value != null && value.text != null) {
+                                  final text = _customHomePageController.text;
+                                  //final selection = _searchController.selection;
+                                  final selection = editableTextState
+                                      .textEditingValue.selection;
+                                  final newText = text.replaceRange(
+                                    selection.start,
+                                    selection.end,
+                                    value.text!,
+                                  );
+                                  print(
+                                      'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                  _customHomePageController.text = newText;
+                                  // if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                  //   print("The User Message Contains Url 1");
+                                  // canShowSearchAI= '';
+                                  //   }else
+                                  //     canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+        
+                                  //canShowSearchAI = _searchController.text;
+                                  final newSelection = TextSelection.collapsed(
+                                    offset:
+                                        selection.start + value.text!.length,
+                                  );
+                                  _customHomePageController.selection = newSelection;
+                                  editableTextState.hideToolbar(false);
+                                }
+                              });
+                            }));
+                      } else {
+                        buttonItems.clear();
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Cut',
+                          onPressed: () {
+                            editableTextState
+                                .cutSelection(SelectionChangedCause.tap);
+                            final TextEditingController controller =
+                                editableTextState.widget.controller;
+                            final TextEditingValue value = controller.value;
+                            final TextSelection selection = value.selection;
+                            if (!selection.isCollapsed) {
+                              final String cutText =
+                                  selection.textInside(value.text);
+                              Clipboard.setData(ClipboardData(text: cutText));
+
+                              final String newText = value.text.replaceRange(
+                                  selection.start, selection.end, '');
+                              controller.value = TextEditingValue(
+                                  text: newText,
+                                  selection: TextSelection.collapsed(
+                                      offset: selection.start));
+
+                              final String findOnPageText =
+                                  _customHomePageController.text;
+                              final String newFindOnPageText =
+                                  findOnPageText.replaceRange(
+                                      selection.start, selection.end, '');
+
+                              print(
+                                  'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                              _customHomePageController.text =
+                                  findOnPageText; //newFindOnPageText;
+                            }
+                            //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                            //   editableTextState.cutSelection(SelectionChangedCause.tap);
+                            //   _searchController.clear();
+                            //   //editableTextState.hideToolbar(false);
+                          },
+                        ));
+
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Copy',
+                          onPressed: () {
+                            final TextEditingValue value =
+                                editableTextState.textEditingValue;
+                            final TextSelection selection = value.selection;
+
+                            if (!selection.isCollapsed) {
+                              final String selectedText =
+                                  selection.textInside(value.text);
+                              Clipboard.setData(
+                                  ClipboardData(text: selectedText));
+                              print("Copied value --> $selectedText");
+                            }
+                            editableTextState.hideToolbar(false);
+                          },
+                        ));
+                        if (!isAllTextSelected(
+                            editableTextState.textEditingValue.selection,
+                            editableTextState.textEditingValue.text)) {
+                          buttonItems.add(ContextMenuButtonItem(
+                            label: 'Select All',
+                            onPressed: () {
+                              // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                              editableTextState
+                                  .selectAll(SelectionChangedCause.tap);
+                              //editableTextState.hideToolbar(false);
+                            },
+                          ));
+                        }
+                        // Add a custom "Paste" button
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Paste',
+                          onPressed: () {
+                            Clipboard.getData('text/plain').then((value) {
+                              if (value != null && value.text != null) {
+                                final text = _customHomePageController.text;
+                                // final selection = _searchController.selection;
+                                final selection = editableTextState
+                                    .textEditingValue.selection;
+                                final newText = text.replaceRange(
+                                  selection.start,
+                                  selection.end,
+                                  value.text!,
+                                );
+                                print(
+                                    'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                _customHomePageController.text = newText;
+                                final newSelection = TextSelection.collapsed(
+                                  offset: selection.start + value.text!.length,
+                                );
+                                _customHomePageController.selection = newSelection;
+                                editableTextState.hideToolbar(false);
+                              }
+                            });
+                          },
+                        ));
+                      }
+                      return  AdaptiveTextSelectionToolbar.buttonItems(
+                        anchors: editableTextState.contextMenuAnchors,
+                        buttonItems: buttonItems,
+                      );
+                    },
+                                                  
                                                 ),
                                               ),
                                             )
@@ -582,11 +734,13 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                       isSwitched = value;
                     });
                     if (basicProvider.scrnSecurity) {
-                      await FlutterWindowManager.addFlags(
-                          FlutterWindowManager.FLAG_SECURE);
+                     await BelnetLib.enableScreenSecurity();
+                      // await FlutterWindowManager.addFlags(
+                      //     FlutterWindowManager.FLAG_SECURE);
                     } else {
-                      await FlutterWindowManager.clearFlags(
-                          FlutterWindowManager.FLAG_SECURE);
+                      await BelnetLib.disableScreenSecurity();
+                      // await FlutterWindowManager.clearFlags(
+                      //     FlutterWindowManager.FLAG_SECURE);
                     }
 
                     // await saveSwitchState(value);

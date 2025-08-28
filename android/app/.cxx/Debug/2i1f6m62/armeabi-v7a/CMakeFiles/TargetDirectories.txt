@@ -1,0 +1,2 @@
+/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/android/app/.cxx/Debug/2i1f6m62/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/android/app/.cxx/Debug/2i1f6m62/armeabi-v7a/CMakeFiles/rebuild_cache.dir

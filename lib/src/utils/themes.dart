@@ -6,7 +6,6 @@ class Themes {
   static final ThemeData lightTheme = ThemeData(
     //fontFamily: 'OpenSans',
     brightness: Brightness.light,
-    backgroundColor: Palette.lightThemeBackground,
     scaffoldBackgroundColor: Palette.lightThemeBlack,
     appBarTheme: AppBarTheme(
       backgroundColor: Palette.lightThemeBlack,
@@ -14,39 +13,51 @@ class Themes {
     hintColor: Colors.grey[500],
     focusColor: Palette.lightGrey, // focused and enabled border color for text fields
     primaryTextTheme: TextTheme(
-      headline6: TextStyle(
-        color: BeldexPalette.black
-      ),
-      caption: TextStyle(
-        color: BeldexPalette.black,
-      ),
-      button: TextStyle(
-        color: Colors.white,//BeldexPalette.black,
-          backgroundColor: BeldexPalette.tealWithOpacity,
-          decorationColor: BeldexPalette.teal
-      ),
-      headline5: TextStyle(
-        color: Palette.darkThemeGrey,
-        //color: BeldexPalette.black // account list tile, contact page
-      ),
-      subtitle2: TextStyle(
-        color: Palette.wildDarkBlue, // filters
-        backgroundColor:Palette.saveAndCopyButtonColor1
-      ),
-      subtitle1: TextStyle(
-        color: BeldexPalette.black // transaction raw, trade raw
-      ),
-      overline: TextStyle(
-        color: PaletteDark.darkThemeCloseButton // standard list row, transaction details
-      )
-    ),
+  titleLarge: TextStyle(
+    color: BeldexPalette.black,
+  ),
+  bodySmall: TextStyle(
+    color: BeldexPalette.black,
+  ),
+  labelLarge: TextStyle(
+    color: Colors.white,
+    backgroundColor: BeldexPalette.tealWithOpacity,
+    decorationColor: BeldexPalette.teal,
+  ),
+  headlineSmall: TextStyle(
+    color: Palette.darkThemeGrey,
+  ),
+  titleSmall: TextStyle(
+    color: Palette.wildDarkBlue,
+    backgroundColor: Palette.saveAndCopyButtonColor1,
+  ),
+  bodyLarge: TextStyle(
+    color: BeldexPalette.black,
+  ),
+  labelSmall: TextStyle(
+    color: PaletteDark.darkThemeCloseButton,
+  ),
+),
     toggleButtonsTheme: ToggleButtonsThemeData(
       selectedColor: BeldexPalette.teal,
       disabledColor: Palette.wildDarkBlue,
       color: Palette.switchBackground,
       borderColor: Palette.switchBorder
     ),
-    selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
+
+
+    // Replace selectedRowColor with dataTableTheme
+  dataTableTheme: DataTableThemeData(
+    dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+      (states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.grey; // Selected row color
+        }
+        return null; // Default
+      },
+    ),
+  ),
+  //  selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
     dividerColor: Colors.black,//Palette.lightGrey,
     dividerTheme: DividerThemeData(
       color: Colors.grey,//Palette.lightGrey
@@ -58,14 +69,14 @@ class Themes {
     ),
     primaryIconTheme: IconThemeData(
       color: Colors.white
-    ),
+    ), //colorScheme: ColorScheme(background: Palette.lightThemeBackground, brightness: null, primary: null
+   // ),
   );
 
 
   static final ThemeData darkTheme = ThemeData(
     //fontFamily: 'OpenSans',
     brightness: Brightness.dark,
-    backgroundColor: PaletteDark.darkThemeBackground,
     scaffoldBackgroundColor: PaletteDark.darkThemeBlack,
     appBarTheme: AppBarTheme(
       backgroundColor: PaletteDark.darkThemeBlack,
@@ -73,38 +84,48 @@ class Themes {
     hintColor: PaletteDark.darkThemeGrey,
     focusColor: PaletteDark.darkThemeGreyWithOpacity, // focused and enabled border color for text fields
     primaryTextTheme: TextTheme(
-      headline6: TextStyle(
-        color: Colors.white
-      ),
-      caption: TextStyle(
-        color: Colors.white
-      ),
-      button: TextStyle(
-        color: Colors.white,
-        backgroundColor: BeldexPalette.tealWithOpacity, // button indigo background color
-        decorationColor: BeldexPalette.tealWithOpacity // button indigo border color
-      ),
-      headline5: TextStyle(
-        color: PaletteDark.darkThemeGrey // account list tile, contact page
-      ),
-      subtitle2: TextStyle(
-        color: PaletteDark.darkThemeGrey ,// filters
-        backgroundColor:PaletteDark.saveAndCopyButtonColor1
-      ),
-        subtitle1: TextStyle(
-        color: Palette.blueGrey // transaction raw, trade raw
-      ),
-      overline: TextStyle(
-        color: PaletteDark.darkThemeGrey // standard list row, transaction details
-      )
-    ),
+  titleLarge: TextStyle(
+    color: Colors.white, // replaces headline6
+  ),
+  bodySmall: TextStyle(
+    color: Colors.white, // replaces caption
+  ),
+  labelLarge: TextStyle(
+    color: Colors.white, // replaces button
+    backgroundColor: BeldexPalette.tealWithOpacity, // button background
+    decorationColor: BeldexPalette.tealWithOpacity, // button border color
+  ),
+  headlineSmall: TextStyle(
+    color: PaletteDark.darkThemeGrey, // replaces headline5
+  ),
+  titleSmall: TextStyle(
+    color: PaletteDark.darkThemeGrey, // replaces subtitle2
+    backgroundColor: PaletteDark.saveAndCopyButtonColor1,
+  ),
+  bodyLarge: TextStyle(
+    color: Palette.blueGrey, // replaces subtitle1
+  ),
+  labelSmall: TextStyle(
+    color: PaletteDark.darkThemeGrey, // replaces overline
+  ),
+),
     toggleButtonsTheme: ToggleButtonsThemeData(
       selectedColor: BeldexPalette.teal,
       disabledColor: Palette.wildDarkBlue,
       color: PaletteDark.switchBackground,
       borderColor: PaletteDark.darkThemeMidGrey
     ),
-    selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
+    dataTableTheme: DataTableThemeData(
+    dataRowColor: MaterialStateProperty.resolveWith<Color?>(
+      (states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.grey; // Selected row color
+        }
+        return null; // Default
+      },
+    ),
+  ),
+   // selectedRowColor: Colors.grey,//BeldexPalette.tealWithOpacity,
     dividerColor: Colors.white,//PaletteDark.darkThemeDarkGrey,
     dividerTheme: DividerThemeData(
       color: PaletteDark.darkThemeGreyWithOpacity
@@ -116,7 +137,7 @@ class Themes {
     ),
     primaryIconTheme: IconThemeData(
       color: PaletteDark.darkThemeViolet
-    ),
+    ), //colorScheme: ColorScheme(background: PaletteDark.darkThemeBackground),
   );
 
 }

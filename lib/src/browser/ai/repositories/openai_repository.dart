@@ -102,15 +102,15 @@ if (cancelToken.isCancelled) {
     }
   } on DioException catch (e) {
   if (CancelToken.isCancel(e)) {
-    print("🚨 Request was canceled: ${e.message}");
+    print("Request was canceled: ${e.message}");
     yield "Request was canceled by the user."; // Send as single string
   } else {
-    print("❌ Network error: ${e.message}");
+    print("Network error: ${e.message}");
     yield "Network error: ${e.message}";
   }
 }
 catch (e) {
-  print("❌ Unexpected error: $e");
+  print("Unexpected error: $e");
   yield "An unexpected error occurred.";
 }
 }
@@ -577,7 +577,7 @@ String fullContent = '';
 //             }
 //           }
 //         } catch (e) {
-//           print("❌ Error decoding response: $e");
+//           print(" Error decoding response: $e");
 //         }
 
 //         buffer = buffer.substring(dataEnd + 1);
@@ -586,7 +586,7 @@ String fullContent = '';
 //       }
 //     }
 //   } catch (e) {
-//     print("❌ Error processing chunk: $e");
+//     print(" Error processing chunk: $e");
 //     buffer = '';
 //   }
 // }
@@ -662,16 +662,27 @@ String fullContent = '';
     "Content-Type": "application/json",
   };
 
+requestData = {
+  "model": _getModelName(modelType),
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI assistant that always responds in English, even if the user input is meaningless"
+    },
+    ...?_history["deepseek"], // keep your conversation history
+  ],
+  "stream": true,
+};
 
 
-  requestData = {
-    "model": _getModelName(modelType),
-    "messages":_history["deepseek"],
-    // [
-    //       {"role": "user", "content": "$userMessage"}
-    //     ],
-    "stream": true,  // Ensure streaming is enabled
-  };
+  // requestData = {
+  //   "model": _getModelName(modelType),
+  //   "messages":_history["deepseek"],
+  //   // [
+  //   //       {"role": "user", "content": "$userMessage"}
+  //   //     ],
+  //   "stream": true,  // Ensure streaming is enabled
+  // };
      try {
     final response = await _dio.post<ResponseBody>(
       apiUrl,

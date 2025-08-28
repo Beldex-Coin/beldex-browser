@@ -14,21 +14,16 @@ import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/custom_popup_menu_item.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
-import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
-import 'package:beldex_browser/src/browser/tab_viewer_popup_menu_actions.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
-import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 GlobalKey chatMenukey = GlobalKey();
 // ignore: must_be_immutable
@@ -41,6 +36,8 @@ class BeldexAIScreen extends StatelessWidget {
 
   bool? canShowWelcome;
   OpenAIRepository openAIRepository = OpenAIRepository();
+    late List<ContextMenuButtonItem> buttonItems = [];
+     late EditableTextState editableState = EditableTextState();
   checkSummariseString(WebViewModel webViewModel, ChatViewModel model) {
     if(webViewModel != null && (webViewModel.url.toString() == "about:blank" || webViewModel.url.toString().startsWith("chrome-error") || webViewModel.url.toString().startsWith("edge-error"))){
     model.isSummariseAvailable = false;
@@ -299,7 +296,9 @@ String removeSpecialFormatting(String text) {
 }
 
 
-
+bool isAllTextSelected(TextSelection selection, String text) {
+  return selection.baseOffset == 0 && selection.extentOffset == text.length;
+}
 
 
 
@@ -309,7 +308,7 @@ String removeSpecialFormatting(String text) {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
-    var browserModel = Provider.of<BrowserModel>(context);
+    var browserModel = Provider.of<BrowserModel>(context,listen: false);
     final webViewModel = Provider.of<WebViewModel>(context);
     final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
@@ -334,7 +333,7 @@ String removeSpecialFormatting(String text) {
         //print('BASE MODEL READY>>>>');
       },
       builder: (context, model, child) {
-       // print('BASE MODEL BUILDER CALLING');
+        //print('BASE MODEL BUILDER CALLING ${model.messages}');
         
         return SafeArea(
           child: GestureDetector(
@@ -501,7 +500,7 @@ String removeSpecialFormatting(String text) {
                                                          Share.share(removeSpecialFormatting(chatHistory), subject:'');
                                                         break;
                                                         case AIChatPopupMenuActions.DELETE_CHAT:
-                                                          model.messages.clear();
+                                                          model.messages = []; //.clear();
                                             //               // Find the index of the last model message
                                             // final lastModelMessageIndex = model.messages.lastIndexWhere((message) {
                                             //   return message.role == Roles.model && message.text.isNotEmpty;
@@ -1039,6 +1038,8 @@ String removeSpecialFormatting(String text) {
                                       model.getTextForUser(modelType: aiModelProvider.selectedModel); //getTextAndImageInfo();
                                       model.messageController.clear();
                                     }                          },
+
+
                           cursorColor: Colors.green,
                           decoration: InputDecoration(
                                                 border: InputBorder.none,
@@ -1051,134 +1052,291 @@ String removeSpecialFormatting(String text) {
                                                   fontFamily: 'Poppins',
                                                 ),
                                               ),
+                           contextMenuBuilder: (context, editableTextState) {
+                      //final List<ContextMenuButtonItem>
+                      buttonItems = editableTextState.contextMenuButtonItems;
+
+                      editableState = editableTextState;
+
+                      buttonItems.clear(); // Clear all default options
+                      if (model.messageController.text.isEmpty) {
+                        buttonItems.add(ContextMenuButtonItem(
+                            label: 'Paste',
+                            onPressed: () {
+                              Clipboard.getData('text/plain').then((value) {
+                                if (value != null && value.text != null) {
+                                  final text = model.messageController.text;
+                                  //final selection = _searchController.selection;
+                                  final selection = editableTextState
+                                      .textEditingValue.selection;
+                                  final newText = text.replaceRange(
+                                    selection.start,
+                                    selection.end,
+                                    value.text!,
+                                  );
+                                  print(
+                                      'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                  model.messageController.text = newText;
+                                //   if(model.messageController.text.trim().isEmpty || containsUrl(model.messageController.text)){
+                                //     print("The User Message Contains Url 1");
+                                //  // canShowSearchAI= '';
+                                //     }else
+                                //       canShowSearchAI= _searchController.text;
+                         // print('BELDEX AI ---------> $canShowSearchAI');
+        
+                                  //canShowSearchAI = _searchController.text;
+                                  final newSelection = TextSelection.collapsed(
+                                    offset:
+                                        selection.start + value.text!.length,
+                                  );
+                                   model.messageController.selection = newSelection;
+                                  editableTextState.hideToolbar(false);
+                                }
+                              });
+                            }));
+                      } else {
+                        buttonItems.clear();
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Cut',
+                          onPressed: () {
+                            editableTextState
+                                .cutSelection(SelectionChangedCause.tap);
+                            final TextEditingController controller =
+                                editableTextState.widget.controller;
+                            final TextEditingValue value = controller.value;
+                            final TextSelection selection = value.selection;
+                            if (!selection.isCollapsed) {
+                              final String cutText =
+                                  selection.textInside(value.text);
+                              Clipboard.setData(ClipboardData(text: cutText));
+
+                              final String newText = value.text.replaceRange(
+                                  selection.start, selection.end, '');
+                              controller.value = TextEditingValue(
+                                  text: newText,
+                                  selection: TextSelection.collapsed(
+                                      offset: selection.start));
+
+                              final String findOnPageText =
+                                   model.messageController.text;
+                              final String newFindOnPageText =
+                                  findOnPageText.replaceRange(
+                                      selection.start, selection.end, '');
+
+                              print(
+                                  'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                               model.messageController.text =
+                                  findOnPageText; //newFindOnPageText;
+                            }
+                            //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                            //   editableTextState.cutSelection(SelectionChangedCause.tap);
+                            //   _searchController.clear();
+                            //   //editableTextState.hideToolbar(false);
+                          },
+                        ));
+
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Copy',
+                          onPressed: () {
+                            final TextEditingValue value =
+                                editableTextState.textEditingValue;
+                            final TextSelection selection = value.selection;
+
+                            if (!selection.isCollapsed) {
+                              final String selectedText =
+                                  selection.textInside(value.text);
+                              Clipboard.setData(
+                                  ClipboardData(text: selectedText));
+                              print("Copied value --> $selectedText");
+                            }
+                            editableTextState.hideToolbar(false);
+                          },
+                        ));
+                        if (!isAllTextSelected(
+                            editableTextState.textEditingValue.selection,
+                            editableTextState.textEditingValue.text)) {
+                          buttonItems.add(ContextMenuButtonItem(
+                            label: 'Select All',
+                            onPressed: () {
+                              // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                              editableTextState
+                                  .selectAll(SelectionChangedCause.tap);
+                              //editableTextState.hideToolbar(false);
+                            },
+                          ));
+                        }
+                        // Add a custom "Paste" button
+                        buttonItems.add(ContextMenuButtonItem(
+                          label: 'Paste',
+                          onPressed: () {
+                            Clipboard.getData('text/plain').then((value) {
+                              if (value != null && value.text != null) {
+                                final text =  model.messageController.text;
+                                // final selection = _searchController.selection;
+                                final selection = editableTextState
+                                    .textEditingValue.selection;
+                                final newText = text.replaceRange(
+                                  selection.start,
+                                  selection.end,
+                                  value.text!,
+                                );
+                                print(
+                                    'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                 model.messageController.text = newText;
+                                final newSelection = TextSelection.collapsed(
+                                  offset: selection.start + value.text!.length,
+                                );
+                                 model.messageController.selection = newSelection;
+                                editableTextState.hideToolbar(false);
+                              }
+                            });
+                          },
+                        ));
+                      }
+                      return  AdaptiveTextSelectionToolbar.buttonItems(
+                        anchors: editableTextState.contextMenuAnchors,
+                        buttonItems: buttonItems,
+                      );
+                    },
+
                         ),
                       ),
                       Positioned(
                         top:15.0,right:15.0,
-                        child: Visibility(
-                          visible: model.messageController.text.isNotEmpty,
-                          child: GestureDetector(
-                            onTap: ()=> model.messageController.clear(),
-                            child: SvgPicture.asset(
-                                                  themeProvider.darkTheme
-                                                      ? IconConstants.closeIconDark
-                                                      : IconConstants.closeIconWhite,
-                                                  width: 15, // Ensure visibility
-                                                  height: 15,
-                                                ),
-                          ),
+                        child:  ValueListenableBuilder<TextEditingValue>(
+                                   valueListenable: model.messageController,
+                                    builder: (context, value,child) {
+                            return Visibility(
+                              visible: model.messageController.text.isNotEmpty,
+                              child: GestureDetector(
+                                onTap: ()=> model.messageController.clear(),
+                                child: SvgPicture.asset(
+                                                      themeProvider.darkTheme
+                                                          ? IconConstants.closeIconDark
+                                                          : IconConstants.closeIconWhite,
+                                                      width: 15, // Ensure visibility
+                                                      height: 15,
+                                                    ),
+                              ),
+                            );
+                          }
                         ),)
                     ],
                                   ),
-                                  Container(
-                       padding: const EdgeInsets.only(left: 15,right:15,bottom: 8.0),
-                       margin: EdgeInsets.only(bottom: 5.0),
-                    decoration: BoxDecoration(
-                     // color: Colors.green,
-                      border: Border(bottom: BorderSide( color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),right: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),left: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA))),
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0),bottomRight: Radius.circular(10.0))),
-                                  
-                                  child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical:3.0),
-                              child: GestureDetector(
-                                onTap: (){
-                                          final lastModelMessageIndex = model.messages.lastIndexWhere(
-                                    (message) => message.role == Roles.model && message.text.isNotEmpty,
-                                  );
-                              
-                                  final lastUserMessageIndex = model.messages.lastIndexWhere(
-                                (message) => message.role == Roles.user,
-                              );
-                                 if(containsUrl(model.messageController.text)){
-                                  return;
-                                 }
-                              
-                                  if (model.isTyping) {
-                                    // Stop typing state
-                                    model.isTyping = false;
-                                    //typingProvider.updateAITypingState(false);
-                                   model.stopResponse();
-                                     // Check if the last user message exists but its respective model message is empty
-                                if (lastUserMessageIndex != -1 &&
-                                    lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
-                                    model.messages[lastUserMessageIndex + 1].role == Roles.model &&
-                                    model.messages[lastUserMessageIndex + 1].text.isEmpty) {
-                                     // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
-                                  print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
-                                  OpenAIRepository().cancelRequest();
-                                  model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted'; // If token cancelled before generating response
-                                  model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
-                                }else if (lastModelMessageIndex != -1) {
-                                  
-                                      model.messages[lastModelMessageIndex].canShowRegenerate = true;
-                                       print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
-                                    }
-                              
-                                  } else {
-                                    // Check if there’s any input in the message controller
-                                    if (model.messageController.text.trim().isNotEmpty) {
-                                      //MessageBodyState().updateTypingText();
-                                      urlSummaryProvider.updateSummariser(false);
-                                      //typingProvider.updateAITypingState(true);
-                                      model.isTyping = true;
-                                     
-                                      // Reset messages state and UI components
-                                       if (lastModelMessageIndex != -1) {
-                                         model.messages[lastModelMessageIndex].canShowRegenerate = false;
-                                         model.messages[lastModelMessageIndex].isRetry = false;
-                                      //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
-                                      //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
+                                  ValueListenableBuilder<TextEditingValue>(
+                                   valueListenable: model.messageController,
+                                    builder: (context, value,child) {
+                                      return Container(
+                                                             padding: const EdgeInsets.only(left: 15,right:15,bottom: 8.0),
+                                                             margin: EdgeInsets.only(bottom: 5.0),
+                                                          decoration: BoxDecoration(
+                                                           // color: Colors.green,
+                                                            border: Border(bottom: BorderSide( color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),right: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA)),left: BorderSide(color: themeProvider.darkTheme ? Color(0xff3D4354) : Color(0xffDADADA))),
+                                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.0),bottomRight: Radius.circular(10.0))),
+                                      
+                                      child: Row(
+                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.symmetric(vertical:3.0),
+                                                                    child: GestureDetector(
+                                                                      onTap: (){
+                                              final lastModelMessageIndex = model.messages.lastIndexWhere(
+                                        (message) => message.role == Roles.model && message.text.isNotEmpty,
+                                      );
+                                                                    
+                                      final lastUserMessageIndex = model.messages.lastIndexWhere(
+                                                                      (message) => message.role == Roles.user,
+                                                                    );
+                                                                       if(containsUrl(model.messageController.text)){
+                                      return;
+                                                                       }
+                                                                    
+                                      if (model.isTyping) {
+                                        // Stop typing state
+                                        model.isTyping = false;
+                                        //typingProvider.updateAITypingState(false);
+                                       model.stopResponse();
+                                         // Check if the last user message exists but its respective model message is empty
+                                                                      if (lastUserMessageIndex != -1 &&
+                                        lastUserMessageIndex + 1 < model.messages.length && // Ensure modelMessage exists
+                                        model.messages[lastUserMessageIndex + 1].role == Roles.model &&
+                                        model.messages[lastUserMessageIndex + 1].text.isEmpty) {
+                                         // model.messages[lastUserMessageIndex + 1].isInterrupted = true;
+                                      print("Last user message is available but model message is empty ${model.messages[lastUserMessageIndex + 1]}");
+                                      OpenAIRepository().cancelRequest();
+                                      model.messages[lastUserMessageIndex + 1].text = 'The response has been interrupted'; // If token cancelled before generating response
+                                      model.messages[lastUserMessageIndex + 1].canShowRegenerate = true;
+                                                                      }else if (lastModelMessageIndex != -1) {
+                                      
+                                          model.messages[lastModelMessageIndex].canShowRegenerate = true;
+                                           print('OnData coming inside data ${model.messages[lastModelMessageIndex].canShowRegenerate}');
+                                        }
+                                                                    
+                                      } else {
+                                        // Check if there’s any input in the message controller
+                                        if (model.messageController.text.trim().isNotEmpty) {
+                                          //MessageBodyState().updateTypingText();
+                                          urlSummaryProvider.updateSummariser(false);
+                                          //typingProvider.updateAITypingState(true);
+                                          model.isTyping = true;
                                          
-                                      //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
-                                      //   model.messages[lastModelMessageIndex].typingText = '';
-                                       }
-                                        
-                                      //   model.messages[lastModelMessageIndex].isTypingComplete = true;
-                                      //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
-                                      // }
-                                      FocusScope.of(context).unfocus();
-                                      setWelcomeAIScreen();
-                                      model.canshowWelcome = false;
-                                      model.isSummariseAvailable = false;
-                              
-                                      // Handle new message if text is present
-                                      model.getTextForUser(modelType: aiModelProvider.selectedModel); //getTextAndImageInfo();
-                                      model.messageController.clear();
-                                    }
-                                  }
-                              
-                                  },
-                                child: 
-                                SizedBox(
-                                  height: 25,width: 25,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: SvgPicture.asset(
-                                       (model.messageController.text.trim().isEmpty && !model.isTyping) || containsUrl(model.messageController.text) ? 
-                                       themeProvider.darkTheme ? 'assets/images/ai-icons/send_disabled.svg' : 'assets/images/ai-icons/send_disabled_wht_theme.svg'
-                                       :
-                                        model.isTyping
-                                            ? 
-                                            //themeProvider.darkTheme
-                                               // ? 
-                                                'assets/images/ai-icons/stop.svg'
-                                               // : 'assets/images/ai-icons/Stop Circled 1.svg'
-                                            : 
-                                            //themeProvider.darkTheme
-                                                //? 
-                                                IconConstants.send
-                                                //: IconConstants.sendWhite,
+                                          // Reset messages state and UI components
+                                           if (lastModelMessageIndex != -1) {
+                                             model.messages[lastModelMessageIndex].canShowRegenerate = false;
+                                             model.messages[lastModelMessageIndex].isRetry = false;
+                                          //   print('last model message iiis is ${model.messages[lastModelMessageIndex].typingText} ');
+                                          //   if(model.messages[lastModelMessageIndex].typingText.isNotEmpty || model.messages[lastModelMessageIndex].typingText != ''){
+                                             
+                                          //     model.messages[lastModelMessageIndex].text = model.messages[lastModelMessageIndex].typingText;
+                                          //   model.messages[lastModelMessageIndex].typingText = '';
+                                           }
+                                            
+                                          //   model.messages[lastModelMessageIndex].isTypingComplete = true;
+                                          //   print('last model message is ${model.messages[lastModelMessageIndex].text} ');
+                                          // }
+                                          FocusScope.of(context).unfocus();
+                                          setWelcomeAIScreen();
+                                          model.canshowWelcome = false;
+                                          model.isSummariseAvailable = false;
+                                                                    
+                                          // Handle new message if text is present
+                                          model.getTextForUser(modelType: aiModelProvider.selectedModel); //getTextAndImageInfo();
+                                          model.messageController.clear();
+                                        }
+                                      }
+                                                                    
+                                      },
+                                                                      child: 
+                                                                      SizedBox(
+                                      height: 25,width: 25,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: SvgPicture.asset(
+                                           (model.messageController.text.trim().isEmpty && !model.isTyping) || containsUrl(model.messageController.text) ? 
+                                           themeProvider.darkTheme ? 'assets/images/ai-icons/send_disabled.svg' : 'assets/images/ai-icons/send_disabled_wht_theme.svg'
+                                           :
+                                            model.isTyping
+                                                ? 
+                                                //themeProvider.darkTheme
+                                                   // ? 
+                                                    'assets/images/ai-icons/stop.svg'
+                                                   // : 'assets/images/ai-icons/Stop Circled 1.svg'
+                                                : 
+                                                //themeProvider.darkTheme
+                                                    //? 
+                                                    IconConstants.send
+                                                    //: IconConstants.sendWhite,
+                                          ),
                                       ),
-                                  ),
-                                ),
-                              ),
-                             
-                            ),
-                          ],
-                        ),
+                                                                      ),
+                                                                    ),
+                                                                   
+                                                                  ),
+                                                                ],
+                                                              ),
+                                      );
+                                    }
                                   )
                                 ],
                               ),

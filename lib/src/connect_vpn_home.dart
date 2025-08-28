@@ -89,6 +89,7 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
 
   @override
   void initState() {
+     super.initState();
     _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {

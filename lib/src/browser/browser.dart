@@ -22,8 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:listen_sharing_intent/listen_sharing_intent.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+//import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:upgrader/upgrader.dart';
 // import 'app_bar/sample_webview_tab_app_bar.dart';
 import 'empty_tab.dart';
@@ -61,6 +62,9 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
      WidgetsBinding.instance.addObserver(this);
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
     // Listen for incoming text or URL when the app is running or resumed
+   
+   
+   
     _intentDataStreamSubscription =
         ReceiveSharingIntent.instance.getMediaStream().listen((value)async {
        String? url = await platform.invokeMethod("getIntentData");
@@ -227,7 +231,7 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
     
     super.didChangeAppLifecycleState(state);
     if(state == AppLifecycleState.resumed){
-      print('INSIDE THE APPLIFECYCLE SHARED ${_sharedFiles.map((f) => f.toMap())}');
+     // print('INSIDE THE APPLIFECYCLE SHARED ${_sharedFiles.map((f) => f.toMap())}');
       if(_sharedFiles.isNotEmpty){
         print('INSIDE THE RESUMED STATE  -----');
         
@@ -236,10 +240,10 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
           _sharedFiles.clear();
         });
         closeTabListPage();
-        // while (Navigator.canPop(context)) {
-        //        Navigator.pop(context);
-        //       }
-       // Navigator.push(context, MaterialPageRoute(builder: (context)=> Browser()));
+      //   // while (Navigator.canPop(context)) {
+      //   //        Navigator.pop(context);
+      //   //       }
+      //  // Navigator.push(context, MaterialPageRoute(builder: (context)=> Browser()));
       }
     }
   }
@@ -630,25 +634,51 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
       children: stackChildren,
     );
   }
+Widget _createProgressIndicator() {
+  return Selector<WebViewModel, double>(
+    selector: (context, webViewModel) => webViewModel.progress,
+    builder: (context, progress, child) {
+      final clampedProgress = progress.clamp(0.0, 1.0);
+      print("Building progress indicator: $clampedProgress");
 
-  Widget _createProgressIndicator() {
-    return Selector<WebViewModel, double>(
-        selector: (context, webViewModel) => webViewModel.progress,
-        builder: (context, progress, child) {
-          if (progress >= 1.0) {
-            return Container();
-          }
-          return PreferredSize(
-              preferredSize: const Size(double.infinity, 4.0),
-              child: SizedBox(
-                  height: 3.0,
-                  child: LinearProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(const Color(0xff00B134)),
-                    value: progress,
-                  )));
-        });
-  }
+      if (clampedProgress >= 1.0) {
+        return SizedBox.shrink(); // No progress bar at 100%
+      }
+
+      return PreferredSize(
+        preferredSize: const Size(double.infinity, 4.0),
+        child: SizedBox(
+          height: 3.0,
+          child: LinearProgressIndicator(
+            value: clampedProgress,
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xff00B134)),
+            backgroundColor: Colors.transparent,
+          ),
+        ),
+      );
+    },
+  );
+}
+
+  // Widget _createProgressIndicator() {
+  //   return Selector<WebViewModel, double>(
+  //       selector: (context, webViewModel) => webViewModel.progress,
+  //       builder: (context, progress, child) {
+  //             print("Building progress indicator: $progress");
+  //         if (progress >= 1.0) {
+  //           return Container();
+  //         }
+  //         return PreferredSize(
+  //             preferredSize: const Size(double.infinity, 4.0),
+  //             child: SizedBox(
+  //                 height: 3.0,
+  //                 child: LinearProgressIndicator(
+  //                   valueColor:
+  //                       AlwaysStoppedAnimation<Color>(const Color(0xff00B134)),
+  //                   value: progress,
+  //                 )));
+  //       });
+  // }
 String currentUrl = '';
 
   Widget _buildWebViewTabsViewer() {
