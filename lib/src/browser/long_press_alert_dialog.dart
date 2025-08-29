@@ -775,7 +775,13 @@ Widget _buildDialogLongPressHitTestResult(
         await tempFile.writeAsBytes(bytes);
 
         // Share the temporary file
-        await Share.shareFiles([tempFilePath], text: 'Shared Image');
+        await SharePlus.instance.share(ShareParams(files: [XFile(tempFilePath)],text: 'Shared Image')); //.shareFiles([tempFilePath], text: 'Shared Image');
+
+  //       final file = XFile(tempFilePath);
+  // await Share.shareXFiles(
+  //   [file],
+  //   text: 'Shared Image',
+  // );
       } catch (e) {
         print('Error sharing image: $e');
         // Handle error sharing image

@@ -137,4 +137,14 @@ static Future<dynamic>  unmapExitNode(String swapNode) async {
   return setApp;
 }
 
+ static Future<bool> enableScreenSecurity()async{
+  final bool setScnApp = await _methodChannel.invokeMethod("enableSecure");
+  return setScnApp;
+}
+
+
+ static Future<bool> disableScreenSecurity()async{
+  final bool setScnApp = await _methodChannel.invokeMethod("disableSecure");
+  return setScnApp;
+}
 }

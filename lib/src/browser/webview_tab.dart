@@ -273,14 +273,39 @@ bool _isValidUrl(String url) {
           currentWebViewModel.updateWithValue(widget.webViewModel);
         }
 
-      _webViewController!.addJavaScriptHandler(
-              handlerName: 'changeNode',
-              callback: (args) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NodeDropdownListPage(exitData: [], canChangeNode: true,webViewController: _webViewController,)),
-                );
-              });
+        // setState(() {
+          
+        // });
+       // print("WebViewController ref: $_webViewController");
+
+ // Register handler immediately here // not working
+    _webViewController!.addJavaScriptHandler(
+      handlerName: 'changeNode',
+      callback: (args) {
+        print("JS called Flutter changeNode handler");
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NodeDropdownListPage(
+                exitData: [],
+                canChangeNode: true,
+                webViewController: _webViewController,
+              ),
+            ),
+          );
+        });
+      },
+    );
+      // _webViewController!.addJavaScriptHandler(
+      //         handlerName: 'changeNode',
+      //         callback: (args) {
+      //            print("JS called Flutter changeNode handler");
+      //           Navigator.push(
+      //             context,
+      //             MaterialPageRoute(builder: (context) => NodeDropdownListPage(exitData: [], canChangeNode: true,webViewController: _webViewController,)),
+      //           );
+      //         });
 
       },
      
@@ -510,6 +535,18 @@ await _webViewController!.evaluateJavascript(source: """
           if (isCurrentTab(currentWebViewModel)) {
             currentWebViewModel.updateWithValue(widget.webViewModel);
           }
+
+          if (consoleMessage.message == "changeNodeClicked") {
+      print("Flutter received console message");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => NodeDropdownListPage(
+          exitData: [],
+          canChangeNode: true,
+          webViewController: controller,
+        )),
+      );
+    }
         } catch (e) {
           print(e.toString());
         }
@@ -861,11 +898,13 @@ line-height:27px;
 
 
 <script type="text/javascript">
-document.getElementById("footer").style.display = "none";
-   document.getElementById("changeNodeButton").onclick = function() {
-            if (window.flutter_inappwebview) {
-                window.flutter_inappwebview.callHandler('changeNode');
-            }
+ document.getElementById("footer").style.display = "none";
+        document.getElementById("changeNodeButton").onclick = function() {
+          if (window.flutter_inappwebview) {
+            window.flutter_inappwebview.callHandler('changeNode');
+console.log("changeNodeClicked");
+            console.log(window.flutter_inappwebview);
+          }
         }
         function hideFooter() {
         document.getElementById("footer").style.display = "none";

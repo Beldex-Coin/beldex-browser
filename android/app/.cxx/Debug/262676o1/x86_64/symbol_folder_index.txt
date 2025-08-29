@@ -1,0 +1,1 @@
+/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/build/app/intermediates/cxx/Debug/262676o1/obj/x86_64

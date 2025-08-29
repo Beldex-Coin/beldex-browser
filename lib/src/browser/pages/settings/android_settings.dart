@@ -72,10 +72,11 @@ class _AndroidSettingsState extends State<AndroidSettings> {
 
 
 Widget _buildSliderOption(double currentValue,
-      Function(double) onChanged) {
+      Function(double) onChanged,DarkThemeProvider themeProvider) {
     return SliderTheme(
       data: SliderThemeData(
                 trackHeight: 3,
+                inactiveTrackColor:themeProvider.darkTheme ? Color(0xff363645) : Color(0xffDADADA)
               ),
       child: Slider(
             value: currentValue,
@@ -171,7 +172,9 @@ String getPercentage(double value) {
              // browserModel.updateSettings(currentWebViewModel);
               browserModel.save();
             });
-          }),
+          },
+          themeProvider
+          ),
             // SliderTheme(
             //   data: SliderThemeData(
             //     trackHeight: 3,

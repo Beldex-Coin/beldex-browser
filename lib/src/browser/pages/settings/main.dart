@@ -6,10 +6,11 @@ import 'package:beldex_browser/src/browser/pages/settings/cross_platform_setting
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+//import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:provider/provider.dart';
 
 
@@ -351,7 +352,8 @@ resetScreenSecurity()async{
   // await prefs.setBool('switchState', true);
   var basicProvider = Provider.of<BasicProvider>(context,listen: false);
   basicProvider.updateScrnSecurity(true);
-  await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  await BelnetLib.enableScreenSecurity();
+  //await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
 }
 
 

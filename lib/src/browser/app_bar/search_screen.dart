@@ -402,24 +402,51 @@ class _SearchScreenState extends State<SearchScreen> {
                             //   //editableTextState.hideToolbar(false);
                           },
                         ));
+                         buttonItems.add(
+  ContextMenuButtonItem(
+    label: 'Copy',
+    onPressed: () {
+      final TextEditingValue value = editableTextState.textEditingValue;
+      final TextSelection selection = value.selection;
 
-                        buttonItems.add(ContextMenuButtonItem(
-                          label: 'Copy',
-                          onPressed: () {
-                            final TextEditingValue value =
-                                editableTextState.textEditingValue;
-                            final TextSelection selection = value.selection;
+      if (!selection.isCollapsed) {
+        final String selectedText = selection.textInside(value.text);
 
-                            if (!selection.isCollapsed) {
-                              final String selectedText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(
-                                  ClipboardData(text: selectedText));
-                              print("Copied value --> $selectedText");
-                            }
-                            editableTextState.hideToolbar(false);
-                          },
-                        ));
+        // Copy to clipboard
+        Clipboard.setData(ClipboardData(text: selectedText));
+        print("Copied value --> $selectedText");
+
+        // Clear the selection (move cursor to the end of selection)
+        editableTextState.userUpdateTextEditingValue(
+          value.copyWith(
+            selection: TextSelection.collapsed(offset: selection.end),
+          ),
+          SelectionChangedCause.toolbar,
+        );
+      }
+
+      editableTextState.hideToolbar(false);
+    },
+  ),
+);
+
+                        // buttonItems.add(ContextMenuButtonItem(
+                        //   label: 'Copy',
+                        //   onPressed: () {
+                        //     final TextEditingValue value =
+                        //         editableTextState.textEditingValue;
+                        //     final TextSelection selection = value.selection;
+
+                        //     if (!selection.isCollapsed) {
+                        //       final String selectedText =
+                        //           selection.textInside(value.text);
+                        //       Clipboard.setData(
+                        //           ClipboardData(text: selectedText));
+                        //       print("Copied value --> $selectedText");
+                        //     }
+                        //     editableTextState.hideToolbar(false);
+                        //   },
+                        // ));
                         if (!isAllTextSelected(
                             editableTextState.textEditingValue.selection,
                             editableTextState.textEditingValue.text)) {
@@ -461,7 +488,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           },
                         ));
                       }
-                      return AdaptiveTextSelectionToolbar.buttonItems(
+                      return  AdaptiveTextSelectionToolbar.buttonItems(
                         anchors: editableTextState.contextMenuAnchors,
                         buttonItems: buttonItems,
                       );
@@ -498,7 +525,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
-                _searchController.text.isNotEmpty
+                _searchController.text.isNotEmpty 
                     ? Container(
                         width: 40,
                         child: IconButton(
