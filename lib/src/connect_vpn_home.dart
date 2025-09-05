@@ -7,6 +7,7 @@ import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 // import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/no_internet_screen.dart';
@@ -57,6 +58,8 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
 
   bool isOpen = false;
   late OverlayEntry? overlayEntry;
+
+
 
 // void connect(){
 //   setState(() {
@@ -115,7 +118,27 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
     getExitNodeData();
     //WidgetsBinding.instance.addObserver(this);
     //getRandomExitData();
-    super.initState();
+    // super.initState();
+ 
+    // Delay to after the first frame
+  WidgetsBinding.instance.addPostFrameCallback((_) async{
+    final basicProvider = Provider.of<BasicProvider>(context, listen: false);
+    final vpnProvider = Provider.of<VpnStatusProvider>(context, listen: false);
+    final loadingProvider = Provider.of<LoadingtickValueProvider>(context, listen: false);
+    final isVpnPermit = await BelnetLib.isPrepared;
+    print('AUTOCONNECT VALUE ON LAUNCH --> ${basicProvider.autoConnect}');
+      print('IS VPN PERMISSION ENABLED ${isVpnPermit}');
+
+    if (basicProvider.autoConnect && BelnetLib.isConnected == false) {
+      if(isVpnPermit)
+      toggleBelnet(vpnProvider, loadingProvider);
+    }
+  });
+
+
+
+
+
   }
 
   Future<void> checkInternetConnection() async {
