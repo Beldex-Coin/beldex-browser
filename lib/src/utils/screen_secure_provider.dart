@@ -11,6 +11,16 @@ bool _scrnSecurity = true;
 
 bool get scrnSecurity => _scrnSecurity;
 
+bool _autoConnect = false;
+
+bool get autoConnect => _autoConnect;
+
+
+void updateAutoConnect(bool newValue){
+  _autoConnect = newValue;
+  notifyListeners();
+  saveAutoConnectToPrefs();
+}
 
 
 bool _adblock = true;
@@ -43,6 +53,9 @@ Future<void> loadFromPrefs()async{
   notifyListeners();
   _adblock = prefs.getBool('adblock') ?? true;
   notifyListeners();
+
+   _autoConnect = prefs.getBool('autoConnect') ?? false;
+  notifyListeners();
 }
 
 Future<void> saveToPrefs()async{
@@ -52,6 +65,11 @@ Future<void> saveToPrefs()async{
 
 }
 
+Future<void> saveAutoConnectToPrefs()async{
+  SharedPreferences prefs =  await SharedPreferences.getInstance();
+    await prefs.setBool('autoConnect', _autoConnect);
+
+}
 
 
 }

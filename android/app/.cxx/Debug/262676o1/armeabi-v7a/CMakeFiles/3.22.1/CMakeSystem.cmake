@@ -1,6 +1,6 @@
-set(CMAKE_HOST_SYSTEM "Linux-6.8.0-65-generic")
+set(CMAKE_HOST_SYSTEM "Linux-6.8.0-79-generic")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-65-generic")
+set(CMAKE_HOST_SYSTEM_VERSION "6.8.0-79-generic")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
 include("/home/guna/Android/Sdk/ndk/28.1.13356709/build/cmake/android.toolchain.cmake")
