@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
@@ -9,8 +10,14 @@ import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+//import 'package:beldex_browser/src/browser/pages/reading_mode/lang_provider.dart';
+import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
+//import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
+//import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/translation_provider.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -194,7 +201,12 @@ void main() async {
          ),
                   ChangeNotifierProvider(create: (context) => VpnStatusNotifier()
          ),
-
+         ChangeNotifierProvider(create: (_) => TtsProvider()), // Provide audio state
+        // ChangeNotifierProvider(create: (_)=> TranslationProvider()),
+         //ChangeNotifierProvider(create: (_)=> LanguageProvider()),
+         //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
+         //ChangeNotifierProvider(create: (_)=> TextToSpeechProvider('')),
+         ChangeNotifierProvider(create: (_)=> ReaderProvider(''))
         
       ],
       child:
