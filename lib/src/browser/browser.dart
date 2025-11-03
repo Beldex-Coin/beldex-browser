@@ -9,10 +9,12 @@ import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
@@ -45,6 +47,9 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
   late Connectivity _connectivity;
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+
+
+  SpeechController speechController = SpeechController();
 
   String? _sharedUrl;
   StreamSubscription? _intentDataStreamSubscription;
@@ -343,6 +348,7 @@ void closeTabListPage(){
           final aiModelProvider = Provider.of<AIModelProvider>(context,listen: false);
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
+          final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
     return WillPopScope(
         onWillPop: () async {
      
@@ -356,6 +362,12 @@ void closeTabListPage(){
 
       if(vpnStatusProvider.showFAB){
         vpnStatusProvider.updateFAB(false);
+      }
+      if(ttsProvider.canTTSDisplay){
+        ttsProvider.updateTTSDisplayStatus(false);
+      }
+      if(speechController.isListening){
+        speechController.stopSpeech();
       }
 
 if (vpnStatusProvider.canShowHomeScreen == true) {
@@ -688,6 +700,8 @@ String currentUrl = '';
     var webviewController = webviewmodel?.webViewController;
     final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+        final ttsProvider = Provider.of<TtsProvider>(context);
+
     return WillPopScope(
         onWillPop: () async {
           browserModel.showTabScroller = false;
@@ -788,6 +802,7 @@ String currentUrl = '';
               onTap: (index) async {
                 vpnStatusProvider.updateFAB(false);
                 browserModel.showTabScroller = false;
+                // ttsProvider.updateTTSDisplayStatus(false);
                 browserModel.showTab(index);
                await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString())));
                // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
