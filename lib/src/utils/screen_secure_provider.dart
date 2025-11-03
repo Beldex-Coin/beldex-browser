@@ -16,6 +16,17 @@ bool _autoConnect = false;
 bool get autoConnect => _autoConnect;
 
 
+bool _autoSuggest = false;
+
+bool get autoSuggest => _autoSuggest;
+
+void updateAutoSuggest(bool value){
+  _autoSuggest = value;
+  notifyListeners();
+  saveAutoSuggestToPrefs();
+}
+
+
 void updateAutoConnect(bool newValue){
   _autoConnect = newValue;
   notifyListeners();
@@ -50,11 +61,13 @@ Future<void> loadFromPrefs()async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   _scrnSecurity = prefs.getBool('scrnSecurity') ?? true;
    print('screenSecurity2-----> $_scrnSecurity');
-  notifyListeners();
+  //notifyListeners();
   _adblock = prefs.getBool('adblock') ?? true;
-  notifyListeners();
+  //notifyListeners();
 
    _autoConnect = prefs.getBool('autoConnect') ?? false;
+ // notifyListeners();
+  _autoSuggest = prefs.getBool('autoSuggest') ?? false;
   notifyListeners();
 }
 
@@ -68,6 +81,14 @@ Future<void> saveToPrefs()async{
 Future<void> saveAutoConnectToPrefs()async{
   SharedPreferences prefs =  await SharedPreferences.getInstance();
     await prefs.setBool('autoConnect', _autoConnect);
+
+}
+
+
+Future<void> saveAutoSuggestToPrefs()async{
+  print('screenSecurity1-----> $_scrnSecurity');
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('autoSuggest', _autoSuggest);
 
 }
 
