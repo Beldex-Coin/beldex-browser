@@ -1807,6 +1807,28 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                       ]),
                     ),
                   );
+                case PopupMenuActions.REPORT_AN_ISSUE:
+                  return CustomPopupMenuItem<String>(
+                    enabled: true,
+                    value: choice,
+                    height: 35,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(children: [
+                        SvgPicture.asset('assets/images/ai-icons/report_issue.svg',
+                            color: themeProvider.darkTheme
+                                ?const Color(0xffFFFFFF)
+                                : const Color(0xff282836)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: TextWidget(
+                           text: choice,
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+                      ]),
+                    ),
+                  );
                 case PopupMenuActions.QUIT_VPN:
                   return CustomPopupMenuItem<String>(
                       enabled: true,
@@ -2290,6 +2312,32 @@ Future<Map<String, dynamic>?> extractReadableContent(
       webViewModel: WebViewModel(url: url, isIncognitoMode: true, settings: webViewModel.settings),
     ));
   }
+
+
+  void reportIssue() async {
+    if(_isReporting) return;
+
+    setState(() {
+      
+    });
+    _isReporting = true;
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: 'support@beldex.io', // 
+    query: Uri.encodeFull('subject=Feedback Report: Beldex Browser_Android&body='),
+  );
+
+  if (await canLaunchUrl(emailUri)) {
+    await launchUrl(emailUri);
+  // setState(() {}); _isReporting = false;
+  } else {
+  // setState(() { }); _isReporting = false;
+    // Optionally, handle the error if no email app is available
+    print('Could not launch email app');
+  }
+  _isReporting = false;
+}
+
 
   void showFavorites() async {
     await showDialog<void>(

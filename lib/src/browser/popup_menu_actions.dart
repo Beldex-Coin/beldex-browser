@@ -36,15 +36,22 @@ class PopupMenuActions {
   
   static const String DOWNLOADS ="Downloads"; 
 
+
+static const String REPORT_AN_ISSUE = "Report an Issue";
+
+    //static const String READING_MODE = 'Reading mode';
+
+
   static const List<String> choices = <String>[
     NEW_TAB,
     //NEW_INCOGNITO_TAB,
     FAVORITES,
+    //READING_MODE,
     // HISTORY,
     BELNET,
+    BELDEX_AI,
     SHARE,
     DIVIDER,
-    BELDEX_AI,
     WEB_ARCHIVES,
     FIND_ON_PAGE,
     DOWNLOADS,
@@ -52,6 +59,7 @@ class PopupMenuActions {
     DIVIDER,
     SETTINGS,
     DARKMODE,
+    REPORT_AN_ISSUE,
     ABOUT,
     QUIT_VPN
     // DEVELOPERS,
