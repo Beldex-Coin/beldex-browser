@@ -43,18 +43,19 @@ final List<Map<String, String>> items = [
     {'image': 'assets/images/browser.svg', 
      'label': 'Beldex Browser.bdx',
      'link': 'http://browser.bdx/'},
+     {'image': 'assets/images/BNS.svg',
+     'label': 'bns.bdx', 
+     'link': 'http://bns.bdx/',
+    //  'darkImage': 'assets/images/bridge_dark.svg',
+    //  'lightImage': 'assets/images/bridge_wht_theme.svg',
+     },
     {'image': 'assets/images/explorer_dark.svg', 
      'label': 'Beldex explorer.bdx',
      'link': 'http://explorer.bdx/',
      'darkImage': 'assets/images/explorer_dark.svg',
      'lightImage': 'assets/images/explorer_wht_theme.svg',
      },
-    {'image': 'assets/images/bridge_dark.svg',
-     'label': 'Beldex Bridge.bdx', 
-     'link': 'http://bridge.bdx/',
-     'darkImage': 'assets/images/bridge_dark.svg',
-     'lightImage': 'assets/images/bridge_wht_theme.svg',
-     },
+    
   ];
 
 
