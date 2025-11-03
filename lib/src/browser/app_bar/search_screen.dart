@@ -13,14 +13,20 @@ import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart'
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+//import 'package:searchfield/searchfield.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -237,6 +243,331 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
+
+
+
+
+
+//   Future<void> fetchSuggestions(String query) async {
+//      print('ERROR TEXT RESPONSE AUTOCOMPLETE CALLING---');
+//   if (query.isEmpty) {
+//     setState(() => _suggestions = []);
+//     return;
+//   }
+
+//   try {
+//     final response = await _dio.get(
+//       'http://suggestqueries.google.com/complete/search',
+//       queryParameters: {
+//         'client': 'firefox',
+//         'q': query,
+//       },
+//       options: Options(responseType: ResponseType.json), //  ensure JSON
+//     );
+//      print('ERROR TEXT RESPONSE AUTOCOMPLETE ${response.statusCode} --- ${response.data}');
+//     if (response.statusCode == 200) {
+//   final data = jsonDecode(response.data); //  convert to List
+//   if (data is List && data.length > 1 && data[1] is List) {
+//     final List<dynamic> suggestionsList = data[1];
+//     setState(() {
+//       _suggestions = suggestionsList
+//           .map((item) => SearchFieldListItem<String>(
+//                 item.toString(),
+//                 item: item.toString(),
+//               ))
+//           .toList();
+//     });
+//   }}
+//   } catch (e) {
+//     debugPrint("Error fetching suggestions: $e");
+//   }
+// }
+
+
+
+
+
+
+// final List<String> allSuggestions = [
+//     "google.com",
+//     "github.com",
+//     "flutter.dev",
+//     "stackoverflow.com",
+//     "openai.com"
+//   ];
+String _currentQuery = "";
+
+  List<String> filteredSuggestions = [];
+
+
+  // Future<void> _filterSuggestions(String query) async {
+  //    _currentQuery = query;
+
+  //  if (query.isEmpty) {
+  //   print('The User Message Contains url 33 $query');
+  //     setState(() => filteredSuggestions = []);
+  //     return;
+  //   }
+
+  //   //setState(() => _isLoading = true);
+
+  //   try {
+  //     final response = await _dio.get(
+  //       'http://suggestqueries.google.com/complete/search',
+  //       queryParameters: {
+  //         'client': 'firefox',
+  //         'q': query,
+  //       },
+  //       options: Options(responseType: ResponseType.plain), // force plain text
+  //     );
+
+  //     // Parse manually
+  //     final List<dynamic> data = jsonDecode(response.data);
+  //     final List<String> suggestions = List<String>.from(data[1]);
+
+  //     setState(() {
+  //       filteredSuggestions = suggestions;
+  //     });
+  //     print('The User Message Contains url 44 ${suggestions.length} ${filteredSuggestions.length}');
+  //   } catch (e) {
+  //     print("Error fetching suggestions: $e");
+  //     setState(() => filteredSuggestions = []);
+  //   } finally {
+  //     //setState(() => _isLoading = false);
+  //   }
+  // }
+Future<void> _filterSuggestions(String query) async {
+  _currentQuery = query;
+
+  if (query.isEmpty) {
+    print('The User Message Contains url 33 $query');
+    setState(() => filteredSuggestions = []);
+    return;
+  }
+
+  try {
+    final response = await _dio.get(
+      'http://suggestqueries.google.com/complete/search',
+      queryParameters: {
+        'client': 'firefox',
+        'q': query,
+      },
+      options: Options(responseType: ResponseType.bytes), // get raw bytes
+    );
+
+    // Decode response as UTF-8 manually
+    final decoded = utf8.decode(response.data);
+    final List<dynamic> data = jsonDecode(decoded);
+    final List<String> suggestions = List<String>.from(data[1]);
+
+    setState(() {
+      filteredSuggestions = suggestions;
+    });
+
+    print('The User Message Contains url 44 ${suggestions.length} ${filteredSuggestions.length}');
+  } catch (e) {
+    print("Error fetching suggestions: $e");
+    setState(() => filteredSuggestions = []);
+  }
+}
+
+  // void _filterSuggestions(String input) {
+  //   setState(() {
+  //     if (input.isEmpty) {
+  //       filteredSuggestions = [];
+  //     } else {
+  //       filteredSuggestions = allSuggestions
+  //           .where((s) => s.toLowerCase().contains(input.toLowerCase()))
+  //           .toList();
+  //     }
+  //   });
+  // }
+
+
+//  void _openVoiceDialog() {
+//     showVoiceDialog(
+//       context,Provider.of<DarkThemeProvider>(context,listen: false),
+//       onResult: (recognizedText) {
+//         _searchController.text = recognizedText; // update controller
+//         setState(() {
+//           canShowSearchAI = _searchController.text;
+//         });
+//       },
+//     );
+//   }
+
+void _openVoiceDialog() async {
+  var status = await Permission.microphone.status;
+
+  if (status.isDenied) {
+    status = await Permission.microphone.request();
+    print('STATUS MICROPHONE ___> $status');
+  }
+
+  if (status.isPermanentlyDenied) {
+    // User selected "Don't ask again"
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Microphone Permission Required"),
+        content: const Text(
+          "You have permanently denied microphone access. "
+          "Please enable it in app settings to use voice search.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("Cancel",style: TextStyle(color: Colors.blue),),
+          ),
+          TextButton(
+            onPressed: () {
+              openAppSettings(); // from permission_handler
+              Navigator.pop(ctx);
+            },
+            child: const Text("Open Settings",style: TextStyle(color: Colors.green),),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
+
+  if (status.isGranted) {
+    print('STATUS MICROPHONE granted -> $status');
+  showVoiceDialog(
+  context,
+  Provider.of<DarkThemeProvider>(context, listen: false),
+  Provider.of<TtsProvider>(context,listen: false),
+  onResult: (recognizedText) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      // Update the controller safely
+      _searchController.text = recognizedText;
+
+      // Update the state safely
+      setState(() {
+        canShowSearchAI = _searchController.text;
+      });
+    });
+  },
+);
+
+  }
+}
+
+
+Future<void> _openQRScanner() async {
+  final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
+  var status = await Permission.camera.status;
+  if(status.isDenied){
+    setState(() {
+      
+    });
+    status = await Permission.camera.request();
+  }
+  if (status.isGranted) {
+    // final scannedValue = await Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => const QRScannerScreen()),
+    // );
+
+final scannedValue = await showDialog<String>(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+        insetPadding: const EdgeInsets.all(16),
+        child: Container(
+          height: 450,
+          padding: EdgeInsets.all(14),
+          //color: Color(0xff282836),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top:3,bottom: 8),//only(left:12,right:12),
+                margin: EdgeInsets.only(bottom: 5),
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                 // color: Colors.blue,
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline:TextBaseline.ideographic,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: Colors.transparent,)),
+                      Text("Scan QR",
+                          style: TextStyle( fontSize: 20,fontFamily: 'Poppins',fontWeight: FontWeight.w600)),
+                      
+                      
+                      GestureDetector(
+                       onTap: () {
+                          MobileScannerController().stop();
+                          Navigator.pop(context);
+                        } , // no v
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom:8,top: 5 ),
+                          child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black, height: 18,)),
+                      ),
+                      // IconButton(
+                      //   icon: const Icon(Icons.close,),
+                      //   onPressed: () {
+                      //     MobileScannerController().stop();
+                      //     Navigator.pop(context);
+                      //   } , // no value
+                      // ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: MobileScanner(
+                    fit: BoxFit.cover,
+                    onDetect: (capture) {
+                      final barcode = capture.barcodes.first;
+                      final code = barcode.rawValue;
+                      if (code != null) {
+                        Navigator.pop(context, code); // return value
+                      }
+                    },
+                  ),
+                ),
+              ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              child: Center(child: Text('Align the QR code in the\ncenter of frame',textAlign: TextAlign.center ,style: TextStyle(fontSize: 16,fontFamily: 'Poppins'),)))
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+    if (scannedValue != null) {
+      setState(() { _searchController.text = scannedValue;
+       canShowSearchAI = '';// _searchController.text;
+      });
+    }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Camera permission denied")),
+    );
+  }
+}
+
+
+
+
+
+
   @override
   void dispose() {
     SearchScreen.isActive = false;
@@ -248,12 +579,15 @@ class _SearchScreenState extends State<SearchScreen> {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     // var webViewModel = Provider.of<WebViewModel>(context, listen: true);
     // print('this is the favIcons list is ${widget.favIcons}');
+    final basicProvider = Provider.of<BasicProvider>(context,listen: false);
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
     final theme = Theme.of(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
      final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
+     final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: Container(
@@ -266,7 +600,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     ? const Color(0xff282836)
                     : const Color(0xffF3F3F3),
                 borderRadius: BorderRadius.circular(8)),
-            child: Row(
+            child: 
+            Row(
               children: [
 
                 // SearchSettingsPopupList(
@@ -329,6 +664,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         // widget.webViewController!.getTitle();
                       }
                       vpnStatusProvider.updateCanShowHomeScreen(false);
+                      ttsProvider.updateTTSDisplayStatus(false);
                       Future.delayed(Duration(milliseconds: duration), () {
                         Navigator.pop(context, url);
                       });
@@ -367,11 +703,17 @@ class _SearchScreenState extends State<SearchScreen> {
                                   print(
                                       'text --> $text\n selection --> $selection\n newtext --> $newText');
                                   _searchController.text = newText;
-                                  if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                  if(_searchController.text.trim().isEmpty){
                                     print("The User Message Contains Url 1");
                                   canShowSearchAI= '';
-                                    }else
+                                    }else if(containsUrl(_searchController.text)){
+                                      canShowSearchAI = '';
+                                      _filterSuggestions(_searchController.text);
+                                    }
+                                    else{
                                       canShowSearchAI= _searchController.text;
+                                      _filterSuggestions(_searchController.text);
+                                    }
                          // print('BELDEX AI ---------> $canShowSearchAI');
         
                                   //canShowSearchAI = _searchController.text;
@@ -500,6 +842,19 @@ class _SearchScreenState extends State<SearchScreen> {
                                 print(
                                     'text --> $text\n selection --> $selection\n newtext --> $newText');
                                 _searchController.text = newText;
+
+                                 if(_searchController.text.trim().isEmpty){
+                                    print("The User Message Contains Url 1");
+                                  canShowSearchAI= '';
+                                    }else if(containsUrl(_searchController.text)){
+                                      canShowSearchAI = '';
+                                      _filterSuggestions(_searchController.text);
+                                    }else{
+                                      canShowSearchAI= _searchController.text;
+                                      _filterSuggestions(_searchController.text);
+                                    }
+
+
                                 final newSelection = TextSelection.collapsed(
                                   offset: selection.start + value.text!.length,
                                 );
@@ -516,10 +871,13 @@ class _SearchScreenState extends State<SearchScreen> {
                       );
                     },
                     onChanged: (value) {
+                      _filterSuggestions(value);
                        setState(() {
                         if(containsUrl(_searchController.text) || _searchController.text.trim().isEmpty){
-                          print("The User Message Contains url 22");
                           canShowSearchAI= '';
+                          filteredSuggestions = [];
+                          print("The User Message Contains url 22 ${filteredSuggestions.length}");
+
                         }else
                           canShowSearchAI= _searchController.text;
                          // print('BELDEX AI ---------> $canShowSearchAI');
@@ -543,10 +901,72 @@ class _SearchScreenState extends State<SearchScreen> {
                         hintStyle: TextStyle(
                             color: const Color(0xff6D6D81),
                             fontSize: 14.0,
-                            fontWeight: FontWeight.normal)),
+                            fontWeight: FontWeight.normal),
+                            // suffix:  Visibility(
+                            //   visible: _searchController.text.trim().isEmpty, 
+                            //   child: Container(
+                            //     //color: Colors.green,
+                            //     width: 55,
+                            //     child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.end,
+                            //       // crossAxisAlignment: CrossAxisAlignment.baseline,
+                            //       // textBaseline: TextBaseline.alphabetic,
+                            //       children: [
+                            //         Padding(
+                            //           padding: const EdgeInsets.only(top:5.0), // added
+                            //           child: GestureDetector(
+                            //             onTap: _openQRScanner,
+                                        
+                            //             child: SvgPicture.asset('assets/images/ai-icons/qr_reader.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                            //         ),
+                            //           SizedBox(width: 9,),
+                            //         Padding(
+                            //            padding: const EdgeInsets.only(top:5.0), //added
+                            //           child: GestureDetector(
+                            //             onTap:_openVoiceDialog,
+                            //             // (){
+                            //             //   print('SpeechToText clciked');
+                            //             //   print('SpeechTo Text calling value ${_speechToText.isNotListening} ${_speechToText.isListening}');
+                            //             //   _speechToText.isNotListening ? _startListening() : _stopListening();
+                            //             //   },
+                            //             child: SvgPicture.asset('assets/images/ai-icons/Microphone 1.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )
+                            ),
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
+                Visibility(
+                              visible: _searchController.text.trim().isEmpty, 
+                              child: Container(
+                                margin: EdgeInsets.only(right: 8),
+                                //color: Colors.green,
+                                width: 55,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  // crossAxisAlignment: CrossAxisAlignment.baseline,
+                                  // textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: _openQRScanner,
+                                      
+                                      child: SvgPicture.asset('assets/images/ai-icons/qr_reader.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                                      SizedBox(width: 9,),
+                                    GestureDetector(
+                                      onTap:_openVoiceDialog,
+                                      // (){
+                                      //   print('SpeechToText clciked');
+                                      //   print('SpeechTo Text calling value ${_speechToText.isNotListening} ${_speechToText.isListening}');
+                                      //   _speechToText.isNotListening ? _startListening() : _stopListening();
+                                      //   },
+                                      child: SvgPicture.asset('assets/images/ai-icons/Microphone 1.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                                  ],
+                                ),
+                              ),
+                            ),
                 _searchController.text.isNotEmpty 
                     ? Container(
                         width: 40,
@@ -560,6 +980,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               if (_searchController.text.isNotEmpty) {
                                 editableState.hideToolbar(true);
                               }
+                              filteredSuggestions = [];
                               _searchController.text = '';
                               buttonItems.clear();
                               canShowSearchAI = '';
@@ -572,9 +993,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ),),
       body: Column(
         children: [
-          widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen
+         // if( (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) && filteredSuggestions.isEmpty)...[
+
+          (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) || filteredSuggestions.isNotEmpty
               ? Container()
-              : Container(
+              : 
+              Container(
                   height: 55,
                   width: double.infinity,
                   margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -721,6 +1145,145 @@ class _SearchScreenState extends State<SearchScreen> {
                     ],
                   ),
                 ),
+         // ],
+
+if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty && basicProvider.autoSuggest ) ...[
+              const SizedBox(height: 4),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color:themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
+                ),
+                padding: EdgeInsets.only(bottom: 5),
+                margin: EdgeInsets.only(left:10,right:10,bottom: 10),
+                constraints: BoxConstraints(
+                  maxHeight: 200, // limit max height
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredSuggestions.length,
+                  itemBuilder: (context, index) {
+                    final suggestion = filteredSuggestions[index];
+                
+                    final queryLower = _currentQuery.toLowerCase();
+                    final suggestionLower = suggestion.toLowerCase();
+                
+                    final matchIndex = suggestionLower.indexOf(queryLower);
+                
+                    InlineSpan textSpan;
+                    if (matchIndex != -1 && _currentQuery.isNotEmpty) {
+                      textSpan = TextSpan(
+                        children: [
+                          TextSpan(
+                            text: suggestion.substring(0, matchIndex),
+                            style: TextStyle(
+                              color: themeProvider.darkTheme ? Colors.white : Colors.black,
+                            ),
+                          ),
+                          TextSpan(
+                            text: suggestion.substring(matchIndex, matchIndex + _currentQuery.length),
+                            style:  TextStyle(
+                              color: themeProvider.darkTheme ? Colors.white : Colors.black, //Colors.blue, // highlight color
+                             // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: suggestion.substring(matchIndex + _currentQuery.length),
+                            style: TextStyle(
+                              color: themeProvider.darkTheme ? Colors.white.withOpacity(0.5) : Color(0xff333333).withOpacity(0.5),
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      textSpan = TextSpan(
+                        text: suggestion,
+                        style: TextStyle(
+                          color: themeProvider.darkTheme ? Colors.white : Colors.black,
+                        ),
+                      );
+                    }
+                
+                    return GestureDetector(
+                      onTap: () async {
+                        // handle tap
+                String trimmedValue = suggestion.trim();
+                    if(trimmedValue.isNotEmpty){
+                      var url = WebUri(formatUrl(suggestion.trim()));
+                     if (!url.scheme.startsWith("http") &&
+                         !Util.isLocalizedContent(url)) {
+                       url = WebUri(
+                           widget.settings.searchEngine.searchUrl + suggestion);
+                     }
+                     //Navigator.pop(context, url);
+                     // browserModel.updateIsNewTab(false);
+                     if (widget.webViewController != null) {
+                       widget.webViewController!
+                           .loadUrl(urlRequest: URLRequest(url: url));
+                     } else {
+                       if (mounted) setState(() {});
+                       print('comes inside new tab');
+                       //  browserModel.updateIsNewTab(false);
+                       addNewTab(url: url);
+                       widget.webViewModel.url = url;
+                
+                       // widget.webViewController!.getTitle();
+                     }
+                     //filteredSuggestions = [];
+                     vpnStatusProvider.updateCanShowHomeScreen(false);
+                     Future.delayed(Duration(milliseconds: duration), () {
+                       Navigator.pop(context, url);
+                     });
+                    }
+                
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(13.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: themeProvider.darkTheme
+                 ? SvgPicture.asset('assets/images/ai-icons/Search_suggestion.svg')
+                 : SvgPicture.asset('assets/images/ai-icons/Search_suggestions_wht.svg'),
+                            ),
+                            Expanded(
+                              child: RichText(
+                                text: textSpan,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                setState(() {
+                                  _searchController.text = suggestion;
+                                  if(containsUrl(suggestion)){
+                                    canShowSearchAI = '';
+                                  }else{
+                                    canShowSearchAI= suggestion;
+                                  }
+                                });
+                              },
+                              child: SizedBox(
+                                child:  themeProvider.darkTheme
+                                  ? SvgPicture.asset('assets/images/ai-icons/arrow_suggestion.svg')
+                                  : SvgPicture.asset('assets/images/ai-icons/arrow_suggestions_wht.svg'),
+                              ),
+                            )
+                           
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+
+
+
 
               canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  GestureDetector(
                 onTap: ()async{
@@ -748,9 +1311,10 @@ class _SearchScreenState extends State<SearchScreen> {
   margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
   decoration: BoxDecoration(
-    border: Border.all(
-      color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
-    ),
+    color:  themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
+    // border: Border.all(
+    //   color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+    // ),
     borderRadius: BorderRadius.circular(8),
   ),
   child: Row(
