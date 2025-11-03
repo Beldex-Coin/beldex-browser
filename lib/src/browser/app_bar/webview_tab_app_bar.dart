@@ -6,7 +6,7 @@ import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
-import 'package:beldex_browser/src/browser/app_bar/content_translate_page.dart';
+//import 'package:beldex_browser/src/browser/app_bar/content_translate_page.dart';
 import 'package:beldex_browser/src/browser/app_bar/reader_mode_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';

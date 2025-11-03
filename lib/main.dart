@@ -16,7 +16,7 @@ import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.da
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
-import 'package:beldex_browser/src/translation_provider.dart';
+//import 'package:beldex_browser/src/translation_provider.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
