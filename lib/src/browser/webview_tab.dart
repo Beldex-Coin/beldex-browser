@@ -8,6 +8,7 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
@@ -25,6 +26,7 @@ import 'javascript_console_result.dart';
 import 'long_press_alert_dialog.dart';
 import 'models/browser_model.dart';
 
+import 'package:flutter/services.dart' show rootBundle;
 final webViewTabStateKey = GlobalKey<_WebViewTabState>();
 
 class WebViewTab extends StatefulWidget {
@@ -95,6 +97,30 @@ setAdBlocker() async {
 
     _findInteractionController = FindInteractionController();
   }
+
+
+
+
+Future<void> injectReadability(InAppWebViewController controller) async {
+  String readabilityJs = await rootBundle.loadString("assets/readability.js");
+  await controller.evaluateJavascript(source: readabilityJs);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @override
   void dispose() {
@@ -214,6 +240,8 @@ bool _isValidUrl(String url) {
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
         final basicProvider = Provider.of<BasicProvider>(context);
+    final ttsProvider = Provider.of<TtsProvider>(context);
+
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -385,7 +413,7 @@ bool _isValidUrl(String url) {
         }catch(e){
           print(e);
         }
-
+      await injectReadability(controller);
 
 if(basicProvider.adblock){
 await _webViewController!.evaluateJavascript(source: """

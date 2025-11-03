@@ -6,6 +6,8 @@ import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
+import 'package:beldex_browser/src/browser/app_bar/content_translate_page.dart';
+import 'package:beldex_browser/src/browser/app_bar/reader_mode_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -19,12 +21,15 @@ import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/developers/main.dart';
 import 'package:beldex_browser/src/browser/pages/download_page.dart';
+import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
+import 'package:beldex_browser/src/browser/pages/reading_mode/reader_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/dynamic_text_size_widget.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
@@ -42,12 +47,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 //import 'package:share_extend/share_extend.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../custom_popup_dialog.dart';
 import '../custom_popup_menu_item.dart';
 import '../popup_menu_actions.dart';
@@ -91,6 +98,13 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
 
   late List<ContextMenuButtonItem> buttonItems = [];
   late EditableTextState editableState;
+
+
+   final FlutterTts flutterTts = FlutterTts();
+
+    bool _isReporting = false;
+//  final TextEditingController _textController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -109,6 +123,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     });
     Provider.of<SelectedItemsProvider>(context, listen: false)
         .initSharedPreferences();
+           // _configureTts(context);
     //  loadSearchShortcutListItems();
   }
 
@@ -435,6 +450,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = webViewModel.webViewController;
+    final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
     return PreferredSize(
         preferredSize: Size.fromHeight(150),
         child: LayoutBuilder(builder: (context, constraints) {
@@ -466,6 +482,8 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                           vpnStatusProvider.updateCanShowHomeScreen(true);
                           await webViewController?.stopLoading();
                           vpnStatusProvider.updateFAB(false);
+                         ttsProvider.updateTTSDisplayStatus(false);
+
                   //            await webViewController?.evaluateJavascript(
                   // source: "document.activeElement.blur();");
                         if (await webViewController?.getSelectedText() != null) {
@@ -594,9 +612,10 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                     ),
                   ),
                   Container(
-                    width: webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false 
+                    width: webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false && ttsProvider.canTTSDisplay == false
                         ? constraint.maxWidth / 2
-                        : constraint.maxWidth / 1.8,
+                       : ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 2.1 
+                          : constraint.maxWidth / 1.8,
                     child: GestureDetector(
                       onTap: () async {
                         if (webViewController != null) {
@@ -710,10 +729,42 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                     ),
                   ),
                   Container(
-                    width: constraint.maxWidth / 4.1,
+                    width: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 3.8 : constraint.maxWidth / 4.1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Visibility(
+                          visible: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty,
+                          child: GestureDetector(
+                            onTap: ()async{
+                              final article = await extractReadableContent(webViewController);
+                           hideSelectionMenu(webViewController!);
+if (article != null) {
+   showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return ChangeNotifierProvider(
+      create: (context) => ReaderProvider(
+        (article['title'] != null && article['title'].toString().isNotEmpty)
+                                      ? '<h2>${article['title']}</h2>${article['content'] ?? article['textContent'] ?? ""}'
+                                      : article['content'] ?? article['textContent'] ?? ""
+       
+        ),
+      
+         child: SpeechHtmlScreen(article: article,)
+      
+     ); //TtsHtmlScreen(article: article,); //ReadingModeScreen(article: article,); //DraggableAISheet();
+          //return BeldexAiScreen();
+     });
+} else {
+  debugPrint("No article extracted");
+}
+
+                            },
+                            child: themeProvider.darkTheme ?  SvgPicture.asset('assets/images/ai-icons/reading_mode.svg') : SvgPicture.asset('assets/images/ai-icons/Reading_mode_wht.svg')) ),
+                      
                         tabList(themeProvider,theme),
                         // SearchSettingsPopupList(browserModel: browserModel, browserSettings: settings,),
                          VerticalDivider(
@@ -981,7 +1032,14 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
 
  bool checkCanGoforward = false;
 
-
+   hideSelectionMenu(InAppWebViewController webViewController)async{
+    await webViewController?.evaluateJavascript(
+                  source: "document.activeElement.blur();");
+              if (await webViewController?.getSelectedText() != null) {
+                await webViewController?.evaluateJavascript(
+                    source: "window.getSelection().removeAllRanges();");
+              }
+   }
 
   void hideFooter(InAppWebViewController? webViewController) {
     print('THE WEB MODEL FROM ----');
@@ -1023,6 +1081,8 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
     var webViewController = webViewModel.webViewController;
     final width = MediaQuery.of(context).size.width;
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen:true);
+        final ttsProvider = Provider.of<TtsProvider>(context);
+
     return Container(
       //color: Colors.yellow,
       width: 33,
@@ -1423,7 +1483,45 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           ]),
                     ),
                   );
-
+                // case PopupMenuActions.READING_MODE:
+                //   return CustomPopupMenuItem<String>(
+                //     enabled: ttsProvider.canTTSDisplay,
+                //     value: choice,
+                //     height: 35,
+                //     child: Padding(
+                //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                //       child: Row(
+                //           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Icon(Icons.record_voice_over,size: 21,color: checkCanGoforward
+                //                       ? themeProvider.darkTheme
+                //                           ? const Color(0xffFFFFFF)
+                //                           : const Color(0xff282836)
+                //                       : Colors.grey.shade500,),
+                //             // SvgPicture.asset(
+                //             //     'assets/images/Favorites_white_theme.svg',
+                //             //     color: themeProvider.darkTheme
+                //             //         ? const Color(0xffFFFFFF)
+                //             //         : const Color(0xff282836)),
+                //             Padding(
+                //               padding:
+                //                   const EdgeInsets.symmetric(horizontal: 4.0),
+                //               child: TextWidget(
+                //                text: choice,
+                //                 style: theme.textTheme.bodySmall!.copyWith(color: ttsProvider.canTTSDisplay
+                //                       ? themeProvider.darkTheme
+                //                           ? const Color(0xffFFFFFF)
+                //                           : const Color(0xff282836)
+                //                       : Colors.grey.shade500),
+                //               ),
+                //             ),
+                //             // const Icon(
+                //             //   Icons.star,
+                //             //   color: Colors.yellow,
+                //             // )
+                //           ]),
+                //     ),
+                //   );
                 case PopupMenuActions.BELNET:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
@@ -1791,6 +1889,135 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
             builder: (BuildContext context) => SearchSettingsPage()));
   }
 
+// Future<String> extractContent(InAppWebViewController? webViewController) async {
+//   try {
+//     var result = await webViewController?.evaluateJavascript(source: """
+//       (() => {
+//         let bodyHtml = document.body.innerHTML || "";
+//         return bodyHtml.trim();
+//       })();
+//     """);
+
+//     if (result is String) {
+//       return result.trim();
+//     }
+//     return "";
+//   } catch (e) {
+//     debugPrint("Error extracting content: $e");
+//     return "";
+//   }
+// }
+
+
+// Last working readability.js           /////////////////////////// working one
+// Future<Map<String, dynamic>?> extractReadableContent(
+//     InAppWebViewController? controller) async {
+//   try {
+//     final result = await controller?.evaluateJavascript(source: """
+//       (() => {
+//         try {
+//           var doc = document.cloneNode(true);
+//           var reader = new Readability(doc);
+//           var article = reader.parse();
+//           return article ? JSON.stringify(article) : "";
+//         } catch (e) {
+//           return "";
+//         }
+//       })();
+//     """);
+
+//     if (result == null || result.isEmpty) return null;
+
+//     return Map<String, dynamic>.from(jsonDecode(result));
+//   } catch (e) {
+//     debugPrint("Error extracting readable content: $e");
+//     return null;
+//   }
+// }
+
+
+
+Future<Map<String, dynamic>?> extractReadableContent(
+    InAppWebViewController? controller) async {
+  try {
+    final result = await controller?.evaluateJavascript(source: """
+      (() => {
+        try {
+          // Clone and clean DOM
+          var doc = document.cloneNode(true);
+
+          // Remove scripts, templates, and AMP tags
+          doc.querySelectorAll('script, style, template, amp-analytics, amp-list, amp-ad, iframe, noscript').forEach(el => el.remove());
+
+          // Use Readability
+          var reader = new Readability(doc);
+          var article = reader.parse();
+
+          if (!article) return "";
+
+          // Sanitize HTML to remove any residual unwanted tags
+          var content = document.createElement('div');
+          content.innerHTML = article.content;
+          content.querySelectorAll('script, style, template, amp-analytics, amp-list, amp-ad, iframe, noscript').forEach(el => el.remove());
+
+          article.content = content.innerHTML.trim();
+
+          return JSON.stringify(article);
+        } catch (e) {
+          return "";
+        }
+      })();
+    """);
+
+    if (result == null || result.isEmpty) return null;
+
+    return Map<String, dynamic>.from(jsonDecode(result));
+  } catch (e) {
+    debugPrint("Error extracting readable content: $e");
+    return null;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Future<String> extractReadableContent(InAppWebViewController? controller) async {
+//   try {
+//     return 
+//     await controller?.evaluateJavascript(source: """
+//       (() => {
+//         try {
+//           let article = new Readability(document).parse();
+//           return article && article.content ? article.content : "";
+//         } catch(e) {
+//           return "";
+//         }
+//       })();
+//     """) ?? "";
+//   } catch (e) {
+//     debugPrint("Error extracting readable content: $e");
+//     return "";
+//   }
+// }
+
+
+
+
 
 
   void _popupMenuChoiceAction(String choice) async {
@@ -1867,7 +2094,9 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
       case PopupMenuActions.ABOUT:
         goToAbout();
         break;
-
+      case PopupMenuActions.REPORT_AN_ISSUE:
+        reportIssue();
+        break;
       case PopupMenuActions.DARKMODE:
         Future.delayed(const Duration(milliseconds: 1000), () {});
         //changetheme();
@@ -2403,7 +2632,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                       ),
                       Expanded(
                           child: listViewChildren.isEmpty
-                              ? Center(child: TextWidget(text:'No Web archives'))
+                              ? Center(child: TextWidget(text:'No Web Archives'))
                               : ListView(
                                   children: listViewChildren,
                                 ))
