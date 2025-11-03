@@ -9,6 +9,7 @@ import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
@@ -23,6 +24,15 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+bool isSearchScreenActive(BuildContext context) {
+  return ModalRoute.of(context)?.settings.arguments is SearchScreen;
+}
+
+
+
+
+
 
 String formatUrl(String url) {
   if (kDebugMode) {
@@ -59,6 +69,7 @@ class SearchScreen extends StatefulWidget {
   final dynamic webViewController;
   final WebViewModel webViewModel;
   final Function(WebUri url)? addNewTab;
+  static bool isActive = false;
   SearchScreen({
     super.key,
     required this.controller,
@@ -84,9 +95,19 @@ class _SearchScreenState extends State<SearchScreen> {
   late EditableTextState editableState = EditableTextState();
   late int duration;
   String canShowSearchAI = '';
+
+
+
+
+   final Dio _dio = Dio();
+  //List<SearchFieldListItem<String>> _suggestions = [];
+
+
+
   @override
   void initState() {
     super.initState();
+    SearchScreen.isActive = true;
     getDataForIconsAndTitle();
     setDuration(context);
     //loadSearchShortcutListItems();
@@ -218,6 +239,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    SearchScreen.isActive = false;
     super.dispose();
   }
 
