@@ -37,4 +37,25 @@ Future<List<ExitNodeDataList>> getListData() async {
 
 
 
+
+Future<List<ExitNodeDataList>> getExitnodeInfoListData() async {
+    var response = await http.get(Uri.parse(
+      'https://belnet-exitnode.s3.ap-south-1.amazonaws.com/exitnode-bns-list/exitnode_info_list.json'));
+    try {
+      //response 
+      if (response.statusCode == 200) {
+        print(response.body);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return exitNodeDataListFromJson(response.body);
+  }
+
+
+
+
+
+
+
 }
