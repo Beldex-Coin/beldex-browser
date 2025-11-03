@@ -150,6 +150,7 @@ flutter:
     - assets/icon/
     - assets/images/flags/
     - assets/images/ai-icons/
+    - assets/readability.js
     # - assets/images/Belnet_Text_White.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
