@@ -7,9 +7,20 @@ class DarkThemeProvider with ChangeNotifier {
 
   bool get darkTheme => _darkTheme;
 
+
   set darkTheme(bool value) {
     _darkTheme = value;
     darkThemePreference.setDarkTheme(value);
     notifyListeners();
   }
+
+ bool _readerDarkTheme = true;
+
+ bool get readerDarkTheme => _readerDarkTheme;
+
+ set readerDarkTheme(bool value){
+  _readerDarkTheme = value;
+  notifyListeners();
+ }
+
 }

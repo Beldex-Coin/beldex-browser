@@ -192,8 +192,46 @@ void updateAIResponse(String aiText)async{
 }
 
 
+// Zoom contoller for readingmode content
+
+double _fontSize = 16;
+
+double get fontSize => _fontSize;
+
+void updateReaderContentFontSize(double value){
+  _fontSize = value;
+  notifyListeners();
+}
 
 
+bool _changeReaderMenu = false;
+
+bool get changeReaderMenu => _changeReaderMenu;
+
+void updateReaderMenu(bool value){
+  _changeReaderMenu = value;
+  notifyListeners();
+}
+
+
+
+bool _isTTSDisabled = false;
+
+bool get isTTSDisabled => _isTTSDisabled;
+
+void setTTSStatus(bool value){
+  _isTTSDisabled = value;
+  notifyListeners();
+}
+
+bool _isNoInternet = false;
+
+bool get isNoInternet => _isNoInternet;
+
+void setInternetStatus(bool value){
+ _isNoInternet = value;
+ notifyListeners();
+}
 
   }
 

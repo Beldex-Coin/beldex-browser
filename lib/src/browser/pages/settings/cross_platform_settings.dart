@@ -997,7 +997,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
           ),
         ),
       ),
-
+      
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 13.0),
         child: InkWell(

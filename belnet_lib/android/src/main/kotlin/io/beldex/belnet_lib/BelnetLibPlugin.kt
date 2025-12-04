@@ -36,6 +36,33 @@ import android.content.ServiceConnection
 
 import android.view.WindowManager
 import android.app.Activity
+
+
+
+
+
+
+import android.content.*
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.os.Build
+import android.os.Looper
+import android.os.Handler
+
+
+
+
+
+
+
+
+
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.telephony.TelephonyManager
+
+
 /** BelnetLibPlugin */
 open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var mShouldUnbind: Boolean = false
@@ -63,12 +90,73 @@ open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private var mEventSink: EventChannel.EventSink? = null
 
+
+
+
+  // Audio Focus
+    private var focusRequest: AudioFocusRequest? = null
+    private var audioFocusChangeListener: AudioManager.OnAudioFocusChangeListener? = null
+    private lateinit var context: Context
+    private lateinit var messenger: io.flutter.plugin.common.BinaryMessenger
+
+
+
+
     private var mIsConnectedObserver = Observer<Boolean> { newIsConnected ->
         mEventSink?.success(newIsConnected)
     }
 
+
+// 📞 Call & audio route broadcast receiver
+    private val callReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED -> {
+                    val state = intent.getIntExtra(AudioManager.EXTRA_SCO_AUDIO_STATE, -1)
+                    if (state == AudioManager.SCO_AUDIO_STATE_CONNECTED ||
+                        state == AudioManager.SCO_AUDIO_STATE_CONNECTING
+                    ) {
+                        Log.d("CallState", " SCO audio active — stopping TTS.")
+                        sendFocusEventToFlutter("focusLost")
+                    }
+                }
+
+                AudioManager.ACTION_AUDIO_BECOMING_NOISY -> {
+                    Log.d("CallState", " Headphones unplugged / route changed.")
+                    //sendFocusEventToFlutter("audio_noisy")
+                }
+
+                TelephonyManager.ACTION_PHONE_STATE_CHANGED -> {
+                    val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
+                    if (state == TelephonyManager.EXTRA_STATE_RINGING ||
+                        state == TelephonyManager.EXTRA_STATE_OFFHOOK
+                    ) {
+                        Log.d("CallState", " Incoming or ongoing phone call — stop TTS.")
+                        sendFocusEventToFlutter("focusLost")
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         System.loadLibrary("belnet-android")
+
+
+          context = binding.applicationContext
+         messenger = binding.binaryMessenger
+
+
 
         mMethodChannel = MethodChannel(binding.binaryMessenger, "belnet_lib_method_channel")
         mMethodChannel.setMethodCallHandler(this)
@@ -85,12 +173,42 @@ open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 mEventSink = null
             }
         })
+        // Audio phone call
+        registerCallAndAudioReceivers()
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         mMethodChannel.setMethodCallHandler(null)
         doUnbindService()
+        unregisterReceivers()
     }
+
+
+private fun registerCallAndAudioReceivers() {
+        val filter = IntentFilter().apply {
+            addAction(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED)
+            //addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+            addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+        }
+        context.registerReceiver(callReceiver, filter)
+    }
+
+    private fun unregisterReceivers() {
+        try {
+            context.unregisterReceiver(callReceiver)
+        } catch (e: Exception) {
+            Log.w("CelnetLibPlugin", "Receiver already unregistered or not initialized.")
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     @SuppressLint("NewApi")
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
@@ -257,10 +375,128 @@ open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             result.error("SCREEN_SECURITY_ERROR", "Failed to disable screen security", e.message)
                         }
                 }
+             "requestAudioFocus" -> {
+                requestAudioFocus()
+                result.success(true)
+            }
+            "abandonAudioFocus" -> {
+                abandonAudioFocus()
+                result.success(true)
+            }
+            "isCallActive" -> {
+                
+                result.success(isCallActive())
+            }
 
             else -> result.notImplemented()
         }
     }
+
+
+private fun requestAudioFocus() {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+            when (focusChange) {
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    Log.d("AudioFocus", "Permanent loss. Stop TTS.")
+                    sendFocusEventToFlutter("focusLost")
+                }
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
+                AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
+                    Log.d("AudioFocus", "Transient loss.")
+                    //sendFocusEventToFlutter("focusTransient")
+                }
+                AudioManager.AUDIOFOCUS_GAIN -> {
+                    Log.d("AudioFocus", "Focus regained. Resume TTS if paused.")
+                    //sendFocusEventToFlutter("focusGained")
+                }
+            }
+        }
+
+        focusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE)
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ASSISTANT)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build()
+                )
+                .setOnAudioFocusChangeListener(audioFocusChangeListener!!)
+                .setWillPauseWhenDucked(true)
+                .build()
+        } else null
+
+        val result = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && focusRequest != null) {
+            audioManager.requestAudioFocus(focusRequest!!)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus(
+                audioFocusChangeListener,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
+            )
+        }
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            Log.d("AudioFocus", " Focus granted")
+        }
+    }
+
+    private fun abandonAudioFocus() {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && focusRequest != null) {
+            audioManager.abandonAudioFocusRequest(focusRequest!!)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.abandonAudioFocus(audioFocusChangeListener)
+        }
+    }
+
+    private fun sendFocusEventToFlutter(event: String) {
+        Handler(Looper.getMainLooper()).post {
+            MethodChannel(messenger, "belnet_lib_method_channel").invokeMethod("focusLost", null)
+        }
+    }
+
+
+@SuppressLint("MissingPermission")
+private fun isCallActive(): Boolean {
+    try {
+        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val state = telephonyManager.callState
+        if (state == TelephonyManager.CALL_STATE_OFFHOOK || state == TelephonyManager.CALL_STATE_RINGING) {
+            Log.d("CallState", "📞 Regular phone call active or ringing")
+            return true
+        }
+    } catch (e: Exception) {
+        Log.e("CallState", "Error checking call state: ${e.message}")
+    }
+
+    // --- Optional: detect ongoing VoIP (e.g., WhatsApp, Zoom) ---
+    try {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val isVoipActive = audioManager.mode == AudioManager.MODE_IN_COMMUNICATION ||
+                           audioManager.mode == AudioManager.MODE_RINGTONE
+        if (isVoipActive) {
+            Log.d("CallState", "📶 VoIP or Internet call in progress")
+            return true
+        }
+    } catch (e: Exception) {
+        Log.e("CallState", "Error checking VoIP call state: ${e.message}")
+    }
+
+    return false
+}
+
+
+// private fun isCallActive(): Boolean {
+//     val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+//     return telephonyManager.callState == TelephonyManager.CALL_STATE_OFFHOOK ||
+//            telephonyManager.callState == TelephonyManager.CALL_STATE_RINGING
+// }
+
+
 
 override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activityBinding = binding
