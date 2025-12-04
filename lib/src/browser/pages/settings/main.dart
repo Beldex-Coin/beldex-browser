@@ -333,6 +333,7 @@ void resetSettings()async{
 
 resetOptions(){
   final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+  final basicProvider = Provider.of<BasicProvider>(context,listen: false);
   vpnStatusProvider.updateCacheValue(true);
   vpnStatusProvider.updateJSEnabled(true);
   vpnStatusProvider.updateSupportZoomEbld(true);
@@ -341,6 +342,10 @@ resetOptions(){
   vpnStatusProvider.updateBuiltinZoomControl(true);
   vpnStatusProvider.updateDisplayZoomControls(false);
   vpnStatusProvider.updateThirdpartyCookies(true);
+  basicProvider.updateAutoConnect(false);
+  basicProvider.updateAutoSuggest(false);
+  basicProvider.updateAdblock(true);
+
 }
 
 

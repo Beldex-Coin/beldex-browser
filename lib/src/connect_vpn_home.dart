@@ -1,5 +1,6 @@
 //import 'package:beldex_browser/src/browser/browser_home_page.dart';
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
@@ -7,6 +8,8 @@ import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 // import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/random_node_selection.dart';
+import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/no_internet_screen.dart';
@@ -58,18 +61,8 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
   bool isOpen = false;
   late OverlayEntry? overlayEntry;
 
-// void connect(){
-//   setState(() {
+Map<String,dynamic> nearest = {};
 
-//   });
-//   // messageTimer = Timer(Duration(seconds: 20),(){
-//   //   setState(() {
-//   //    messages.clear();
-//   //   });
-//   // });
-
-//   displayMessages();
-// }
 
   void displayMessages() {
     showMessage('Checking for connection...', 0);
@@ -111,12 +104,131 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
         setState(() {});
       }
     });
+
+    final basicProvider = Provider.of<BasicProvider>(context, listen: false);
     checkInternetConnection();
-    getExitNodeData();
+    //getExitNodeData();
+
+
+getNodeInitialSelection(basicProvider);
+
+
     //WidgetsBinding.instance.addObserver(this);
     //getRandomExitData();
-    super.initState();
+    // super.initState();
+  //  Future.delayed(Duration(milliseconds: 300),(){
+  //   if(widget.nearestId != '' && )
+  //   setForAutoConnect();
+  //  });
+    // Delay to after the first frame
+//   WidgetsBinding.instance.addPostFrameCallback((_) async{
+//     final basicProvider = Provider.of<BasicProvider>(context, listen: false);
+//     final vpnProvider = Provider.of<VpnStatusProvider>(context, listen: false);
+//     final loadingProvider = Provider.of<LoadingtickValueProvider>(context, listen: false);
+//     final isVpnPermit = await BelnetLib.isPrepared;
+//     print('AUTOCONNECT VALUE ON LAUNCH --> ${basicProvider.autoConnect}');
+//       print('IS VPN PERMISSION ENABLED ${isVpnPermit}');
+// Future.delayed(Duration(milliseconds: 300),(){
+//     if (basicProvider.autoConnect && BelnetLib.isConnected == false) {
+//       print('USER BAB ONE --> ${nearest}');
+//       setState(() {
+        
+//       });
+//       if(nearest.isNotEmpty){
+//               print('USER BAB TWO --> ${nearest}');
+
+//         if(isVpnPermit)
+//                       print('USER BAB Three --> ${nearest}');
+
+//        // toggleBelnet(vpnProvider, loadingProvider);
+//       }
+//      // setForAutoConnect();
+//      // if(isVpnPermit)
+//      // toggleBelnet(vpnProvider, loadingProvider);
+//     }
+// });
+   
+//   });
+
   }
+
+
+
+ getNodeInitialSelection(BasicProvider basicProvider)async{
+  final isVpnPermit = await BelnetLib.isPrepared;
+    final vpnProvider = Provider.of<VpnStatusProvider>(context, listen: false);
+     final loadingProvider = Provider.of<LoadingtickValueProvider>(context, listen: false);
+   final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedExitNode', '$selectedValue');
+    await prefs.setString('selectedCountryIcon', '$selectedConIcon');
+
+    exitNode = prefs.getString('selectedExitNode');
+    exitIcon = prefs.getString('selectedCountryIcon');
+    setState(() {});
+try{
+
+      var resp = await DataRepo().getExitnodeInfoListData();
+      exitNodeDataList.addAll(resp);
+      print('${exitNodeDataList[0].node}');
+
+      String jsonString = exitNodeDataListToJson(exitNodeDataList);
+      print('JSONSTRING ____ $jsonString');
+      await prefs.setString('allExitnodeList', jsonString);
+
+      setState(() {});
+      // exitNodeDataList.forEach((element) {
+      //   element.node.forEach((element) {
+      //     myExitData.add(element.name);
+      //   });
+      // });
+      nearest = await findNearestNode(nodeLists: exitNodeDataList,basicProvider:basicProvider);
+ await prefs.setString('selectedExitNode', '${nearest['name']}');
+        await prefs.setString(
+            'selectedCountryIcon', 'assets/images/flags/${nearest['country']}.png');
+        // print(
+        //     'second index for the data ${customIcon}  and the $customExitnode');
+
+        exitNode = prefs.getString('selectedExitNode');
+        exitIcon = prefs.getString('selectedCountryIcon');
+          print('USER BAB ONE NODE SELECTED ---> $exitNode -- $exitIcon');
+
+  if (basicProvider.autoConnect && BelnetLib.isConnected == false) {
+      print('USER BAB ONE --> ${nearest}');
+      setState(() {
+        
+      });
+      if(nearest.isNotEmpty){
+              print('USER BAB TWO --> ${nearest}');
+        if(isVpnPermit)
+          toggleBelnet(vpnProvider, loadingProvider);
+                     // print('USER BAB Three --> ${nearest}');
+
+       // toggleBelnet(vpnProvider, loadingProvider);
+      }
+     // setForAutoConnect();
+     // if(isVpnPermit)
+     // toggleBelnet(vpnProvider, loadingProvider);
+    }
+
+
+
+
+
+}catch(e){
+ print('Error in the Random nearest node selection $e');
+}
+
+ }
+
+
+
+
+
+
+
+
+
+
 
   Future<void> checkInternetConnection() async {
     var connectivityResult = await _connectivity.checkConnectivity();
@@ -1280,6 +1392,7 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
                     ? Image.asset(
                         'assets/images/flags/${vnode[i].country}.png',
                         errorBuilder: (context, error, stackTrace) {
+                          print('Not taking picture $e -- ${vnode[i].country}');
                           return const Icon(
                             Icons.more_horiz,
                             color: Colors.grey,

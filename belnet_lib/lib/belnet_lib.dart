@@ -147,4 +147,43 @@ static Future<dynamic>  unmapExitNode(String swapNode) async {
   final bool setScnApp = await _methodChannel.invokeMethod("disableSecure");
   return setScnApp;
 }
+
+
+ static Future<void> requestFocus() async {
+    try {
+      await _methodChannel.invokeMethod('requestAudioFocus');
+    } catch (e) {
+      print('Error requesting focus: $e');
+    }
+  }
+
+ static Future<void> abandonFocus() async {
+    try {
+      await _methodChannel.invokeMethod('abandonAudioFocus');
+    } catch (e) {
+      print('Error abandoning focus: $e');
+    }
+  }
+
+  static Future<bool> isCallActive()async{
+     try {
+    final result = await _methodChannel.invokeMethod<bool>('isCallActive');
+    return result ?? false;
+  } catch (e) {
+    print('Error checking call state: $e');
+    return false;
+  }
+   
+   
+   
+  //   try{
+
+  //  final bool isActive =  await _methodChannel.invokeMethod('isCallActive');
+  //  return isActive;
+  //   }catch(e){
+
+  //     print('Error checking is call active: $e');
+  //     return false;
+  //   }
+  }
 }

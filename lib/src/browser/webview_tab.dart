@@ -8,6 +8,7 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
+import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
@@ -25,6 +26,7 @@ import 'javascript_console_result.dart';
 import 'long_press_alert_dialog.dart';
 import 'models/browser_model.dart';
 
+import 'package:flutter/services.dart' show rootBundle;
 final webViewTabStateKey = GlobalKey<_WebViewTabState>();
 
 class WebViewTab extends StatefulWidget {
@@ -95,6 +97,30 @@ setAdBlocker() async {
 
     _findInteractionController = FindInteractionController();
   }
+
+
+
+
+Future<void> injectReadability(InAppWebViewController controller) async {
+  String readabilityJs = await rootBundle.loadString("assets/readability.js");
+  await controller.evaluateJavascript(source: readabilityJs);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @override
   void dispose() {
@@ -214,6 +240,8 @@ bool _isValidUrl(String url) {
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
         final basicProvider = Provider.of<BasicProvider>(context);
+    final ttsProvider = Provider.of<TtsProvider>(context);
+
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -240,6 +268,7 @@ bool _isValidUrl(String url) {
     //    // const Color.fromRGBO(0, 0, 0, 0.5);
     // initialSettings.horizontalScrollbarThumbColor =themeProvider.darkTheme ?Color(0xff4D4D64) : Color(0xffC7C7C7);
     // const Color.fromRGBO(0, 0, 0, 0.5);
+    initialSettings.useHybridComposition = true;
     initialSettings.allowsLinkPreview = false;
     initialSettings.isFraudulentWebsiteWarningEnabled = true;
     initialSettings.disableLongPressContextMenuOnLinks = true;
@@ -252,7 +281,7 @@ bool _isValidUrl(String url) {
       windowId: widget.webViewModel.windowId,
       pullToRefreshController: _pullToRefreshController,
       findInteractionController: _findInteractionController,
-
+       
       onWebViewCreated: (controller) async {
         initialSettings.transparentBackground = false;
         await controller.setSettings(settings: initialSettings);
@@ -326,7 +355,7 @@ bool _isValidUrl(String url) {
         try{
            _pullToRefreshController?.endRefreshing();
             urlSummaryProvider.updateUrl(url.toString()); // for summarise with floating button
-           _checkIsUrlSearchResult(url.toString(),vpnStatusProvider); // for showing floating button
+           _checkIsUrlSearchResult(url.toString(),vpnStatusProvider,ttsProvider); // for showing floating button
         if (widget.webViewModel.isDesktopMode) {
           String js =
               "document.querySelector('meta[name=\"viewport\"]').setAttribute('content', 'width=1024px, initial-scale=' + (document.documentElement.clientWidth / 1024));";
@@ -385,7 +414,7 @@ bool _isValidUrl(String url) {
         }catch(e){
           print(e);
         }
-
+      await injectReadability(controller);
 
 if(basicProvider.adblock){
 await _webViewController!.evaluateJavascript(source: """
@@ -931,6 +960,7 @@ console.log("changeNodeClicked");
 
 
   vpnStatusProvider.updateFAB(false);
+  ttsProvider.updateTTSDisplayStatus(false);
  vpnStatusProvider.setErrorPage(true);
         widget.webViewModel.url = errorUrl;
        // widget.webViewModel.isSecure = false;
@@ -955,6 +985,7 @@ Future.delayed(const Duration(seconds: 3),(){
        _webViewController?.evaluateJavascript(source: "hideFooter();");
      }
      vpnStatusProvider.updateFAB(false);
+       ttsProvider.updateTTSDisplayStatus(false);
      vpnStatusProvider.setErrorPage(true);
     });  
 
@@ -1012,23 +1043,31 @@ Future.delayed(const Duration(seconds: 3),(){
 
 
 // Show FAB when individual sites open
-void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider) {
+void _checkIsUrlSearchResult(String url,VpnStatusProvider vpnStatusProvider,TtsProvider ttsProvider) async{
   if(vpnStatusProvider.canShowHomeScreen){
     vpnStatusProvider.updateFAB(false);
+      ttsProvider.updateTTSDisplayStatus(false);
+
     print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB} inside showHome');
     return;
   }
 
   if(url.isEmpty || url == "about:blank" || url.startsWith("chrome-error") || url.startsWith("edge-error") || url.startsWith("file:")){
     vpnStatusProvider.updateFAB(false);
+      ttsProvider.updateTTSDisplayStatus(false);
+
     return;
   }
  
 
 
 vpnStatusProvider.updateFAB(shouldShowFAB(url));
+//shouldShowTts(url,ttsProvider);
+ extractReadableContent(_webViewController,ttsProvider,url);
     print('The URL is -----> $url and it is able to see FAB ${vpnStatusProvider.showFAB}');
   }
+
+
 
 
 
@@ -1102,26 +1141,442 @@ bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce
   }
 
  
+   
+//  AUTH / SIGN-IN / LOGIN detection (includes Google Accounts)
+  bool isAuthPage = [
+    'login',
+    'signin',
+    'signup',
+    'auth',
+    'account',
+    'accounts.google.com',
+  ].any((keyword) => host.contains(keyword) || path.contains(keyword));
+
+  //  DOWNLOAD / FILE type detection
+  bool isFileDownload = RegExp(
+    r'\.(pdf|zip|rar|7z|exe|apk|dmg|msi|csv|xls|xlsx|doc|docx|ppt|pptx|mp3|mp4|avi|mkv|mov|flac|m4a)$',
+    caseSensitive: false,
+  ).hasMatch(path);
+
+ if(isAuthPage || isFileDownload){
+  return false;
+ }
 
   return true; // Show FAB only for actual webpages and valid Twitter/X posts
 }
 
-// bool shouldShowFAB(String url) {
+
+bool shouldShowTts(String url, TtsProvider ttsProvider) {
+  Uri uri = Uri.parse(url);
+  String host = uri.host.toLowerCase();
+  String path = uri.path.split('#')[0]; // Strip fragments after '#'
+
+  Map<String, List<String>> blockedSites = {
+    'google': ['google.'],
+    'bing': ['bing.com'],
+    'yahoo': ['yahoo.', 'consent.yahoo.', 'guce.yahoo.'],
+    'duckduckgo': ['duckduckgo.com'],
+    'baidu': ['baidu.com'],
+    'yandex': ['yandex.'],
+    'ask': ['ask.com'],
+    'ecosia': ['ecosia.org'],
+    'youtube': ['youtube.com'],
+    'reddit': ['reddit.com'],
+    'twitter': ['twitter.com', 'x.com'],
+  };
+
+  bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+      entry.value.any((domain) => host.contains(domain)) &&
+      (path == "/" || path.isEmpty));
+
+  bool isBlockedSearchOrFeed = [
+    'search',
+    'yandsearch',
+    'results',
+    'watch',
+    'explore',
+    'trending'
+  ].any((keyword) =>
+      path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+  bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+      (path.startsWith("/login") ||
+          path.startsWith("/i/flow/login") ||
+          path.startsWith("/signup"));
+
+  bool isYahooConsentPage =
+      host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
+
+  bool isAuthPage = [
+    'login',
+    'signin',
+    'signup',
+    'auth',
+    'account',
+    'accounts.google.com',
+  ].any((keyword) => host.contains(keyword) || path.contains(keyword));
+
+  bool isFileDownload = RegExp(
+    r'\.(pdf|zip|rar|7z|exe|apk|dmg|msi|csv|xls|xlsx|doc|docx|ppt|pptx|mp3|mp4|avi|mkv|mov|flac|m4a)$',
+    caseSensitive: false,
+  ).hasMatch(path);
+
+  bool isWikipedia = host.contains("wikipedia.org");
+  bool isWikipediaContentPage = isWikipedia &&
+      path.startsWith("/wiki/") &&
+      !path.startsWith("/wiki/Special:") &&
+      !path.startsWith("/wiki/Talk:") &&
+      !path.startsWith("/wiki/User:") &&
+      !path.startsWith("/wiki/Wikipedia:") &&
+      !path.startsWith("/wiki/Category:") &&
+      !path.startsWith("/wiki/File:") &&
+      !path.startsWith("/wiki/Help:") &&
+      !path.contains("search") &&
+      !path.contains("index.php") &&
+      !path.contains("#References");
+
+  if (isWikipedia) {
+    print("Wikipedia URL detected → content page: $isWikipediaContentPage");
+    ttsProvider.updateTTSDisplayStatus(isWikipediaContentPage);
+    return isWikipediaContentPage;
+  }
+
+  //  Supported content patterns (must have article/post path after /news, /article, etc.)
+  final supportedRegex = RegExp(
+    r'('
+    // News articles: must have something AFTER /news/ or /article/
+    r'\/(news|article|story|world|politics|technology|health|entertainment|business|sports)\/[a-zA-Z0-9\-\_]+|'
+    // Dated URLs: /2025/10/15/slug
+    r'\/\d{4}\/\d{2}\/\d{2}\/[a-zA-Z0-9\-\_]+|'
+    // Blogs, posts, guides
+    r'\/(blog|posts|entry|medium\.com\/@|dev\.to\/|substack\.com)\/[a-zA-Z0-9\-\_]+|'
+    // Docs / guides / tutorials
+    r'\/(docs|guide|learn|tutorial|manual|how-to)\/[a-zA-Z0-9\-\_]+'
+    r')',
+    caseSensitive: false,
+  );
+
+  //  News homepages — /news, /article, etc. alone without further content
+  final blockedNewsHomepages = RegExp(
+    r'\/(news|article|story|world|politics|technology|health|entertainment|business|sports)\/?$',
+    caseSensitive: false,
+  );
+
+  //  Unsupported (videos, login, file pages)
+  final unsupportedForTTSRegex = RegExp(
+    r'('
+    r'\/(watch|video|embed|playlist)\/|'
+    r'\.(mp4|mkv|avi|mov|mp3|flac|m4a)$|'
+    r'/(amp|amphtml|mobile|m\.)/|'
+    r'\/(error|404|download|redirect|login|signin|signup|home)\/?'
+    r'\/(product|dp|item|p)\/[\w\-]+'
+    r'(^|\.)((amazon|flipkart|ebay|aliexpress|walmart|target|bestbuy|myntra|snapdeal|etsy|alibaba|nykaa|shopclues|olx|mercadolibre|lazada|zalando)\.[a-z\.]{2,}|[a-z0-9-]+\.myshopify\.com)$'
+    r')',
+    caseSensitive: false,
+  ); 
+
+
+
+
+
+  bool isSupportedUrl = supportedRegex.hasMatch(url);
+  bool isBlockedNewsHome = blockedNewsHomepages.hasMatch(path);
+  bool isUnsupportedUrl = unsupportedForTTSRegex.hasMatch(url) || isAuthPage || isFileDownload;
+
+  //  Block cases
+  if (isBlockedHomepage ||
+      isBlockedSearchOrFeed ||
+      isTwitterAuthPage ||
+      isYahooConsentPage ||
+      isBlockedNewsHome ||
+      isUnsupportedUrl) {
+    print("Blocked or homepage URL → Hiding TTS FAB");
+    ttsProvider.updateTTSDisplayStatus(false);
+    return false;
+  }
+
+
+
+  //  Allow TTS for readable article-like content
+  bool showTts = isSupportedUrl || (!isUnsupportedUrl && path.length > 3)|| !isEcommerceSite(url);
+  ttsProvider.updateTTSDisplayStatus(showTts);
+  return showTts;
+}
+
+
+final ecommerceRe = RegExp(
+  r'(^|\.)((amazon|flipkart|ebay|aliexpress|walmart|target|bestbuy|myntra|snapdeal|etsy|alibaba|nykaa|shopclues|olx|mercadolibre|lazada|zalando)\.[a-z\.]{2,}|[a-z0-9-]+\.myshopify\.com)$',
+  caseSensitive: false,
+);
+
+bool isEcommerceSite(String url) {
+  try {
+    final host = Uri.parse(url).host.toLowerCase();
+    return ecommerceRe.hasMatch(host);
+  } catch (_) {
+    return false;
+  }
+}
+
+
+
+
+// bool shouldShowTts(String url, TtsProvider ttsProvider) {
 //   Uri uri = Uri.parse(url);
 //   String host = uri.host.toLowerCase();
-//   String path = uri.path;
+//   String path = uri.path.split('#')[0]; // Strip fragments after '#'
+
+  
+//   Map<String, List<String>> blockedSites = {
+//     'google': ['google.'],
+//     'bing': ['bing.com'],
+//     'yahoo': ['yahoo.', 'consent.yahoo.', 'guce.yahoo.'],
+//     'duckduckgo': ['duckduckgo.com'],
+//     'baidu': ['baidu.com'],
+//     'yandex': ['yandex.'],
+//     'ask': ['ask.com'],
+//     'ecosia': ['ecosia.org'],
+//     'youtube': ['youtube.com'],
+//     'reddit': ['reddit.com'],
+//     'twitter': ['twitter.com', 'x.com'],
+//   };
+
+//   bool isBlockedHomepage = blockedSites.entries.any((entry) =>
+//       entry.value.any((domain) => host.contains(domain)) &&
+//       (path == "/" || path.isEmpty));
+
+//   bool isBlockedSearchOrFeed = [
+//     'search', 'yandsearch', 'results', 'watch', 'explore', 'trending'
+//   ].any((keyword) =>
+//       path.contains(keyword) || uri.queryParameters.containsKey("q"));
+
+//   bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
+//       (path.startsWith("/login") ||
+//           path.startsWith("/i/flow/login") ||
+//           path.startsWith("/signup"));
+
+//   bool isYahooConsentPage =
+//       host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
+
+  
+// //  AUTH / SIGN-IN / LOGIN detection (includes Google Accounts)
+//   bool isAuthPage = [
+//     'login',
+//     'signin',
+//     'signup',
+//     'auth',
+//     'account',
+//     'accounts.google.com',
+//   ].any((keyword) => host.contains(keyword) || path.contains(keyword));
+
+//   //  DOWNLOAD / FILE type detection
+//   bool isFileDownload = RegExp(
+//     r'\.(pdf|zip|rar|7z|exe|apk|dmg|msi|csv|xls|xlsx|doc|docx|ppt|pptx|mp3|mp4|avi|mkv|mov|flac|m4a)$',
+//     caseSensitive: false,
+//   ).hasMatch(path);
+
+//   bool isWikipedia = host.contains("wikipedia.org");
+//   bool isWikipediaContentPage = isWikipedia &&
+//       path.startsWith("/wiki/") &&
+//       !path.startsWith("/wiki/Special:") &&
+//       !path.startsWith("/wiki/Talk:") &&
+//       !path.startsWith("/wiki/User:") &&
+//       !path.startsWith("/wiki/Wikipedia:") &&
+//       !path.startsWith("/wiki/Category:") &&
+//       !path.startsWith("/wiki/File:") &&
+//       !path.startsWith("/wiki/Help:") &&
+//       !path.contains("search") &&
+//       !path.contains("index.php") &&
+//       !path.contains("#References");
+
+//   if (isWikipedia) {
+//     print("Wikipedia URL detected → content page: $isWikipediaContentPage");
+//     ttsProvider.updateTTSDisplayStatus(isWikipediaContentPage);
+//     return isWikipediaContentPage;
+//   }
+
+  
+
+//   // Supported content pages (news, blogs, docs, etc.)
+//   final supportedRegex = RegExp(
+//     r'('
+
+//      r'\/(news|article|story|world|politics|technology|health|entertainment|business|sports)\/[\w\-]+.+|'
+//   r'\d{4}\/\d{2}\/\d{2}\/[\w\-]+.+|'
+
+//   // Blogs: /blog/... /posts/... /entry/... Medium, Dev.to, Substack
+//   r'\/(blog|posts|entry|medium\.com\/@|dev\.to\/|substack\.com)\/[\w\-]+.+|'
+
+//   // Documentation & Guides: /docs/... /guide/... /tutorial/... /manual/... /how-to/...
+//   r'\/(docs|guide|learn|tutorial|manual|how-to)\/[\w\-]+.+|'
+
+//     // News articles: /news/, /article/, /story/, or dated URLs like /2025/10/15/
+//     // r'\/(news|article|story|world|politics|technology|health|entertainment|business|sports)\/[\w\-]+|'
+//     // r'\d{4}\/\d{2}\/\d{2}\/[\w\-]+|'
+
+//     // // Blogs: /blog/, /posts/, /entry/, Medium, Dev.to, Substack
+//     // r'\/(blog|posts|entry|medium\.com\/@|dev\.to\/|substack\.com)\/[\w\-]+|'
+
+//     // // Documentation & Guides: /docs/, /guide/, /learn/, /tutorial/, /manual/, /how-to/
+//     // r'\/(docs|guide|learn|tutorial|manual|how-to)\/[\w\-]+|'
+
+//     // // Forums: /questions/, /thread/, /discussion/, /forum/
+//     // r'\/(questions|thread|discussion|forum)\/[\w\-]+|'
+
+//     // // E-commerce product detail pages: /product/, /dp/, /item/, /p/
+//     // r'\/(product|dp|item|p)\/[\w\-]+'
+//     r')',
+//     caseSensitive: false,
+//   );
+
+//   // Unsupported content (videos, homepages, downloads, login, redirects)
+//   final unsupportedForTTSRegex = RegExp(
+//     r'('
+//     // Video/multimedia URLs
+//     r'\/(watch|video|embed|playlist)\/|'
+//     r'\.(mp4|mkv|avi|mov|mp3|flac|m4a)$|'
+
+//     // Homepage-like URLs
+//     r'^https?:\/\/(www\.)?[\w\-]+\.[a-z]{2,6}\/?$|'
+
+
+//      // AMP page
+//     r'/(amp|amphtml|mobile|m\.)/'
+
+//     // Errors, downloads, redirects, auth, home
+//     r'\/(error|404|download|redirect|login|signin|signup|home)\/?'
+//     r')',
+//     caseSensitive: false,
+//   );
+
+// final unsupportedForFab = RegExp(
+//     r'('
+//     // Video/multimedia URLs
+//     r'\/(watch|video|embed|playlist)\/|'
+//     r'\.(mp4|mkv|avi|mov|mp3|flac|m4a)$|'
+
+//     // Homepage-like URLs
+//    // r'^https?:\/\/(www\.)?[\w\-]+\.[a-z]{2,6}\/?$|'
+
+
+//      // AMP page
+//     r'/(amp|amphtml|mobile|m\.)/'
+
+//     // Errors, downloads, redirects, auth, home
+//     r'\/(error|404|download|redirect|login|signin|signup|home)\/?'
+//     r')',
+//     caseSensitive: false,
+//   );
+
+
+//   bool isSupportedUrl = supportedRegex.hasMatch(url);
+//   bool isUnsupportedUrl = unsupportedForTTSRegex.hasMatch(url) || isAuthPage || isFileDownload;
+
+//   //bool isUnsupportedUrlForFAB = unsupportedForFab.hasMatch(url) || isAuthPage || isFileDownload;
+//   if (isBlockedHomepage ||
+//       isBlockedSearchOrFeed ||
+//       isTwitterAuthPage ||
+//       isYahooConsentPage ||
+//       isUnsupportedUrl) {
+//     print("Blocked URL → Hiding FAB");
+//     ttsProvider.updateTTSDisplayStatus(false);
+//     return false;
+//   }
+
+//  // bool showFab = isSupportedUrl || (!isUnsupportedUrlForFAB && path.length > 3);
+//   bool showTts = isSupportedUrl || (!isUnsupportedUrl && path.length > 3);
+//   ttsProvider.updateTTSDisplayStatus(showTts);
+//   return showTts;
+// }
+
+
+
+
+
+Future<void> extractReadableContent(
+    InAppWebViewController? controller, TtsProvider ttsProvider,String url) async {
+  try {
+    final result = await controller?.evaluateJavascript(source: """
+      (() => {
+        try {
+          // Clone and clean DOM
+          var doc = document.cloneNode(true);
+
+          // Remove scripts, templates, and AMP tags
+          doc.querySelectorAll('script, style, template, amp-analytics, amp-list, amp-ad, iframe, noscript').forEach(el => el.remove());
+
+          // Use Readability
+          var reader = new Readability(doc);
+          var article = reader.parse();
+
+          if (!article) return "";
+
+          // Sanitize HTML to remove any residual unwanted tags
+          var content = document.createElement('div');
+          content.innerHTML = article.content;
+          content.querySelectorAll('script, style, template, amp-analytics, amp-list, amp-ad, iframe, noscript').forEach(el => el.remove());
+
+          article.content = content.innerHTML.trim();
+
+          return JSON.stringify(article);
+        } catch (e) {
+          return "";
+        }
+      })();
+    """);
+
+    if (result == null || result.isEmpty){
+      ttsProvider.updateTTSDisplayStatus(false);
+     return ;
+    } 
+
+    final Map<String, dynamic> article = Map<String, dynamic>.from(jsonDecode(result));
+
+    // Check character count of the extracted content
+    final String? content = article['textContent'] ?? article['content'];
+    final int charCount = content?.length ?? 0;
+          debugPrint("Readable content short: $charCount characters");
+
+    if (charCount < 1000) {
+      debugPrint("Readable content too short: $charCount characters");
+      ttsProvider.updateTTSDisplayStatus(false); // or return article if you still want to keep it
+            debugPrint("Readable content too short: ${ttsProvider.canTTSDisplay} characters");
+        return ;
+
+    }else{
+            debugPrint("Readable content Not short: $charCount characters");
+     shouldShowTts(url,ttsProvider);
+
+    }
+
+   // debugPrint("Readable content length: $charCount characters");
+    //return article;
+  } catch (e) {
+          ttsProvider.updateTTSDisplayStatus(false); // or return article if you still want to keep it
+    debugPrint("Error extracting readable content: $e");
+    //return null;
+  }
+}
+
+
+// bool shouldShowFAB(String url,TtsProvider ttsProvider) {
+//   Uri uri = Uri.parse(url);
+//   String host = uri.host.toLowerCase();
+//   String path = uri.path.split('#')[0]; // Modified to strip fragments after '#'
 
 //   // List of search engines and social media platforms to exclude
 //   Map<String, List<String>> blockedSites = {
 //     'google': ['google.'], // Matches all Google domains (google.com, google.co.in, etc.)
 //     'bing': ['bing.com'],
-//     'yahoo': ['yahoo.'],
+//     'yahoo': ['yahoo.','consent.yahoo.','guce.yahoo.'],
 //     'duckduckgo': ['duckduckgo.com'],
 //     'baidu': ['baidu.com'],
-//     'yandex': ['yandex.'],
+//     'yandex': ['yandex.'], // juce
 //     'ask': ['ask.com'],
+//     'ecosia':['ecosia.org'],
 //     'youtube': ['youtube.com'],
-//     'wikipedia':['wikipedia.org'],
+//     'reddit': ['reddit.com'],
+//     'wikipedia': ['wikipedia.org'],
 //     'twitter': ['twitter.com', 'x.com'],
 //   };
 
@@ -1133,7 +1588,7 @@ bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce
 //   // Check for search, video, or feed pages in search engines and social media
 //   bool isBlockedSearchOrFeed = [
 //     'search',      // Google, Bing, Yahoo, DuckDuckGo, Ask
-//     's',           // Baidu
+//    // '/s',           // Baidu
 //     'yandsearch',  // Yandex
 //     'results',     // YouTube search results
 //     'watch',       // YouTube videos (https://www.youtube.com/watch?v=xyz)
@@ -1145,9 +1600,8 @@ bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce
 //   bool isTwitterAuthPage = (host.contains("twitter.com") || host.contains("x.com")) &&
 //       (path.startsWith("/login") || path.startsWith("/i/flow/login") || path.startsWith("/signup"));
 
-
-//    // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
-// bool isWikipedia = host.contains("wikipedia.org");
+//   // Wikipedia-specific logic: Only allow content pages (not search, login, or special pages)
+//   bool isWikipedia = host.contains("wikipedia.org");
 //   bool isWikipediaContentPage = isWikipedia &&
 //       path.startsWith("/wiki/") && // Must be an article path
 //       !path.startsWith("/wiki/Special:") && 
@@ -1159,21 +1613,30 @@ bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce
 //       !path.startsWith("/wiki/Help:") &&
 //       !path.contains("search") && // Exclude search pages
 //       !path.contains("index.php") && // Exclude index/search pages
-//       !path.contains("#References"); // Exclude reference sections
-
-
-//   if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage) {
-//     return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
-//   }
-
-
-//   // Only allow Wikipedia content pages
+//       !path.contains("#References"); // Exclude reference sections (though now redundant due to split)
+//  // Only allow Wikipedia content pages
 //   if (isWikipedia) {
+//     print("The URL is coming inside wikipedia block");
+//       ttsProvider.updateTTSDisplayStatus(isWikipediaContentPage);
+
+//    // print("The Wikipedia 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")}");
 //     return isWikipediaContentPage;
 //   }
 
+// bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce.yahoo.");
+// //print("The Wikipedia $isWikipedia or $isWikiOne 1 - ${!path.startsWith("/wiki/Special:")} 2 - ${ !path.startsWith("/wiki/Talk:")} 3 - ${!path.startsWith("/wiki/User:") } 4 - ${!path.startsWith("/wiki/Wikipedia:")} 5 - ${!path.startsWith("/wiki/Category:")} 6 - ${!path.startsWith("/wiki/File:")} 7 - ${!path.startsWith("/wiki/Help:")} 8 - ${!path.contains("search")} 9 - ${!path.contains("index.php")} 10 - ${ !path.contains("#References")} and the last one $isWikipediaContentPage");
+//   if (isBlockedHomepage || isBlockedSearchOrFeed || isTwitterAuthPage || isYahooConsentPage) {
+//     print("The URL is coming inside block $isBlockedHomepage ----  $isBlockedSearchOrFeed ---- $isTwitterAuthPage");
+//       ttsProvider.updateTTSDisplayStatus(false);
+
+//     return false; // Hide FAB for blocked homepages, search/feed pages, YouTube videos, and Twitter auth pages
+//   }
+
+ 
+//   ttsProvider.updateTTSDisplayStatus(true);
 //   return true; // Show FAB only for actual webpages and valid Twitter/X posts
 // }
+
 
 
 String getDownloadFile(String name){
