@@ -31,7 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:get/get.dart';
+//import 'package:get/get.dart';
 //import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -409,7 +409,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(
       builder: (context, value, child) {
-        return GetMaterialApp(
+        return MaterialApp(
           scaffoldMessengerKey: scaffoldMessengerKey,
           title: 'Beldex Browser',
           debugShowCheckedModeBanner: false,

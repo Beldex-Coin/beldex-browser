@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:velocity_x/velocity_x.dart';
+//import 'package:velocity_x/velocity_x.dart';
 
 class ChatMessage extends StatelessWidget {
    ChatMessage({super.key, required this.text, required this.sender, required this.ai, this.aiResponse='loading'});

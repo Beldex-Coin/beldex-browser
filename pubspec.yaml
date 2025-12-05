@@ -75,7 +75,7 @@ dependencies:
   url_launcher: ^6.3.2
   cached_network_image: ^3.3.1
   flutter_colorpicker: ^1.1.0
-  intl: ^0.20.2
+  #intl: ^0.20.2
   uuid: ^4.5.1
   collection: #^1.19.1
   
@@ -85,7 +85,7 @@ dependencies:
   #flutter_windowmanager:
   square_progress_indicator: ^0.0.8
   
-  get: ^4.7.2
+  #get: ^4.7.2
   #flutter_file_downloader: ^2.1.0
   get_storage: ^2.1.1
   fluttertoast: ^8.2.12
@@ -105,7 +105,7 @@ dependencies:
   installed_apps: ^1.5.1
 
 
-  velocity_x: ^4.3.1
+  #velocity_x: ^4.3.1
   
   flutter_markdown: any
  
@@ -147,7 +147,8 @@ dependencies:
 
 
   #geolocator: 10.0.1
-
+  flutter_localization: any
+  intl: #^0.20.2
 
 
 dev_dependencies:
@@ -182,7 +183,7 @@ flutter:
     - assets/images/ai-icons/
     - assets/readability.js
     # - assets/images/Belnet_Text_White.png
-
+  generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
