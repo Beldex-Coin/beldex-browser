@@ -1,9 +1,9 @@
 {
   "@@locale": "es",
   "hello": "Hola 👋",
-  
+  "connect": "Conectar",
   "connecting": "Conectando...",
-  "exitnode": "Nodo de salida:",
+  "exitnode": "Nodo de salida",
   "beldexofficial": "Oficial de Beldex",
   "contributorExitNode": "nodo de salida del contribuidor",
   "belnetServiceStarted": "Servicio BelNet iniciado",
@@ -22,7 +22,7 @@
   "editEnginesVisible": "Editar motores visibles en el menú de búsqueda",
   "selectOne": "Seleccionar uno",
   "engineVisibleOnSearchMenu": "Motor visible en el menú de búsqueda",
-  "newtab": "Nuevo apartado",
+  "newtab": "Nueva pestana",
   "favorites": "Favoritos",
   "changeNode": "Cambiar nodo",
   "share": "Compartir",
@@ -41,14 +41,16 @@
   "chooseLanguage": "Elegir idioma",
   "scanQR": "Escanea el QR",
   "alignQRInCenterOFFrame": "Alinea el código QR en el\ncentro del cuadro",
-  "beldexAIEnhancesTheBeldexBrowser": "Pantalla de bienvenida de la IA: Beldex AI mejora el Navegador Beldex con funciones inteligentes para una experiencia web perfecta. Resume el contenido de la página para una lectura rápida. Al enrutar el tráfico de manera eficiente a través de masternodes y nodos de salida, garantiza confidencialidad y una navegación más rápida. A diferencia de los modelos basados en suscripción, Beldex AI es gratuito, ofreciendo funciones avanzadas mientras prioriza la comodidad del usuario y una experiencia de internet centrada en la confidencialidad. Explora una navegación más inteligente y más rápida con Beldex AI.",
+  "beldexAIEnhancesTheBeldexBrowser": "Beldex AI mejora el Navegador Beldex con funciones inteligentes para una experiencia web perfecta. Resume el contenido de la página para una lectura rápida. Al enrutar el tráfico de manera eficiente a través de masternodes y nodos de salida, garantiza confidencialidad y una navegación más rápida. A diferencia de los modelos basados en suscripción, Beldex AI es gratuito, ofreciendo funciones avanzadas mientras prioriza la comodidad del usuario y una experiencia de internet centrada en la confidencialidad. Explora una navegación más inteligente y más rápida con Beldex AI.",
   "needHelpWithThisSite": "¿Necesitas ayuda con este sitio?",
   "beldexAICanHelpYou": "BeldexAI puede ayudarte a resumir artículos,\nampliar el contenido de un sitio y mucho más.",
   "enterPromptHere": "Envía tu solicitud aquí..",
   "summariseThisPage": "Resumir esta página",
   "hideSummarise": "Ocultar resumen",
   "retry": "Reintentar",
-
+  
+  "regenerate": "Regenerar",
+  
 
 
 
@@ -89,9 +91,11 @@
   "supportZoomContent": "Habilita el zoom para ver el contenido web más de cerca.",
   "setAsDefaultBrowser": "Establecer como Navegador Predeterminado",
   "appPermissions": "Permisos de la Aplicación",
-  "aboutBeldexBrowser" : "Acerca de Beldex Browser",
+  "aboutBeldexBrowser" : "Acerca del navegador Beldex",
   
-  
+
+  "resetSettings": "Restablecer configuración",
+  "doYouWanttoReset": "¿Quieres restablecer la configuración del navegador?",
 
  
 
@@ -117,8 +121,56 @@
 
 
 
+  "closeTabs": "Cerrar pestañas",
+  "closeAllTabs": "Cerrar todas las pestañas",
+  "copy": "Copiar",
+  "cut" :"Cortar",
+  "paste" :"Pegar",
+  "selectAll": "Seleccionar todo",
+  "copied": "Copiado",
+  "copiedToClipboard": "Copiado al portapapeles",
+  "unableToShareUrl": "No se pudo compartir la URL",
+  "openInNewTab": "Abrir en nueva pestaña",
+  "copyAddressLink": "Copiar enlace de dirección",
+  "shareLink": "Compartir enlace",
+  "downloadimage": "Descargar imagen",
+  "shareImage": "Compartir imagen",
+  "openImageInNewTab": "Abrir imagen en nueva pestaña",
+  "searchImageWith": "Buscar imagen con",
+  "youRaboutToDownloadImage": "Estás a punto de descargar la imagen.\n ¿Estás seguro?",
+  "rUSureWantToQuitApp": "¿Estás seguro de que deseas salir?",
+  "quitBrowser": "Salir del navegador",
+  "delete": "Eliminar",
+  "reset": "Restablecer",
+  "customUrlHomePage": "Página de inicio con URL personalizada",
+  "ok": "Aceptar",
+  "downloadFailed": "¡Descarga fallida!",
+  "noCompletedDownloads": "No hay descargas completadas",
+  "cannotOpenThisFile": "No se puede abrir este archivo",
+  "titleChangeNode": "Cambiar Nodo",
+  "hasExperiancedTraffic": "ha experimentado un tráfico sin precedentes. Por favor, haz clic en 'Cambiar Nodo' para cambiar el nodo de salida",
+  "theResponseHasBeenInterrupted": "La respuesta ha sido interrumpida",
+  "tryThis": "Prueba esto:",
+  "you": "Tú",
+  "chat": "Chat",
+  "cameraPermissionDenied": "Permiso de cámara denegado",
+  "micPermissionRequired": "Se requiere permiso del micrófono",
+  "uPermanentlyDeniedMicAccess": "Has denegado permanentemente el acceso al micrófono",
+  "plsEnableMicInAppSettings": "Por favor, actívalo en la configuración de la aplicación para usar la búsqueda por voz",
+  "thispageAlreadySavedOffline": "Esta página ya está guardada sin conexión",
+  "pageSavedOffline": "¡Página guardada sin conexión!",
+  "unabledToSave": "No se pudo guardar",
+  "basic": "Básico",
+  "advanced" :"Avanzado",
+  
+  "downloadCompelete":"Descarga completa",
+  "screensecurityCurrentlyEnabled": "La seguridad de pantalla está activada actualmente. Asegúrate de desactivarla en la pantalla de configuración",
+  "openSettings": "abrir configuración",
+  "noInternetConnection": "Sin conexión a internet",
+  "youAreNotConnectedToInternet": "No estás conectado a internet. Asegúrate de que el WiFi/datos móviles estén activados",
 
-
+    "pleaseEnterValidCustomURL": "Por favor, introduzca una URL personalizada válida",
+ 
 
 "beldexIsAnEcosystem": "Beldex es un ecosistema de aplicaciones descentralizadas y orientadas a preservar la confidencialidad. La aplicación del Navegador Beldex es una de las aplicaciones que componen este ecosistema, junto con BChat, BelNet y el protocolo Beldex. El Navegador Beldex es tu puerta de entrada a una experiencia en línea fluida y confidencial, donde tus datos te pertenecen solo a ti. Construido sobre una infraestructura blockchain robusta, el navegador Beldex garantiza confidencialidad y anonimato a sus usuarios.",
 "atBeldex": " \n En Beldex, creemos en empoderar a las personas otorgándoles el derecho fundamental de controlar su huella digital. El Navegador Beldex está diseñado para brindar un entorno en línea seguro y confidencial para que los usuarios puedan comunicarse e interactuar con el mundo digital.",
