@@ -178,7 +178,7 @@ abstract class AppLocalizations {
   /// No description provided for @searchOrEnterAddress.
   ///
   /// In en, this message translates to:
-  /// **'Search or enter Address'**
+  /// **'Search or enter address'**
   String get searchOrEnterAddress;
 
   /// No description provided for @thistimeSearchIn.
@@ -732,6 +732,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Activate debugging mode for advanced insights into performance.'**
   String get debuggingEnabledContent;
+
+  /// No description provided for @closeTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tabs'**
+  String get closeTabs;
+
+  /// No description provided for @closeAllTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Close all tabs'**
+  String get closeAllTabs;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @cut.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut'**
+  String get cut;
+
+  /// No description provided for @paste.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste'**
+  String get paste;
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
+
+  /// No description provided for @copied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get copied;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @unableToShareUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to share URL'**
+  String get unableToShareUrl;
+
+  /// No description provided for @openInNewTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in new tab'**
+  String get openInNewTab;
+
+  /// No description provided for @copyAddressLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy address link'**
+  String get copyAddressLink;
+
+  /// No description provided for @shareLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Share link'**
+  String get shareLink;
+
+  /// No description provided for @downloadimage.
+  ///
+  /// In en, this message translates to:
+  /// **'Download image'**
+  String get downloadimage;
+
+  /// No description provided for @shareImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share image'**
+  String get shareImage;
+
+  /// No description provided for @openImageInNewTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Open image in new tab'**
+  String get openImageInNewTab;
+
+  /// No description provided for @searchImageWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Search image with'**
+  String get searchImageWith;
+
+  /// No description provided for @youRaboutToDownloadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are about to download image. \n Are you sure?'**
+  String get youRaboutToDownloadImage;
+
+  /// No description provided for @rUSureWantToQuitApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to quit?'**
+  String get rUSureWantToQuitApp;
+
+  /// No description provided for @quitBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Quit Browser'**
+  String get quitBrowser;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @customUrlHomePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom URL Home Page'**
+  String get customUrlHomePage;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @downloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Failed!'**
+  String get downloadFailed;
+
+  /// No description provided for @noCompletedDownloads.
+  ///
+  /// In en, this message translates to:
+  /// **'No completed downloads'**
+  String get noCompletedDownloads;
+
+  /// No description provided for @cannotOpenThisFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot open this file'**
+  String get cannotOpenThisFile;
+
+  /// No description provided for @titleChangeNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Node'**
+  String get titleChangeNode;
+
+  /// No description provided for @hasExperiancedTraffic.
+  ///
+  /// In en, this message translates to:
+  /// **'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node'**
+  String get hasExperiancedTraffic;
+
+  /// No description provided for @theResponseHasBeenInterrupted.
+  ///
+  /// In en, this message translates to:
+  /// **'The response has been interrupted'**
+  String get theResponseHasBeenInterrupted;
+
+  /// No description provided for @tryThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Try this:'**
+  String get tryThis;
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @chat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chat;
+
+  /// No description provided for @cameraPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera permission denied'**
+  String get cameraPermissionDenied;
+
+  /// No description provided for @micPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone Permission Required'**
+  String get micPermissionRequired;
+
+  /// No description provided for @uPermanentlyDeniedMicAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You have permanently denied microphone access'**
+  String get uPermanentlyDeniedMicAccess;
+
+  /// No description provided for @plsEnableMicInAppSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable it in app settings to use voice search'**
+  String get plsEnableMicInAppSettings;
+
+  /// No description provided for @thispageAlreadySavedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'This page is already saved offline'**
+  String get thispageAlreadySavedOffline;
+
+  /// No description provided for @pageSavedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Page is saved offline!'**
+  String get pageSavedOffline;
+
+  /// No description provided for @unabledToSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to save'**
+  String get unabledToSave;
+
+  /// No description provided for @basic.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic'**
+  String get basic;
+
+  /// No description provided for @advanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get advanced;
+
+  /// No description provided for @downloadCompelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Download complete'**
+  String get downloadCompelete;
+
+  /// No description provided for @screensecurityCurrentlyEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen security is currently enabled.Make sure to disable it in the settings screen'**
+  String get screensecurityCurrentlyEnabled;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettings;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @youAreNotConnectedToInternet.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not connected to the internet. Make sure WiFi/Mobile data is on'**
+  String get youAreNotConnectedToInternet;
+
+  /// No description provided for @pleaseEnterValidCustomURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter valid custom URL'**
+  String get pleaseEnterValidCustomURL;
 
   /// No description provided for @beldexIsAnEcosystem.
   ///

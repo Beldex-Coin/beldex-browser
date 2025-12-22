@@ -39,7 +39,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get prepareDaemonConnection => 'Preparing Daemon connection';
 
   @override
-  String get searchOrEnterAddress => 'Search or enter Address';
+  String get searchOrEnterAddress => 'Search or enter address';
 
   @override
   String get thistimeSearchIn => 'This time Search in';
@@ -316,6 +316,147 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get debuggingEnabledContent => 'Activate debugging mode for advanced insights into performance.';
+
+  @override
+  String get closeTabs => 'Close tabs';
+
+  @override
+  String get closeAllTabs => 'Close all tabs';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get cut => 'Cut';
+
+  @override
+  String get paste => 'Paste';
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get copied => 'Copied';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get unableToShareUrl => 'Unable to share URL';
+
+  @override
+  String get openInNewTab => 'Open in new tab';
+
+  @override
+  String get copyAddressLink => 'Copy address link';
+
+  @override
+  String get shareLink => 'Share link';
+
+  @override
+  String get downloadimage => 'Download image';
+
+  @override
+  String get shareImage => 'Share image';
+
+  @override
+  String get openImageInNewTab => 'Open image in new tab';
+
+  @override
+  String get searchImageWith => 'Search image with';
+
+  @override
+  String get youRaboutToDownloadImage => 'You are about to download image. \n Are you sure?';
+
+  @override
+  String get rUSureWantToQuitApp => 'Are you sure you want to quit?';
+
+  @override
+  String get quitBrowser => 'Quit Browser';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get customUrlHomePage => 'Custom URL Home Page';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get downloadFailed => 'Download Failed!';
+
+  @override
+  String get noCompletedDownloads => 'No completed downloads';
+
+  @override
+  String get cannotOpenThisFile => 'Cannot open this file';
+
+  @override
+  String get titleChangeNode => 'Change Node';
+
+  @override
+  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node';
+
+  @override
+  String get theResponseHasBeenInterrupted => 'The response has been interrupted';
+
+  @override
+  String get tryThis => 'Try this:';
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get chat => 'Chat';
+
+  @override
+  String get cameraPermissionDenied => 'Camera permission denied';
+
+  @override
+  String get micPermissionRequired => 'Microphone Permission Required';
+
+  @override
+  String get uPermanentlyDeniedMicAccess => 'You have permanently denied microphone access';
+
+  @override
+  String get plsEnableMicInAppSettings => 'Please enable it in app settings to use voice search';
+
+  @override
+  String get thispageAlreadySavedOffline => 'This page is already saved offline';
+
+  @override
+  String get pageSavedOffline => 'Page is saved offline!';
+
+  @override
+  String get unabledToSave => 'Unable to save';
+
+  @override
+  String get basic => 'Basic';
+
+  @override
+  String get advanced => 'Advanced';
+
+  @override
+  String get downloadCompelete => 'Download complete';
+
+  @override
+  String get screensecurityCurrentlyEnabled => 'Screen security is currently enabled.Make sure to disable it in the settings screen';
+
+  @override
+  String get openSettings => 'Open Settings';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get youAreNotConnectedToInternet => 'You are not connected to the internet. Make sure WiFi/Mobile data is on';
+
+  @override
+  String get pleaseEnterValidCustomURL => 'Please enter valid custom URL';
 
   @override
   String get beldexIsAnEcosystem => 'Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.';

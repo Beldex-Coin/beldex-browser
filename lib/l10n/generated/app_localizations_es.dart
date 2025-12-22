@@ -12,13 +12,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hello => 'Hola 👋';
 
   @override
-  String get connect => 'Connect';
+  String get connect => 'Conectar';
 
   @override
   String get connecting => 'Conectando...';
 
   @override
-  String get exitnode => 'Nodo de salida:';
+  String get exitnode => 'Nodo de salida';
 
   @override
   String get beldexofficial => 'Oficial de Beldex';
@@ -69,7 +69,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get engineVisibleOnSearchMenu => 'Motor visible en el menú de búsqueda';
 
   @override
-  String get newtab => 'Nuevo apartado';
+  String get newtab => 'Nueva pestana';
 
   @override
   String get favorites => 'Favoritos';
@@ -126,7 +126,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Alinea el código QR en el\ncentro del cuadro';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'Pantalla de bienvenida de la IA: Beldex AI mejora el Navegador Beldex con funciones inteligentes para una experiencia web perfecta. Resume el contenido de la página para una lectura rápida. Al enrutar el tráfico de manera eficiente a través de masternodes y nodos de salida, garantiza confidencialidad y una navegación más rápida. A diferencia de los modelos basados en suscripción, Beldex AI es gratuito, ofreciendo funciones avanzadas mientras prioriza la comodidad del usuario y una experiencia de internet centrada en la confidencialidad. Explora una navegación más inteligente y más rápida con Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI mejora el Navegador Beldex con funciones inteligentes para una experiencia web perfecta. Resume el contenido de la página para una lectura rápida. Al enrutar el tráfico de manera eficiente a través de masternodes y nodos de salida, garantiza confidencialidad y una navegación más rápida. A diferencia de los modelos basados en suscripción, Beldex AI es gratuito, ofreciendo funciones avanzadas mientras prioriza la comodidad del usuario y una experiencia de internet centrada en la confidencialidad. Explora una navegación más inteligente y más rápida con Beldex AI.';
 
   @override
   String get needHelpWithThisSite => '¿Necesitas ayuda con este sitio?';
@@ -147,7 +147,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get retry => 'Reintentar';
 
   @override
-  String get regenerate => 'Regenerate';
+  String get regenerate => 'Regenerar';
 
   @override
   String get thereWasAnErrorGenerateResponse => 'Hubo un error al generar la respuesta';
@@ -255,13 +255,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appPermissions => 'Permisos de la Aplicación';
 
   @override
-  String get aboutBeldexBrowser => 'Acerca de Beldex Browser';
+  String get aboutBeldexBrowser => 'Acerca del navegador Beldex';
 
   @override
-  String get resetSettings => 'Reset settings';
+  String get resetSettings => 'Restablecer configuración';
 
   @override
-  String get doYouWanttoReset => 'Do you want to reset the browser\nsettings?';
+  String get doYouWanttoReset => '¿Quieres restablecer la configuración del navegador?';
 
   @override
   String get textZoom => 'Zoom de Texto';
@@ -316,6 +316,147 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get debuggingEnabledContent => 'Activa el modo de depuración para obtener información avanzada sobre el rendimiento.';
+
+  @override
+  String get closeTabs => 'Cerrar pestañas';
+
+  @override
+  String get closeAllTabs => 'Cerrar todas las pestañas';
+
+  @override
+  String get copy => 'Copiar';
+
+  @override
+  String get cut => 'Cortar';
+
+  @override
+  String get paste => 'Pegar';
+
+  @override
+  String get selectAll => 'Seleccionar todo';
+
+  @override
+  String get copied => 'Copiado';
+
+  @override
+  String get copiedToClipboard => 'Copiado al portapapeles';
+
+  @override
+  String get unableToShareUrl => 'No se pudo compartir la URL';
+
+  @override
+  String get openInNewTab => 'Abrir en nueva pestaña';
+
+  @override
+  String get copyAddressLink => 'Copiar enlace de dirección';
+
+  @override
+  String get shareLink => 'Compartir enlace';
+
+  @override
+  String get downloadimage => 'Descargar imagen';
+
+  @override
+  String get shareImage => 'Compartir imagen';
+
+  @override
+  String get openImageInNewTab => 'Abrir imagen en nueva pestaña';
+
+  @override
+  String get searchImageWith => 'Buscar imagen con';
+
+  @override
+  String get youRaboutToDownloadImage => 'Estás a punto de descargar la imagen.\n ¿Estás seguro?';
+
+  @override
+  String get rUSureWantToQuitApp => '¿Estás seguro de que deseas salir?';
+
+  @override
+  String get quitBrowser => 'Salir del navegador';
+
+  @override
+  String get delete => 'Eliminar';
+
+  @override
+  String get reset => 'Restablecer';
+
+  @override
+  String get customUrlHomePage => 'Página de inicio con URL personalizada';
+
+  @override
+  String get ok => 'Aceptar';
+
+  @override
+  String get downloadFailed => '¡Descarga fallida!';
+
+  @override
+  String get noCompletedDownloads => 'No hay descargas completadas';
+
+  @override
+  String get cannotOpenThisFile => 'No se puede abrir este archivo';
+
+  @override
+  String get titleChangeNode => 'Cambiar Nodo';
+
+  @override
+  String get hasExperiancedTraffic => 'ha experimentado un tráfico sin precedentes. Por favor, haz clic en \'Cambiar Nodo\' para cambiar el nodo de salida';
+
+  @override
+  String get theResponseHasBeenInterrupted => 'La respuesta ha sido interrumpida';
+
+  @override
+  String get tryThis => 'Prueba esto:';
+
+  @override
+  String get you => 'Tú';
+
+  @override
+  String get chat => 'Chat';
+
+  @override
+  String get cameraPermissionDenied => 'Permiso de cámara denegado';
+
+  @override
+  String get micPermissionRequired => 'Se requiere permiso del micrófono';
+
+  @override
+  String get uPermanentlyDeniedMicAccess => 'Has denegado permanentemente el acceso al micrófono';
+
+  @override
+  String get plsEnableMicInAppSettings => 'Por favor, actívalo en la configuración de la aplicación para usar la búsqueda por voz';
+
+  @override
+  String get thispageAlreadySavedOffline => 'Esta página ya está guardada sin conexión';
+
+  @override
+  String get pageSavedOffline => '¡Página guardada sin conexión!';
+
+  @override
+  String get unabledToSave => 'No se pudo guardar';
+
+  @override
+  String get basic => 'Básico';
+
+  @override
+  String get advanced => 'Avanzado';
+
+  @override
+  String get downloadCompelete => 'Descarga completa';
+
+  @override
+  String get screensecurityCurrentlyEnabled => 'La seguridad de pantalla está activada actualmente. Asegúrate de desactivarla en la pantalla de configuración';
+
+  @override
+  String get openSettings => 'abrir configuración';
+
+  @override
+  String get noInternetConnection => 'Sin conexión a internet';
+
+  @override
+  String get youAreNotConnectedToInternet => 'No estás conectado a internet. Asegúrate de que el WiFi/datos móviles estén activados';
+
+  @override
+  String get pleaseEnterValidCustomURL => 'Por favor, introduzca una URL personalizada válida';
 
   @override
   String get beldexIsAnEcosystem => 'Beldex es un ecosistema de aplicaciones descentralizadas y orientadas a preservar la confidencialidad. La aplicación del Navegador Beldex es una de las aplicaciones que componen este ecosistema, junto con BChat, BelNet y el protocolo Beldex. El Navegador Beldex es tu puerta de entrada a una experiencia en línea fluida y confidencial, donde tus datos te pertenecen solo a ti. Construido sobre una infraestructura blockchain robusta, el navegador Beldex garantiza confidencialidad y anonimato a sus usuarios.';
