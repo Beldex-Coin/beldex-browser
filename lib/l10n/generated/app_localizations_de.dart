@@ -12,250 +12,250 @@ class AppLocalizationsDe extends AppLocalizations {
   String get hello => 'Hallo 👋';
 
   @override
-  String get connect => 'Connect';
+  String get connect => 'Verbinden';
 
   @override
-  String get connecting => 'Connecting...';
+  String get connecting => 'Verbindung...';
 
   @override
-  String get exitnode => 'Exit Node';
+  String get exitnode => 'Exit-Knoten';
 
   @override
-  String get beldexofficial => 'Beldex official';
+  String get beldexofficial => 'Beldex Offizieller';
 
   @override
-  String get contributorExitNode => 'Contributor exit node';
+  String get contributorExitNode => 'Mitwirkender Exit-Knoten';
 
   @override
-  String get belnetServiceStarted => 'Belnet service started';
+  String get belnetServiceStarted => 'BelNet-Dienst gestartet';
 
   @override
-  String get checkingConnection => 'Checking for connection...';
+  String get checkingConnection => 'Überprüfung der Verbindung...';
 
   @override
-  String get connectingBelnetdVPN => 'Connecting to belnet dVPN';
+  String get connectingBelnetdVPN => 'Verbindung zum BelNet dVPN wird hergestellt';
 
   @override
-  String get prepareDaemonConnection => 'Preparing Daemon connection';
+  String get prepareDaemonConnection => 'Daemon-Verbindung wird vorbereitet';
 
   @override
-  String get searchOrEnterAddress => 'Search or enter address';
+  String get searchOrEnterAddress => 'Suchen oder adresse eingeben';
 
   @override
-  String get thistimeSearchIn => 'This time Search in';
+  String get thistimeSearchIn => 'Dieses Mal suchen in';
 
   @override
-  String get searchSettings => 'Search settings';
+  String get searchSettings => 'Sucheinstellungen';
 
   @override
-  String get search => 'Search';
+  String get search => 'Suche';
 
   @override
-  String get searchEngine => 'Search Engine';
+  String get searchEngine => 'Suchmaschine';
 
   @override
-  String get defaultSearchEngine => 'Default Search Engine';
+  String get defaultSearchEngine => 'Standard-Suchmaschine';
 
   @override
-  String get manageSearchShortcuts => 'Manage Search shortcuts';
+  String get manageSearchShortcuts => 'Suchkürzel verwalten';
 
   @override
-  String get editEnginesVisible => 'Edit engines visible in the search menu';
+  String get editEnginesVisible => 'Suchmaschinen im Suchmenü bearbeiten';
 
   @override
-  String get selectOne => 'Select one';
+  String get selectOne => 'Eine auswählen';
 
   @override
-  String get engineVisibleOnSearchMenu => 'Engine visible on the search menu';
+  String get engineVisibleOnSearchMenu => 'Suchmaschine im Suchmenü sichtbar';
 
   @override
-  String get newtab => 'New tab';
+  String get newtab => 'Neuer Tab';
 
   @override
-  String get favorites => 'Favorites';
+  String get favorites => 'Favoriten';
 
   @override
-  String get changeNode => 'Change Node';
+  String get changeNode => 'Knoten wechseln';
 
   @override
-  String get share => 'Share';
+  String get share => 'Teilen';
 
   @override
   String get beldexAI => 'Beldex AI';
 
   @override
-  String get webArchives => 'Web Archives';
+  String get webArchives => 'Web-Archive';
 
   @override
-  String get findOnPage => 'Find on page';
+  String get findOnPage => 'Auf Seite suchen';
 
   @override
   String get downloads => 'Downloads';
 
   @override
-  String get desktopMode => 'Desktop mode';
+  String get desktopMode => 'Desktop-Modus';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Einstellungen';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'Dunkel';
 
   @override
-  String get reportAnIssue => 'Report an Issue';
+  String get reportAnIssue => 'Problem melden';
 
   @override
-  String get about => 'About';
+  String get about => 'Über';
 
   @override
-  String get quit => 'Quit';
+  String get quit => 'Beenden';
 
   @override
-  String get noFavorites => 'No Favorites';
+  String get noFavorites => 'Keine Favoriten';
 
   @override
-  String get noWebArchives => 'No Web archives';
+  String get noWebArchives => 'Keine Webarchive';
 
   @override
-  String get chooseLanguage => 'Choose Language';
+  String get chooseLanguage => 'Sprache wählen';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'QR scannen';
 
   @override
-  String get alignQRInCenterOFFrame => 'Align the QR code in the\ncenter of frame';
+  String get alignQRInCenterOFFrame => 'QR-Code in der Mitte des Rahmens ausrichten';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI enhances the Beldex Browser with intelligent features for a seamless web experience. It summarizes page content for quick reading. By efficiently routing traffic through masternodes and exit nodes, it ensures confidentiality and faster browsing. Unlike subscription-based models, Beldex AI is free to use, delivering advanced functionality while prioritizing user convenience and a confidentiality-centered internet experience. Explore smarter, faster browsing with Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI erweitert den Beldex Browser um intelligente Funktionen für ein nahtloses Interneterlebnis. Es fasst Seiteninhalte für schnelles Lesen zusammen. Durch effizientes Routing des Datenverkehrs über Masternodes und Exit-Nodes gewährleistet es Vertraulichkeit und schnelleres Surfen. Im Gegensatz zu abonnementbasierten Modellen ist Beldex AI kostenlos nutzbar und bietet fortschrittliche Funktionen, während der Komfort des Nutzers und eine auf Vertraulichkeit ausgerichtete Internet-Erfahrung im Vordergrund stehen. Entdecken Sie intelligenteres und schnelleres Surfen mit Beldex AI.';
 
   @override
-  String get needHelpWithThisSite => 'Need help with this site?';
+  String get needHelpWithThisSite => 'Brauchen Sie Hilfe mit dieser Seite?';
 
   @override
-  String get beldexAICanHelpYou => 'BeldexAI can help you summarize articles,\nexpand on a site\'s content and much more.';
+  String get beldexAICanHelpYou => 'BeldexAI kann Ihnen helfen, Artikel zusammenzufassen,\nInhalte einer Website zu erweitern und vieles mehr.';
 
   @override
-  String get enterPromptHere => 'Enter prompt here..';
+  String get enterPromptHere => 'Eingabeaufforderung hier eingeben..';
 
   @override
-  String get summariseThisPage => 'Summarise this page';
+  String get summariseThisPage => 'Diese Seite zusammenfassen';
 
   @override
-  String get hideSummarise => 'Hide Summarise';
+  String get hideSummarise => 'Zusammenfassung ausblenden';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Erneut versuchen';
 
   @override
-  String get regenerate => 'Regenerate';
+  String get regenerate => 'Erneut generieren';
 
   @override
-  String get thereWasAnErrorGenerateResponse => 'There was an error generating response';
+  String get thereWasAnErrorGenerateResponse => 'Beim Erstellen der Antwort ist ein Fehler aufgetreten';
 
   @override
-  String get askBeldexAI => 'Ask Beldex AI';
+  String get askBeldexAI => 'Fragen Sie Beldex AI';
 
   @override
-  String get chatDeleted => 'Chat deleted successfully';
+  String get chatDeleted => 'Chat erfolgreich gelöscht';
 
   @override
-  String get unprecidentedTrafficExitNodeError => 'Unprecedented traffic with Exit node. Please change exit node and retry';
+  String get unprecidentedTrafficExitNodeError => 'Ungewöhnlich hoher Datenverkehr mit Exit-Node. Bitte wechseln Sie den Exit-Node und versuchen Sie es erneut.';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Verbunden';
 
   @override
-  String get disconnected => 'Disconnected';
+  String get disconnected => 'Getrennt';
 
   @override
-  String get switchNode => 'Switch Node';
+  String get switchNode => 'Node wechseln';
 
   @override
-  String get switchingNode => 'Switching Node';
+  String get switchingNode => 'Wechsle Node';
 
   @override
-  String get nodes => 'Nodes';
+  String get nodes => 'Knoten';
 
   @override
-  String get exitNodeSwitched => 'Exit node switched successfully';
+  String get exitNodeSwitched => 'Exit-Knoten erfolgreich gewechselt';
 
   @override
-  String get thisNodeAlreadySelected => 'This node is already selected.Please select another one from the list';
+  String get thisNodeAlreadySelected => 'Dieser Node ist bereits ausgewählt. Bitte wählen Sie einen anderen aus der Liste';
 
   @override
-  String get doYouWantToSwitch => 'Do you want to switch with the selected node?';
+  String get doYouWantToSwitch => 'Möchten Sie zum ausgewählten Node wechseln?';
 
   @override
-  String get noRecentDownloads => 'No recent downloads';
+  String get noRecentDownloads => 'Keine kürzlichen Downloads';
 
   @override
-  String get clearDownloads => 'Clear Downloads';
+  String get clearDownloads => 'Downloads löschen';
 
   @override
   String get download => 'Download';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Abbrechen';
 
   @override
-  String get youAreAboutToDownload => 'You are about to download';
+  String get youAreAboutToDownload => 'Sie sind dabei, herunterzuladen';
 
   @override
-  String get areYouSure => 'Are you sure?';
+  String get areYouSure => 'Sind Sie sicher?';
 
   @override
-  String get startDownloading => 'Start downloading';
+  String get startDownloading => 'Download starten';
 
   @override
-  String get downloading => 'Downloading';
+  String get downloading => 'Wird heruntergeladen';
 
   @override
-  String get completed => 'Completed';
+  String get completed => 'Abgeschlossen';
 
   @override
-  String get fileDownloaded => 'Files downloaded successfully';
+  String get fileDownloaded => 'Dateien erfolgreich heruntergeladen';
 
   @override
-  String get searchEngineContent => 'Choose your preferred search engine for personalized browsing.';
+  String get searchEngineContent => 'Wählen Sie Ihre bevorzugte Suchmaschine für ein personalisiertes Browser-Erlebnis.';
 
   @override
-  String get homePage => 'Home Page';
+  String get homePage => 'Startseite';
 
   @override
-  String get homepageContent => 'Set your homepage for quick access to favorite sites.';
+  String get homepageContent => 'Legen Sie Ihre Startseite fest, um schnellen Zugriff auf bevorzugte Websites zu erhalten.';
 
   @override
-  String get screenSecurity => 'Screen Security';
+  String get screenSecurity => 'Bildschirmsicherheit';
 
   @override
-  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing';
+  String get screenSecurityContent => 'Fügen Sie eine zusätzliche Sicherheitsebene für geschütztes Browsen hinzu.';
 
   @override
-  String get javascriptEnabled => 'JavaScript Enabled';
+  String get javascriptEnabled => 'JavaScript aktiviert';
 
   @override
-  String get javascriptEnabledContent => 'Enable or disable JavaScript for a tailored experience.';
+  String get javascriptEnabledContent => 'Aktivieren oder deaktivieren Sie JavaScript für ein individuell angepasstes Erlebnis.';
 
   @override
-  String get cacheEnabled => 'Cache Enabled';
+  String get cacheEnabled => 'Cache aktiviert';
 
   @override
-  String get cacheEnabledContent => 'Toggle caching for faster loading or increased confidentiality.';
+  String get cacheEnabledContent => 'Cache ein- oder ausschalten für schnellere Ladezeiten oder erhöhte Vertraulichkeit.';
 
   @override
-  String get supportZoom => 'Support Zoom';
+  String get supportZoom => 'Zoom unterstützen';
 
   @override
-  String get supportZoomContent => 'Enable zoom for a closer look at web content.';
+  String get supportZoomContent => 'Zoom aktivieren, um Webinhalte näher zu betrachten.';
 
   @override
-  String get setAsDefaultBrowser => 'Set as Default Browser';
+  String get setAsDefaultBrowser => 'Als Standardbrowser festlegen';
 
   @override
-  String get appPermissions => 'App Permissions';
+  String get appPermissions => 'App-Berechtigungen';
 
   @override
-  String get aboutBeldexBrowser => 'About Beldex Browser';
+  String get aboutBeldexBrowser => 'Über den Beldex-Browser';
 
   @override
   String get resetSettings => 'Reset settings';
