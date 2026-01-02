@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -52,6 +55,12 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
   Future<void> _openAppSettings() async {
     await openAppSettings();
   }
+
+
+ _openLanguageScreen(){
+   Navigator.push(context, MaterialPageRoute(builder: (context)=> AppLanguageScreen()));
+ }
+
 
   @override
   void dispose() {
@@ -126,7 +135,8 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
         Provider.of<SelectedItemsProvider>(context, listen: false);
     var basicProvider = Provider.of<BasicProvider>(context, listen: false);
     bool _showError = false;
-
+    final localeProvider = Provider.of<LocaleProvider>(context,listen: true);
+        final loc = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
 
@@ -175,11 +185,11 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 textBaseline: TextBaseline.alphabetic,
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 children: [
-                  TextWidget(text:"Search Engine",
+                  TextWidget(text:loc.searchEngine, //"Search Engine",
                       style: theme.textTheme.bodyLarge!
                           .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                   TextWidget(
-                      text:'Choose your preferred search engine for personalized browsing.',
+                      text:loc.searchEngineContent, //'Choose your preferred search engine for personalized browsing.',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: theme.textTheme.bodySmall!
@@ -279,7 +289,115 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
           ]),
         ),
       ),
-
+    //   Padding(
+    //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+    //     child: SizedBox(
+    //       //height: constraints.maxHeight/7.5,
+    //       //color: Colors.yellow,
+    //       child:
+    //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    //         Expanded(
+    //           child: Column(
+    //             textBaseline: TextBaseline.alphabetic,
+    //             crossAxisAlignment: CrossAxisAlignment.baseline,
+    //             children: [
+    //               TextWidget(text:"Change Langauge",
+    //                   style: theme.textTheme.bodyLarge!
+    //                       .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+    //               TextWidget(
+    //                   text: loc.hello, //'Change the app language',
+    //                   overflow: TextOverflow.ellipsis,
+    //                   maxLines: 3,
+    //                   style: theme.textTheme.bodySmall!
+    //                       .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+    //             ],
+    //           ),
+    //         ),
+    //         PopupMenuTheme(
+    //           data: PopupMenuThemeData(
+    //             shape: RoundedRectangleBorder(
+    //   borderRadius: BorderRadius.circular(4),
+    //   side: BorderSide(
+    //     color: themeProvider.darkTheme
+    //         ? const Color(0xff42425F)
+    //         : const Color(0xffF3F3F3),
+    //   ),
+    // ),
+    //           ),
+    //           child: PopupMenuButton<String>(
+    //             offset: Offset(-8, 49),
+    //             color: themeProvider.darkTheme
+    //                 ? const Color(0xff292937)
+    //                 : const Color(0xffF3F3F3),
+    //             surfaceTintColor: themeProvider.darkTheme
+    //                 ? const Color(0xff292937)
+    //                 : const Color(0xffF3F3F3),
+    //             icon: Container(
+    //               width: 100,
+    //               height: 40,
+    //               decoration: BoxDecoration(
+    //                   color: themeProvider.darkTheme
+    //                       ? const Color(0xff363645)
+    //                       : const Color(0xffFFFFFF),
+    //                   border: Border.all(
+    //                       color: themeProvider.darkTheme
+    //                           ? const Color(0xff42425F)
+    //                           : const Color(0xff3EC745)),
+    //                   borderRadius: BorderRadius.circular(3)),
+    //               padding:const EdgeInsets.symmetric(horizontal: 5),
+    //               child: Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Expanded(
+    //                       child: TextWidget(
+    //                    text:localeProvider.selectedLanguage,
+    //                     overflow: TextOverflow.ellipsis,
+    //                     maxLines: 1,
+    //                     style: TextStyle(
+    //                         fontSize: 13,
+    //                         color: themeProvider.darkTheme
+    //                             ? Colors.white
+    //                             : Color(0xff3EC745)),
+    //                   )),
+    //                   SizedBox(
+    //                     width: 25,
+    //                     child: Icon(Icons.arrow_drop_down,
+    //                         color: themeProvider.darkTheme
+    //                             ? const Color(0xff6D6D81)
+    //                             : const Color(0xff3EC745)),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //             onSelected: (String selected) {
+    //               /// This automatically:
+    //   /// - Saves locale
+    //   /// - Disables follow-system-locale mode
+    //   /// - Updates selectedLanguage
+    //   /// - Triggers UI update
+    //   localeProvider.setLocale(localeProvider.languages[selected]!);
+    //               // localeProvider.setLocale(localeProvider.languages[selected]!);
+    //               // localeProvider.setSelectedLanguage();
+    //               // // setState(() {
+    //               // //   // settings.searchEngine = value;
+    //               // //   // browserModel.updateSettings(settings);
+    //               // // });
+                 
+    //             },
+    //             itemBuilder: ((context) {
+    //               return localeProvider.languages.keys.map((String language) {
+    //                 return PopupMenuItem<String>(
+    //                     enabled: true,
+    //                     value: language,
+    //                     height: 30,
+    //                     child: Text(language,style: TextStyle(fontWeight: FontWeight.w300),));
+    //               }).toList();
+    //             }),
+    //           ),
+    //         )
+    //       ]),
+    //     ),
+    //   ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SizedBox(
@@ -293,11 +411,11 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     textBaseline: TextBaseline.alphabetic,
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
-                      TextWidget(text:"Home page",
+                      TextWidget(text:loc.homePage, //"Home page",
                           style: theme.textTheme.bodyLarge!.copyWith(
                               fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                       TextWidget(
-                         text: 'Set your homepage for quick access to favorite sites.',
+                         text:loc.homepageContent, //'Set your homepage for quick access to favorite sites.',
                           style: theme.textTheme.bodySmall!
                               .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
                     ],
@@ -363,8 +481,8 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
-                                      child: const TextWidget(
-                                       text: 'Home Page',
+                                      child:  TextWidget(
+                                       text:loc.homePage, //'Home Page',
                                         style: TextStyle(
                                             fontSize: 22,
                                             fontWeight: FontWeight.w600),
@@ -439,8 +557,8 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                                   decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     contentPadding: EdgeInsets.only(left:5),
-                                                    hintText:
-                                                        'Custom URL Home Page',
+                                                    hintText:loc.customUrlHomePage,
+                                                        //'Custom URL Home Page',
                                                     hintStyle: TextStyle(
                                                       fontSize: 14,
                                                         color:  const Color(0xff77778B),
@@ -459,7 +577,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                       buttonItems.clear(); // Clear all default options
                       if (_customHomePageController.text.isEmpty) {
                         buttonItems.add(ContextMenuButtonItem(
-                            label: 'Paste',
+                            label:loc.paste,// 'Paste',
                             onPressed: () {
                               Clipboard.getData('text/plain').then((value) {
                                 if (value != null && value.text != null) {
@@ -495,7 +613,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                       } else {
                         buttonItems.clear();
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Cut',
+                          label:loc.cut,// 'Cut',
                           onPressed: () {
                             editableTextState
                                 .cutSelection(SelectionChangedCause.tap);
@@ -534,7 +652,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         ));
 
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Copy',
+                          label:loc.copy,// 'Copy',
                           onPressed: () {
                             final TextEditingValue value =
                                 editableTextState.textEditingValue;
@@ -554,7 +672,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                             editableTextState.textEditingValue.selection,
                             editableTextState.textEditingValue.text)) {
                           buttonItems.add(ContextMenuButtonItem(
-                            label: 'Select All',
+                            label:loc.selectAll, // 'Select All',
                             onPressed: () {
                               // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
                               editableTextState
@@ -565,7 +683,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         }
                         // Add a custom "Paste" button
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Paste',
+                          label:loc.paste, // 'Paste',
                           onPressed: () {
                             Clipboard.getData('text/plain').then((value) {
                               if (value != null && value.text != null) {
@@ -604,8 +722,8 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                     }),
                                     Visibility(
                                       visible: _showError,
-                                      child: const TextWidget(
-                                       text: 'Please enter valid custom Url',
+                                      child: TextWidget(
+                                       text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
                                         style: TextStyle(color: Colors.red),
                                       ),
                                     ),
@@ -618,7 +736,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                         disabledColor: Color(0xff2C2C3B),
                                         minWidth: double.maxFinite,
                                         height: 50,
-                                        child: const Text('OK',
+                                        child:  Text(loc.ok, // 'OK',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18)),
@@ -682,7 +800,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   textBaseline: TextBaseline.alphabetic,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    TextWidget(text:"Screen security",
+                    TextWidget(text:loc.screenSecurity, //"Screen security",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -691,7 +809,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         // fontWeight: FontWeight.w600),
                         ),
                     TextWidget(
-                        text:'Add an extra layer of protection for secure browsing.',
+                        text:loc.screenSecurityContent, //'Add an extra layer of protection for secure browsing.',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -763,7 +881,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"JavaScript Enabled",
+                    TextWidget(text:loc.javascriptEnabled, //"JavaScript Enabled",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -778,7 +896,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                          text:"Enable or disable JavaScript for a tailored experience.",
+                          text:loc.javascriptEnabledContent, //"Enable or disable JavaScript for a tailored experience.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -846,7 +964,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Cache Enabled",
+                    TextWidget(text:loc.cacheEnabled, //"Cache Enabled",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -861,7 +979,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                         text: "Toggle caching for faster loading or increased confidentiality.",
+                         text:loc.cacheEnabledContent,// "Toggle caching for faster loading or increased confidentiality.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -928,7 +1046,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Support Zoom",
+                    TextWidget(text:loc.supportZoom, //"Support Zoom",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -943,7 +1061,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                          text:"Enable zoom for a closer look at web content.",
+                          text:loc.supportZoomContent, //"Enable zoom for a closer look at web content.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -998,6 +1116,59 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
         ),
       ),
       
+Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: InkWell(
+          onTap: _openLanguageScreen,
+          child: Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  textBaseline: TextBaseline.alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  children: [
+                    TextWidget(text:"App Language", //"Screen security",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                        // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
+                        // fontWeight: FontWeight.w600),
+                        ),
+                    TextWidget(
+                        text:localeProvider.selectedLanguage, //'Add an extra layer of protection for secure browsing.',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                        // TextStyle(
+                        //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
+                        //   fontWeight: FontWeight.w400,
+                        // )
+                        ),
+                  ],
+                ),
+              ),
+             const SizedBox(
+                width: 30,
+              ),
+              SvgPicture.asset(
+                'assets/images/arrow_backs.svg', height:widget.toggleSizeInDp*0.5, //width / 18.5, //16 ,
+                color: themeProvider.darkTheme
+                    ? const Color(0xff56566F)
+                    : const Color(0xffB8B8C0),
+              )
+              
+            ],
+          ),
+        ),
+      ),
+
+
+
+
+
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 13.0),
         child: InkWell(
@@ -1006,7 +1177,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: TextWidget(text:"App Permissions",
+                child: TextWidget(text:loc.appPermissions, //"App Permissions",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
@@ -1016,7 +1187,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     ),
               ),
               SvgPicture.asset(
-                'assets/images/arrow_backs.svg', height:widget.toggleSizeInDp, //width / 18.5, //16 ,
+                'assets/images/arrow_backs.svg', height:widget.toggleSizeInDp*0.5, //width / 18.5, //16 ,
                 color: themeProvider.darkTheme
                     ? const Color(0xff56566F)
                     : const Color(0xffB8B8C0),
@@ -1060,7 +1231,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: TextWidget(text:"Set as Default Browser",
+                child: TextWidget(text:loc.setAsDefaultBrowser, //"Set as Default Browser",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
@@ -1068,7 +1239,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg',
-                height:widget.toggleSizeInDp, //width / 18.5,
+                height:widget.toggleSizeInDp*0.5, //width / 18.5,
                 color: themeProvider.darkTheme
                     ? const Color(0xff56566F)
                     : const Color(0xffB8B8C0),
@@ -1086,7 +1257,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: TextWidget(text:"About Beldex Browser",
+                child: TextWidget(text:loc.aboutBeldexBrowser,  //"About Beldex Browser",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
@@ -1094,7 +1265,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg',
-                height:widget.toggleSizeInDp, //width / 18.5,
+                height:widget.toggleSizeInDp*0.5, //width / 18.5,
                 color: themeProvider.darkTheme
                     ? const Color(0xff56566F)
                     : const Color(0xffB8B8C0),

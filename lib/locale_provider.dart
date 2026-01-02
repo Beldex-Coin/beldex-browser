@@ -58,6 +58,28 @@ String get localeId => _locale.languageCode; //for voice search
     };
   }
 
+
+String getLocalizedLanguageName(BuildContext context, String staticName) {
+  final loc = AppLocalizations.of(context)!;
+
+  switch (staticName) {
+    case 'English': return loc.languageEnglish;
+    case 'Español': return loc.languageSpanish;
+    case '日本語': return loc.languageJapanese;
+    case 'Português': return loc.languagePortuguese;
+    case 'Deutsch': return loc.languageGerman;
+    case 'Türkçe': return loc.languageTurkish;
+    case 'Русский': return loc.languageRussian;
+    case '中文': return loc.languageChinese;
+    case '한국어': return loc.languageKorean;
+    case 'Tiếng Việt': return loc.languageVietnamese;
+    case 'தமிழ்': return loc.languageTamil;
+    case 'العربية': return loc.languageArabic;
+    default: return loc.languageEnglish;
+  }
+}
+
+
   Future<void> _loadSavedLocale() async {
     final prefs = await SharedPreferences.getInstance();
 
