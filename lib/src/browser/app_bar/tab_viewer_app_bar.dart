@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
@@ -40,6 +41,7 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     var themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
+    final loc = AppLocalizations.of(context)!;
     return <Widget>[
       InkWell(
         key: tabInkWellKey,
@@ -112,29 +114,12 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                                                 :const Color(0xff282836)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:8.0),
-                          child: Text(choice, style: Theme.of(context)
+                          child: Text(loc.newtab, style: Theme.of(context)
                                               .textTheme
                                               .bodySmall),
                         ),
                       ]),
                 );
-              // case TabViewerPopupMenuActions.NEW_INCOGNITO_TAB:
-              //   return CustomPopupMenuItem<String>(
-              //     enabled: true,
-              //     value: choice,
-              //     child: Row(
-              //         children: [
-              //          SvgPicture.asset('assets/images/private_tab.svg', color: themeProvider.darkTheme
-              //                                   ?const Color(0xffFFFFFF)
-              //                                   :const Color(0xff282836)),
-              //           Padding(
-              //             padding: const EdgeInsets.symmetric(horizontal:8.0),
-              //             child: Text(choice,style: Theme.of(context)
-              //                                 .textTheme
-              //                                 .bodySmall),
-              //           ),
-              //         ]),
-              //   );
               case TabViewerPopupMenuActions.CLOSE_ALL_TABS:
                 return CustomPopupMenuItem<String>(
                   enabled: browserModel.webViewTabs.isNotEmpty,
@@ -147,7 +132,7 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                          ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:5.0),
-                          child: Text(choice, style: Theme.of(context)
+                          child: Text(loc.closeAllTabs, style: Theme.of(context)
                                               .textTheme
                                               .bodySmall),
                         ),
@@ -168,7 +153,7 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:8.0),
-                          child: Text(choice,style: Theme.of(context)
+                          child: Text(loc.settings,style: Theme.of(context)
                                               .textTheme
                                               .bodySmall),
                         ),

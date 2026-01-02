@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
@@ -229,7 +230,7 @@ void getRandomExitnode() async {
     }
   }
 
-Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel) async {
+Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc) async {
     //getRandomExitnode();
    // setRandomNode();
   //  if(isSameNode){
@@ -240,7 +241,7 @@ Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider
      final prefs = await SharedPreferences.getInstance();
       await prefs.setString('selectedExitNode', '$exitNode');
       await prefs.setString('selectedCountryIcon', '$exitIcon');
-    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel); 
+    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc); 
    }
     
   }
@@ -267,7 +268,7 @@ showWarning()async{
 }
 
 
-Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel) async {
+Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc) async {
     try{
       // if (BelnetLib.isConnected == false) {
       setState(() {
@@ -293,8 +294,9 @@ Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider 
          vpnStatusProvider.updateValue('Connected');
          vpnStatusProvider.updateChangeNodevalue(false);
          vpnStatusProvider.updateCanClose(false);
-         showMessage(
-                'Exit node switched successfully');
+         showMessage(loc.exitNodeSwitched
+                //'Exit node switched successfully'
+                );
          if(widget.webViewController != null){
           //var dds = widget.webViewController!.getUrl().toString();
             widget.webViewController!.loadUrl(
@@ -437,6 +439,7 @@ void setRandomNode() async {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context); 
     double mHeight = MediaQuery.of(context).size.height;
+     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
@@ -459,12 +462,12 @@ void setRandomNode() async {
           resizeToAvoidBottomInset: true,
 
           //backgroundColor: Color(0xff171720),
-          appBar: _appBar(themeProvider,vpnStatusProvider),
-          body: _scaffoldBody(mHeight, themeProvider)),
+          appBar: _appBar(themeProvider,vpnStatusProvider,loc),
+          body: _scaffoldBody(mHeight, themeProvider,loc)),
     );
   }
 
-  AppBar _appBar(DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider) {
+  AppBar _appBar(DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider,AppLocalizations loc) {
     return AppBar(
       //backgroundColor: Color(0xff171720),
       leading:vpnStatusProvider.isChangeNode ? Container() : IconButton(
@@ -477,11 +480,12 @@ void setRandomNode() async {
       ),
       centerTitle: true,
       title:
-          Text('Change Node', style: Theme.of(context).textTheme.bodyLarge),
+          Text(loc.changeNode, //'Change Node', 
+          style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 
-  Widget _scaffoldBody(double mHeight, DarkThemeProvider themeProvider) {
+  Widget _scaffoldBody(double mHeight, DarkThemeProvider themeProvider,AppLocalizations loc) {
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final loadingtickValueProvider = Provider.of<LoadingtickValueProvider>(context);
@@ -533,8 +537,7 @@ void setRandomNode() async {
                           children: [
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: const Text(
-                                  'Exit Node',
+                                child: Text(loc.exitnode,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                            const SizedBox(
@@ -623,7 +626,7 @@ void setRandomNode() async {
                                             overlayEntry = OverlayEntry(
                                               builder: (context) {
                                                 return _buildExitnodeListView(
-                                                    mHeight, themeProvider,vpnStatusProvider);
+                                                    mHeight, themeProvider,vpnStatusProvider,loc);
                                               },
                                             );
                                             overlayState.insert(overlayEntry!);
@@ -731,13 +734,13 @@ void setRandomNode() async {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: const Text(
-                    'Switching Node',
+                  child: Text( loc.switchingNode,
+                   // 'Switching Node',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const Text(
-                  'Do you want to switch with the selected node?',
+                Text( loc.doYouWantToSwitch,
+                  //'Do you want to switch with the selected node?',
                   style: TextStyle(fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -755,7 +758,7 @@ void setRandomNode() async {
                                 disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: const Text('Cancel',
+                          child: Text( loc.cancel,// 'Cancel',
                               style: TextStyle(fontSize: 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -780,7 +783,7 @@ void setRandomNode() async {
                                 disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: const Text('Connect',
+                          child: Text(loc.connect, //'Connect',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           shape: RoundedRectangleBorder(
@@ -789,7 +792,7 @@ void setRandomNode() async {
                           ),
                           onPressed: () async {
                             // disconnectVpn(vpnStatusProvider);
-                                    toggleBelnet(vpnStatusProvider,loadingtickValueProvider,webViewModel);
+                                    toggleBelnet(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc);
                                   // resetSettings();
                                    Navigator.pop(context);
 
@@ -823,8 +826,8 @@ void setRandomNode() async {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Switch Node',
+                      child: Text( loc.switchNode,
+                       // 'Switch Node',
                         style: TextStyle(fontSize: 18 ,fontWeight: FontWeight.w600,color: !isChangeNodeEnable ? themeProvider.darkTheme? Color(0xff6D6D81) : Color(0xffC5C5C5) :  Colors.white //: Colors.black
                          ),
                       ),
@@ -836,19 +839,19 @@ void setRandomNode() async {
           
 
 
-       Visibility(
-        visible: canShowWarning,
-         child: Container(
-          margin: EdgeInsets.all(15),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color:Colors.grey,width: 0.1),
-            borderRadius: BorderRadius.circular(8),
-            color: themeProvider.darkTheme ? Colors.white : Color(0xffF3F3F3)
-          ),
-            child: Text('Please remain on this page until the operation has been completed.',textAlign: TextAlign.center, style: TextStyle(fontWeight:FontWeight.w500,color: Colors.black ),),
-         ),
-       )
+      //  Visibility(
+      //   visible: canShowWarning,
+      //    child: Container(
+      //     margin: EdgeInsets.all(15),
+      //     padding: EdgeInsets.all(10),
+      //     decoration: BoxDecoration(
+      //       border: Border.all(color:Colors.grey,width: 0.1),
+      //       borderRadius: BorderRadius.circular(8),
+      //       color: themeProvider.darkTheme ? Colors.white : Color(0xffF3F3F3)
+      //     ),
+      //       child: Text('Please remain on this page until the operation has been completed.',textAlign: TextAlign.center, style: TextStyle(fontWeight:FontWeight.w500,color: Colors.black ),),
+      //    ),
+      //  )
 
 
 
@@ -870,7 +873,7 @@ void setRandomNode() async {
   }
 
   Widget _buildExitnodeListView(
-      double mHeight, DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider) {
+      double mHeight, DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider,AppLocalizations loc) {
     // print('${exitData1.length}');
     try {
       return Material(
@@ -934,7 +937,7 @@ void setRandomNode() async {
                                   left: mHeight * 0.08 / 3,
                                   right: mHeight * 0.04 / 3),
                               title: Text(
-                                exitData1[index].type,
+                                exitData1[index].type == 'Beldex Official' ? loc.beldexofficial : loc.contributorExitNode,
                                 style: TextStyle(
                                     color: index == 0
                                         ? Color(0xff1CBE20)
@@ -954,7 +957,7 @@ void setRandomNode() async {
                                 // exitData[index].type == "Custom Exit Node" &&
                                 //         customExitAdd.isNotEmpty
                                 //     ? "${customExitAdd.length} Nodes":
-                                "${exitData1[index].node.length} Nodes",
+                                "${exitData1[index].node.length} ${loc.nodes}",
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: MediaQuery.of(context).size.height *
@@ -968,7 +971,8 @@ void setRandomNode() async {
                                       exitData1[index].type,
                                       themeProvider,
                                       mHeight,
-                                      vpnStatusProvider
+                                      vpnStatusProvider,
+                                      loc
                                       ),
                                 ),
                               ],
@@ -990,7 +994,7 @@ void setRandomNode() async {
   }
 
   _buildExpandableContent(List<exitNodeModel.Node> vnode, String type,
-      DarkThemeProvider themeProvider, double mHeight,VpnStatusProvider vpnStatusProvider) {
+      DarkThemeProvider themeProvider, double mHeight,VpnStatusProvider vpnStatusProvider,AppLocalizations loc) {
     List<Widget> columnContent = [];
     for (int i = 0; i < vnode.length; i++) {
       columnContent.add(GestureDetector(
@@ -1020,7 +1024,7 @@ void setRandomNode() async {
               if(connectednode == vnode[i].name){
                 isChangeNodeEnable = false;
                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('This node is already selected.Please select another one from the list')));
+                    content: Text(loc.thisNodeAlreadySelected)));
 
               }else{
                 isChangeNodeEnable = true;
@@ -1132,6 +1136,16 @@ void setRandomNode() async {
   }
 }
 
+
+String getStringsForStatus(String status,AppLocalizations loc){
+  switch(status){
+    case 'Connected': return loc.connected;
+    case 'Connecting...' : return loc.connecting;
+    case 'Disconnected': return loc.disconnected;
+    default: return loc.connected;
+  }
+}
+
 class VpnConnectStatus extends StatelessWidget {
   const VpnConnectStatus({super.key});
 
@@ -1140,6 +1154,7 @@ class VpnConnectStatus extends StatelessWidget {
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     final loadingtickValueProvider =
         Provider.of<LoadingtickValueProvider>(context);
+      final loc = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         children: [
@@ -1149,7 +1164,7 @@ class VpnConnectStatus extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0, bottom: 8),
                 child: Text(
-                  '${vpnStatusProvider.value}',
+                 getStringsForStatus(vpnStatusProvider.value,loc) ,
                   style: TextStyle(),
                 ),
               ),

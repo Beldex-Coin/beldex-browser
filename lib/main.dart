@@ -5,6 +5,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
@@ -202,6 +204,7 @@ void main() async {
                   ChangeNotifierProvider(create: (context) => VpnStatusNotifier()
          ),
          ChangeNotifierProvider(create: (_) => TtsProvider()), // Provide audio state
+          ChangeNotifierProvider(create: (_)=> LocaleProvider()),
         // ChangeNotifierProvider(create: (_)=> TranslationProvider()),
          //ChangeNotifierProvider(create: (_)=> LanguageProvider()),
          //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
@@ -394,6 +397,8 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+        final localeProvider = Provider.of<LocaleProvider>(context);
+
     //final themProvider = Provider.of<DarkThemeProvider>(context);
 // return MaterialApp(
 //              scaffoldMessengerKey: scaffoldMessengerKey,
@@ -411,6 +416,9 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
       builder: (context, value, child) {
         return MaterialApp(
           scaffoldMessengerKey: scaffoldMessengerKey,
+          locale: localeProvider.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           title: 'Beldex Browser',
           debugShowCheckedModeBanner: false,
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),

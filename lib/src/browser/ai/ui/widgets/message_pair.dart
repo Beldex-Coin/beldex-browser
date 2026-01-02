@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
@@ -40,9 +41,9 @@ bool containsUrl(String text) {
 }
 
 
-copyText(String text){
+copyText(String text,AppLocalizations loc){
  Clipboard.setData(ClipboardData(text:removeSpecialFormatting(text)));
-  showMessage('Copied');
+  showMessage(loc.copied);
 }
 
 String removeSpecialFormatting(String text) {
@@ -95,6 +96,7 @@ static bool _isSharing = false;
   Widget build(BuildContext context) {
     final webviewModel = Provider.of<WebViewModel>(context);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0
       ),
@@ -119,12 +121,12 @@ static bool _isSharing = false;
                     SvgPicture.asset(themeProvider.darkTheme ? IconConstants.userIconDark : IconConstants.userIconWhite),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(StringConstants.you,style: TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',),),
+                      child: Text(loc.you,style: TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',),),
                     ),
                     Spacer(),
 
                     GestureDetector(
-                      onTap: ()=> copyText(userMessage.text),
+                      onTap: ()=> copyText(userMessage.text,loc),
                       child: SvgPicture.asset(IconConstants.copyIconDark)),
 
                       Padding(
@@ -149,7 +151,7 @@ static bool _isSharing = false;
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical:8.0),
-                    child: Text('Summarise this page',style: TextStyle(fontFamily: 'Poppins'),),
+                    child: Text(loc.summariseThisPage,style: TextStyle(fontFamily: 'Poppins'),),
                   ),
                   Container(
                     //height: 30,
@@ -224,13 +226,15 @@ static bool _isSharing = false;
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(StringConstants.beldexAI,style : TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',
+                        child: Text(loc.beldexAI,
+                          //StringConstants.beldexAI,
+                          style : TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',
                         ),),
                       ),
                       Spacer(),
                      modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
                      if(modelMessage.text.isNotEmpty){
-                      copyText(modelMessage.text);
+                      copyText(modelMessage.text,loc);
                      }
                       },
                        child: SvgPicture.asset(IconConstants.copyIconDark)):SizedBox()

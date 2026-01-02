@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_message.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
@@ -409,6 +410,7 @@ void callSummaryRetry(BuildContext context) async {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final webViewModel = Provider.of<WebViewModel>(context);
     final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     // return BaseView<ChatViewModel>(
     //   onModelReady: (model){
     //     this.model = model;
@@ -446,8 +448,8 @@ void callSummaryRetry(BuildContext context) async {
                                 height: 20,
                               ),
                             ),
-                            Text(
-                              StringConstants.beldexAI,
+                            Text(loc.beldexAI,
+                              //StringConstants.beldexAI,
                               style: TextStyle(
                                // color: Colors.white,
                                fontFamily: 'Poppins',
@@ -466,8 +468,9 @@ void callSummaryRetry(BuildContext context) async {
                                       color: themeProvider.darkTheme ? Color(0xff2C2C3B): Color(0xffFDFDFD),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(StringConstants.hideSummarise,style: TextStyle(fontFamily: 'Poppins',fontSize: 13),),
+                                      Text(loc.hideSummarise,style: TextStyle(fontFamily: 'Poppins',fontSize: 13,overflow: TextOverflow.ellipsis,),maxLines: 2,),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: SvgPicture.asset(
@@ -491,7 +494,7 @@ void callSummaryRetry(BuildContext context) async {
                               SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical:10.0),
-                                child: Text(StringConstants.retryMessage,style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),),
+                                child: Text(loc.thereWasAnErrorGenerateResponse,style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),),
                               ),
                               // Padding(
                               //            padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -516,22 +519,54 @@ void callSummaryRetry(BuildContext context) async {
                    copyResult = '';
                    });                              
                 },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                   padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
-                   width: 93,
-                   decoration: BoxDecoration(
-                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-                    borderRadius: BorderRadius.circular(12)
-                   ),
-                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                       children: [
-                        SvgPicture.asset('assets/images/ai-icons/retry.svg'),
-                         Text('Retry',style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
-                       ],
-                     ),
-                ),
+                child: 
+                Container(
+  margin: const EdgeInsets.symmetric(vertical: 10),
+  padding: const EdgeInsets.symmetric(
+    vertical: 9.0,
+    horizontal: 12.0,
+  ),
+  decoration: BoxDecoration(
+    color: themeProvider.darkTheme
+        ? const Color(0xff282836)
+        : const Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SvgPicture.asset(
+        'assets/images/ai-icons/retry.svg',
+        width: 18,
+        height: 18,
+      ),
+      const SizedBox(width: 8),
+      Text(
+        loc.retry,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          color: Color(0xff00B134),
+        ),
+      ),
+    ],
+  ),
+),
+                // Container(
+                //   margin: EdgeInsets.symmetric(vertical: 10),
+                //    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
+                //    width:double.infinity,// 93,
+                //    decoration: BoxDecoration(
+                //     color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
+                //     borderRadius: BorderRadius.circular(12)
+                //    ),
+                //      child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //        children: [
+                //         SvgPicture.asset('assets/images/ai-icons/retry.svg'),
+                //          Text(loc.retry,style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
+                //        ],
+                //      ),
+                // ),
               ),
                             ],
                           )
@@ -714,7 +749,7 @@ void callSummaryRetry(BuildContext context) async {
                         child: GestureDetector(
                           onTap: () {
                             Clipboard.setData(ClipboardData(text:copyResult));
-                            showMessage('Copied');
+                            showMessage(loc.copied);
 
                           },
                           child: Container(
@@ -754,6 +789,7 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Container(
       //color: Colors.green,
       child: Column(
@@ -769,21 +805,29 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
                     : IconConstants.welcomeBeldexAIWhite),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text(
-                    StringConstants.welcomeAIContent,
+                  child: Text(loc.beldexAIEnhancesTheBeldexBrowser,
+                   // StringConstants.welcomeAIContent,
                     //textAlign: TextAlign.center,
-                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 14,fontWeight: FontWeight.w300),
+                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 13,fontWeight: FontWeight.w300),
                   ),
                 )
               ],
             ),
           ),
-          SizedBox(
-            height: 10
-            // model.canshowWelcome &&
-            //                         browserModel.webViewTabs.isNotEmpty &&
-            //                         model.isSummariseAvailable ? 10 : 80,
-          ),
+          // SizedBox(
+          //   height: 10
+          //   // model.canshowWelcome &&
+          //   //                         browserModel.webViewTabs.isNotEmpty &&
+          //   //                         model.isSummariseAvailable ? 10 : 80,
+          // ),
+         
+         
+         
+         
+         
+         
+         
+         
           // Container(
           //   height: 180,
           //   width: MediaQuery.of(context).size.width,

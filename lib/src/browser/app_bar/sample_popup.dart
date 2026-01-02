@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -116,16 +117,17 @@ class ItemsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final provider = Provider.of<SelectedItemsProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
-        appBar: normalAppBar(context, 'Manage search Shortcuts', themeProvider),
+        appBar: normalAppBar(context, loc.manageSearchShortcuts, themeProvider),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child:const Text(
-                  'Engine visible on the search menu',
+                child: Text(loc.engineVisibleOnSearchMenu,
+                  //'Engine visible on the search menu',
                   style: TextStyle(
                       color: const Color(0xff00BD40),
                       fontSize: 17,
@@ -272,6 +274,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = webViewModel.webViewController;
+    final loc = AppLocalizations.of(context)!;
     return PopupMenuButton<List<int>>(
       offset: Offset(0, 47),
       color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
@@ -334,8 +337,8 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: Text(
-                          '${provider.items[index].name}:',
+                        child: Text(loc.thistimeSearchIn,
+                         // '${provider.items[index].name}:',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -360,7 +363,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: TextWidget(
-                         text: provider.items[index].name,
+                         text: index == 11 ? loc.searchSettings : provider.items[index].name,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),

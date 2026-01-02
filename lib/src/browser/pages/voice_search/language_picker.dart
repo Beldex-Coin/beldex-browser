@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -180,6 +181,7 @@ String? _selectedLocaleId = 'en-US';
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+        final loc = AppLocalizations.of(context)!;
     return DraggableScrollableSheet(
          initialChildSize: 0.95,
                     minChildSize: 0.3,
@@ -216,8 +218,8 @@ String? _selectedLocaleId = 'en-US';
                       child: SvgPicture.asset('assets/images/back.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
                     // Icon(Icons.arrow_back),
                     SizedBox(width: 15,),
-                    Text(
-                      "Choose Language",
+                    Text(loc.chooseLanguage,
+                     // "Choose Language",
                       style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -226,68 +228,126 @@ String? _selectedLocaleId = 'en-US';
               Divider(
                      color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
                      ),
-
-              Expanded(
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: widget.langs.length,
-                  itemBuilder: (c, i) {
-                    final lang = widget.langs[i];
-                    print('LANGUAGE ${speech.currentLocale} ------ ${lang.localeId}');
-                    return 
-                    
-                    InkWell(
-                      onTap: (){
-                        setState(() {
-                          //_selectedLocaleId = lang.localeId;
-                          
-                        });
-                        
-                        speech.setCurrentLocale(normalizeLocale(lang.localeId));
-                         Navigator.pop(context, speech.currentLocale); 
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric( horizontal: 8),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-                        color: speech.currentLocale == normalizeLocale(lang.localeId) && !themeProvider.darkTheme ? Color(0xffF3F3F3) : Colors.transparent,
-                        border: Border.all(color:speech.currentLocale == normalizeLocale(lang.localeId) && themeProvider.darkTheme ? Color(0xff39394B) : Colors.transparent )
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children:[
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',)),
-                              ),
-                           Visibility(
-                            visible: speech.currentLocale == normalizeLocale(lang.localeId),
-                             child: Padding(
-                               padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                               child: SvgPicture.asset('assets/images/tick.svg'),
-                             ),
-                           ),
-                          // Checkbox(
-                          //   value: _selectedLocaleId == lang.localeId, onChanged: (checked){
-                          //    setState(() {
-                          //         _selectedLocaleId =
-                          //             checked == true ? lang.localeId : null;
-                          //       });
-                          //       Navigator.pop(context, _selectedLocaleId); // return selection
-                          // })
-                         ]
-                        ),
-                      ),
-                    );
-                    // ListTile(
-                    //   title: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',),),
-                    //   //subtitle: Text(lang.localeId,style: TextStyle(color: Colors.black),),
-                    //   onTap: () {
-                    //     Navigator.pop(context, lang.localeId);
-                    //   },
-                    // );
-                  },
+             Expanded(
+  child: ListView.builder(
+    controller: scrollController,
+    itemCount: languageIdList.length,
+    itemBuilder: (c, i) {
+      final name = languageIdList.keys.elementAt(i);
+      final localeId = languageIdList.values.elementAt(i);
+    print('THE CURRENT SELECTED LOCALE ${speech.currentLocale}');
+      return InkWell(
+        onTap: () {
+          setState(() {});
+          speech.setCurrentLocale(normalizeLocale(localeId));
+          Navigator.pop(context, speech.currentLocale);
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: speech.currentLocale == normalizeLocale(localeId) &&
+                    !themeProvider.darkTheme
+                ? const Color(0xffF3F3F3)
+                : Colors.transparent,
+            border: Border.all(
+              color: speech.currentLocale == normalizeLocale(localeId) &&
+                      themeProvider.darkTheme
+                  ? const Color(0xff39394B)
+                  : Colors.transparent,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(fontFamily: 'Poppins'),
+                    ),
+                    Text(getLocalizedVoiceSearchLanguageName(context,name),style: TextStyle(fontSize:10,color: themeProvider.darkTheme ? Color(0xffB9B9BE) : Color(0xff78787D)),)
+                  ],
                 ),
               ),
+              Visibility(
+                visible: speech.currentLocale == normalizeLocale(localeId),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: SvgPicture.asset('assets/images/tick.svg',height: 20,),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  ),
+)
+              // Expanded(
+              //   child: ListView.builder(
+              //     controller: scrollController,
+              //     itemCount: widget.langs.length,
+              //     itemBuilder: (c, i) {
+              //       final lang = widget.langs[i];
+              //       print('LANGUAGE ${speech.currentLocale} ------ ${lang.localeId}');
+              //       return 
+                    
+              //       InkWell(
+              //         onTap: (){
+              //           setState(() {
+              //             //_selectedLocaleId = lang.localeId;
+                          
+              //           });
+                        
+              //           speech.setCurrentLocale(normalizeLocale(lang.localeId));
+              //            Navigator.pop(context, speech.currentLocale); 
+              //         },
+              //         child: Container(
+              //           margin: EdgeInsets.symmetric( horizontal: 8),
+              //           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+              //           color: speech.currentLocale == normalizeLocale(lang.localeId) && !themeProvider.darkTheme ? Color(0xffF3F3F3) : Colors.transparent,
+              //           border: Border.all(color:speech.currentLocale == normalizeLocale(lang.localeId) && themeProvider.darkTheme ? Color(0xff39394B) : Colors.transparent )
+              //           ),
+              //           child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //            children:[
+              //                 Padding(
+              //                   padding: const EdgeInsets.all(15.0),
+              //                   child: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',)),
+              //                 ),
+              //              Visibility(
+              //               visible: speech.currentLocale == normalizeLocale(lang.localeId),
+              //                child: Padding(
+              //                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              //                  child: SvgPicture.asset('assets/images/tick.svg'),
+              //                ),
+              //              ),
+              //             // Checkbox(
+              //             //   value: _selectedLocaleId == lang.localeId, onChanged: (checked){
+              //             //    setState(() {
+              //             //         _selectedLocaleId =
+              //             //             checked == true ? lang.localeId : null;
+              //             //       });
+              //             //       Navigator.pop(context, _selectedLocaleId); // return selection
+              //             // })
+              //            ]
+              //           ),
+              //         ),
+              //       );
+              //       // ListTile(
+              //       //   title: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',),),
+              //       //   //subtitle: Text(lang.localeId,style: TextStyle(color: Colors.black),),
+              //       //   onTap: () {
+              //       //     Navigator.pop(context, lang.localeId);
+              //       //   },
+              //       // );
+              //     },
+              //   ),
+              // ),
             ],
           ),
         );

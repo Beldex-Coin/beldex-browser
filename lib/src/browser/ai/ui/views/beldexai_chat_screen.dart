@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
@@ -314,6 +316,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     final aiModelProvider = Provider.of<AIModelProvider>(context);
     final screenHeight = MediaQuery.of(context).size.height;
+    final loc = AppLocalizations.of(context)!;
+    final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
     return BaseView<ChatViewModel>(
       onModelReady: (model) {
         this.model = model;
@@ -413,8 +417,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                           height: 20,
                                         ),
                                       ),
-                                      Text(
-                                        StringConstants.beldexAI,
+                                      Text(loc.beldexAI,
+                                        //StringConstants.beldexAI,
                                         style: TextStyle(
                                           fontFamily: 'Poppins',
                                            // color: Colors.white,
@@ -494,7 +498,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
             
                                                     Clipboard.setData(ClipboardData(text:removeSpecialFormatting(chatHistory)));
                                                          // Clipboard.setData(ClipboardData(text: modelMessage.text));
-                                                          showMessage('Copied');
+                                                          showMessage(loc.copied  
+                                                          );
                                                         break;
                                                         case AIChatPopupMenuActions.SHARE_CHAT:
                                                          Share.share(removeSpecialFormatting(chatHistory), subject:'');
@@ -518,7 +523,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                             // if (lastUserMessageIndex != -1) {
                                             //   model.messages.removeAt(lastUserMessageIndex);
                                             // }
-                                                   showMessage('Chat deleted successfully');
+                                                   showMessage(loc.chatDeleted //'Chat deleted successfully'
+                                                   );
                                                         break;
                                                        }
                                                 },
@@ -561,7 +567,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                       :const Color(0xff282836)),
                                                                 Padding(
                                                                   padding: const EdgeInsets.symmetric(horizontal:8.0),
-                                                                  child: Text(choice, style: Theme.of(context)
+                                                                  child: Text(loc.copy,
+                                                                   style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall?.copyWith( 
                                                       color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81): Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
@@ -572,7 +579,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                       case AIChatPopupMenuActions.SHARE_CHAT:
                                                         return CustomPopupMenuItem<String>(
                                                           enabled:model.messages.isNotEmpty && !model.isTyping,
-                                                          value: choice,
+                                                          value:loc.share, // choice,
                                                           height: 35,
                                                           child: Row(
                                                               children: [
@@ -581,7 +588,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                     :const Color(0xff282836)),
                                                                 Padding(
                                                                   padding: const EdgeInsets.symmetric(horizontal:5.0),
-                                                                  child: Text(choice, style: Theme.of(context)
+                                                                  child: Text(loc.share, style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall?.copyWith( 
                                                       color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81):  Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
@@ -603,7 +610,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                     :const Color(0xff282836)),
                                                                 Padding(
                                                                   padding: const EdgeInsets.symmetric(horizontal:5.0),
-                                                                  child: Text(choice,style: Theme.of(context)
+                                                                  child: Text(loc.delete,style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall?.copyWith( 
                                                       color: model.messages.isEmpty || model.isTyping ? themeProvider.darkTheme ? Color(0xff6D6D81):Color(0xffC5C5C5) : themeProvider.darkTheme ? Colors.white:Colors.black
@@ -676,8 +683,8 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                     Padding(
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text(
-                                          IconConstants.chat,
+                                        child: Text(loc.chat,
+                                          //IconConstants.chat,
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: 'Poppins',
@@ -769,12 +776,13 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                                StringConstants.needHelpWithSite,style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600),),
+                                            Text(loc.needHelpWithThisSite
+                                               // StringConstants.needHelpWithSite
+                                                ,style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600),),
                                             Padding(
                                               padding: const EdgeInsets.symmetric(
-                                                  vertical: 8.0),
-                                              child: Text('${StringConstants.iCanHelpYouSummarising}${model.isSummariseAvailable ? " Try\n this:" : ""}',style: TextStyle(fontFamily: 'Poppins',fontSize:12, fontWeight: FontWeight.w300)
+                                                  vertical: 8.0), //StringConstants.iCanHelpYouSummarising
+                                              child: Text('${loc.beldexAICanHelpYou}${model.isSummariseAvailable ? loc.tryThis : ""}',style: TextStyle(fontFamily: 'Poppins',fontSize:12, fontWeight: FontWeight.w300)
                                                   ),
                                             ),
                                             Visibility(
@@ -821,9 +829,9 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 12)),
-                                                    child: Text(
-                                                      StringConstants
-                                                          .summariseThispage,
+                                                    child: Text(loc.summariseThisPage,
+                                                      // StringConstants
+                                                      //     .summariseThispage,
                                                       style: TextStyle(
                                                           color: Color(0xff01D001)),
                                                     ),
@@ -843,7 +851,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                  Visibility(
                                   visible: (model.canshowWelcome &&
                                         //browserModel.webViewTabs.isNotEmpty &&
-                                        !model.isSummariseAvailable),
+                                        !model.isSummariseAvailable && localeProvider.languages == 'English'),
                                    child: SizedBox( height:MediaQuery.of(context).size.height * (60 / MediaQuery.of(context).size.height), //30,
                                    ),
                                  ),
@@ -960,7 +968,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                       BorderRadius.circular(12)),
                                               child: Row(
                                                 children: [
-                                                  Text('Summarise this page',style: TextStyle(color: Colors.white,fontFamily: 'Poppins',),),
+                                                  Text(loc.summariseThisPage,style: TextStyle(color: Colors.white,fontFamily: 'Poppins',),),
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -1046,7 +1054,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                 counterText: '',
                                                 contentPadding: const EdgeInsets.only(
                                                right: 29.0),
-                                                hintText: StringConstants.enterPromptHere,
+                                                hintText: loc.enterPromptHere,
                                                 hintStyle: const TextStyle(
                                                   color: Color(0xff6D6D81),
                                                   fontFamily: 'Poppins',
@@ -1061,7 +1069,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                       buttonItems.clear(); // Clear all default options
                       if (model.messageController.text.isEmpty) {
                         buttonItems.add(ContextMenuButtonItem(
-                            label: 'Paste',
+                            label:loc.paste,// 'Paste',
                             onPressed: () {
                               Clipboard.getData('text/plain').then((value) {
                                 if (value != null && value.text != null) {
@@ -1097,7 +1105,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                       } else {
                         buttonItems.clear();
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Cut',
+                          label:loc.cut, //'Cut',
                           onPressed: () {
                             editableTextState
                                 .cutSelection(SelectionChangedCause.tap);
@@ -1136,7 +1144,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                         ));
 
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Copy',
+                          label: loc.copy,// 'Copy',
                           onPressed: () {
                             final TextEditingValue value =
                                 editableTextState.textEditingValue;
@@ -1156,7 +1164,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                             editableTextState.textEditingValue.selection,
                             editableTextState.textEditingValue.text)) {
                           buttonItems.add(ContextMenuButtonItem(
-                            label: 'Select All',
+                            label:loc.selectAll, // 'Select All',
                             onPressed: () {
                               // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
                               editableTextState
@@ -1167,7 +1175,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                         }
                         // Add a custom "Paste" button
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Paste',
+                          label:loc.paste, // 'Paste',
                           onPressed: () {
                             Clipboard.getData('text/plain').then((value) {
                               if (value != null && value.text != null) {

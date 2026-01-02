@@ -1,6 +1,7 @@
 import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
@@ -62,9 +63,12 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
     super.initState();
     //getIntentData();
     
-    checkForNetwork();
+    // checkForNetwork(AppLocalizations.of(context)!);
 
      WidgetsBinding.instance.addObserver(this);
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    checkForNetwork(AppLocalizations.of(context)!);
+  });
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
     // Listen for incoming text or URL when the app is running or resumed
    
@@ -153,12 +157,12 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   }
 
 
-checkForNetwork(){
+checkForNetwork(AppLocalizations loc){
   _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
       if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
-         showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+         showMessage(loc.youAreNotConnectedToInternet);
       }
     });
 }
@@ -513,6 +517,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
   Future<bool?> _showDownloadConfirmationDialog(BuildContext context) {
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
+        final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -537,12 +542,12 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextWidget(
-                    text:'Quit Browser',
+                    text: loc.quitBrowser, //'Quit Browser',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextWidget(
-                 text: 'Are you sure you want to quit?',
+                 text:loc.rUSureWantToQuitApp,// 'Are you sure you want to quit?',
                   style: TextStyle(fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -562,7 +567,8 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget(text:'Cancel', style: TextStyle(fontSize: 18)),
+                          child: TextWidget(text:loc.cancel ,// 'Cancel',
+                           style: TextStyle(fontSize: 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -588,7 +594,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget( text:'Quit',
+                          child: TextWidget( text:loc.quit, // 'Quit',
                               style:
                                   TextStyle(color: Colors.red, fontSize: 18)),
                           shape: RoundedRectangleBorder(

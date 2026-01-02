@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/widget/downloads/download_task_model.dart';
@@ -64,10 +65,10 @@ class DownloadProvider extends ChangeNotifier {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
-  Future<void> addTask(String url, dir, fileName) async {
+  Future<void> addTask(String url, dir, fileName,AppLocalizations loc) async {
     print('whole tasks ----> ${tasks.length}');
     try {
-      showMessage('Start downloading');
+      showMessage(loc.startDownloading);
       String newFileName = fileName;
       int fileNumber = 1;
       String baseName = fileName;

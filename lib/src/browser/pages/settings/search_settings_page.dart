@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -55,14 +56,16 @@ class SearchSettingsPage extends StatefulWidget {
 }
 
 class _SearchSettingsPageState extends State<SearchSettingsPage> {
+
   @override
   Widget build(BuildContext context) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context, 'Search', themeProvider),
+      appBar: normalAppBar(context, loc.search, themeProvider),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
         child: Column(
@@ -71,81 +74,84 @@ class _SearchSettingsPageState extends State<SearchSettingsPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: const Text(
-                'Search Engine',
+              child: Text(loc.searchEngine,
                 style: TextStyle(
                     color: Color(0xff00BD40),
                     fontSize: 17,
                     fontWeight: FontWeight.w500),
               ),
             ),
-            Container(
-                height: 155,
-                padding:
-                   const EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
-                decoration: BoxDecoration(
-                    color: themeProvider.darkTheme
-                        ?const Color(0xff292937)
-                        :const Color(0xffF3F3F3),
-                    borderRadius: BorderRadius.circular(15.0)),
-                child:
-                    // LayoutBuilder(builder: ((context, constraints) {
-                    //   return
-                    Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: ListTile(
-                        //contentPadding: EdgeInsets.symmetric(vertical: 5),
-                        leading: SvgPicture.asset(
-                          'assets/images/find_on_page.svg',
-                          color: themeProvider.darkTheme
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                        title:const Text(
-                          'Default search engine',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.normal),
-                        ),
-                        subtitle: Text(settings.searchEngine.name,
+            Expanded(
+              flex: 2,
+              child: Container(
+                  height: 158,
+                  padding:
+                     const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
+                  decoration: BoxDecoration(
+                      color: themeProvider.darkTheme
+                          ?const Color(0xff292937)
+                          :const Color(0xffF3F3F3),
+                      borderRadius: BorderRadius.circular(15.0)),
+                  child:
+                      // LayoutBuilder(builder: ((context, constraints) {
+                      //   return
+                      Column(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: ListTile(
+                          //contentPadding: EdgeInsets.symmetric(vertical: 5),
+                          leading: SvgPicture.asset(
+                            'assets/images/find_on_page.svg',
+                            color: themeProvider.darkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          title: Text(loc.defaultSearchEngine,
                             style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w400)),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => DefaultSearchEngine()))),
+                                fontSize: 13, fontWeight: FontWeight.normal),
+                          ),
+                          subtitle: Text(settings.searchEngine.name,
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w400)),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => DefaultSearchEngine()))),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: ListTile(
-                        leading: SvgPicture.asset(
-                          'assets/images/shortcut.svg',
-                          color: themeProvider.darkTheme
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                        title: const Text(
-                          'manage search shortcuts',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.normal),
-                        ),
-                        subtitle:const Text(
-                            'Edit engines visible in the search menu',
+                      Expanded(
+                        flex: 1,
+                        child: ListTile(
+                          leading: SvgPicture.asset(
+                            'assets/images/shortcut.svg',
+                            color: themeProvider.darkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          title:  Text(loc.manageSearchShortcuts,
                             style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.w400)),
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ItemsScreen())),
+                                fontSize: 13, fontWeight: FontWeight.normal),
+                          ),
+                          subtitle: Text(loc.editEnginesVisible,
+                              //'Edit engines visible in the search menu',
+                              style: TextStyle(
+                                  fontSize: 11, fontWeight: FontWeight.w400)),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ItemsScreen())),
+                        ),
                       ),
-                    ),
-                  ],
-                )
-                //}))
-
-                )
+                    ],
+                  )
+                  //}))
+              
+                  ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Container())
           ],
         ),
       ),
@@ -182,9 +188,10 @@ class _DefaultSearchEngineState extends State<DefaultSearchEngine> {
     final browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context, 'Default search engine', themeProvider),
+      appBar: normalAppBar(context, loc.defaultSearchEngine, themeProvider),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
         child: Column(
@@ -194,8 +201,7 @@ class _DefaultSearchEngineState extends State<DefaultSearchEngine> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-              child:const Text(
-                'Select one',
+              child: Text(loc.selectOne,
                 style: TextStyle(
                     color: Color(0xff00BD40),
                     fontSize: 17,
@@ -345,9 +351,10 @@ class _SearchShortcutsState extends State<SearchShortcuts> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context, 'Manage search shortcuts', themeProvider),
+      appBar: normalAppBar(context,loc.manageSearchShortcuts, themeProvider),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
         child: Column(
@@ -357,8 +364,8 @@ class _SearchShortcutsState extends State<SearchShortcuts> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-              child:const Text(
-                'Engine visible on the search menu',
+              child: Text(loc.engineVisibleOnSearchMenu,
+               // 'Engine visible on the search menu',
                 style: TextStyle(
                     color: Color(0xff00BD40),
                     fontSize: 17,

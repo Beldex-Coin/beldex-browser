@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
@@ -35,6 +36,7 @@ class _DownloadUIState extends State<DownloadUI> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final downloadProvider = Provider.of<DownloadProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -45,7 +47,7 @@ class _DownloadUIState extends State<DownloadUI> {
               color: themeProvider.darkTheme ? Colors.white : Color(0xff282836),
               height: 30,
             )),
-        title: TextWidget(text:'Downloads', style: Theme.of(context).textTheme.bodyLarge),
+        title: TextWidget(text:loc.downloads, style: Theme.of(context).textTheme.bodyLarge),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: downloadProvider.tasks.length > 0
@@ -80,7 +82,7 @@ class _DownloadUIState extends State<DownloadUI> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: TextWidget(
-                                 text: 'Clear Downloads',
+                                 text:loc.clearDownloads,// 'Clear Downloads',
                                   style: TextStyle(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w400),
@@ -102,7 +104,8 @@ class _DownloadUIState extends State<DownloadUI> {
       body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: downloadProvider.tasks.length == 0
-              ? const Center(child: TextWidget(text:'No recent downloads'))
+              ?  Center(child: TextWidget(text:loc.noRecentDownloads //'No recent downloads'
+              ))
               : Container(child: LayoutBuilder(builder: (context, constraints) {
                   return Container(
                     height: constraints.maxHeight,
@@ -134,7 +137,8 @@ class _DownloadUIState extends State<DownloadUI> {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 8.0),
-                                            child:const TextWidget(text:'Downloading '),
+                                            child: TextWidget(text:loc.downloading //'Downloading '
+                                            ),
                                           ),
                                           downloadProvider
                                                       .getDownloadingCount() ==
@@ -221,9 +225,9 @@ class _DownloadUIState extends State<DownloadUI> {
                                                           child: Row(
                                                             children: [
                                                               Container(
-                                                                                                                                height: 30,
-                                                                                                                                width: 30,
-                                                                                                                                decoration: BoxDecoration(
+                                                                 height: 30,
+                                                                 width: 30,
+                                                                   decoration: BoxDecoration(
                                                                 color: themeProvider
                                                                         .darkTheme
                                                                     ?const Color(
@@ -290,10 +294,10 @@ class _DownloadUIState extends State<DownloadUI> {
                                                                     TextWidget(
                                                                      text: task.status ==
                                                                               DownloadTaskStatus.failed.index
-                                                                          ? 'Download Failed!'
+                                                                          ? loc.downloadFailed// 'Download Failed!'
                                                                           : task.status == DownloadTaskStatus.paused.index
                                                                               ? 'Download paused'
-                                                                              : ' Downloading...',
+                                                                              : "${loc.downloading}...", //' Downloading...',
                                                                       style: TextStyle(
                                                                           color: task.status == DownloadTaskStatus.failed.index
                                                                               ? const Color(0xffFF3D00)
@@ -385,7 +389,7 @@ class _DownloadUIState extends State<DownloadUI> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8.0),
                                           child: TextWidget(
-                                           text: 'No completed downloads',
+                                           text:loc.noCompletedDownloads, //'No completed downloads',
                                             style: TextStyle(
                                                 color: themeProvider.darkTheme
                                                     ?const Color(0xff6D6D81)
@@ -407,7 +411,7 @@ class _DownloadUIState extends State<DownloadUI> {
                                                         horizontal: 8),
                                                 child: Row(
                                                   children: [
-                                                   const TextWidget(text:'Completed',
+                                                    TextWidget(text:loc.completed, //'Completed',
                                                         style: TextStyle(
                                                             color: Color(
                                                                 0xff0BA70F),
@@ -491,8 +495,7 @@ class _DownloadUIState extends State<DownloadUI> {
                                                                         final success =
                                                                             await downloadProvider.openDownloadedFile(task.taskId);
                                                                         if (!success) {
-                                                                          showMessage(
-                                                                              'Cannot open this file');
+                                                                          showMessage(loc.cannotOpenThisFile);
                                                                           // ScaffoldMessenger.of(context).showSnackBar(
                                                                           //   const SnackBar(
                                                                           //     content: Text('Cannot open this file'),

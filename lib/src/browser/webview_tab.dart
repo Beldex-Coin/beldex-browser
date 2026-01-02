@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/ad_blocker_filter.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -241,7 +242,7 @@ bool _isValidUrl(String url) {
         final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
         final basicProvider = Provider.of<BasicProvider>(context);
     final ttsProvider = Provider.of<TtsProvider>(context);
-
+  final loc= AppLocalizations.of(context)!;
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -715,7 +716,7 @@ await _webViewController!.evaluateJavascript(source: """
               await _showDownloadConfirmationDialog(context, url);
           if (downloadConfirmed == true) {
             downloadProvider.addTask(
-                url.url.toString(), _dir, url.suggestedFilename);
+                url.url.toString(), _dir, url.suggestedFilename,loc);
           }
           //
 
@@ -1653,6 +1654,7 @@ String getDownloadFile(String name){
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
         final width = MediaQuery.of(context).size.width;
+        final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -1675,13 +1677,13 @@ String getDownloadFile(String name){
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child:const Text(
-                    'Download',
+                  child: Text(loc.download,
+                    //'Download',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text(
-                  'You are about to download ${getDownloadFile(url.suggestedFilename)}. \n Are you sure?',
+                Text( 
+                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. \n ${loc.areYouSure}',
                   textAlign: TextAlign.center,
                 ),
                 Row(
@@ -1700,7 +1702,7 @@ String getDownloadFile(String name){
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child:const Text('Cancel', style: TextStyle(fontSize: 18)),
+                          child: Text(loc.cancel, style: TextStyle(fontSize: 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -1723,7 +1725,7 @@ String getDownloadFile(String name){
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: Text('Download',
+                          child: Text(loc.download,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           shape: RoundedRectangleBorder(

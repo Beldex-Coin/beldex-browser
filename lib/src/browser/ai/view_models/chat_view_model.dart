@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/enums/roles.dart';
@@ -586,11 +587,11 @@ void retryResponse(AIModelProvider aiModelProvider) async{
 
 //// Checing Network errors
 ///
-void checkNetworkConnectivity()async{
+void checkNetworkConnectivity(AppLocalizations loc)async{
   final connectivityResult = await Connectivity().checkConnectivity();
 
   if(connectivityResult == ConnectivityResult.none){
-    showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+    showMessage(loc.youAreNotConnectedToInternet);
     return;
   }else{
     // Step 2: Test Actual Internet Access
