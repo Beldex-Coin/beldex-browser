@@ -66,11 +66,11 @@ Stream<String> sendTextForStream(String userMessage) async* {
 
 
 if (cancelToken.isCancelled) {
-    print("🚨 Request was canceled: ");
+    print(" Request was canceled: ");
     yield "Request was canceled by the user."; // Send as single string
   } 
   // else {
-  //   print("❌ Network error: ");
+  //   print(" Network error: ");
   //   yield "Network errors:";
   // }
     await for (var chunk in response.data!.stream) {
@@ -558,7 +558,7 @@ String fullContent = '';
 //         String jsonString = completeChunk.substring(6).trim(); 
 
 //         if (jsonString == "[DONE]") {
-//           print("✅ Stream finished");
+//           print("Stream finished");
 //           return;
 //         }
 
@@ -822,7 +822,7 @@ String fullContent = '';
 //             String newText = jsonData["choices"]?[0]["delta"]?["content"] ?? "";
 
 //             if (newText.isNotEmpty) {
-//               print("✅ Yielding new content: $newText");
+//               print(" Yielding new content: $newText");
 //                _history[modelType]?.add({"role": "assistant", "content": newText});
 //               yield newText;  // Yield the new content
 //             }
@@ -885,8 +885,8 @@ String buffer = '';
   String fullContent = ''; // Accumulate full response here
   final utf8Decoder = Utf8Decoder(allowMalformed: true);
 
-print("✅ Response received. Status: ${response.statusCode}");
-print("✅ Response received. Status: ${response.statusCode}");
+print("Response received. Status: ${response.statusCode}");
+print("Response received. Status: ${response.statusCode}");
 
     await for (var chunk in response.data!.stream) {
       final decoded = utf8Decoder.convert(chunk);
@@ -918,7 +918,7 @@ print("✅ Response received. Status: ${response.statusCode}");
         String jsonSnippet = buffer.substring(nextOpen, endIndex + 1);
         try {
           final List<dynamic> jsonResponse = jsonDecode(jsonSnippet);
-          print("✅ Parsed JSON: $jsonResponse");
+          print(" Parsed JSON: $jsonResponse");
 
           for (var item in jsonResponse) {
             if (item.containsKey("candidates")) {
@@ -928,7 +928,7 @@ print("✅ Response received. Status: ${response.statusCode}");
                   String text = part["text"];
                   if (text.isNotEmpty) {
                     fullContent += text;
-                    print("✅ Yielding content: '$text'");
+                    print(" Yielding content: '$text'");
                     yield text; // Yield immediately
                   }
                 }
@@ -938,13 +938,13 @@ print("✅ Response received. Status: ${response.statusCode}");
           buffer = buffer.substring(endIndex + 1).trim(); // Remove processed part
           startIndex = 0; // Reset to start of remaining buffer
         } catch (e) {
-          print("❌ Error decoding JSON: $e");
+          print("Error decoding JSON: $e");
           break; // Wait for more data if parsing fails
         }
 
         // Check for [DONE] after processing
         if (buffer.contains('[DONE]')) {
-          print("🏁 Stream ended with [DONE]");
+          print(" Stream ended with [DONE]");
           if (fullContent.isNotEmpty) {
             if (_history["gemini"] == null || _history["gemini"] is! List) {
               _history["gemini"] = [];
@@ -953,14 +953,14 @@ print("✅ Response received. Status: ${response.statusCode}");
               "role": "assistant",
               "content": fullContent,
             });
-            print("📜 Stored in history: '$fullContent'");
+            print("Stored in history: '$fullContent'");
           }
           buffer = '';
           break;
         }
       }
     }
-    print("🔚 Stream processing completed");
+    print(" Stream processing completed");
 
 
 

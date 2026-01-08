@@ -1,6 +1,5 @@
 import 'package:beldex_browser/src/model/theme_set_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:beldex_browser/src/utils/is_darkmode.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
