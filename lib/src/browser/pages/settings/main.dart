@@ -334,6 +334,7 @@ void resetSettings()async{
 resetOptions(){
   final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
   final basicProvider = Provider.of<BasicProvider>(context,listen: false);
+    final localeProvider = Provider.of<LocaleProvider>(context,listen:false);
   vpnStatusProvider.updateCacheValue(true);
   vpnStatusProvider.updateJSEnabled(true);
   vpnStatusProvider.updateSupportZoomEbld(true);
@@ -345,6 +346,8 @@ resetOptions(){
   basicProvider.updateAutoConnect(false);
   basicProvider.updateAutoSuggest(false);
   basicProvider.updateAdblock(true);
+    localeProvider.resetAppLocaleToEnglish();
+
 
 }
 
