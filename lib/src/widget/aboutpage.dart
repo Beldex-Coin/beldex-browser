@@ -1,5 +1,6 @@
 //import 'package:clipboard/clipboard.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     var mHeight = MediaQuery.of(context).size.height;
     //var mWidth = MediaQuery.of(context).size.width;
     final loc = AppLocalizations.of(context)!;
@@ -46,13 +48,18 @@ class AboutPage extends StatelessWidget {
                 //     :const Color(0xff3EC745), //Color(0xffC7C7C7),
                 //controller: scrollController,
                 thumbVisibility: true,
+                trackVisibility: true,
                 thickness: 5,
                 radius: Radius.circular(10),
-                child: Container(
-                  color: themeProvider.darkTheme
+                trackColor:themeProvider.darkTheme
                       ?const Color(0xff111117)
                       :const Color(0xffE3E3E3),
-                  padding: EdgeInsets.only(right: 5.0),
+                child: Container(
+                  color: Colors.transparent,
+                  // themeProvider.darkTheme
+                  //     ?const Color(0xff111117)
+                  //     :const Color(0xffE3E3E3),
+                 // padding: EdgeInsets.only(right: 5.0),
                   child: SingleChildScrollView(
                       child: Container(
                     decoration: BoxDecoration(
@@ -139,7 +146,7 @@ class AboutPage extends StatelessWidget {
                                 ),
                             textAlign: TextAlign.justify),
                         TextWidget(
-                         text: loc.titleKeyFeature, //"\nKey Features",
+                         text:localeProvider.selectedLanguage == 'العربية' ? '\n${loc.titleKeyFeature}\n' : loc.titleKeyFeature, //"\nKey Features",
                           style: TextStyle(
                               fontSize:fontSizeInDp * 1.2,
                               fontFamily: "Poppins",
@@ -149,7 +156,7 @@ class AboutPage extends StatelessWidget {
                                   : Colors.black),
                         ),
                         TextWidget(
-                           text:loc.followingAreTheFeatures, //"""\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n""",
+                           text:localeProvider.selectedLanguage == 'العربية' ? '${loc.followingAreTheFeatures}\n' :loc.followingAreTheFeatures, //"""\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n""",
                             style: TextStyle(
                                 fontSize:fontSizeInDp,
                                 color: getColor(themeProvider),
@@ -232,7 +239,7 @@ class AboutPage extends StatelessWidget {
                           fontSizeInDp: fontSizeInDp,
                         ),
                         BulletItem(
-                          text: loc.aboutBeldexAI,
+                          text: localeProvider.selectedLanguage == 'العربية' ? 'Beldex AI:${loc.aboutBeldexAI}': loc.aboutBeldexAI,
                               //"""Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you're searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n""",
                           mHeight: mHeight,
                           fontSizeInDp: fontSizeInDp,
