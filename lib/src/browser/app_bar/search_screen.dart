@@ -438,7 +438,7 @@ void _openVoiceDialog() async {
   showVoiceDialog(
   context,
   Provider.of<DarkThemeProvider>(context, listen: false),
-  Provider.of<TtsProvider>(context,listen: false),
+  Provider.of<TtsProvider>(context,listen: false),true,
   onResult: (recognizedText) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
