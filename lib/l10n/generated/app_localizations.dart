@@ -1015,6 +1015,60 @@ abstract class AppLocalizations {
   /// **'Please enter valid custom URL'**
   String get pleaseEnterValidCustomURL;
 
+  /// No description provided for @enterSearchEngineName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a search engine name'**
+  String get enterSearchEngineName;
+
+  /// No description provided for @enterSearchEngineURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the search engine URL'**
+  String get enterSearchEngineURL;
+
+  /// No description provided for @entervalidURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid URL'**
+  String get entervalidURL;
+
+  /// No description provided for @pleaseEnterCorrectSEName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the correct search engine name for the given URL'**
+  String get pleaseEnterCorrectSEName;
+
+  /// No description provided for @urlUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'The URL is unreachable. Please try a valid URL'**
+  String get urlUnreachable;
+
+  /// No description provided for @notvalidSearchEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid search engine'**
+  String get notvalidSearchEngine;
+
+  /// No description provided for @searchEngineAlreadyExist.
+  ///
+  /// In en, this message translates to:
+  /// **'This search engine already exists'**
+  String get searchEngineAlreadyExist;
+
+  /// No description provided for @searchEngineAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Search engine added successfully!'**
+  String get searchEngineAdded;
+
+  /// No description provided for @searchEngineUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Search engine updated successfully!'**
+  String get searchEngineUpdated;
+
   /// No description provided for @beldexIsAnEcosystem.
   ///
   /// In en, this message translates to:
@@ -1146,6 +1200,264 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'\nCredits: Beldex & BelNet.\n'**
   String get credits;
+
+  /// No description provided for @languageChineseSimplifiedChina.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese (Simplified, China)'**
+  String get languageChineseSimplifiedChina;
+
+  /// No description provided for @languageChineseTraditionalTaiwan.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese (Traditional, Taiwan)'**
+  String get languageChineseTraditionalTaiwan;
+
+  /// No description provided for @languageEnglishAustralia.
+  ///
+  /// In en, this message translates to:
+  /// **'English (Australia)'**
+  String get languageEnglishAustralia;
+
+  /// No description provided for @languageEnglishCanada.
+  ///
+  /// In en, this message translates to:
+  /// **'English (Canada)'**
+  String get languageEnglishCanada;
+
+  /// No description provided for @languageEnglishIndia.
+  ///
+  /// In en, this message translates to:
+  /// **'English (India)'**
+  String get languageEnglishIndia;
+
+  /// No description provided for @languageEnglishIreland.
+  ///
+  /// In en, this message translates to:
+  /// **'English (Ireland)'**
+  String get languageEnglishIreland;
+
+  /// No description provided for @languageEnglishSingapore.
+  ///
+  /// In en, this message translates to:
+  /// **'English (Singapore)'**
+  String get languageEnglishSingapore;
+
+  /// No description provided for @languageEnglishUnitedKingdom.
+  ///
+  /// In en, this message translates to:
+  /// **'English (United Kingdom)'**
+  String get languageEnglishUnitedKingdom;
+
+  /// No description provided for @languageEnglishUnitedStates.
+  ///
+  /// In en, this message translates to:
+  /// **'English (United States)'**
+  String get languageEnglishUnitedStates;
+
+  /// No description provided for @languageFrenchBelgium.
+  ///
+  /// In en, this message translates to:
+  /// **'French (Belgium)'**
+  String get languageFrenchBelgium;
+
+  /// No description provided for @languageFrenchCanada.
+  ///
+  /// In en, this message translates to:
+  /// **'French (Canada)'**
+  String get languageFrenchCanada;
+
+  /// No description provided for @languageFrenchFrance.
+  ///
+  /// In en, this message translates to:
+  /// **'French (France)'**
+  String get languageFrenchFrance;
+
+  /// No description provided for @languageFrenchSwitzerland.
+  ///
+  /// In en, this message translates to:
+  /// **'French (Switzerland)'**
+  String get languageFrenchSwitzerland;
+
+  /// No description provided for @languageGermanAustria.
+  ///
+  /// In en, this message translates to:
+  /// **'German (Austria)'**
+  String get languageGermanAustria;
+
+  /// No description provided for @languageGermanBelgium.
+  ///
+  /// In en, this message translates to:
+  /// **'German (Belgium)'**
+  String get languageGermanBelgium;
+
+  /// No description provided for @languageGermanGermany.
+  ///
+  /// In en, this message translates to:
+  /// **'German (Germany)'**
+  String get languageGermanGermany;
+
+  /// No description provided for @languageGermanSwitzerland.
+  ///
+  /// In en, this message translates to:
+  /// **'German (Switzerland)'**
+  String get languageGermanSwitzerland;
+
+  /// No description provided for @languageHindiIndia.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi (India)'**
+  String get languageHindiIndia;
+
+  /// No description provided for @languageIndonesianIndonesia.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesian (Indonesia)'**
+  String get languageIndonesianIndonesia;
+
+  /// No description provided for @languageItalianItaly.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian (Italy)'**
+  String get languageItalianItaly;
+
+  /// No description provided for @languageItalianSwitzerland.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian (Switzerland)'**
+  String get languageItalianSwitzerland;
+
+  /// No description provided for @languageJapaneseJapan.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese (Japan)'**
+  String get languageJapaneseJapan;
+
+  /// No description provided for @languageKoreanSouthKorea.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean (South Korea)'**
+  String get languageKoreanSouthKorea;
+
+  /// No description provided for @languagePolishPoland.
+  ///
+  /// In en, this message translates to:
+  /// **'Polish (Poland)'**
+  String get languagePolishPoland;
+
+  /// No description provided for @languagePortugueseBrazil.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese (Brazil)'**
+  String get languagePortugueseBrazil;
+
+  /// No description provided for @languageRussianRussia.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian (Russia)'**
+  String get languageRussianRussia;
+
+  /// No description provided for @languageSpanishSpain.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish (Spain)'**
+  String get languageSpanishSpain;
+
+  /// No description provided for @languageSpanishUnitedStates.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish (United States)'**
+  String get languageSpanishUnitedStates;
+
+  /// No description provided for @languageThaiThailand.
+  ///
+  /// In en, this message translates to:
+  /// **'Thai (Thailand)'**
+  String get languageThaiThailand;
+
+  /// No description provided for @languageTurkishTurkey.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish (Turkey)'**
+  String get languageTurkishTurkey;
+
+  /// No description provided for @languageVietnameseVietnam.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese (Vietnam)'**
+  String get languageVietnameseVietnam;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageSpanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get languageSpanish;
+
+  /// No description provided for @languageJapanese.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get languageJapanese;
+
+  /// No description provided for @languagePortuguese.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get languagePortuguese;
+
+  /// No description provided for @languageGerman.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get languageGerman;
+
+  /// No description provided for @languageTurkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get languageTurkish;
+
+  /// No description provided for @languageRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get languageRussian;
+
+  /// No description provided for @languageChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get languageChinese;
+
+  /// No description provided for @languageKorean.
+  ///
+  /// In en, this message translates to:
+  /// **'Korean'**
+  String get languageKorean;
+
+  /// No description provided for @languageVietnamese.
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese'**
+  String get languageVietnamese;
+
+  /// No description provided for @languageTamil.
+  ///
+  /// In en, this message translates to:
+  /// **'Tamil'**
+  String get languageTamil;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get languageArabic;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

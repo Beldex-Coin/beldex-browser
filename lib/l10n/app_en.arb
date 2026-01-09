@@ -157,6 +157,18 @@
 
   "pleaseEnterValidCustomURL": "Please enter valid custom URL",
 
+
+  "enterSearchEngineName": "Please enter a search engine name",
+  "enterSearchEngineURL": "Please enter the search engine URL",
+  "entervalidURL": "Please enter a valid URL",
+  "pleaseEnterCorrectSEName": "Please enter the correct search engine name for the given URL",
+  "urlUnreachable": "The URL is unreachable. Please try a valid URL",
+  "notvalidSearchEngine": "This is not a valid search engine",
+  "searchEngineAlreadyExist": "This search engine already exists",
+  "searchEngineAdded": "Search engine added successfully!",
+  "searchEngineUpdated": "Search engine updated successfully!",
+
+
 "beldexIsAnEcosystem": "Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.",
 "atBeldex": " \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.",
 "titlebns": "\nBNS",
@@ -178,7 +190,55 @@
 "aboutAdblocker": "Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n",
 "aboutBeldexAI": "Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you're searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n",
 "thusbeldexbrowserOffers": "\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.",
-"credits":"\nCredits: Beldex & BelNet.\n"
+"credits":"\nCredits: Beldex & BelNet.\n",
 
+
+
+"languageChineseSimplifiedChina": "Chinese (Simplified, China)",
+  "languageChineseTraditionalTaiwan": "Chinese (Traditional, Taiwan)",
+  "languageEnglishAustralia": "English (Australia)",
+  "languageEnglishCanada": "English (Canada)",
+  "languageEnglishIndia": "English (India)",
+  "languageEnglishIreland": "English (Ireland)",
+  "languageEnglishSingapore": "English (Singapore)",
+  "languageEnglishUnitedKingdom": "English (United Kingdom)",
+  "languageEnglishUnitedStates": "English (United States)",
+  "languageFrenchBelgium": "French (Belgium)",
+  "languageFrenchCanada": "French (Canada)",
+  "languageFrenchFrance": "French (France)",
+  "languageFrenchSwitzerland": "French (Switzerland)",
+  "languageGermanAustria": "German (Austria)",
+  "languageGermanBelgium": "German (Belgium)",
+  "languageGermanGermany": "German (Germany)",
+  "languageGermanSwitzerland": "German (Switzerland)",
+  "languageHindiIndia": "Hindi (India)",
+  "languageIndonesianIndonesia": "Indonesian (Indonesia)",
+  "languageItalianItaly": "Italian (Italy)",
+  "languageItalianSwitzerland": "Italian (Switzerland)",
+  "languageJapaneseJapan": "Japanese (Japan)",
+  "languageKoreanSouthKorea": "Korean (South Korea)",
+  "languagePolishPoland": "Polish (Poland)",
+  "languagePortugueseBrazil": "Portuguese (Brazil)",
+  "languageRussianRussia": "Russian (Russia)",
+  "languageSpanishSpain": "Spanish (Spain)",
+  "languageSpanishUnitedStates": "Spanish (United States)",
+  "languageThaiThailand": "Thai (Thailand)",
+  "languageTurkishTurkey": "Turkish (Turkey)",
+  "languageVietnameseVietnam": "Vietnamese (Vietnam)",
+
+
+
+"languageEnglish": "English",
+"languageSpanish": "Spanish",
+"languageJapanese": "Japanese",
+"languagePortuguese": "Portuguese",
+"languageGerman": "German",
+"languageTurkish": "Turkish",
+"languageRussian": "Russian",
+"languageChinese": "Chinese",
+"languageKorean": "Korean",
+"languageVietnamese": "Vietnamese",
+"languageTamil": "Tamil",
+"languageArabic": "Arabic"
   
 }

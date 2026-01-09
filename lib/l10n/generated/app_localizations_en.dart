@@ -459,6 +459,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseEnterValidCustomURL => 'Please enter valid custom URL';
 
   @override
+  String get enterSearchEngineName => 'Please enter a search engine name';
+
+  @override
+  String get enterSearchEngineURL => 'Please enter the search engine URL';
+
+  @override
+  String get entervalidURL => 'Please enter a valid URL';
+
+  @override
+  String get pleaseEnterCorrectSEName => 'Please enter the correct search engine name for the given URL';
+
+  @override
+  String get urlUnreachable => 'The URL is unreachable. Please try a valid URL';
+
+  @override
+  String get notvalidSearchEngine => 'This is not a valid search engine';
+
+  @override
+  String get searchEngineAlreadyExist => 'This search engine already exists';
+
+  @override
+  String get searchEngineAdded => 'Search engine added successfully!';
+
+  @override
+  String get searchEngineUpdated => 'Search engine updated successfully!';
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.';
 
   @override
@@ -523,4 +550,133 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get credits => '\nCredits: Beldex & BelNet.\n';
+
+  @override
+  String get languageChineseSimplifiedChina => 'Chinese (Simplified, China)';
+
+  @override
+  String get languageChineseTraditionalTaiwan => 'Chinese (Traditional, Taiwan)';
+
+  @override
+  String get languageEnglishAustralia => 'English (Australia)';
+
+  @override
+  String get languageEnglishCanada => 'English (Canada)';
+
+  @override
+  String get languageEnglishIndia => 'English (India)';
+
+  @override
+  String get languageEnglishIreland => 'English (Ireland)';
+
+  @override
+  String get languageEnglishSingapore => 'English (Singapore)';
+
+  @override
+  String get languageEnglishUnitedKingdom => 'English (United Kingdom)';
+
+  @override
+  String get languageEnglishUnitedStates => 'English (United States)';
+
+  @override
+  String get languageFrenchBelgium => 'French (Belgium)';
+
+  @override
+  String get languageFrenchCanada => 'French (Canada)';
+
+  @override
+  String get languageFrenchFrance => 'French (France)';
+
+  @override
+  String get languageFrenchSwitzerland => 'French (Switzerland)';
+
+  @override
+  String get languageGermanAustria => 'German (Austria)';
+
+  @override
+  String get languageGermanBelgium => 'German (Belgium)';
+
+  @override
+  String get languageGermanGermany => 'German (Germany)';
+
+  @override
+  String get languageGermanSwitzerland => 'German (Switzerland)';
+
+  @override
+  String get languageHindiIndia => 'Hindi (India)';
+
+  @override
+  String get languageIndonesianIndonesia => 'Indonesian (Indonesia)';
+
+  @override
+  String get languageItalianItaly => 'Italian (Italy)';
+
+  @override
+  String get languageItalianSwitzerland => 'Italian (Switzerland)';
+
+  @override
+  String get languageJapaneseJapan => 'Japanese (Japan)';
+
+  @override
+  String get languageKoreanSouthKorea => 'Korean (South Korea)';
+
+  @override
+  String get languagePolishPoland => 'Polish (Poland)';
+
+  @override
+  String get languagePortugueseBrazil => 'Portuguese (Brazil)';
+
+  @override
+  String get languageRussianRussia => 'Russian (Russia)';
+
+  @override
+  String get languageSpanishSpain => 'Spanish (Spain)';
+
+  @override
+  String get languageSpanishUnitedStates => 'Spanish (United States)';
+
+  @override
+  String get languageThaiThailand => 'Thai (Thailand)';
+
+  @override
+  String get languageTurkishTurkey => 'Turkish (Turkey)';
+
+  @override
+  String get languageVietnameseVietnam => 'Vietnamese (Vietnam)';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageSpanish => 'Spanish';
+
+  @override
+  String get languageJapanese => 'Japanese';
+
+  @override
+  String get languagePortuguese => 'Portuguese';
+
+  @override
+  String get languageGerman => 'German';
+
+  @override
+  String get languageTurkish => 'Turkish';
+
+  @override
+  String get languageRussian => 'Russian';
+
+  @override
+  String get languageChinese => 'Chinese';
+
+  @override
+  String get languageKorean => 'Korean';
+
+  @override
+  String get languageVietnamese => 'Vietnamese';
+
+  @override
+  String get languageTamil => 'Tamil';
+
+  @override
+  String get languageArabic => 'Arabic';
 }
