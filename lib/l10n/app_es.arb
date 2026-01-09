@@ -172,6 +172,19 @@
     "pleaseEnterValidCustomURL": "Por favor, introduzca una URL personalizada válida",
  
 
+ "enterSearchEngineName": "Por favor, ingrese el nombre del motor de búsqueda",
+  "enterSearchEngineURL": "Por favor, ingrese la URL del motor de búsqueda",
+  "entervalidURL": "Por favor, ingrese una URL válida",
+  "pleaseEnterCorrectSEName": "Por favor, ingrese el nombre correcto del motor de búsqueda para la URL proporcionada",
+  "urlUnreachable": "La URL no es accesible. Por favor, intente con una URL válida",
+  "notvalidSearchEngine": "Este no es un motor de búsqueda válido",
+  "searchEngineAlreadyExist": "Este motor de búsqueda ya existe",
+  "searchEngineAdded": "¡Motor de búsqueda agregado correctamente!",
+  "searchEngineUpdated": "¡Motor de búsqueda actualizado correctamente!",
+
+
+
+
 "beldexIsAnEcosystem": "Beldex es un ecosistema de aplicaciones descentralizadas y orientadas a preservar la confidencialidad. La aplicación del Navegador Beldex es una de las aplicaciones que componen este ecosistema, junto con BChat, BelNet y el protocolo Beldex. El Navegador Beldex es tu puerta de entrada a una experiencia en línea fluida y confidencial, donde tus datos te pertenecen solo a ti. Construido sobre una infraestructura blockchain robusta, el navegador Beldex garantiza confidencialidad y anonimato a sus usuarios.",
 "atBeldex": " \n En Beldex, creemos en empoderar a las personas otorgándoles el derecho fundamental de controlar su huella digital. El Navegador Beldex está diseñado para brindar un entorno en línea seguro y confidencial para que los usuarios puedan comunicarse e interactuar con el mundo digital.",
 "titlebns": "\nBNS",
@@ -193,5 +206,56 @@
 "aboutAdblocker": "Bloqueador de Anuncios: Bloquea anuncios intrusivos, rastreadores y ventanas emergentes para una experiencia de navegación más limpia y libre de distracciones. Disfruta de cargas de página más rápidas y menor uso de datos mientras mantienes control total sobre tus interacciones en línea.\n",
 "aboutBeldexAI": "Beldex AI: Obtén respuestas instantáneas a tus consultas con BeldexAI, un asistente inteligente que responde basándose en el contenido del sitio web. Ya sea que busques información específica o necesites ideas rápidas, BeldexAI mejora tu experiencia de navegación con respuestas contextuales y personalizadas.\n",
 "thusbeldexbrowserOffers": "\nAsí, el Navegador Beldex ofrece un refugio simple y seguro para los usuarios que buscan confidencialidad en un mundo cada vez más interconectado. Únete a nosotros en este camino hacia un futuro digital más confidencial y seguro. Experimenta la libertad de navegar, comunicarse y explorar Internet sin comprometer tu privacidad. Beldex Network – Donde la Confidencialidad se Encuentra con la Innovación.",
-"credits":"\nCréditos: Beldex & BelNet.\n"
+"credits":"\nCréditos: Beldex & BelNet.\n",
+
+
+
+
+  "languageChineseSimplifiedChina": "Chino (simplificado, China)",
+  "languageChineseTraditionalTaiwan": "Chino (tradicional, Taiwán)",
+  "languageEnglishAustralia": "Inglés (Australia)",
+  "languageEnglishCanada": "Inglés (Canadá)",
+  "languageEnglishIndia": "Inglés (India)",
+  "languageEnglishIreland": "Inglés (Irlanda)",
+  "languageEnglishSingapore": "Inglés (Singapur)",
+  "languageEnglishUnitedKingdom": "Inglés (Reino Unido)",
+  "languageEnglishUnitedStates": "Inglés (Estados Unidos)",
+  "languageFrenchBelgium": "Francés (Bélgica)",
+  "languageFrenchCanada": "Francés (Canadá)",
+  "languageFrenchFrance": "Francés (Francia)",
+  "languageFrenchSwitzerland": "Francés (Suiza)",
+  "languageGermanAustria": "Alemán (Austria)",
+  "languageGermanBelgium": "Alemán (Bélgica)",
+  "languageGermanGermany": "Alemán (Alemania)",
+  "languageGermanSwitzerland": "Alemán (Suiza)",
+  "languageHindiIndia": "Hindi (India)",
+  "languageIndonesianIndonesia": "Indonesio (Indonesia)",
+  "languageItalianItaly": "Italiano (Italia)",
+  "languageItalianSwitzerland": "Italiano (Suiza)",
+  "languageJapaneseJapan": "Japonés (Japón)",
+  "languageKoreanSouthKorea": "Coreano (Corea del Sur)",
+  "languagePolishPoland": "Polaco (Polonia)",
+  "languagePortugueseBrazil": "Portugués (Brasil)",
+  "languageRussianRussia": "Ruso (Rusia)",
+  "languageSpanishSpain": "Español (España)",
+  "languageSpanishUnitedStates": "Español (Estados Unidos)",
+  "languageThaiThailand": "Tailandés (Tailandia)",
+  "languageTurkishTurkey": "Turco (Turquía)",
+  "languageVietnameseVietnam": "Vietnamita (Vietnam)",
+
+
+
+
+"languageEnglish": "Inglés",
+"languageSpanish": "Español",
+"languageJapanese": "Japonés",
+"languagePortuguese": "Portugués",
+"languageGerman": "Alemán",
+"languageTurkish": "Turco",
+"languageRussian": "Ruso",
+"languageChinese": "Chino",
+"languageKorean": "Coreano",
+"languageVietnamese": "Vietnamita",
+"languageTamil": "Tamil",
+"languageArabic": "Árabe"
 }
