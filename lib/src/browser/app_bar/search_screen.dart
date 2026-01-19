@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
@@ -590,6 +591,7 @@ final scannedValue = await showDialog<String>(
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
      final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
      final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
+     final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: PreferredSize(
@@ -657,7 +659,11 @@ final scannedValue = await showDialog<String>(
                       // browserModel.updateIsNewTab(false);
                       if (widget.webViewController != null) {
                         widget.webViewController!
-                            .loadUrl(urlRequest: URLRequest(url: url));
+                            .loadUrl(urlRequest: URLRequest(url: url,
+                            headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                            ));
                       } else {
                         if (mounted) setState(() {});
                         print('comes inside new tab');
@@ -1006,7 +1012,11 @@ final scannedValue = await showDialog<String>(
                                 // browserModel.updateIsNewTab(false);
                                 if (widget.webViewController != null) {
                                   widget.webViewController!.loadUrl(
-                                      urlRequest: URLRequest(url: url));
+                                      urlRequest: URLRequest(url: url,
+                                      headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          },
+                                      ));
                                   print(
                                       'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
                                 } else {
@@ -1184,7 +1194,11 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
                      // browserModel.updateIsNewTab(false);
                      if (widget.webViewController != null) {
                        widget.webViewController!
-                           .loadUrl(urlRequest: URLRequest(url: url));
+                           .loadUrl(urlRequest: URLRequest(url: url,
+                           headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                           ));
                      } else {
                        if (mounted) setState(() {});
                        print('comes inside new tab');

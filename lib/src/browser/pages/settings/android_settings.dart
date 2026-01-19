@@ -1,5 +1,6 @@
 import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -116,6 +117,7 @@ String getPercentage(double value) {
     final basicProvider = Provider.of<BasicProvider>(context);
     final loc = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
+    final appLocaleProvider = Provider.of<LocaleProvider>(context);
     var widgets = <Widget>[
       Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,7 +311,9 @@ String getPercentage(double value) {
               currentWebViewModel.settings = webSet;
               vpnStatusProvider.updateFAB(false);
              // await webViewController.reload();
-             await webViewController.loadUrl(urlRequest: URLRequest(url: currentWebViewModel.url));
+             await webViewController.loadUrl(urlRequest: URLRequest(url: currentWebViewModel.url,headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }));
 
             } catch (e) {}
 

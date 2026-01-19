@@ -2,6 +2,7 @@ import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
@@ -174,6 +175,7 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
         Provider.of<VpnStatusProvider>(context, listen: false);
     var webViewModel = Provider.of<WebViewModel>(context, listen: false);
     var webViewController = webViewModel.webViewController;
+    final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     var url = WebUri(formatUrl(_sharedUrl!.trim()));
     url ??= WebUri(settings.searchEngine.url);
    // print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
@@ -206,7 +208,9 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
    if ((webViewController != null && vpnStatusProvider.canShowHomeScreen == true) //|| (webViewController != null && settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty)
    ) {
       vpnStatusProvider.updateCanShowHomeScreen(false);
-        webViewController.loadUrl(urlRequest: URLRequest(url: url));
+        webViewController.loadUrl(urlRequest: URLRequest(url: url,headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }));
         print('THE URL loading 2 --> ${webViewModel.url}');
     } 
     else {
@@ -707,7 +711,7 @@ String currentUrl = '';
     final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final ttsProvider = Provider.of<TtsProvider>(context);
-
+final appLocaleProvider = Provider.of<LocaleProvider>(context);
     return WillPopScope(
         onWillPop: () async {
           browserModel.showTabScroller = false;
@@ -810,7 +814,11 @@ String currentUrl = '';
                 browserModel.showTabScroller = false;
                 // ttsProvider.updateTTSDisplayStatus(false);
                 browserModel.showTab(index);
-               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString())));
+               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString()),
+                headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          },
+               ));
                // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
               },
             )));

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:beldex_browser/ad_blocker_filter.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -243,6 +244,7 @@ bool _isValidUrl(String url) {
         final basicProvider = Provider.of<BasicProvider>(context);
     final ttsProvider = Provider.of<TtsProvider>(context);
   final loc= AppLocalizations.of(context)!;
+  final appLocaleProvider = Provider.of<LocaleProvider>(context);
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -277,7 +279,11 @@ bool _isValidUrl(String url) {
     //print('selected text is ---> ${_webViewController?.getSelectedText().toString()}');
     return InAppWebView(
       // keepAlive: widget.webViewModel.keepAlive,
-      initialUrlRequest: URLRequest(url: widget.webViewModel.url),
+      initialUrlRequest: URLRequest(url: widget.webViewModel.url,
+       headers: {
+        "Accept-Language": appLocaleProvider.fullLocaleId //"ta-IN"
+      }
+      ),
       initialSettings: initialSettings,
       windowId: widget.webViewModel.windowId,
       pullToRefreshController: _pullToRefreshController,
@@ -671,6 +677,28 @@ await _webViewController!.evaluateJavascript(source: """
           //   return NavigationActionPolicy.CANCEL;
           // }
         }
+        if (url != null &&
+      (url.scheme == "http" || url.scheme == "https")) {
+
+    // prevent infinite loops
+    bool alreadyHasTamilHeader =
+        navigationAction.request.headers?["Accept-Language"] != null;
+
+    if (!alreadyHasTamilHeader) {
+      print("Applying language Headers for: $url");
+
+      await controller.loadUrl(
+        urlRequest: URLRequest(
+          url: WebUri(url.toString()),
+          headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId //"ta-IN,ta;q=0.9",
+          },
+        ),
+      );
+
+      return NavigationActionPolicy.CANCEL;
+    }
+  }
 
         return NavigationActionPolicy.ALLOW;
       },

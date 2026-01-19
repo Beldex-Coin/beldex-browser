@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
@@ -230,7 +231,7 @@ void getRandomExitnode() async {
     }
   }
 
-Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc) async {
+Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc, LocaleProvider localeProvider) async {
     //getRandomExitnode();
    // setRandomNode();
   //  if(isSameNode){
@@ -241,7 +242,7 @@ Future toggleBelnet(VpnStatusProvider vpnStatusProvider,LoadingtickValueProvider
      final prefs = await SharedPreferences.getInstance();
       await prefs.setString('selectedExitNode', '$exitNode');
       await prefs.setString('selectedCountryIcon', '$exitIcon');
-    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc); 
+    changeNode(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc,localeProvider); 
    }
     
   }
@@ -268,7 +269,7 @@ showWarning()async{
 }
 
 
-Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc) async {
+Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider loadingtickValueProvider,WebViewModel webViewModel,AppLocalizations loc,LocaleProvider localeProvider) async {
     try{
       // if (BelnetLib.isConnected == false) {
       setState(() {
@@ -301,7 +302,11 @@ Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider 
           //var dds = widget.webViewController!.getUrl().toString();
             widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
-                          url: WebUri(webViewModel.url.toString())));
+                          url: WebUri(webViewModel.url.toString()),
+                          headers: {
+            "Accept-Language": localeProvider.fullLocaleId,
+          },
+                          ));
 
           // print('THE RELOAD URL IN HERE IS ---- $dds');
           // await widget.webViewController!.reload();
@@ -491,6 +496,7 @@ void setRandomNode() async {
     final loadingtickValueProvider = Provider.of<LoadingtickValueProvider>(context);
      var webViewModel = Provider.of<WebViewModel>(context, listen: true);
     final mheight = MediaQuery.of(context).size.height;
+    final localeProvider = Provider.of<LocaleProvider>(context);
     return Center(
       child: LayoutBuilder(builder: (context, constraint) {
         return Column(
@@ -792,7 +798,7 @@ void setRandomNode() async {
                           ),
                           onPressed: () async {
                             // disconnectVpn(vpnStatusProvider);
-                                    toggleBelnet(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc);
+                                    toggleBelnet(vpnStatusProvider,loadingtickValueProvider,webViewModel,loc,localeProvider);
                                   // resetSettings();
                                    Navigator.pop(context);
 
