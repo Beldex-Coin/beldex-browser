@@ -42,6 +42,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchOrEnterAddress => 'Search or enter address';
 
   @override
+  String get beldexBrowserForAndroid => 'Beldex Browser for android is\n protecting your confidentiality!';
+
+  @override
+  String get applanguage => 'App language';
+
+  @override
+  String get searchLanguage => 'Search language';
+
+  @override
+  String get downloadCancelled => 'Download Cancelled';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get addSearchEngine => 'Add search engine';
+
+  @override
+  String get editSearchEngine => 'Edit search engine';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get url => 'URL';
+
+  @override
+  String get enterSEName => 'Enter search engine name';
+
+  @override
+  String get enterSEURL => 'Enter search engine URL';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
   String get thistimeSearchIn => 'This time Search in';
 
   @override
@@ -679,4 +721,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageArabic => 'Arabic';
+
+  @override
+  String get languageFrench => 'French';
+
+  @override
+  String get languageItalian => 'Italian';
+
+  @override
+  String get languageDanish => 'Danish';
+
+  @override
+  String get languageDutch => 'Dutch';
+
+  @override
+  String get languageFinnish => 'Finnish';
+
+  @override
+  String get languageFilipino => 'Filipino';
+
+  @override
+  String get languageIndonesian => 'Indonesian';
+
+  @override
+  String get languageMalay => 'Malay';
+
+  @override
+  String get languageThai => 'Thai';
+
+  @override
+  String get languageHindi => 'Hindi';
+
+  @override
+  String get languageTelugu => 'Telugu';
+
+  @override
+  String get languageMalayalam => 'Malayalam';
+
+  @override
+  String get languageMarathi => 'Marathi';
 }

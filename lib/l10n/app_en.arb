@@ -12,6 +12,22 @@
   "prepareDaemonConnection": "Preparing Daemon connection",
   "searchOrEnterAddress": "Search or enter address",
 
+  "beldexBrowserForAndroid": "Beldex Browser for android is\n protecting your confidentiality!",
+  "applanguage": "App language",
+  "searchLanguage": "Search language",
+  "downloadCancelled": "Download Cancelled",
+  "open": "Open",
+  "addSearchEngine": "Add search engine",
+  "editSearchEngine": "Edit search engine",
+  "name": "Name",
+  "url":"URL",
+  "enterSEName": "Enter search engine name",
+  "enterSEURL": "Enter search engine URL",
+  "add": "Add",
+  "save": "Save",
+  "edit": "Edit",
+
+
   "thistimeSearchIn": "This time Search in",
   "searchSettings": "Search settings",
   "search": "Search",
@@ -239,6 +255,22 @@
 "languageKorean": "Korean",
 "languageVietnamese": "Vietnamese",
 "languageTamil": "Tamil",
-"languageArabic": "Arabic"
+"languageArabic": "Arabic",
+
+  "languageFrench": "French",
+  "languageItalian": "Italian",
+  "languageDanish": "Danish",
+  "languageDutch": "Dutch",
+  "languageFinnish": "Finnish",
+  "languageFilipino": "Filipino",
+  "languageIndonesian": "Indonesian",
+  "languageMalay": "Malay",
+  "languageThai": "Thai",
+  "languageHindi": "Hindi",
+  "languageTelugu": "Telugu",
+  "languageMalayalam": "Malayalam",
+  "languageMarathi": "Marathi"
+
+
   
 }
