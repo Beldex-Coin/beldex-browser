@@ -12,515 +12,752 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hello => 'مرحباً 👋';
 
   @override
-  String get connect => 'Connect';
+  String get connect => 'اتصال';
 
   @override
-  String get connecting => 'Connecting...';
+  String get connecting => 'جارٍ الاتصال';
 
   @override
-  String get exitnode => 'Exit Node';
+  String get exitnode => 'عقدة الخروج';
 
   @override
-  String get beldexofficial => 'Beldex official';
+  String get beldexofficial => 'بيلدكس الرسمية';
 
   @override
-  String get contributorExitNode => 'Contributor exit node';
+  String get contributorExitNode => 'عقدة خروج المساهم';
 
   @override
-  String get belnetServiceStarted => 'Belnet service started';
+  String get belnetServiceStarted => 'تم بدء خدمة Belnet';
 
   @override
-  String get checkingConnection => 'Checking for connection...';
+  String get checkingConnection => 'جارٍ التحقق من الاتصال...';
 
   @override
-  String get connectingBelnetdVPN => 'Connecting to belnet dVPN';
+  String get connectingBelnetdVPN => 'جارٍ الاتصال بـ belnet dVPN';
 
   @override
-  String get prepareDaemonConnection => 'Preparing Daemon connection';
+  String get prepareDaemonConnection => 'جارٍ إعداد اتصال Daemon';
 
   @override
-  String get searchOrEnterAddress => 'Search or enter address';
+  String get searchOrEnterAddress => 'ابحث أو أدخل العنوان';
 
   @override
-  String get thistimeSearchIn => 'This time Search in';
+  String get beldexBrowserForAndroid => 'متصفح Beldex لنظام أندرويد يحمي خصوصيتك!';
 
   @override
-  String get searchSettings => 'Search settings';
+  String get applanguage => 'لغة التطبيق';
 
   @override
-  String get search => 'Search';
+  String get searchLanguage => 'لغة البحث';
 
   @override
-  String get searchEngine => 'Search Engine';
+  String get downloadCancelled => 'تم إلغاء التنزيل';
 
   @override
-  String get defaultSearchEngine => 'Default Search Engine';
+  String get open => 'فتح';
 
   @override
-  String get manageSearchShortcuts => 'Manage Search shortcuts';
+  String get addSearchEngine => 'إضافة محرك بحث';
 
   @override
-  String get editEnginesVisible => 'Edit engines visible in the search menu';
+  String get editSearchEngine => 'تعديل محرك البحث';
 
   @override
-  String get selectOne => 'Select one';
+  String get name => 'الاسم';
 
   @override
-  String get engineVisibleOnSearchMenu => 'Engine visible on the search menu';
+  String get url => 'URL';
 
   @override
-  String get newtab => 'New tab';
+  String get enterSEName => 'أدخل اسم محرك البحث';
 
   @override
-  String get favorites => 'Favorites';
+  String get enterSEURL => 'أدخل رابط محرك البحث';
 
   @override
-  String get changeNode => 'Change Node';
+  String get add => 'إضافة';
 
   @override
-  String get share => 'Share';
+  String get save => 'حفظ';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get thistimeSearchIn => 'هذه المرة البحث في';
+
+  @override
+  String get searchSettings => 'إعدادات البحث';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get searchEngine => 'محرك البحث';
+
+  @override
+  String get defaultSearchEngine => 'محرك البحث الافتراضي';
+
+  @override
+  String get manageSearchShortcuts => 'إدارة اختصارات البحث';
+
+  @override
+  String get editEnginesVisible => 'تحرير محركات البحث الظاهرة في قائمة البحث';
+
+  @override
+  String get selectOne => 'اختر واحداً';
+
+  @override
+  String get engineVisibleOnSearchMenu => 'محرك البحث الظاهر في قائمة البحث';
+
+  @override
+  String get newtab => 'علامة تبويب جديدة';
+
+  @override
+  String get favorites => 'المفضلة';
+
+  @override
+  String get changeNode => 'تغيير العقد';
+
+  @override
+  String get share => 'مشاركة';
 
   @override
   String get beldexAI => 'Beldex AI';
 
   @override
-  String get webArchives => 'Web Archives';
+  String get webArchives => 'أرشيف الويب';
 
   @override
-  String get findOnPage => 'Find on page';
+  String get findOnPage => 'البحث في الصفحة';
 
   @override
-  String get downloads => 'Downloads';
+  String get downloads => 'التنزيلات';
 
   @override
-  String get desktopMode => 'Desktop mode';
+  String get desktopMode => 'وضع سطح المكتب';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'الإعدادات';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'الوضع الداكن';
 
   @override
-  String get reportAnIssue => 'Report an Issue';
+  String get reportAnIssue => 'الإبلاغ عن مشكلة';
 
   @override
-  String get about => 'About';
+  String get about => 'حول';
 
   @override
-  String get quit => 'Quit';
+  String get quit => 'خروج';
 
   @override
-  String get noFavorites => 'No Favorites';
+  String get noFavorites => 'لا توجد عناصر مفضلة';
 
   @override
-  String get noWebArchives => 'No Web archives';
+  String get noWebArchives => 'لا توجد أرشيفات ويب';
 
   @override
-  String get chooseLanguage => 'Choose Language';
+  String get chooseLanguage => 'اختر اللغة';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'مسح رمز الاستجابة السريعة';
 
   @override
-  String get alignQRInCenterOFFrame => 'Align the QR code in the\ncenter of frame';
+  String get alignQRInCenterOFFrame => 'ضع رمز الاستجابة السريعة في مركز الإطار';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI enhances the Beldex Browser with intelligent features for a seamless web experience. It summarizes page content for quick reading. By efficiently routing traffic through masternodes and exit nodes, it ensures confidentiality and faster browsing. Unlike subscription-based models, Beldex AI is free to use, delivering advanced functionality while prioritizing user convenience and a confidentiality-centered internet experience. Explore smarter, faster browsing with Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'يعزز متصفح Beldex بميزات ذكية لتجربة ويب سلسة. يقوم بتلخيص محتوى الصفحات لقراءة سريعة. ومن خلال توجيه حركة المرور بكفاءة عبر الـ masternodes ونقاط الخروج، يضمن السرية وتصفح أسرع. على عكس النماذج المعتمدة على الاشتراك، Beldex AI مجاني للاستخدام، ويوفر وظائف متقدمة مع التركيز على راحة المستخدم وتجربة إنترنت قائمة على الخصوصية. اكتشف تصفحًا أذكى وأسرع مع Beldex AI.';
 
   @override
-  String get needHelpWithThisSite => 'Need help with this site?';
+  String get needHelpWithThisSite => 'تحتاج مساعدة في هذا الموقع؟';
 
   @override
-  String get beldexAICanHelpYou => 'BeldexAI can help you summarize articles,\nexpand on a site\'s content and much more.';
+  String get beldexAICanHelpYou => 'BeldexAI يمكنه مساعدتك في تلخيص المقالات، وتوسيع محتوى الموقع، وأكثر من ذلك بكثير.';
 
   @override
-  String get enterPromptHere => 'Enter prompt here..';
+  String get enterPromptHere => 'أدخل النص هنا..';
 
   @override
-  String get summariseThisPage => 'Summarise this page';
+  String get summariseThisPage => 'تلخيص هذه الصفحة';
 
   @override
-  String get hideSummarise => 'Hide Summarise';
+  String get hideSummarise => 'إخفاء التلخيص';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'إعادة المحاولة';
 
   @override
-  String get regenerate => 'Regenerate';
+  String get regenerate => 'إعادة الإنشاء';
 
   @override
-  String get thereWasAnErrorGenerateResponse => 'There was an error generating response';
+  String get thereWasAnErrorGenerateResponse => 'حدث خطأ أثناء إنشاء الرد';
 
   @override
-  String get askBeldexAI => 'Ask Beldex AI';
+  String get askBeldexAI => 'اسأل Beldex AI';
 
   @override
-  String get chatDeleted => 'Chat deleted successfully';
+  String get chatDeleted => 'تم حذف المحادثة بنجاح';
 
   @override
-  String get unprecidentedTrafficExitNodeError => 'Unprecedented traffic with Exit node. Please change exit node and retry';
+  String get unprecidentedTrafficExitNodeError => 'حركة مرور غير مسبوقة مع Exit node. يرجى تغيير Exit node والمحاولة مرة أخرى';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'متصل';
 
   @override
-  String get disconnected => 'Disconnected';
+  String get disconnected => 'غير متصل';
 
   @override
-  String get switchNode => 'Switch Node';
+  String get switchNode => 'تبديل العقدة';
 
   @override
-  String get switchingNode => 'Switching Node';
+  String get switchingNode => 'جارٍ تبديل العقدة';
 
   @override
-  String get nodes => 'Nodes';
+  String get nodes => 'العُقَد';
 
   @override
-  String get exitNodeSwitched => 'Exit node switched successfully';
+  String get exitNodeSwitched => 'تم تبديل عقدة الخروج بنجاح';
 
   @override
-  String get thisNodeAlreadySelected => 'This node is already selected.Please select another one from the list';
+  String get thisNodeAlreadySelected => 'تم اختيار هذا النود بالفعل. يرجى اختيار آخر من القائمة';
 
   @override
-  String get doYouWantToSwitch => 'Do you want to switch with the selected node?';
+  String get doYouWantToSwitch => 'هل ترغب في التبديل إلى النود المحدد؟';
 
   @override
-  String get noRecentDownloads => 'No recent downloads';
+  String get noRecentDownloads => 'لا توجد تنزيلات حديثة';
 
   @override
-  String get clearDownloads => 'Clear Downloads';
+  String get clearDownloads => 'مسح التنزيلات';
 
   @override
-  String get download => 'Download';
+  String get download => 'تنزيل';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'إلغا';
 
   @override
-  String get youAreAboutToDownload => 'You are about to download';
+  String get youAreAboutToDownload => 'أنت على وشك تنزيل';
 
   @override
-  String get areYouSure => 'Are you sure?';
+  String get areYouSure => 'هل أنت متأكد';
 
   @override
-  String get startDownloading => 'Start downloading';
+  String get startDownloading => 'بدء التنزيل';
 
   @override
-  String get downloading => 'Downloading';
+  String get downloading => 'جارٍ التنزيل';
 
   @override
-  String get completed => 'Completed';
+  String get completed => 'اكتمل';
 
   @override
-  String get fileDownloaded => 'Files downloaded successfully';
+  String get fileDownloaded => 'تم تنزيل الملفات بنجاح';
 
   @override
-  String get searchEngineContent => 'Choose your preferred search engine for personalized browsing.';
+  String get searchEngineContent => 'اختر محرك البحث المفضل لديك لتصفح مخصص.';
 
   @override
-  String get homePage => 'Home Page';
+  String get homePage => 'الصفحة الرئيسية';
 
   @override
-  String get homepageContent => 'Set your homepage for quick access to favorite sites.';
+  String get homepageContent => 'اضبط الصفحة الرئيسية للوصول السريع إلى المواقع المفضلة.';
 
   @override
-  String get screenSecurity => 'Screen Security';
+  String get screenSecurity => 'أمان الشاشة';
 
   @override
-  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing';
+  String get screenSecurityContent => 'أضف طبقة حماية إضافية لتصفح آمن.';
 
   @override
-  String get javascriptEnabled => 'JavaScript Enabled';
+  String get javascriptEnabled => 'تمكين JavaScript';
 
   @override
-  String get javascriptEnabledContent => 'Enable or disable JavaScript for a tailored experience.';
+  String get javascriptEnabledContent => ' تمكين أو تعطيل JavaScript لتجربة مخصصة.';
 
   @override
-  String get cacheEnabled => 'Cache Enabled';
+  String get cacheEnabled => 'يفضل تمكين التخزين المؤقت';
 
   @override
-  String get cacheEnabledContent => 'Toggle caching for faster loading or increased confidentiality.';
+  String get cacheEnabledContent => ' تفعيل إلغاء تفعيل التخزين المؤقت السرعة تحميل أعلى أو خصوصية أكبر.';
 
   @override
-  String get supportZoom => 'Support Zoom';
+  String get supportZoom => 'دعم التكبير/التصغير';
 
   @override
-  String get supportZoomContent => 'Enable zoom for a closer look at web content.';
+  String get supportZoomContent => 'تمكين التكبير لمشاهدة محتوى الويب عن قرب.';
 
   @override
-  String get setAsDefaultBrowser => 'Set as Default Browser';
+  String get setAsDefaultBrowser => 'تعيين كمتصفح افتراضي';
 
   @override
-  String get appPermissions => 'App Permissions';
+  String get appPermissions => 'أذونات التطبيق';
 
   @override
-  String get aboutBeldexBrowser => 'About Beldex Browser';
+  String get aboutBeldexBrowser => 'حول متصفح Beldex';
 
   @override
-  String get resetSettings => 'Reset settings';
+  String get resetSettings => 'إعادة ضبط الإعدادات';
 
   @override
-  String get doYouWanttoReset => 'Do you want to reset the browser\nsettings?';
+  String get doYouWanttoReset => 'هل تريد إعادة ضبط إعدادات المتصفح؟';
 
   @override
-  String get textZoom => 'Text Zoom';
+  String get textZoom => 'تكبير النص';
 
   @override
-  String get textZoomContent => 'Customize text size in percentage for comfortable reading on any website.';
+  String get textZoomContent => ' تخصيص حجم النص بالنسبة المئوية للقراءة المريحة على أي موقع.';
 
   @override
-  String get adBlocker => 'Ad Blocker';
+  String get adBlocker => 'مانع الإعلانات';
 
   @override
-  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience';
+  String get adBlockerContent => 'Tتشغيل/إيقاف لمنع الإعلانات المزعجة وتحسين تجربة التصفح.';
 
   @override
-  String get autoConnect => 'Auto-Connect';
+  String get autoConnect => 'الاتصال التلقائي';
 
   @override
-  String get autoConnectContent => 'Automatically connect when the app launches.';
+  String get autoConnectContent => 'الاتصال تلقائيًا عند فتح التطبيق.';
 
   @override
-  String get autoSuggestion => 'Auto-Suggestion';
+  String get autoSuggestion => 'الاقتراح التلقائي';
 
   @override
-  String get autoSuggestionContent => 'Automatically display suggestions while searching.';
+  String get autoSuggestionContent => 'عرض الاقتراحات تلقائيًا أثناء البحث.';
 
   @override
-  String get clearSessionCache => 'Clear Session Cache';
+  String get clearSessionCache => 'مسح ذاكرة الجلسة';
 
   @override
-  String get clearSessionCacheContent => 'Automatically clear the current session\'s cache for confidentiality.';
+  String get clearSessionCacheContent => 'مسح ذاكرة الجلسة الحالية تلقائيًا للخصوصية.';
 
   @override
-  String get builtinZoomControls => 'Built-In Zoom Controls';
+  String get builtinZoomControls => 'أدوات التحكم بالتكبير المدمجة';
 
   @override
-  String get builtinZoomControlsContent => 'Control your browsing experience with built-in zoom functionality.';
+  String get builtinZoomControlsContent => 'التحكم في تجربة التصفح باستخدام وظائف التكبير المدمجة.';
 
   @override
-  String get displayZoomControls => 'Display Zoom Controls';
+  String get displayZoomControls => 'عرض أدوات التحكم بالتكبير';
 
   @override
-  String get displayZoomControlsContent => 'Show on-screen zoom controls for easy accessibility.';
+  String get displayZoomControlsContent => 'إظهار أدوات التحكم على الشاشة للوصول السهل.';
 
   @override
-  String get thirdpartCookiesEnabled => 'Third-Party Cookies Enabled';
+  String get thirdpartCookiesEnabled => 'تمكين ملفات تعريف الارتباط للجهات الخارجية';
 
   @override
-  String get thirdpartyCookiesEnabledContent => 'Enable or disable third-party cookies to manage your confidentiality while browsing.';
+  String get thirdpartyCookiesEnabledContent => 'تمكين/تعطيل ملفات تعريف الارتباط للتحكم في الخصوصية أثناء التصفح.';
 
   @override
-  String get debuggingEnabled => 'Debugging Enabled';
+  String get debuggingEnabled => 'تمكين التصحيح';
 
   @override
-  String get debuggingEnabledContent => 'Activate debugging mode for advanced insights into performance.';
+  String get debuggingEnabledContent => 'تفعيل وضع التصحيح للحصول على معلومات متقدمة حول الأداء.';
 
   @override
-  String get closeTabs => 'Close tabs';
+  String get closeTabs => 'إغلاق التبويبات';
 
   @override
-  String get closeAllTabs => 'Close all tabs';
+  String get closeAllTabs => 'إغلاق جميع التبويبات';
 
   @override
-  String get copy => 'Copy';
+  String get copy => 'نسخ';
 
   @override
-  String get cut => 'Cut';
+  String get cut => 'قص';
 
   @override
-  String get paste => 'Paste';
+  String get paste => 'لصق';
 
   @override
-  String get selectAll => 'Select all';
+  String get selectAll => 'تحديد الكل';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'تم النسخ';
 
   @override
-  String get copiedToClipboard => 'Copied to clipboard';
+  String get copiedToClipboard => 'تم النسخ إلى الحافظة';
 
   @override
-  String get unableToShareUrl => 'Unable to share URL';
+  String get unableToShareUrl => 'غير قادر على مشاركة الرابط';
 
   @override
-  String get openInNewTab => 'Open in new tab';
+  String get openInNewTab => 'افتح في تبويب جديد';
 
   @override
-  String get copyAddressLink => 'Copy address link';
+  String get copyAddressLink => 'نسخ رابط العنوان';
 
   @override
-  String get shareLink => 'Share link';
+  String get shareLink => 'مشاركة الرابط';
 
   @override
-  String get downloadimage => 'Download image';
+  String get downloadimage => 'تحميل الصورة';
 
   @override
-  String get shareImage => 'Share image';
+  String get shareImage => 'مشاركة الصورة';
 
   @override
-  String get openImageInNewTab => 'Open image in new tab';
+  String get openImageInNewTab => 'افتح الصورة في تبويب جديد';
 
   @override
-  String get searchImageWith => 'Search image with';
+  String get searchImageWith => 'البحث عن الصورة باستخدام';
 
   @override
-  String get youRaboutToDownloadImage => 'You are about to download image. \n Are you sure?';
+  String get youRaboutToDownloadImage => 'أنت على وشك تحميل الصورة. هل أنت متأكد؟';
 
   @override
-  String get rUSureWantToQuitApp => 'Are you sure you want to quit?';
+  String get rUSureWantToQuitApp => 'هل أنت متأكد أنك تريد الخروج؟';
 
   @override
-  String get quitBrowser => 'Quit Browser';
+  String get quitBrowser => 'إنهاء المتصفح';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'حذف';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'إعادة ضبط';
 
   @override
-  String get customUrlHomePage => 'Custom URL Home Page';
+  String get customUrlHomePage => 'الصفحة الرئيسية بعنوان URL مخصص';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'موافق';
 
   @override
-  String get downloadFailed => 'Download Failed!';
+  String get downloadFailed => 'فشل التنزيل!';
 
   @override
-  String get noCompletedDownloads => 'No completed downloads';
+  String get noCompletedDownloads => 'لا توجد تنزيلات مكتملة';
 
   @override
-  String get cannotOpenThisFile => 'Cannot open this file';
+  String get cannotOpenThisFile => 'لا يمكن فتح هذا الملف';
 
   @override
-  String get titleChangeNode => 'Change Node';
+  String get titleChangeNode => 'تغيير العقدة';
 
   @override
-  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node';
+  String get hasExperiancedTraffic => 'واجهت عقدة الخروج حركة مرور غير مسبوقة. يُرجى النقر على \'تغيير العقدة\' لتبديل عقدة الخروج.';
 
   @override
-  String get theResponseHasBeenInterrupted => 'The response has been interrupted';
+  String get theResponseHasBeenInterrupted => 'تم مقاطعة الرد';
 
   @override
-  String get tryThis => 'Try this:';
+  String get tryThis => 'جرّب هذا:';
 
   @override
-  String get you => 'You';
+  String get you => 'أنت';
 
   @override
-  String get chat => 'Chat';
+  String get chat => 'الدردشة';
 
   @override
-  String get cameraPermissionDenied => 'Camera permission denied';
+  String get cameraPermissionDenied => 'تم رفض إذن الكاميرا';
 
   @override
-  String get micPermissionRequired => 'Microphone Permission Required';
+  String get micPermissionRequired => 'يلزم إذن الوصول إلى الميكروفون';
 
   @override
-  String get uPermanentlyDeniedMicAccess => 'You have permanently denied microphone access';
+  String get uPermanentlyDeniedMicAccess => 'لقد قمت برفض الوصول إلى الميكروفون بشكل دائم';
 
   @override
-  String get plsEnableMicInAppSettings => 'Please enable it in app settings to use voice search';
+  String get plsEnableMicInAppSettings => 'يرجى تمكينه في إعدادات التطبيق لاستخدام البحث الصوتي';
 
   @override
-  String get thispageAlreadySavedOffline => 'This page is already saved offline';
+  String get thispageAlreadySavedOffline => 'تم حفظ هذه الصفحة بالفعل بدون اتصال بالإنترنت';
 
   @override
-  String get pageSavedOffline => 'Page is saved offline!';
+  String get pageSavedOffline => 'تم حفظ الصفحة بدون اتصال بالإنترنت!';
 
   @override
-  String get unabledToSave => 'Unable to save';
+  String get unabledToSave => 'غير قادر على الحفظ';
 
   @override
-  String get basic => 'Basic';
+  String get basic => 'أساسي';
 
   @override
-  String get advanced => 'Advanced';
+  String get advanced => 'متقدم';
 
   @override
-  String get downloadCompelete => 'Download complete';
+  String get downloadCompelete => 'اكتمل التنزيل';
 
   @override
-  String get screensecurityCurrentlyEnabled => 'Screen security is currently enabled.Make sure to disable it in the settings screen';
+  String get screensecurityCurrentlyEnabled => 'ميزة أمان الشاشة مفعلة حالياً. تأكد من إيقافها في شاشة الإعدادات.';
 
   @override
-  String get openSettings => 'Open Settings';
+  String get openSettings => 'فتح الإعدادات';
 
   @override
-  String get noInternetConnection => 'No internet connection';
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
 
   @override
-  String get youAreNotConnectedToInternet => 'You are not connected to the internet. Make sure WiFi/Mobile data is on';
+  String get youAreNotConnectedToInternet => ' أنت غير متصل بالإنترنت. تأكد من تشغيل الواي فاي/بيانات الهاتف المحمول';
 
   @override
-  String get pleaseEnterValidCustomURL => 'Please enter valid custom URL';
+  String get pleaseEnterValidCustomURL => 'يرجى إدخال URL مخصص صالح';
 
   @override
-  String get beldexIsAnEcosystem => 'Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.';
+  String get enterSearchEngineName => 'الرجاء إدخال اسم محرك البحث';
 
   @override
-  String get atBeldex => ' \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.';
+  String get enterSearchEngineURL => 'الرجاء إدخال عنوان URL لمحرك البحث';
+
+  @override
+  String get entervalidURL => 'الرجاء إدخال عنوان URL صالح';
+
+  @override
+  String get pleaseEnterCorrectSEName => 'الرجاء إدخال اسم محرك البحث الصحيح للعنوان URL المحدد';
+
+  @override
+  String get urlUnreachable => 'العنوان URL غير قابل للوصول. الرجاء تجربة عنوان URL صالح';
+
+  @override
+  String get notvalidSearchEngine => 'هذا ليس محرك بحث صالح';
+
+  @override
+  String get searchEngineAlreadyExist => 'محرك البحث هذا موجود بالفعل';
+
+  @override
+  String get searchEngineAdded => 'تم إضافة محرك البحث بنجاح!';
+
+  @override
+  String get searchEngineUpdated => 'تم تحديث محرك البحث بنجاح!';
+
+  @override
+  String get beldexIsAnEcosystem => 'Beldex هو نظام بيئي من التطبيقات اللامركزية والمحافظة على الخصوصية. تطبيق متصفح Beldex هو جزء من هذا النظام البيئي الذي يشمل أيضًا تطبيقات مثل BChat و BelNet وبروتوكول Beldex. متصفح Beldex هو بوابتك لتجربة إنترنت سلسة وسرية، حيث تظل بياناتك ملكًا لك وحدك. وبفضل بنية تحتية قوية للبلوك تشين، يضمن متصفح Beldex السرية وإخفاء الهوية لمستخدميه.';
+
+  @override
+  String get atBeldex => 'في Beldex، نؤمن بتمكين الأفراد من الحق الأساسي في التحكم في بصمتهم الرقمية. تم تصميم متصفح Beldex لتوفير بيئة آمنة وسرية على الإنترنت للمستخدمين للتواصل والتفاعل مع العالم الرقمي.';
 
   @override
   String get titlebns => '\nBNS';
 
   @override
-  String get theBeldexBrowserSupports => 'The Beldex browser supports BNS domains. BNS domains are inherently hosted on BelNet. They can only be accessed by connecting to BelNet. However, since the Beldex Browser has BelNet in-built, users can freely access BNS domains.';
+  String get theBeldexBrowserSupports => 'يدعم متصفح Beldex نطاقات BNS. يتم استضافة نطاقات BNS بشكل أساسي على BelNet، ولا يمكن الوصول إليها إلا عند الاتصال بـ BelNet. ومع ذلك، بما أن متصفح Beldex يحتوي على BelNet مدمجًا، يمكن للمستخدمين الوصول إلى نطاقات BNS بحرية.';
 
   @override
   String get titleMNApp => '\nMNApps';
 
   @override
-  String get asTheBrowser => 'As the browser itself supports BelNet as an added confidentiality feature, users can easily access MNApps hosting on the .bdx domain address.';
+  String get asTheBrowser => 'نظرًا لأن المتصفح نفسه يدعم BelNet كميزة إضافية للخصوصية، يمكن للمستخدمين بسهولة الوصول إلى MNApps المستضافة على عنوان نطاق .bdx. \n';
 
   @override
-  String get titleCrossplatformAccess => '\nCross Platform Access';
+  String get titleCrossplatformAccess => 'الوصول عبر الأنظمة الأساسية';
 
   @override
-  String get theBeldexBrowserIsCrossplatform => 'The Beldex browser is cross-platform as it is being developed for both mobile and desktop devices.';
+  String get theBeldexBrowserIsCrossplatform => 'متصفح Beldex يدعم الأنظمة المتعددة، حيث يتم تطويره لكل من أجهزة الجوال وأجهزة سطح المكتب.';
 
   @override
-  String get titleKeyFeature => '\nKey Features';
+  String get titleKeyFeature => 'الميزات الرئيسية';
 
   @override
-  String get followingAreTheFeatures => '\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n';
+  String get followingAreTheFeatures => 'فيما يلي الميزات المتاحة في النسخة التجريبية (Beta) من تطبيق متصفح Beldex. سيتم إضافة المزيد من الميزات في النسخة الأولية (Alpha).';
 
   @override
-  String get blockJavascript => 'Blocks Javascript: The Beldex browser prioritizes user security by blocking Javascript, thereby reducing the risk of malicious scripts that could compromise user confidentiality and security. This ensures a safe browsing experience and protects users from threats that involve javascript vulnerabilities.';
+  String get blockJavascript => 'حظر JavaScript: يعطي متصفح Beldex أولوية لأمن المستخدم عن طريق حظر JavaScript، مما يقلل من خطر السكربتات الضارة التي قد تعرض سرية وأمن المستخدم للخطر. هذا يضمن تجربة تصفح آمنة ويحمي المستخدمين من التهديدات المتعلقة بثغرات JavaScript.';
 
   @override
-  String get blockcookies => 'Blocks Cookies: Cookies collect a user’s personal information that help determine their behavioural and usage patterns. This in-turn helps the website to show relevant ads, manage active sessions, and provide big data analytics.';
+  String get blockcookies => 'حظر ملفات تعريف الارتباط (Cookies): تجمع ملفات تعريف الارتباط معلومات المستخدم الشخصية، مما يساعد على تحديد سلوك المستخدم وأنماط الاستخدام. وهذا بدوره يساعد الموقع على عرض الإعلانات المناسبة، وإدارة الجلسات النشطة، وتقديم تحليلات البيانات الكبيرة.';
 
   @override
-  String get ipAddressMasked => 'IP Address is Masked: The browser’s in-built dVPN, the BelNet, masks the client IP address from the websites they visit. This provides confidentiality and anonymity to the user and prevents websites from identifying and tracking the user based on their IP address.';
+  String get ipAddressMasked => 'إخفاء عنوان IP: يقوم dVPN المدمج في المتصفح، BelNet، بإخفاء عنوان IP الخاص بالمستخدم عن المواقع التي يزورها. هذا يوفر السرية وإخفاء الهوية للمستخدم ويمنع المواقع من التعرف على المستخدم أو تتبعه بناءً على عنوان IP.';
 
   @override
-  String get locationObfuscated => 'Location is Obfuscated: To further enhance confidentiality, the browser obfuscates the user\'s location, making it challenging for websites and third parties to determine the actual geographical location of the user. This ensures that users can browse without revealing sensitive information about their whereabouts.';
+  String get locationObfuscated => 'تشويش الموقع: لتعزيز السرية، يقوم المتصفح بتشويش موقع المستخدم، مما يجعل من الصعب على المواقع والأطراف الثالثة تحديد الموقع الجغرافي الفعلي للمستخدم.';
 
   @override
-  String get noMetadataCallected => 'No Metadata is Collected: The browser abstains from collecting metadata, ensuring that no additional information about the user\'s browsing habits or preferences is stored. This minimizes the risk of data leakage and unauthorized access to user information.';
+  String get noMetadataCallected => 'عدم جمع البيانات الوصفية (Metadata): يمتنع المتصفح عن جمع البيانات الوصفية، مما يضمن عدم تخزين معلومات إضافية عن عادات التصفح أو تفضيلات المستخدم. هذا يقلل من خطر تسرب البيانات والوصول غير المصرح به إلى معلومات المستخدم.';
 
   @override
-  String get inbuiltdVPN => 'In-built dVPN Service: The inclusion of an in-built decentralized VPN (dVPN) service like BelNet encrypts the user’s internet traffic and ensures a secure and confidential connection for users.';
+  String get inbuiltdVPN => 'خدمة dVPN مدمجة: يوفر دمج خدمة VPN لامركزية مدمجة مثل BelNet تشفيرًا لحركة الإنترنت للمستخدمين ويضمن اتصالًا آمنًا وسريًا.';
 
   @override
-  String get unrestrictedAccess => 'Unrestricted Access: The Beldex browser promotes unrestricted access to information on the Internet, thus aiding free speech and resistance to censorship. Users can easily access geo-restricted content.';
+  String get unrestrictedAccess => 'الوصول غير المقيد: يعزز متصفح Beldex الوصول غير المقيد إلى المعلومات على الإنترنت، مما يدعم حرية التعبير والمقاومة ضد الرقابة. يمكن للمستخدمين الوصول بسهولة إلى المحتوى المقيد جغرافيًا.';
 
   @override
-  String get censorshipResistance => 'Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.\n';
+  String get censorshipResistance => 'مقاومة الرقابة: باستخدام بلوك تشين Beldex وشبكة من العقد اللامركزية، يعزز المتصفح مقاومة الرقابة. لا يمكن لانقطاع أي خادم واحد تقييد الوصول إلى الخدمة.\n';
 
   @override
-  String get aboutAdblocker => 'Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n';
+  String get aboutAdblocker => 'حاجب الإعلانات: حظر الإعلانات المزعجة وأدوات التتبع والنوافذ المنبثقة لتجربة تصفح أنظف وخالية من الإلهاءات. استمتع بسرعة تحميل صفحات أسرع وتقليل استخدام البيانات مع الحفاظ على السيطرة الكاملة على تفاعلاتك عبر الإنترنت.\n';
 
   @override
-  String get aboutBeldexAI => 'Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you\'re searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n';
+  String get aboutBeldexAI => ' احصل على إجابات فورية لاستفساراتك مع BeldexAI، المساعد الذكي الذي يستجيب لأسئلتك واستفساراتك بناءً على محتوى الموقع. سواء كنت تبحث عن معلومات محددة أو تحتاج إلى رؤى سريعة، يعزز BeldexAI تجربة التصفح الخاصة بك باستجابات سياقية ومخصصة. \n';
 
   @override
-  String get thusbeldexbrowserOffers => '\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.';
+  String get thusbeldexbrowserOffers => 'وفر متصفح Beldex مكانًا بسيطًا وآمنًا للمستخدمين الذين يسعون للسرية في عالم متصل بشكل متزايد. انضم إلينا في الرحلة نحو مستقبل رقمي أكثر أمانًا وسرية. اختبر حرية التصفح والتواصل واستكشاف الإنترنت دون المساومة على خصوصيتك.شبكة Beldex – حيث تلتقي السرية بالإبداع \n ';
 
   @override
-  String get credits => '\nCredits: Beldex & BelNet.\n';
+  String get credits => 'الاعتمادات: Beldex & BelNet.\n';
+
+  @override
+  String get languageChineseSimplifiedChina => 'الصينية (مبسطة، الصين)';
+
+  @override
+  String get languageChineseTraditionalTaiwan => 'الصينية (تقليدية، تايوان)';
+
+  @override
+  String get languageEnglishAustralia => 'الإنجليزية (أستراليا)';
+
+  @override
+  String get languageEnglishCanada => 'الإنجليزية (كندا)';
+
+  @override
+  String get languageEnglishIndia => 'الإنجليزية (الهند)';
+
+  @override
+  String get languageEnglishIreland => 'الإنجليزية (أيرلندا)';
+
+  @override
+  String get languageEnglishSingapore => 'الإنجليزية (سنغافورة)';
+
+  @override
+  String get languageEnglishUnitedKingdom => 'الإنجليزية (المملكة المتحدة)';
+
+  @override
+  String get languageEnglishUnitedStates => 'الإنجليزية (الولايات المتحدة)';
+
+  @override
+  String get languageFrenchBelgium => 'الفرنسية (بلجيكا)';
+
+  @override
+  String get languageFrenchCanada => 'الفرنسية (كندا)';
+
+  @override
+  String get languageFrenchFrance => 'الفرنسية (فرنسا)';
+
+  @override
+  String get languageFrenchSwitzerland => 'الفرنسية (سويسرا)';
+
+  @override
+  String get languageGermanAustria => 'الألمانية (النمسا)';
+
+  @override
+  String get languageGermanBelgium => 'الألمانية (بلجيكا)';
+
+  @override
+  String get languageGermanGermany => 'الألمانية (ألمانيا)';
+
+  @override
+  String get languageGermanSwitzerland => 'الألمانية (سويسرا)';
+
+  @override
+  String get languageHindiIndia => 'الهندية (الهند)';
+
+  @override
+  String get languageIndonesianIndonesia => 'الإندونيسية (إندونيسيا)';
+
+  @override
+  String get languageItalianItaly => 'الإيطالية (إيطاليا)';
+
+  @override
+  String get languageItalianSwitzerland => 'الإيطالية (سويسرا)';
+
+  @override
+  String get languageJapaneseJapan => 'اليابانية (اليابان)';
+
+  @override
+  String get languageKoreanSouthKorea => 'الكورية (كوريا الجنوبية)';
+
+  @override
+  String get languagePolishPoland => 'البولندية (بولندا)';
+
+  @override
+  String get languagePortugueseBrazil => 'البرتغالية (البرازيل)';
+
+  @override
+  String get languageRussianRussia => 'الروسية (روسيا)';
+
+  @override
+  String get languageSpanishSpain => 'الإسبانية (إسبانيا)';
+
+  @override
+  String get languageSpanishUnitedStates => 'الإسبانية (الولايات المتحدة)';
+
+  @override
+  String get languageThaiThailand => 'التايلاندية (تايلاند)';
+
+  @override
+  String get languageTurkishTurkey => 'التركية (تركيا)';
+
+  @override
+  String get languageVietnameseVietnam => 'الفيتنامية (فيتنام)';
+
+  @override
+  String get languageEnglish => 'الإنجليزية';
+
+  @override
+  String get languageSpanish => 'الإسبانية';
+
+  @override
+  String get languageJapanese => 'اليابانية';
+
+  @override
+  String get languagePortuguese => 'البرتغالية';
+
+  @override
+  String get languageGerman => 'الألمانية';
+
+  @override
+  String get languageTurkish => 'التركية';
+
+  @override
+  String get languageRussian => 'الروسية';
+
+  @override
+  String get languageChinese => 'الصينية';
+
+  @override
+  String get languageKorean => 'الكورية';
+
+  @override
+  String get languageVietnamese => 'الفيتنامية';
+
+  @override
+  String get languageTamil => 'التاميلية';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageFrench => 'الفرنسية';
+
+  @override
+  String get languageItalian => 'الإيطالية';
+
+  @override
+  String get languageDanish => 'الدنماركية';
+
+  @override
+  String get languageDutch => 'الهولندية';
+
+  @override
+  String get languageFinnish => 'الفنلندية';
+
+  @override
+  String get languageFilipino => 'الفلبينية';
+
+  @override
+  String get languageIndonesian => 'الإندونيسية';
+
+  @override
+  String get languageMalay => 'الماليزية';
+
+  @override
+  String get languageThai => 'التايلاندية';
+
+  @override
+  String get languageHindi => 'الهندية';
+
+  @override
+  String get languageTelugu => 'التيلوجو';
+
+  @override
+  String get languageMalayalam => 'المالايالامية';
+
+  @override
+  String get languageMarathi => 'الماراثية';
 }
