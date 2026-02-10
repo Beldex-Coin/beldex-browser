@@ -441,7 +441,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get titleChangeNode => 'تغيير العقدة';
 
   @override
-  String get hasExperiancedTraffic => 'واجهت عقدة الخروج حركة مرور غير مسبوقة. يُرجى النقر على \'تغيير العقدة\' لتبديل عقدة الخروج.';
+  String get hasExperiancedTraffic => 'لتبديل عقدة الخروج';
+
+  @override
+  String get toSwitchExitnode => 'واجهت عقدة الخروج حركة مرور غير مسبوقة. يُرجى النقر على';
 
   @override
   String get theResponseHasBeenInterrupted => 'تم مقاطعة الرد';
@@ -729,7 +732,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageItalian => 'الإيطالية';
 
   @override
-  String get languageDanish => 'الدنماركية';
+  String get languageDanish => 'الدانماركية';
 
   @override
   String get languageDutch => 'الهولندية';
@@ -753,11 +756,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageHindi => 'الهندية';
 
   @override
-  String get languageTelugu => 'التيلوجو';
+  String get languageTelugu => 'التيلجو';
 
   @override
   String get languageMalayalam => 'المالايالامية';
 
   @override
   String get languageMarathi => 'الماراثية';
+
+  @override
+  String get languageAfrikaans => 'الأفريقانية';
+
+  @override
+  String get languagePolish => 'البولندية';
+
+  @override
+  String get languageRomanian => 'الرومانية';
+
+  @override
+  String get languageUkrainian => 'الأوكرانية';
+
+  @override
+  String get languageLithuanian => 'الليتوانية';
+
+  @override
+  String get languageNorwegian => 'النرويجية';
+
+  @override
+  String get languageGreek => 'اليونانية';
+
+  @override
+  String get languageChineseTraditional => 'الصينية (التقليدية)';
+
+  @override
+  String get languageChineseHongKong => 'الصينية (هونغ كونغ)';
+
+  @override
+  String get languagePortuguesePortugal => 'البرتغالية (البرتغال)';
+
+  @override
+  String get languageSwedish => 'السويدية';
 }

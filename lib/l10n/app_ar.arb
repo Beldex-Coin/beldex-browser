@@ -152,7 +152,8 @@
   "noCompletedDownloads": "لا توجد تنزيلات مكتملة",
   "cannotOpenThisFile": "لا يمكن فتح هذا الملف",
   "titleChangeNode": "تغيير العقدة",
-  "hasExperiancedTraffic": "واجهت عقدة الخروج حركة مرور غير مسبوقة. يُرجى النقر على 'تغيير العقدة' لتبديل عقدة الخروج.",
+  "hasExperiancedTraffic": "لتبديل عقدة الخروج",
+  "toSwitchExitnode":"واجهت عقدة الخروج حركة مرور غير مسبوقة. يُرجى النقر على",
   "theResponseHasBeenInterrupted": "تم مقاطعة الرد",
   "tryThis": "جرّب هذا:",
   "you": "أنت",
@@ -260,24 +261,23 @@
  "languageVietnameseVietnam": "الفيتنامية (فيتنام)",
 
 
-"languageEnglish": "الإنجليزية",
-"languageSpanish": "الإسبانية",
-"languageJapanese": "اليابانية",
-"languagePortuguese": "البرتغالية",
-"languageGerman": "الألمانية",
-"languageTurkish": "التركية",
-"languageRussian": "الروسية",
-"languageChinese": "الصينية",
-"languageKorean": "الكورية",
-"languageVietnamese": "الفيتنامية",
-"languageTamil": "التاميلية",
-"languageArabic": "العربية",
 
-
+  "languageEnglish": "الإنجليزية",
+  "languageSpanish": "الإسبانية",
+  "languageJapanese": "اليابانية",
+  "languagePortuguese": "البرتغالية",
+  "languageGerman": "الألمانية",
+  "languageTurkish": "التركية",
+  "languageRussian": "الروسية",
+  "languageChinese": "الصينية",
+  "languageKorean": "الكورية",
+  "languageVietnamese": "الفيتنامية",
+  "languageTamil": "التاميلية",
+  "languageArabic": "العربية",
 
   "languageFrench": "الفرنسية",
   "languageItalian": "الإيطالية",
-  "languageDanish": "الدنماركية",
+  "languageDanish": "الدانماركية",
   "languageDutch": "الهولندية",
   "languageFinnish": "الفنلندية",
   "languageFilipino": "الفلبينية",
@@ -285,8 +285,21 @@
   "languageMalay": "الماليزية",
   "languageThai": "التايلاندية",
   "languageHindi": "الهندية",
-  "languageTelugu": "التيلوجو",
+  "languageTelugu": "التيلجو",
   "languageMalayalam": "المالايالامية",
-  "languageMarathi": "الماراثية"
+  "languageMarathi": "الماراثية",
+  "languageAfrikaans": "الأفريقانية",
+
+  "languagePolish": "البولندية",
+  "languageRomanian": "الرومانية",
+  "languageUkrainian": "الأوكرانية",
+  "languageLithuanian": "الليتوانية",
+  "languageNorwegian": "النرويجية",
+  "languageGreek": "اليونانية",
+  "languageChineseTraditional": "الصينية (التقليدية)",
+  "languageChineseHongKong": "الصينية (هونغ كونغ)",
+  "languagePortuguesePortugal": "البرتغالية (البرتغال)",
+  "languageSwedish": "السويدية"
+
 
 }

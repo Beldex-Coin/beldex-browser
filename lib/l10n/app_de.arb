@@ -12,7 +12,7 @@
   "prepareDaemonConnection": "Daemon-Verbindung wird vorbereitet",
   "searchOrEnterAddress": "Suchen oder adresse eingeben",
 
-  "beldexBrowserForAndroid": "Beldex Browser für Android schützt Ihre Vertraulichkeit!",
+  "beldexBrowserForAndroid": "Beldex Browser für Android\n schützt Ihre Vertraulichkeit!",
   "applanguage": "App-Sprache",
   "searchLanguage": "Sprache suchen",
   "downloadCancelled": "Download abgebrochen",
@@ -151,7 +151,8 @@
   "noCompletedDownloads": "Keine abgeschlossenen Downloads",
   "cannotOpenThisFile": "Datei kann nicht geöffnet werden",
   "titleChangeNode": "Knoten wechseln",
-  "hasExperiancedTraffic": "hat ein beispielloses Verkehrsaufkommen erlebt. Bitte auf „Node wechseln“ klicken, um den Exit-Node zu ändern.",
+  "hasExperiancedTraffic": "hat ein beispielloses Verkehrsaufkommen erlebt. Bitte auf",
+  "toSwitchExitnode":"klicken, um den Exit-Node zu ändern",
   "theResponseHasBeenInterrupted": "Die Antwort wurde unterbrochen",
   "tryThis": "Versuche dies:",
   "you": "Du",
@@ -254,19 +255,19 @@
 
 
 
-"languageEnglish": "Englisch",
-"languageSpanish": "Spanisch",
-"languageJapanese": "Japanisch",
-"languagePortuguese": "Portugiesisch",
-"languageGerman": "Deutsch",
-"languageTurkish": "Türkisch",
-"languageRussian": "Russisch",
-"languageChinese": "Chinesisch",
-"languageKorean": "Koreanisch",
-"languageVietnamese": "Vietnamesisch",
-"languageTamil": "Tamil",
-"languageArabic": "Arabisch",
 
+  "languageEnglish": "Englisch",
+  "languageSpanish": "Spanisch",
+  "languageJapanese": "Japanisch",
+  "languagePortuguese": "Portugiesisch",
+  "languageGerman": "Deutsch",
+  "languageTurkish": "Türkisch",
+  "languageRussian": "Russisch",
+  "languageChinese": "Chinesisch",
+  "languageKorean": "Koreanisch",
+  "languageVietnamese": "Vietnamesisch",
+  "languageTamil": "Tamil",
+  "languageArabic": "Arabisch",
 
   "languageFrench": "Französisch",
   "languageItalian": "Italienisch",
@@ -280,7 +281,21 @@
   "languageHindi": "Hindi",
   "languageTelugu": "Telugu",
   "languageMalayalam": "Malayalam",
-  "languageMarathi": "Marathi"
+  "languageMarathi": "Marathi",
+  "languageAfrikaans": "Afrikaans",
+
+  "languagePolish": "Polnisch",
+  "languageRomanian": "Rumänisch",
+  "languageUkrainian": "Ukrainisch",
+  "languageLithuanian": "Litauisch",
+  "languageNorwegian": "Norwegisch",
+  "languageGreek": "Griechisch",
+  "languageChineseTraditional": "Chinesisch (Traditionell)",
+  "languageChineseHongKong": "Chinesisch (Hongkong)",
+  "languagePortuguesePortugal": "Portugiesisch (Portugal)",
+  "languageSwedish": "Schwedisch"
+
+
 
 
 }

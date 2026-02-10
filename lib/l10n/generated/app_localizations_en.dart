@@ -441,7 +441,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get titleChangeNode => 'Change Node';
 
   @override
-  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node';
+  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on';
+
+  @override
+  String get toSwitchExitnode => 'to switch exit node';
 
   @override
   String get theResponseHasBeenInterrupted => 'The response has been interrupted';
@@ -760,4 +763,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageMarathi => 'Marathi';
+
+  @override
+  String get languageAfrikaans => 'Afrikaans';
+
+  @override
+  String get languagePolish => 'Polish';
+
+  @override
+  String get languageRomanian => 'Romanian';
+
+  @override
+  String get languageUkrainian => 'Ukrainian';
+
+  @override
+  String get languageLithuanian => 'Lithuanian';
+
+  @override
+  String get languageNorwegian => 'Norwegian';
+
+  @override
+  String get languageGreek => 'Greek';
+
+  @override
+  String get languageChineseTraditional => 'Chinese (Traditional)';
+
+  @override
+  String get languageChineseHongKong => 'Chinese (Hong Kong)';
+
+  @override
+  String get languagePortuguesePortugal => 'Portuguese (Portugal)';
+
+  @override
+  String get languageSwedish => 'Swedish';
 }

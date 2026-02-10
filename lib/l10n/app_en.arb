@@ -151,7 +151,8 @@
   "noCompletedDownloads": "No completed downloads",
   "cannotOpenThisFile": "Cannot open this file",
   "titleChangeNode": "Change Node",
-  "hasExperiancedTraffic": "has experienced unprecedented traffic. Please click on 'Change Node' to switch exit node",
+  "hasExperiancedTraffic": "has experienced unprecedented traffic. Please click on",
+  "toSwitchExitnode": "to switch exit node",
   "theResponseHasBeenInterrupted": "The response has been interrupted",
   "tryThis": "Try this:",
   "you": "You",
@@ -185,6 +186,7 @@
   "searchEngineUpdated": "Search engine updated successfully!",
 
 
+
 "beldexIsAnEcosystem": "Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.",
 "atBeldex": " \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.",
 "titlebns": "\nBNS",
@@ -208,6 +210,54 @@
 "thusbeldexbrowserOffers": "\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.",
 "credits":"\nCredits: Beldex & BelNet.\n",
 
+
+
+  "languageChineseSimplifiedChina": "Chineză (Simplificată, China)",
+  "languageChineseTraditionalTaiwan": "Chineză (Tradițională, Taiwan)",
+
+  "languageEnglishAustralia": "Engleză (Australia)",
+  "languageEnglishCanada": "Engleză (Canada)",
+  "languageEnglishIndia": "Engleză (India)",
+  "languageEnglishIreland": "Engleză (Irlanda)",
+  "languageEnglishSingapore": "Engleză (Singapore)",
+  "languageEnglishUnitedKingdom": "Engleză (Regatul Unit)",
+  "languageEnglishUnitedStates": "Engleză (Statele Unite)",
+
+  "languageFrenchBelgium": "Franceză (Belgia)",
+  "languageFrenchCanada": "Franceză (Canada)",
+  "languageFrenchFrance": "Franceză (Franța)",
+  "languageFrenchSwitzerland": "Franceză (Elveția)",
+
+  "languageGermanAustria": "Germană (Austria)",
+  "languageGermanBelgium": "Germană (Belgia)",
+  "languageGermanGermany": "Germană (Germania)",
+  "languageGermanSwitzerland": "Germană (Elveția)",
+
+  "languageHindiIndia": "Hindi (India)",
+
+  "languageIndonesianIndonesia": "Indoneziană (Indonezia)",
+
+  "languageItalianItaly": "Italiană (Italia)",
+  "languageItalianSwitzerland": "Italiană (Elveția)",
+
+  "languageJapaneseJapan": "Japoneză (Japonia)",
+
+  "languageKoreanSouthKorea": "Coreeană (Coreea de Sud)",
+
+  "languagePolishPoland": "Poloneză (Polonia)",
+
+  "languagePortugueseBrazil": "Portugheză (Brazilia)",
+
+  "languageRussianRussia": "Rusă (Rusia)",
+
+  "languageSpanishSpain": "Spaniolă (Spania)",
+  "languageSpanishUnitedStates": "Spaniolă (Statele Unite)",
+
+  "languageThaiThailand": "Thailandeză (Thailanda)",
+
+  "languageTurkishTurkey": "Turcă (Turcia)",
+
+  "languageVietnameseVietnam": "Vietnameză (Vietnam)",
 
 
 "languageChineseSimplifiedChina": "Chinese (Simplified, China)",
@@ -269,7 +319,20 @@
   "languageHindi": "Hindi",
   "languageTelugu": "Telugu",
   "languageMalayalam": "Malayalam",
-  "languageMarathi": "Marathi"
+  "languageMarathi": "Marathi",
+
+  "languageAfrikaans": "Afrikaans",
+
+"languagePolish": "Polish",
+"languageRomanian": "Romanian",
+"languageUkrainian": "Ukrainian",
+"languageLithuanian": "Lithuanian",
+"languageNorwegian": "Norwegian",
+"languageGreek": "Greek",
+"languageChineseTraditional": "Chinese (Traditional)",
+"languageChineseHongKong": "Chinese (Hong Kong)",
+"languagePortuguesePortugal": "Portuguese (Portugal)",
+"languageSwedish": "Swedish"
 
 
   
