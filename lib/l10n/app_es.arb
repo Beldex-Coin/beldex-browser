@@ -13,6 +13,21 @@
   "searchOrEnterAddress": "Buscar o ingresar dirección",
   
 
+  "beldexBrowserForAndroid": "El navegador Beldex para Android\nprotege tu confidencialidad!",
+  "applanguage": "Idioma de la aplicación",
+  "searchLanguage": "Buscar idioma",
+  "downloadCancelled": "Descarga cancelada",
+  "open": "Abrir",
+  "addSearchEngine": "Agregar motor de búsqueda",
+  "editSearchEngine": "Editar motor de búsqueda",
+  "name": "Nombre",
+  "url":"URL",
+  "enterSEName": "Ingresar nombre del motor de búsqueda",
+  "enterSEURL": "Ingresar URL del motor de búsqueda",
+  "add": "Agregar",
+  "save": "Guardar",
+  "edit": "Editar",
+
   "thistimeSearchIn": "Esta vez buscar en",
   "searchSettings": "Configuración de búsqueda",
   "search": "De búsqueda",
@@ -148,7 +163,8 @@
   "noCompletedDownloads": "No hay descargas completadas",
   "cannotOpenThisFile": "No se puede abrir este archivo",
   "titleChangeNode": "Cambiar Nodo",
-  "hasExperiancedTraffic": "ha experimentado un tráfico sin precedentes. Por favor, haz clic en 'Cambiar Nodo' para cambiar el nodo de salida",
+  "hasExperiancedTraffic": "ha experimentado un tráfico sin precedentes. Por favor, haz clic en",
+  "toSwitchExitnode":"para cambiar el nodo de salida",
   "theResponseHasBeenInterrupted": "La respuesta ha sido interrumpida",
   "tryThis": "Prueba esto:",
   "you": "Tú",
@@ -169,10 +185,10 @@
   "noInternetConnection": "Sin conexión a internet",
   "youAreNotConnectedToInternet": "No estás conectado a internet. Asegúrate de que el WiFi/datos móviles estén activados",
 
-    "pleaseEnterValidCustomURL": "Por favor, introduzca una URL personalizada válida",
+    "pleaseEnterValidCustomURL": "Por favor, ingrese una URL personalizada válida",
  
 
- "enterSearchEngineName": "Por favor, ingrese el nombre del motor de búsqueda",
+  "enterSearchEngineName": "Por favor, ingrese el nombre del motor de búsqueda",
   "enterSearchEngineURL": "Por favor, ingrese la URL del motor de búsqueda",
   "entervalidURL": "Por favor, ingrese una URL válida",
   "pleaseEnterCorrectSEName": "Por favor, ingrese el nombre correcto del motor de búsqueda para la URL proporcionada",
@@ -246,16 +262,47 @@
 
 
 
-"languageEnglish": "Inglés",
-"languageSpanish": "Español",
-"languageJapanese": "Japonés",
-"languagePortuguese": "Portugués",
-"languageGerman": "Alemán",
-"languageTurkish": "Turco",
-"languageRussian": "Ruso",
-"languageChinese": "Chino",
-"languageKorean": "Coreano",
-"languageVietnamese": "Vietnamita",
-"languageTamil": "Tamil",
-"languageArabic": "Árabe"
+
+  "languageEnglish": "Inglés",
+  "languageSpanish": "Español",
+  "languageJapanese": "Japonés",
+  "languagePortuguese": "Portugués",
+  "languageGerman": "Alemán",
+  "languageTurkish": "Turco",
+  "languageRussian": "Ruso",
+  "languageChinese": "Chino",
+  "languageKorean": "Coreano",
+  "languageVietnamese": "Vietnamita",
+  "languageTamil": "Tamil",
+  "languageArabic": "Árabe",
+
+  "languageFrench": "Francés",
+  "languageItalian": "Italiano",
+  "languageDanish": "Danés",
+  "languageDutch": "Neerlandés",
+  "languageFinnish": "Finlandés",
+  "languageFilipino": "Filipino",
+  "languageIndonesian": "Indonesio",
+  "languageMalay": "Malayo",
+  "languageThai": "Tailandés",
+  "languageHindi": "Hindi",
+  "languageTelugu": "Telugu",
+  "languageMalayalam": "Malayalam",
+  "languageMarathi": "Maratí",
+  "languageAfrikaans": "Afrikáans",
+
+  "languagePolish": "Polaco",
+  "languageRomanian": "Rumano",
+  "languageUkrainian": "Ucraniano",
+  "languageLithuanian": "Lituano",
+  "languageNorwegian": "Noruego",
+  "languageGreek": "Griego",
+  "languageChineseTraditional": "Chino (Tradicional)",
+  "languageChineseHongKong": "Chino (Hong Kong)",
+  "languagePortuguesePortugal": "Portugués (Portugal)",
+  "languageSwedish": "Sueco"
+
+
+
+
 }

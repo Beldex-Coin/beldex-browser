@@ -42,6 +42,48 @@ class AppLocalizationsTr extends AppLocalizations {
   String get searchOrEnterAddress => 'Arayın veya adres Girin';
 
   @override
+  String get beldexBrowserForAndroid => 'Android için Beldex Browser\n gizliliğinizi koruyor!';
+
+  @override
+  String get applanguage => 'Uygulama dili';
+
+  @override
+  String get searchLanguage => 'Dil ara';
+
+  @override
+  String get downloadCancelled => 'İndirme iptal edildi';
+
+  @override
+  String get open => 'Aç';
+
+  @override
+  String get addSearchEngine => 'Arama motoru ekle';
+
+  @override
+  String get editSearchEngine => 'Arama motorunu düzenle';
+
+  @override
+  String get name => 'İsim';
+
+  @override
+  String get url => 'URL';
+
+  @override
+  String get enterSEName => 'Arama motoru adını girin';
+
+  @override
+  String get enterSEURL => 'Arama motoru URL’sini girin';
+
+  @override
+  String get add => 'Ekle';
+
+  @override
+  String get save => 'Kaydet';
+
+  @override
+  String get edit => 'Düzenle';
+
+  @override
   String get thistimeSearchIn => 'Bu sefer ara';
 
   @override
@@ -210,7 +252,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get downloading => 'İndiriliyor';
 
   @override
-  String get completed => 'Tamamlandıd';
+  String get completed => 'Tamamlandı';
 
   @override
   String get fileDownloaded => 'Dosyalar başarıyla indirildi';
@@ -399,7 +441,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get titleChangeNode => 'Düğümü Değiştir';
 
   @override
-  String get hasExperiancedTraffic => 'benzeri görülmemiş bir trafik yaşadı. Çıkış düğümünü değiştirmek için lütfen “Düğüm Değiştir” seçeneğine tıklayın.';
+  String get hasExperiancedTraffic => 'benzeri görülmemiş bir trafik yaşadı. Çıkış düğümünü değiştirmek için lütfen';
+
+  @override
+  String get toSwitchExitnode => 'seçeneğine tıklayın';
 
   @override
   String get theResponseHasBeenInterrupted => 'Yanıt kesintiye uğradı';
@@ -457,6 +502,33 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get pleaseEnterValidCustomURL => 'Lütfen geçerli bir özel URL girin';
+
+  @override
+  String get enterSearchEngineName => 'Lütfen bir arama motoru adı girin';
+
+  @override
+  String get enterSearchEngineURL => 'Lütfen arama motoru URL’sini girin';
+
+  @override
+  String get entervalidURL => 'Lütfen geçerli bir URL girin';
+
+  @override
+  String get pleaseEnterCorrectSEName => 'Verilen URL için doğru arama motoru adını girin';
+
+  @override
+  String get urlUnreachable => 'URL’ye ulaşılamıyor. Lütfen geçerli bir URL deneyin';
+
+  @override
+  String get notvalidSearchEngine => 'Bu geçerli bir arama motoru değil';
+
+  @override
+  String get searchEngineAlreadyExist => 'Bu arama motoru zaten mevcut';
+
+  @override
+  String get searchEngineAdded => 'Arama motoru başarıyla eklendi!';
+
+  @override
+  String get searchEngineUpdated => 'Arama motoru başarıyla güncellendi!';
 
   @override
   String get beldexIsAnEcosystem => 'Beldex, merkeziyetsiz ve gizlilik koruyucu uygulamalardan oluşan bir ekosistemdir. Beldex Tarayıcısı uygulaması, BChat, BelNet ve Beldex protokolü gibi uygulamaları da içeren bu ekosistemin bir parçasıdır.Beldex Tarayıcısı, verilerinizin yalnızca size ait olduğu kesintisiz ve gizli bir çevrimiçi deneyimin kapısını açar. Sağlam bir blockchain altyapısı üzerinde geliştirilen Beldex Tarayıcısı, kullanıcılara gizlilik ve anonimlik sağlar.';
@@ -652,4 +724,76 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get languageArabic => 'Arapça';
+
+  @override
+  String get languageFrench => 'Fransızca';
+
+  @override
+  String get languageItalian => 'İtalyanca';
+
+  @override
+  String get languageDanish => 'Danca';
+
+  @override
+  String get languageDutch => 'Hollandaca';
+
+  @override
+  String get languageFinnish => 'Fince';
+
+  @override
+  String get languageFilipino => 'Filipince';
+
+  @override
+  String get languageIndonesian => 'Endonezce';
+
+  @override
+  String get languageMalay => 'Malayca';
+
+  @override
+  String get languageThai => 'Tayca';
+
+  @override
+  String get languageHindi => 'Hintçe';
+
+  @override
+  String get languageTelugu => 'Telugu';
+
+  @override
+  String get languageMalayalam => 'Malayalam';
+
+  @override
+  String get languageMarathi => 'Marathi';
+
+  @override
+  String get languageAfrikaans => 'Afrikaanca';
+
+  @override
+  String get languagePolish => 'Lehçe';
+
+  @override
+  String get languageRomanian => 'Romence';
+
+  @override
+  String get languageUkrainian => 'Ukraynaca';
+
+  @override
+  String get languageLithuanian => 'Litvanca';
+
+  @override
+  String get languageNorwegian => 'Norveççe';
+
+  @override
+  String get languageGreek => 'Yunanca';
+
+  @override
+  String get languageChineseTraditional => 'Çince (Geleneksel)';
+
+  @override
+  String get languageChineseHongKong => 'Çince (Hong Kong)';
+
+  @override
+  String get languagePortuguesePortugal => 'Portekizce (Portekiz)';
+
+  @override
+  String get languageSwedish => 'İsveççe';
 }

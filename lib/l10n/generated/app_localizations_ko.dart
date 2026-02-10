@@ -42,7 +42,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get searchOrEnterAddress => '검색 또는 주소 입력';
 
   @override
-  String get beldexBrowserForAndroid => '안드로이드용 벨덱스 브라우저가 귀하의 개인정보를 보호합니다!';
+  String get beldexBrowserForAndroid => '안드로이드용 벨덱스 브라우저가\n 귀하의 개인정보를 보호합니다!';
 
   @override
   String get applanguage => '앱 언어';
@@ -441,7 +441,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get titleChangeNode => '노드 변경';
 
   @override
-  String get hasExperiancedTraffic => '에 전례 없는 트래픽이 발생했습니다. 출구 노드를 변경하려면 \'노드 변경\'을 클릭하세요';
+  String get hasExperiancedTraffic => '에 전례 없는 트래픽이 발생했습니다. 출구 노드를 변경하려면';
+
+  @override
+  String get toSwitchExitnode => '을 클릭하세요';
 
   @override
   String get theResponseHasBeenInterrupted => '응답이 중단되었습니다';
@@ -760,4 +763,37 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageMarathi => '마라티어';
+
+  @override
+  String get languageAfrikaans => '아프리칸스어';
+
+  @override
+  String get languagePolish => '폴란드어';
+
+  @override
+  String get languageRomanian => '루마니아어';
+
+  @override
+  String get languageUkrainian => '우크라이나어';
+
+  @override
+  String get languageLithuanian => '리투아니아어';
+
+  @override
+  String get languageNorwegian => '노르웨이어';
+
+  @override
+  String get languageGreek => '그리스어';
+
+  @override
+  String get languageChineseTraditional => '중국어(번체)';
+
+  @override
+  String get languageChineseHongKong => '중국어(홍콩)';
+
+  @override
+  String get languagePortuguesePortugal => '포르투갈어(포르투갈)';
+
+  @override
+  String get languageSwedish => '스웨덴어';
 }

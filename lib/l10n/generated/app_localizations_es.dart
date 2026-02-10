@@ -42,6 +42,48 @@ class AppLocalizationsEs extends AppLocalizations {
   String get searchOrEnterAddress => 'Buscar o ingresar dirección';
 
   @override
+  String get beldexBrowserForAndroid => 'El navegador Beldex para Android\nprotege tu confidencialidad!';
+
+  @override
+  String get applanguage => 'Idioma de la aplicación';
+
+  @override
+  String get searchLanguage => 'Buscar idioma';
+
+  @override
+  String get downloadCancelled => 'Descarga cancelada';
+
+  @override
+  String get open => 'Abrir';
+
+  @override
+  String get addSearchEngine => 'Agregar motor de búsqueda';
+
+  @override
+  String get editSearchEngine => 'Editar motor de búsqueda';
+
+  @override
+  String get name => 'Nombre';
+
+  @override
+  String get url => 'URL';
+
+  @override
+  String get enterSEName => 'Ingresar nombre del motor de búsqueda';
+
+  @override
+  String get enterSEURL => 'Ingresar URL del motor de búsqueda';
+
+  @override
+  String get add => 'Agregar';
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get edit => 'Editar';
+
+  @override
   String get thistimeSearchIn => 'Esta vez buscar en';
 
   @override
@@ -399,7 +441,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get titleChangeNode => 'Cambiar Nodo';
 
   @override
-  String get hasExperiancedTraffic => 'ha experimentado un tráfico sin precedentes. Por favor, haz clic en \'Cambiar Nodo\' para cambiar el nodo de salida';
+  String get hasExperiancedTraffic => 'ha experimentado un tráfico sin precedentes. Por favor, haz clic en';
+
+  @override
+  String get toSwitchExitnode => 'para cambiar el nodo de salida';
 
   @override
   String get theResponseHasBeenInterrupted => 'La respuesta ha sido interrumpida';
@@ -456,7 +501,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get youAreNotConnectedToInternet => 'No estás conectado a internet. Asegúrate de que el WiFi/datos móviles estén activados';
 
   @override
-  String get pleaseEnterValidCustomURL => 'Por favor, introduzca una URL personalizada válida';
+  String get pleaseEnterValidCustomURL => 'Por favor, ingrese una URL personalizada válida';
 
   @override
   String get enterSearchEngineName => 'Por favor, ingrese el nombre del motor de búsqueda';
@@ -679,4 +724,76 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get languageArabic => 'Árabe';
+
+  @override
+  String get languageFrench => 'Francés';
+
+  @override
+  String get languageItalian => 'Italiano';
+
+  @override
+  String get languageDanish => 'Danés';
+
+  @override
+  String get languageDutch => 'Neerlandés';
+
+  @override
+  String get languageFinnish => 'Finlandés';
+
+  @override
+  String get languageFilipino => 'Filipino';
+
+  @override
+  String get languageIndonesian => 'Indonesio';
+
+  @override
+  String get languageMalay => 'Malayo';
+
+  @override
+  String get languageThai => 'Tailandés';
+
+  @override
+  String get languageHindi => 'Hindi';
+
+  @override
+  String get languageTelugu => 'Telugu';
+
+  @override
+  String get languageMalayalam => 'Malayalam';
+
+  @override
+  String get languageMarathi => 'Maratí';
+
+  @override
+  String get languageAfrikaans => 'Afrikáans';
+
+  @override
+  String get languagePolish => 'Polaco';
+
+  @override
+  String get languageRomanian => 'Rumano';
+
+  @override
+  String get languageUkrainian => 'Ucraniano';
+
+  @override
+  String get languageLithuanian => 'Lituano';
+
+  @override
+  String get languageNorwegian => 'Noruego';
+
+  @override
+  String get languageGreek => 'Griego';
+
+  @override
+  String get languageChineseTraditional => 'Chino (Tradicional)';
+
+  @override
+  String get languageChineseHongKong => 'Chino (Hong Kong)';
+
+  @override
+  String get languagePortuguesePortugal => 'Portugués (Portugal)';
+
+  @override
+  String get languageSwedish => 'Sueco';
 }

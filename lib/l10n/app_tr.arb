@@ -15,6 +15,20 @@
   "prepareDaemonConnection": "Daemon bağlantısı hazırlanıyor",
   "searchOrEnterAddress": "Arayın veya adres Girin",
   
+  "beldexBrowserForAndroid": "Android için Beldex Browser\n gizliliğinizi koruyor!",
+  "applanguage": "Uygulama dili",
+  "searchLanguage": "Dil ara",
+  "downloadCancelled": "İndirme iptal edildi",
+  "open": "Aç",
+  "addSearchEngine": "Arama motoru ekle",
+  "editSearchEngine": "Arama motorunu düzenle",
+  "name": "İsim",
+  "url":"URL",
+  "enterSEName": "Arama motoru adını girin",
+  "enterSEURL": "Arama motoru URL’sini girin",
+  "add": "Ekle",
+  "save": "Kaydet",
+  "edit": "Düzenle",
 
   "thistimeSearchIn": "Bu sefer ara",
   "searchSettings": "Arama ayarı",
@@ -72,7 +86,7 @@
   "areYouSure": "Emin misiniz?",
   "startDownloading": "İndirmeyi Başlat",
   "downloading": "İndiriliyor",
-  "completed": "Tamamlandıd",
+  "completed": "Tamamlandı",
   "fileDownloaded": "Dosyalar başarıyla indirildi",
   "searchEngineContent": "Kişiselleştirilmiş bir gezinme için tercih ettiğiniz arama motorunu seçin.",
   "homePage": "Ana Sayfa",
@@ -142,7 +156,8 @@
   "noCompletedDownloads": "Tamamlanan indirme yok",
   "cannotOpenThisFile": "Bu dosya açılamıyor",
   "titleChangeNode": "Düğümü Değiştir",
-  "hasExperiancedTraffic": "benzeri görülmemiş bir trafik yaşadı. Çıkış düğümünü değiştirmek için lütfen “Düğüm Değiştir” seçeneğine tıklayın.",
+  "hasExperiancedTraffic": "benzeri görülmemiş bir trafik yaşadı. Çıkış düğümünü değiştirmek için lütfen",
+  "toSwitchExitnode":"seçeneğine tıklayın",
   "theResponseHasBeenInterrupted": "Yanıt kesintiye uğradı",
   "tryThis": "Bunu deneyin:",
   "you": "Sen",
@@ -163,6 +178,19 @@
   "youAreNotConnectedToInternet": "İnternete bağlı değilsiniz. Wi-Fi/Mobil verinin açık olduğundan emin olun",
 
   "pleaseEnterValidCustomURL": "Lütfen geçerli bir özel URL girin",
+
+
+  "enterSearchEngineName": "Lütfen bir arama motoru adı girin",
+  "enterSearchEngineURL": "Lütfen arama motoru URL’sini girin",
+  "entervalidURL": "Lütfen geçerli bir URL girin",
+  "pleaseEnterCorrectSEName": "Verilen URL için doğru arama motoru adını girin",
+  "urlUnreachable": "URL’ye ulaşılamıyor. Lütfen geçerli bir URL deneyin",
+  "notvalidSearchEngine": "Bu geçerli bir arama motoru değil",
+  "searchEngineAlreadyExist": "Bu arama motoru zaten mevcut",
+  "searchEngineAdded": "Arama motoru başarıyla eklendi!",
+  "searchEngineUpdated": "Arama motoru başarıyla güncellendi!",
+
+
 
 "beldexIsAnEcosystem": "Beldex, merkeziyetsiz ve gizlilik koruyucu uygulamalardan oluşan bir ekosistemdir. Beldex Tarayıcısı uygulaması, BChat, BelNet ve Beldex protokolü gibi uygulamaları da içeren bu ekosistemin bir parçasıdır.Beldex Tarayıcısı, verilerinizin yalnızca size ait olduğu kesintisiz ve gizli bir çevrimiçi deneyimin kapısını açar. Sağlam bir blockchain altyapısı üzerinde geliştirilen Beldex Tarayıcısı, kullanıcılara gizlilik ve anonimlik sağlar.",
 "atBeldex": " \n Beldex olarak, bireylerin dijital ayak izlerini kontrol etme temel hakkına sahip olması gerektiğine inanıyoruz. Beldex Tarayıcısı, kullanıcıların dijital dünya ile güvenli ve gizli bir ortamda iletişim kurmasını ve etkileşime girmesini sağlamak için tasarlanmıştır.",
@@ -228,16 +256,46 @@
 
 
 
-"languageEnglish": "İngilizce",
-"languageSpanish": "İspanyolca",
-"languageJapanese": "Japonca",
-"languagePortuguese": "Portekizce",
-"languageGerman": "Almanca",
-"languageTurkish": "Türkçe",
-"languageRussian": "Rusça",
-"languageChinese": "Çince",
-"languageKorean": "Korece",
-"languageVietnamese": "Vietnamca",
-"languageTamil": "Tamilce",
-"languageArabic": "Arapça"
+  "languageEnglish": "İngilizce",
+  "languageSpanish": "İspanyolca",
+  "languageJapanese": "Japonca",
+  "languagePortuguese": "Portekizce",
+  "languageGerman": "Almanca",
+  "languageTurkish": "Türkçe",
+  "languageRussian": "Rusça",
+  "languageChinese": "Çince",
+  "languageKorean": "Korece",
+  "languageVietnamese": "Vietnamca",
+  "languageTamil": "Tamilce",
+  "languageArabic": "Arapça",
+
+  "languageFrench": "Fransızca",
+  "languageItalian": "İtalyanca",
+  "languageDanish": "Danca",
+  "languageDutch": "Hollandaca",
+  "languageFinnish": "Fince",
+  "languageFilipino": "Filipince",
+  "languageIndonesian": "Endonezce",
+  "languageMalay": "Malayca",
+  "languageThai": "Tayca",
+  "languageHindi": "Hintçe",
+  "languageTelugu": "Telugu",
+  "languageMalayalam": "Malayalam",
+  "languageMarathi": "Marathi",
+  "languageAfrikaans": "Afrikaanca",
+
+  "languagePolish": "Lehçe",
+  "languageRomanian": "Romence",
+  "languageUkrainian": "Ukraynaca",
+  "languageLithuanian": "Litvanca",
+  "languageNorwegian": "Norveççe",
+  "languageGreek": "Yunanca",
+  "languageChineseTraditional": "Çince (Geleneksel)",
+  "languageChineseHongKong": "Çince (Hong Kong)",
+  "languagePortuguesePortugal": "Portekizce (Portekiz)",
+  "languageSwedish": "İsveççe"
+
+
+
+
 }

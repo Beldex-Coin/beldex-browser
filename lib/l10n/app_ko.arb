@@ -13,7 +13,7 @@
   "searchOrEnterAddress": "검색 또는 주소 입력",
 
 
-  "beldexBrowserForAndroid": "안드로이드용 벨덱스 브라우저가 귀하의 개인정보를 보호합니다!",
+  "beldexBrowserForAndroid": "안드로이드용 벨덱스 브라우저가\n 귀하의 개인정보를 보호합니다!",
   "applanguage": "앱 언어",
   "searchLanguage": "언어 검색",
   "downloadCancelled": "다운로드 취소됨",
@@ -152,7 +152,8 @@
   "noCompletedDownloads": "완료된 다운로드가 없습니다",
   "cannotOpenThisFile": "이 파일을 열 수 없습니다",
   "titleChangeNode": "노드 변경",
-  "hasExperiancedTraffic": "에 전례 없는 트래픽이 발생했습니다. 출구 노드를 변경하려면 '노드 변경'을 클릭하세요",
+  "hasExperiancedTraffic": "에 전례 없는 트래픽이 발생했습니다. 출구 노드를 변경하려면",
+  "toSwitchExitnode":"을 클릭하세요",
   "theResponseHasBeenInterrupted": "응답이 중단되었습니다",
   "tryThis": "이렇게 해보세요:",
   "you": "나",
@@ -250,20 +251,19 @@
 
 
 
-"languageEnglish": "영어",
-"languageSpanish": "스페인어",
-"languageJapanese": "일본어",
-"languagePortuguese": "포르투갈어",
-"languageGerman": "독일어",
-"languageTurkish": "터키어",
-"languageRussian": "러시아어",
-"languageChinese": "중국어",
-"languageKorean": "한국어",
-"languageVietnamese": "베트남어",
-"languageTamil": "타밀어",
-"languageArabic": "아랍어",
 
-
+  "languageEnglish": "영어",
+  "languageSpanish": "스페인어",
+  "languageJapanese": "일본어",
+  "languagePortuguese": "포르투갈어",
+  "languageGerman": "독일어",
+  "languageTurkish": "터키어",
+  "languageRussian": "러시아어",
+  "languageChinese": "중국어",
+  "languageKorean": "한국어",
+  "languageVietnamese": "베트남어",
+  "languageTamil": "타밀어",
+  "languageArabic": "아랍어",
 
   "languageFrench": "프랑스어",
   "languageItalian": "이탈리아어",
@@ -277,8 +277,19 @@
   "languageHindi": "힌디어",
   "languageTelugu": "텔루구어",
   "languageMalayalam": "말라얄람어",
-  "languageMarathi": "마라티어"
+  "languageMarathi": "마라티어",
+  "languageAfrikaans": "아프리칸스어",
 
+  "languagePolish": "폴란드어",
+  "languageRomanian": "루마니아어",
+  "languageUkrainian": "우크라이나어",
+  "languageLithuanian": "리투아니아어",
+  "languageNorwegian": "노르웨이어",
+  "languageGreek": "그리스어",
+  "languageChineseTraditional": "중국어(번체)",
+  "languageChineseHongKong": "중국어(홍콩)",
+  "languagePortuguesePortugal": "포르투갈어(포르투갈)",
+  "languageSwedish": "스웨덴어"
 
 
 }

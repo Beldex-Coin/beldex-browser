@@ -42,7 +42,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get searchOrEnterAddress => 'ค้นหาหรือป้อนที่อยู่';
 
   @override
-  String get beldexBrowserForAndroid => 'Beldex Browser สำหรับ Android กำลังปกป้องความเป็นส่วนตัวของคุณ!';
+  String get beldexBrowserForAndroid => 'Beldex Browser สำหรับ Android\n กำลังปกป้องความเป็นส่วนตัวของคุณ!';
 
   @override
   String get applanguage => 'ภาษาของแอป';
@@ -441,7 +441,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get titleChangeNode => 'เปลี่ยนโหนด';
 
   @override
-  String get hasExperiancedTraffic => 'มีปริมาณการใช้งานสูงผิดปกติ กรุณาคลิกที่ “เปลี่ยนโหนด” เพื่อสลับโหนดทางออก';
+  String get hasExperiancedTraffic => 'มีปริมาณการใช้งานสูงผิดปกติ กรุณาคลิกที่';
+
+  @override
+  String get toSwitchExitnode => 'เพื่อสลับโหนดทางออก';
 
   @override
   String get theResponseHasBeenInterrupted => 'การตอบสนองถูกขัดจังหวะ';
@@ -687,77 +690,110 @@ class AppLocalizationsTh extends AppLocalizations {
   String get languageVietnameseVietnam => 'เวียดนาม (เวียดนาม)';
 
   @override
-  String get languageEnglish => 'English';
+  String get languageEnglish => 'ภาษาอังกฤษ';
 
   @override
-  String get languageSpanish => 'Spanish';
+  String get languageSpanish => 'ภาษาสเปน';
 
   @override
-  String get languageJapanese => 'Japanese';
+  String get languageJapanese => 'ภาษาญี่ปุ่น';
 
   @override
-  String get languagePortuguese => 'Portuguese';
+  String get languagePortuguese => 'ภาษาโปรตุเกส';
 
   @override
-  String get languageGerman => 'German';
+  String get languageGerman => 'ภาษาเยอรมัน';
 
   @override
-  String get languageTurkish => 'Turkish';
+  String get languageTurkish => 'ภาษาตุรกี';
 
   @override
-  String get languageRussian => 'Russian';
+  String get languageRussian => 'ภาษารัสเซีย';
 
   @override
-  String get languageChinese => 'Chinese';
+  String get languageChinese => 'ภาษาจีน';
 
   @override
-  String get languageKorean => 'Korean';
+  String get languageKorean => 'ภาษาเกาหลี';
 
   @override
-  String get languageVietnamese => 'Vietnamese';
+  String get languageVietnamese => 'ภาษาเวียดนาม';
 
   @override
-  String get languageTamil => 'Tamil';
+  String get languageTamil => 'ภาษาทมิฬ';
 
   @override
-  String get languageArabic => 'Arabic';
+  String get languageArabic => 'ภาษาอาหรับ';
 
   @override
-  String get languageFrench => 'ฝรั่งเศส';
+  String get languageFrench => 'ภาษาฝรั่งเศส';
 
   @override
-  String get languageItalian => 'อิตาลี';
+  String get languageItalian => 'ภาษาอิตาลี';
 
   @override
-  String get languageDanish => 'เดนมาร์ก';
+  String get languageDanish => 'ภาษาเดนมาร์ก';
 
   @override
-  String get languageDutch => 'ดัตช์';
+  String get languageDutch => 'ภาษาดัตช์';
 
   @override
-  String get languageFinnish => 'ฟินแลนด์';
+  String get languageFinnish => 'ภาษาฟินแลนด์';
 
   @override
-  String get languageFilipino => 'ฟิลิปปินส์';
+  String get languageFilipino => 'ภาษาฟิลิปปินส์';
 
   @override
-  String get languageIndonesian => 'อินโดนีเซีย';
+  String get languageIndonesian => 'ภาษาอินโดนีเซีย';
 
   @override
-  String get languageMalay => 'มาเลย์';
+  String get languageMalay => 'ภาษามลายู';
 
   @override
-  String get languageThai => 'ไทย';
+  String get languageThai => 'ภาษาไทย';
 
   @override
-  String get languageHindi => 'ฮินดี';
+  String get languageHindi => 'ภาษาฮินดี';
 
   @override
-  String get languageTelugu => 'เตลูกู';
+  String get languageTelugu => 'ภาษาเตลูกู';
 
   @override
-  String get languageMalayalam => 'มาลายาลัม';
+  String get languageMalayalam => 'ภาษามลายาลัม';
 
   @override
-  String get languageMarathi => 'มราฐี';
+  String get languageMarathi => 'ภาษามราฐี';
+
+  @override
+  String get languageAfrikaans => 'ภาษาแอฟริกานส์';
+
+  @override
+  String get languagePolish => 'ภาษาโปแลนด์';
+
+  @override
+  String get languageRomanian => 'ภาษาโรมาเนีย';
+
+  @override
+  String get languageUkrainian => 'ภาษายูเครน';
+
+  @override
+  String get languageLithuanian => 'ภาษาลิทัวเนีย';
+
+  @override
+  String get languageNorwegian => 'ภาษานอร์เวย์';
+
+  @override
+  String get languageGreek => 'ภาษากรีก';
+
+  @override
+  String get languageChineseTraditional => 'ภาษาจีน (ดั้งเดิม)';
+
+  @override
+  String get languageChineseHongKong => 'ภาษาจีน (ฮ่องกง)';
+
+  @override
+  String get languagePortuguesePortugal => 'ภาษาโปรตุเกส (โปรตุเกส)';
+
+  @override
+  String get languageSwedish => 'ภาษาสวีเดน';
 }

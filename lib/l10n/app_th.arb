@@ -13,7 +13,7 @@
   "prepareDaemonConnection": "กำลังเตรียมการเชื่อมต่อ Daemon",
   "searchOrEnterAddress": "ค้นหาหรือป้อนที่อยู่",
 
-  "beldexBrowserForAndroid": "Beldex Browser สำหรับ Android กำลังปกป้องความเป็นส่วนตัวของคุณ!",
+  "beldexBrowserForAndroid": "Beldex Browser สำหรับ Android\n กำลังปกป้องความเป็นส่วนตัวของคุณ!",
   "applanguage": "ภาษาของแอป",
   "searchLanguage": "ค้นหาภาษา",
   "downloadCancelled": "การดาวน์โหลดถูกยกเลิก",
@@ -152,7 +152,8 @@
   "noCompletedDownloads": "ไม่มีการดาวน์โหลดที่เสร็จสมบูรณ์",
   "cannotOpenThisFile": "ไม่สามารถเปิดไฟล์นี้ได้",
   "titleChangeNode": "เปลี่ยนโหนด",
-  "hasExperiancedTraffic": "มีปริมาณการใช้งานสูงผิดปกติ กรุณาคลิกที่ “เปลี่ยนโหนด” เพื่อสลับโหนดทางออก",
+  "hasExperiancedTraffic": "มีปริมาณการใช้งานสูงผิดปกติ กรุณาคลิกที่",
+  "toSwitchExitnode":"เพื่อสลับโหนดทางออก",
   "theResponseHasBeenInterrupted": "การตอบสนองถูกขัดจังหวะ",
   "tryThis": "ลองใช้:",
   "you": "คุณ",
@@ -245,17 +246,45 @@
 
 
 
-  "languageFrench": "ฝรั่งเศส",
-  "languageItalian": "อิตาลี",
-  "languageDanish": "เดนมาร์ก",
-  "languageDutch": "ดัตช์",
-  "languageFinnish": "ฟินแลนด์",
-  "languageFilipino": "ฟิลิปปินส์",
-  "languageIndonesian": "อินโดนีเซีย",
-  "languageMalay": "มาเลย์",
-  "languageThai": "ไทย",
-  "languageHindi": "ฮินดี",
-  "languageTelugu": "เตลูกู",
-  "languageMalayalam": "มาลายาลัม",
-  "languageMarathi": "มราฐี"
+
+
+  "languageEnglish": "ภาษาอังกฤษ",
+  "languageSpanish": "ภาษาสเปน",
+  "languageJapanese": "ภาษาญี่ปุ่น",
+  "languagePortuguese": "ภาษาโปรตุเกส",
+  "languageGerman": "ภาษาเยอรมัน",
+  "languageTurkish": "ภาษาตุรกี",
+  "languageRussian": "ภาษารัสเซีย",
+  "languageChinese": "ภาษาจีน",
+  "languageKorean": "ภาษาเกาหลี",
+  "languageVietnamese": "ภาษาเวียดนาม",
+  "languageTamil": "ภาษาทมิฬ",
+  "languageArabic": "ภาษาอาหรับ",
+
+  "languageFrench": "ภาษาฝรั่งเศส",
+  "languageItalian": "ภาษาอิตาลี",
+  "languageDanish": "ภาษาเดนมาร์ก",
+  "languageDutch": "ภาษาดัตช์",
+  "languageFinnish": "ภาษาฟินแลนด์",
+  "languageFilipino": "ภาษาฟิลิปปินส์",
+  "languageIndonesian": "ภาษาอินโดนีเซีย",
+  "languageMalay": "ภาษามลายู",
+  "languageThai": "ภาษาไทย",
+  "languageHindi": "ภาษาฮินดี",
+  "languageTelugu": "ภาษาเตลูกู",
+  "languageMalayalam": "ภาษามลายาลัม",
+  "languageMarathi": "ภาษามราฐี",
+  "languageAfrikaans": "ภาษาแอฟริกานส์",
+
+  "languagePolish": "ภาษาโปแลนด์",
+  "languageRomanian": "ภาษาโรมาเนีย",
+  "languageUkrainian": "ภาษายูเครน",
+  "languageLithuanian": "ภาษาลิทัวเนีย",
+  "languageNorwegian": "ภาษานอร์เวย์",
+  "languageGreek": "ภาษากรีก",
+  "languageChineseTraditional": "ภาษาจีน (ดั้งเดิม)",
+  "languageChineseHongKong": "ภาษาจีน (ฮ่องกง)",
+  "languagePortuguesePortugal": "ภาษาโปรตุเกส (โปรตุเกส)",
+  "languageSwedish": "ภาษาสวีเดน"
+
 }

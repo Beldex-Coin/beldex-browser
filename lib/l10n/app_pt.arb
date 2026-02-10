@@ -13,6 +13,22 @@
   "prepareDaemonConnection": "Preparando conexão do Daemon",
   "searchOrEnterAddress": "Pesquisar ou inserir endereço",
 
+
+  "beldexBrowserForAndroid": "Beldex Browser para Android\n está protegendo sua confidencialidade!",
+  "applanguage": "Idioma do aplicativo",
+  "searchLanguage": "Pesquisar idioma",
+  "downloadCancelled": "Download cancelado",
+  "open": "Abrir",
+  "addSearchEngine": "Adicionar mecanismo de pesquisa",
+  "editSearchEngine": "Editar mecanismo de pesquisa",
+  "name": "Nome",
+  "url":"URL",
+  "enterSEName": "Digite o nome do mecanismo de pesquisa",
+  "enterSEURL": "Digite a URL do mecanismo de pesquisa",
+  "add": "Adicionar",
+  "save": "Salvar",
+  "edit": "Editar",
+
   "thistimeSearchIn": "Desta vez Pesquisar em",
   "searchSettings": "Configurações de pesquisa",
   "search": "Buscar",
@@ -136,7 +152,8 @@
   "noCompletedDownloads": "Não é possível abrir este arquivo",
   "cannotOpenThisFile": "Cannot open this file",
   "titleChangeNode": "Mudar Nó",
-  "hasExperiancedTraffic": "sofreu um tráfego sem precedentes. Clique em 'Mudar Nó' para alterar o nó de saída",
+  "hasExperiancedTraffic": "sofreu um tráfego sem precedentes. Clique em",
+  "toSwitchExitnode":"para alterar o nó de saída",
   "theResponseHasBeenInterrupted": "A resposta foi interrompida",
   "tryThis": "Experimente isto:",
   "you": "Você",
@@ -157,6 +174,19 @@
   "youAreNotConnectedToInternet": "Você não está conectado à internet. Certifique-se de que o Wi-Fi/dados móveis estão ligados",
 
   "pleaseEnterValidCustomURL": "Por favor, insira uma URL personalizada válida",
+
+
+  "enterSearchEngineName": "Por favor, insira o nome do mecanismo de busca",
+  "enterSearchEngineURL": "Por favor, insira a URL do mecanismo de busca",
+  "entervalidURL": "Por favor, insira uma URL válida",
+  "pleaseEnterCorrectSEName": "Por favor, insira o nome correto do mecanismo de busca para a URL fornecida",
+  "urlUnreachable": "A URL está inacessível. Por favor, tente uma URL válida",
+  "notvalidSearchEngine": "Este não é um mecanismo de busca válido",
+  "searchEngineAlreadyExist": "Este mecanismo de busca já existe",
+  "searchEngineAdded": "Mecanismo de busca adicionado com sucesso!",
+  "searchEngineUpdated": "Mecanismo de busca atualizado com sucesso!",
+
+
 
 "beldexIsAnEcosystem": "Beldex é um ecossistema de aplicações descentralizadas que preservam a confidencialidade. O aplicativo Beldex Browser é parte desse ecossistema, que também inclui apps como BChat, BelNet e o protocolo Beldex. O Beldex Browser é sua porta de entrada para uma experiência online segura e confidencial, onde seus dados permanecem exclusivamente seus. Construído sobre uma infraestrutura robusta de blockchain, o Beldex Browser garante confidencialidade e anonimato aos seus usuários.",
 "atBeldex": " \n Na Beldex, acreditamos em capacitar os indivíduos com o direito fundamental de controlar sua pegada digital. O Beldex Browser foi projetado para fornecer um ambiente online seguro e confidencial, permitindo que os usuários se comuniquem e interajam com o mundo digital com total proteção.",
@@ -179,7 +209,84 @@
 "aboutAdblocker": "Bloqueador de Anúncios: Bloqueie anúncios intrusivos, rastreadores e pop-ups para uma experiência de navegação limpa e sem distrações. Aproveite carregamento mais rápido das páginas e menor uso de dados, mantendo controle total sobre suas interações online.\n",
 "aboutBeldexAI": "Beldex AI: Obtenha respostas instantâneas com o BeldexAI, assistente inteligente que responde suas perguntas com base no conteúdo dos sites. Seja para informações específicas ou insights rápidos, o BeldexAI melhora a experiência de navegação com respostas contextuais e personalizadas.\n",
 "thusbeldexbrowserOffers": "\nAssim, o Beldex Browser oferece um refúgio simples e seguro para usuários que buscam confidencialidade em um mundo cada vez mais conectado. Junte-se a nós na jornada rumo a um futuro digital mais seguro e confidencial. Experimente a liberdade de navegar, comunicar-se e explorar a internet sem comprometer sua privacidade. Beldex Network – Onde a Confidencialidade Encontra a Inovação.",
-"credits":"\nCréditos: Beldex & BelNet\n"
+"credits":"\nCréditos: Beldex & BelNet\n",
+
+
+
+  "languageChineseSimplifiedChina": "Chinês (simplificado, China)",
+  "languageChineseTraditionalTaiwan": "Chinês (tradicional, Taiwan)",
+  "languageEnglishAustralia": "Inglês (Austrália)",
+  "languageEnglishCanada": "Inglês (Canadá)",
+  "languageEnglishIndia": "Inglês (Índia)",
+  "languageEnglishIreland": "Inglês (Irlanda)",
+  "languageEnglishSingapore": "Inglês (Singapura)",
+  "languageEnglishUnitedKingdom": "Inglês (Reino Unido)",
+  "languageEnglishUnitedStates": "Inglês (Estados Unidos)",
+  "languageFrenchBelgium": "Francês (Bélgica)",
+  "languageFrenchCanada": "Francês (Canadá)",
+  "languageFrenchFrance": "Francês (França)",
+  "languageFrenchSwitzerland": "Francês (Suíça)",
+  "languageGermanAustria": "Alemão (Áustria)",
+  "languageGermanBelgium": "Alemão (Bélgica)",
+  "languageGermanGermany": "Alemão (Alemanha)",
+  "languageGermanSwitzerland": "Alemão (Suíça)",
+  "languageHindiIndia": "Hindi (Índia)",
+  "languageIndonesianIndonesia": "Indonésio (Indonésia)",
+  "languageItalianItaly": "Italiano (Itália)",
+  "languageItalianSwitzerland": "Italiano (Suíça)",
+  "languageJapaneseJapan": "Japonês (Japão)",
+  "languageKoreanSouthKorea": "Coreano (Coreia do Sul)",
+  "languagePolishPoland": "Polonês (Polônia)",
+  "languagePortugueseBrazil": "Português (Brasil)",
+  "languageRussianRussia": "Russo (Rússia)",
+  "languageSpanishSpain": "Espanhol (Espanha)",
+  "languageSpanishUnitedStates": "Espanhol (Estados Unidos)",
+  "languageThaiThailand": "Tailandês (Tailândia)",
+  "languageTurkishTurkey": "Turco (Turquia)",
+  "languageVietnameseVietnam": "Vietnamita (Vietnã)",
+
+
+
+
+
+  "languageEnglish": "Inglês",
+  "languageSpanish": "Espanhol",
+  "languageJapanese": "Japonês",
+  "languagePortuguese": "Português",
+  "languageGerman": "Alemão",
+  "languageTurkish": "Turco",
+  "languageRussian": "Russo",
+  "languageChinese": "Chinês",
+  "languageKorean": "Coreano",
+  "languageVietnamese": "Vietnamita",
+  "languageTamil": "Tâmil",
+  "languageArabic": "Árabe",
+
+  "languageFrench": "Francês",
+  "languageItalian": "Italiano",
+  "languageDanish": "Dinamarquês",
+  "languageDutch": "Holandês",
+  "languageFinnish": "Finlandês",
+  "languageFilipino": "Filipino",
+  "languageIndonesian": "Indonésio",
+  "languageMalay": "Malaio",
+  "languageThai": "Tailandês",
+  "languageHindi": "Hindi",
+  "languageTelugu": "Telugu",
+  "languageMalayalam": "Malaiala",
+  "languageMarathi": "Marata",
+  "languageAfrikaans": "Africâner",
+
+  "languagePolish": "Polonês",
+  "languageRomanian": "Romeno",
+  "languageUkrainian": "Ucraniano",
+  "languageLithuanian": "Lituano",
+  "languageNorwegian": "Norueguês",
+  "languageGreek": "Grego",
+  "languageChineseTraditional": "Chinês (Tradicional)",
+  "languageChineseHongKong": "Chinês (Hong Kong)",
+  "languagePortuguesePortugal": "Português (Portugal)",
+  "languageSwedish": "Sueco"
 
 
 }
