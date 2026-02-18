@@ -78,6 +78,8 @@ android {
     compileOptions {
         targetCompatibility JavaVersion.VERSION_17
         sourceCompatibility JavaVersion.VERSION_17
+
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -95,6 +97,8 @@ flutter {
 }
 
 dependencies {
+    //Required for flutter_local_notification for now
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.4"
     //  implementation project(':belnet_lib') // Include belnet_lib module
     // implementation "org.jetbrains.kotlin:kotlin-stdlib:2.0.20" // Updated to support Java 17
     // implementation "com.airbnb.android:lottie:6.4.0"

@@ -6,12 +6,15 @@ import 'dart:ui';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
+import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_task_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class DownloadProvider extends ChangeNotifier {
+   AppLocalizations? _loc;
+
   List<DownloadTasks> tasks = [];
   ReceivePort _port = ReceivePort();
 
@@ -19,6 +22,13 @@ class DownloadProvider extends ChangeNotifier {
     _bindBackgroundIsolate();
     FlutterDownloader.registerCallback(downloadCallback); // using top-level callback
   }
+
+
+ void setLocalizationObject(AppLocalizations loc) {
+    _loc = loc;
+  }
+
+
 
   void _bindBackgroundIsolate() {
     bool isSuccess = IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
@@ -33,6 +43,9 @@ class DownloadProvider extends ChangeNotifier {
       int status = data[1];
       int progress = data[2];
 
+     //  Unique notification id per task
+    final int notificationId = id.hashCode;
+
       DownloadTasks task = tasks.firstWhere((task) => task.taskId == id, orElse: () => DownloadTasks(taskId: id, url: "", name: "New Task", status: status, progress: 0, totalSize: 0, dir: '', createdDate: DateTime.now()));
       task.progress = progress;
       task.status = status;
@@ -46,6 +59,48 @@ class DownloadProvider extends ChangeNotifier {
         openSnackbar(task.taskId, task.name);
         notifyListeners();
       }
+
+      if(status == DownloadTaskStatus.canceled.index){
+  DownloadNotificationService.cancel(notificationId);
+ }
+
+if(status == DownloadTaskStatus.failed.index){
+ 
+  await DownloadNotificationService.showCancelOrFailed(id: notificationId,title: task.name,text:status == DownloadTaskStatus.canceled.index ?_loc?.downloadCancelled ?? 'Download Cancelled' : _loc?.downloadFailed ?? 'Download Failed!',//'canceled' : 'failed' ,
+  taskId: task.taskId);
+ Future.delayed(const Duration(seconds: 5), () {
+      DownloadNotificationService.cancel(notificationId);
+    });
+    
+}
+
+
+
+ /// PROGRESS
+  if (status == DownloadTaskStatus.running.index) {
+    await DownloadNotificationService.showProgress(
+      id: notificationId,
+      title: task.name,
+      progress: progress,
+    );
+  }
+
+  /// COMPLETED
+  if (status == DownloadTaskStatus.complete.index) {
+    await DownloadNotificationService.showCompleted(
+      id: notificationId,
+      title: task.name,
+      taskId: task.taskId,
+      message: _loc?.downloadCompelete ?? 'Download complete'
+    );
+
+    ///  Auto-dismiss after 5 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+      DownloadNotificationService.cancel(notificationId);
+    });
+
+    openSnackbar(task.taskId, task.name);
+  }
 
       tasks.sort((a, b) {
         if (a.status != b.status) {
@@ -92,8 +147,8 @@ class DownloadProvider extends ChangeNotifier {
         url: url,
         fileName: newFileName,
         savedDir: dir,
-        showNotification: true,
-        openFileFromNotification: true,
+        showNotification: false,
+        openFileFromNotification: false,
         saveInPublicStorage: true,
       );
 
@@ -112,6 +167,35 @@ class DownloadProvider extends ChangeNotifier {
       print('error with provider $e');
     }
   }
+
+
+ Future<void> cancelTasksOnAppExit() async {
+ 
+    try {
+      ///  Cancel all active downloads
+      final tasks = await FlutterDownloader.loadTasks();
+
+      if (tasks != null) {
+        for (final task in tasks) {
+          if (task.status == DownloadTaskStatus.running ||
+              task.status == DownloadTaskStatus.enqueued ||
+              task.status == DownloadTaskStatus.paused) {
+            await FlutterDownloader.cancel(taskId: task.taskId);
+          }
+        }
+      }
+
+      /// Cancel ALL notifications
+      DownloadNotificationService.cancelAllNotifications();
+
+      print('Downloads & notifications cancelled on app exit');
+    } catch (e) {
+      print('Error while cancelling on exit: $e');
+    }
+  }
+
+
+
 
   double bytesToMegabytes(int bytes) {
     return bytes / (1024 * 1024);
@@ -194,15 +278,15 @@ class DownloadProvider extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
-          content: Text(
-            'Download complete $taskName',
+          content: Text('${_loc?.downloadCompelete ?? 'Download completes'} $taskName', 
+            //'Download complete $taskName',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           duration: Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
           action: SnackBarAction(
-            label: 'Open',
+            label:_loc?.open ?? 'Open', //'Open',
             onPressed: () => openDownloadedFile(taskId),
             textColor: Color(0xff0BA70F),
           ),

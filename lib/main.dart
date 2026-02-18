@@ -24,6 +24,7 @@ import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
+import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:get/get.dart';
 //import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -166,6 +168,11 @@ void main() async {
   // await FlutterDownloader.initialize(
   //   debug: kDebugMode,ignoreSsl: true
   // );
+
+  await Permission.notification.request();
+  await DownloadNotificationService.init();
+
+  
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

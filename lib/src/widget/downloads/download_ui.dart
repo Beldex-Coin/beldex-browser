@@ -53,47 +53,45 @@ class _DownloadUIState extends State<DownloadUI> {
           child: downloadProvider.tasks.length > 0
               ? Row(
                   children: [
-                    Expanded(
-                      flex: 4,
-                      child: GestureDetector(
-                        onTap: () {
-                          downloadProvider.clearDownloads();
-                        },
-                        child: Container(
-                          height: 45,
-                          margin:const EdgeInsets.only(left: 10),
-                          decoration: BoxDecoration(
+                    GestureDetector(
+                      onTap: () {
+                        downloadProvider.clearDownloads();
+                      },
+                      child: Container(
+                        height: 45,
+                        padding: EdgeInsets.only(left: 8.0,right:8.0),
+                        margin:const EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                            color: themeProvider.darkTheme
+                                ? Color(0xff39394B)
+                                : Color(0xffF3F3F3),
+                            border: Border.all(color: Color(0xffFF3D00)),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/delete.svg',
+                              height: 15,
+                              width: 15,
                               color: themeProvider.darkTheme
-                                  ? Color(0xff39394B)
-                                  : Color(0xffF3F3F3),
-                              border: Border.all(color: Color(0xffFF3D00)),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/images/delete.svg',
-                                height: 15,
-                                width: 15,
-                                color: themeProvider.darkTheme
-                                    ?const Color(0xffFFFFFF)
-                                    :const Color(0xff222222),
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff222222),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: TextWidget(
+                               text:loc.clearDownloads,// 'Clear Downloads',
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: TextWidget(
-                                 text:loc.clearDownloads,// 'Clear Downloads',
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              )
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
                     ),
-                    Expanded(flex: 5, child:const SizedBox())
+                    //Expanded(flex: 5, child:const SizedBox())
                   ],
                 )
               : SizedBox(),
