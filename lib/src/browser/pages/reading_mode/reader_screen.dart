@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
 // import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 // import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
@@ -71,18 +72,23 @@ class _SpeechHtmlScreenState extends State<SpeechHtmlScreen>{
   //Provider.of<TranslatingProvider>(context,listen: false).resetTranslateContent();
   final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
   final readerProvider = Provider.of<ReaderProvider>(context,listen: false);
- Future.microtask(() {
-   checkForNetwork(vpnStatusProvider,readerProvider);
 
- },);
- 
-//  Future.microtask((){
-//   ttsInterruptionController.initialize(readerProvider);
-//  });
-    // Removed initial highlight
+
+ WidgetsBinding.instance.addPostFrameCallback((_) {
+    checkForNetwork(
+      vpnStatusProvider,
+      readerProvider,
+      AppLocalizations.of(context)!,
+    );
+  });
+//  Future.microtask(() {   /// This is the working one 
+//    checkForNetwork(vpnStatusProvider,readerProvider,AppLocalizations.of(context)!);
+
+//  },);
+
   }
 
-checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvider)async{
+checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvider, AppLocalizations loc)async{
    
   _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
@@ -92,7 +98,7 @@ checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvide
         vpnStatusProvider.setTTSStatus(true);
          readerProvider.stop();
        // _clearHighlight();
-         showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+         showMessage(loc.youAreNotConnectedToInternet);
       }else{
         vpnStatusProvider.setInternetStatus(false);
         vpnStatusProvider.setTTSStatus(false);
@@ -119,6 +125,7 @@ checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvide
     //var webViewController = webViewModel.webViewController;
     //var languageProvider = Provider.of<LanguageProvider>(context);
    // final translatingProvider = Provider.of<TranslatingProvider>(context);
+   final loc = AppLocalizations.of(context)!;
     final readerProvider = Provider.of<ReaderProvider>(context);
     return SafeArea(
       child: Container(
@@ -440,7 +447,8 @@ checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvide
                                                               horizontal: 10,
                                                               vertical: 8),
                                                       child: Text(
-                                                        "Text Zoom",
+                                                        loc.textZoom,
+                                                        //"Text Zoom",
                                                         style: TextStyle(
                                                             color: themeProvider
                                                                     .darkTheme

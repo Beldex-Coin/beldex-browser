@@ -1,3 +1,4 @@
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -151,6 +152,7 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final browserModel = Provider.of<BrowserModel>(context,listen: false);
+    final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     checkLoading(vpnStatusProvider);
     return SizedBox(
         width: 25.0,
@@ -171,7 +173,11 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
                     widget.searchController != null) {
                   await widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
-                          url: WebUri(widget.searchController!.text)));
+                          url: WebUri(widget.searchController!.text),
+                          headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                          ));
                   vpnStatusProvider.updateFAB(true);
                 }
               } else {

@@ -1,3 +1,5 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -72,7 +74,7 @@ setValues(){
     final themeProvider = Provider.of<DarkThemeProvider>(context);
 
 final screenSize = MediaQuery.of(context).size;
-
+final loc = AppLocalizations.of(context)!;
     // Your pixel sizes
     const double pixelHeight = 22.57;
     const double pixelWidth = 39.97;
@@ -110,15 +112,15 @@ final double toggleSizeInDp = (pixelToggleSize / screenSize.width) * screenSize.
                 ),
                 tabs:[
                   Tab(
-                    text: "Basic",
+                    text:loc.basic //"Basic",
                   ),
                   Tab(
-                    text: "Advanced",
+                    text:loc.advanced,// "Advanced",
                   ),
                 ]),
                 centerTitle: true,
             title: Text(
-              "Settings",style:Theme.of(context).textTheme.bodyLarge 
+              loc.settings,style:Theme.of(context).textTheme.bodyLarge 
             ),
             leading:IconButton( 
           onPressed: ()=>Navigator.pop(context),
@@ -200,6 +202,7 @@ void resetBrowserSettingsDialog()async{
   final theme = Theme.of(context);
   final height = MediaQuery.of(context).size.height;
   final width = MediaQuery.of(context).size.width;
+  final loc = AppLocalizations.of(context)!;
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -209,7 +212,7 @@ void resetBrowserSettingsDialog()async{
               insetPadding: EdgeInsets.all(20),
                   child: Container(
                       width:width,
-                height:height/4.2, //200,
+               // height:height/4.2, //200,
                 padding: EdgeInsets.all(10),
                 decoration:
                     BoxDecoration(
@@ -221,14 +224,15 @@ void resetBrowserSettingsDialog()async{
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text('Reset settings',style: theme.textTheme.bodyLarge,
+                          child: Text(loc.resetSettings, //'Reset settings',
+                          style: theme.textTheme.bodyLarge,
                           // TextStyle(fontSize:20,// dynamicTextSizeWidget.dynamicFontSize(20, context),
                           // fontWeight: FontWeight.bold),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical:5.0),
-                          child:const Text('Do you want to reset the browser\nsettings?',
+                          child: Text(loc.doYouWanttoReset,
                           textAlign: TextAlign.center,
                           ),
                         ),
@@ -245,7 +249,8 @@ void resetBrowserSettingsDialog()async{
                                 disabledColor: Color(0xff2C2C3B),
                                  minWidth: double.maxFinite,
                                 height: 50,
-                                child:const Text('Cancel',style: TextStyle(fontSize:18)),
+                                child: Text(loc.cancel,
+                                style: TextStyle(fontSize:18)),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10.0), // Adjust the radius as needed
@@ -270,7 +275,11 @@ void resetBrowserSettingsDialog()async{
                                  minWidth: double.maxFinite,
                                  elevation: 0,
                                 height: 50,
-                                child:const Text('Reset',style: TextStyle(color: Colors.white,fontSize:18)),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(loc.reset //'Reset'
+                                  ,style: TextStyle(color: Colors.white,fontSize:18)),
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
                                       10.0), // Adjust the radius as needed
@@ -297,7 +306,7 @@ void resetBrowserSettingsDialog()async{
 void resetSettings()async{
   
   var browserModel = Provider.of<BrowserModel>(context, listen: false);
-  var selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+ // var selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
    browserModel.getSettings();
    var currentWebViewModel =
             Provider.of<WebViewModel>(context, listen: false);
@@ -308,8 +317,8 @@ void resetSettings()async{
     resetScreenSecurity();
    resetOptions();
 
-    selectedItemsProvider.updateIconValue('assets/images/Google 1.svg');
-    selectedItemsProvider.updateFontSize(8.0);
+    browserModel.updateIconValue('assets/images/Google 1.svg');
+    browserModel.updateFontSize(8.0);
     
     if(browserModel.webViewTabs.isNotEmpty){
       //  var currentWebViewModel =
@@ -334,6 +343,7 @@ void resetSettings()async{
 resetOptions(){
   final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
   final basicProvider = Provider.of<BasicProvider>(context,listen: false);
+    final localeProvider = Provider.of<LocaleProvider>(context,listen:false);
   vpnStatusProvider.updateCacheValue(true);
   vpnStatusProvider.updateJSEnabled(true);
   vpnStatusProvider.updateSupportZoomEbld(true);
@@ -345,6 +355,8 @@ resetOptions(){
   basicProvider.updateAutoConnect(false);
   basicProvider.updateAutoSuggest(false);
   basicProvider.updateAdblock(true);
+    localeProvider.resetAppLocaleToEnglish();
+
 
 }
 

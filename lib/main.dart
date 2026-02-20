@@ -5,6 +5,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:beldex_browser/fetch_price.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
+import 'package:beldex_browser/security/api_key_initializer.dart';
+import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
@@ -12,6 +16,7 @@ import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/lang_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
@@ -22,6 +27,7 @@ import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
+import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/foundation.dart';
@@ -31,9 +37,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //import 'package:flutter_windowmanager/flutter_windowmanager.dart';
-import 'package:get/get.dart';
+//import 'package:get/get.dart';
 //import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -155,6 +162,12 @@ void main() async {
   await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
   await FlutterDownloader.registerCallback(downloadCallback);
   await SharedPreferences.getInstance();
+ await ApiKeyManager.instance.loadDecryptedKeys();
+
+
+
+
+  initializeApiKeysOnLaunch();
   WEB_ARCHIVE_DIR = (await getApplicationSupportDirectory()).path;
 
   TAB_VIEWER_BOTTOM_OFFSET_1 = 130.0;
@@ -164,9 +177,16 @@ void main() async {
   // await FlutterDownloader.initialize(
   //   debug: kDebugMode,ignoreSsl: true
   // );
+
+  await Permission.notification.request();
+  await DownloadNotificationService.init();
+
+  
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
+
+NetworkReinitializer.start();
   // await Permission.camera.request();
   // await Permission.microphone.request();
   // await Permission.storage.request();
@@ -182,10 +202,10 @@ void main() async {
         ChangeNotifierProvider(create: ((context) => SearchEngineProvider())),
         ChangeNotifierProvider(
             create: ((context) => LoadingtickValueProvider())),
-        ChangeNotifierProvider(create: (context) => DownloadProvider()),
-        ChangeNotifierProvider(
-            create: (context) =>
-                SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
+        ChangeNotifierProvider(create: (context) => DownloadProvider()),// AppLocalizations.of(context)!)),
+        // ChangeNotifierProvider(
+        //     create: (context) =>
+        //         SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
         ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
@@ -202,11 +222,13 @@ void main() async {
                   ChangeNotifierProvider(create: (context) => VpnStatusNotifier()
          ),
          ChangeNotifierProvider(create: (_) => TtsProvider()), // Provide audio state
+          ChangeNotifierProvider(create: (_)=> LocaleProvider()),
         // ChangeNotifierProvider(create: (_)=> TranslationProvider()),
          //ChangeNotifierProvider(create: (_)=> LanguageProvider()),
          //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
          //ChangeNotifierProvider(create: (_)=> TextToSpeechProvider('')),
-         ChangeNotifierProvider(create: (_)=> ReaderProvider(''))
+         ChangeNotifierProvider(create: (_)=> ReaderProvider('')),
+         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
         
       ],
       child:
@@ -348,7 +370,8 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
   checkIsScreenSecure() async {
     final basicProvider = Provider.of<BasicProvider>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false );
+    final browserModel = Provider.of<BrowserModel>(context,listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false );
    // final webViewModel = Provider.of<WebViewModel>(context,listen: false);
     //print('screen security 3---->${basicProvider.scrnSecurity}');
     if (basicProvider.scrnSecurity) {
@@ -358,7 +381,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
       await BelnetLib.disableScreenSecurity();
       //await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
     }
-    selectedItemsProvider.updateFontSize(8.0);
+    browserModel.updateFontSize(8.0);
     //print('The WEBView fontSize ---> fontSize ${selectedItemsProvider.fontSize} ${webViewModel.settings?.minimumFontSize}');
   }
 
@@ -394,6 +417,8 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
   @override
   Widget build(BuildContext context) {
+        final localeProvider = Provider.of<LocaleProvider>(context);
+
     //final themProvider = Provider.of<DarkThemeProvider>(context);
 // return MaterialApp(
 //              scaffoldMessengerKey: scaffoldMessengerKey,
@@ -409,8 +434,11 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(
       builder: (context, value, child) {
-        return GetMaterialApp(
+        return MaterialApp(
           scaffoldMessengerKey: scaffoldMessengerKey,
+          locale: localeProvider.locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           title: 'Beldex Browser',
           debugShowCheckedModeBanner: false,
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),
@@ -418,6 +446,15 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           routes: {
             '/': (context) => const ConnectVpnHome() //Browser(),
           },
+           builder: (context, child) {
+          final l10n = AppLocalizations.of(context);
+
+          if (l10n != null) {
+            context.read<DownloadProvider>().setLocalizationObject(l10n);
+          }
+
+          return child!;
+        },
         );
       },
     ));

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
@@ -8,6 +10,8 @@ import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/searchengine_icon_placeholder.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/util.dart';
@@ -16,6 +20,7 @@ import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -398,7 +403,7 @@ Future<void> _filterSuggestions(String query) async {
 
 void _openVoiceDialog() async {
   var status = await Permission.microphone.status;
-
+  final loc = AppLocalizations.of(context)!;
   if (status.isDenied) {
     status = await Permission.microphone.request();
     print('STATUS MICROPHONE ___> $status');
@@ -409,22 +414,22 @@ void _openVoiceDialog() async {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text("Microphone Permission Required"),
-        content: const Text(
-          "You have permanently denied microphone access. "
-          "Please enable it in app settings to use voice search.",
+        title:  Text(loc.micPermissionRequired),
+        content:  Text(
+                   "${loc.uPermanentlyDeniedMicAccess}"
+                   "${loc.plsEnableMicInAppSettings}",
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text("Cancel",style: TextStyle(color: Colors.blue),),
+            child: Text(loc.cancel,style: TextStyle(color: Colors.blue),),
           ),
           TextButton(
             onPressed: () {
               openAppSettings(); // from permission_handler
               Navigator.pop(ctx);
             },
-            child: const Text("Open Settings",style: TextStyle(color: Colors.green),),
+            child: Text(loc.openSettings,style: TextStyle(color: Colors.green),),
           ),
         ],
       ),
@@ -437,7 +442,7 @@ void _openVoiceDialog() async {
   showVoiceDialog(
   context,
   Provider.of<DarkThemeProvider>(context, listen: false),
-  Provider.of<TtsProvider>(context,listen: false),
+  Provider.of<TtsProvider>(context,listen: false),true,
   onResult: (recognizedText) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
@@ -459,6 +464,7 @@ void _openVoiceDialog() async {
 
 Future<void> _openQRScanner() async {
   final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
+  final loc = AppLocalizations.of(context)!;
   var status = await Permission.camera.status;
   if(status.isDenied){
     setState(() {
@@ -502,7 +508,7 @@ final scannedValue = await showDialog<String>(
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: Colors.transparent,)),
-                      Text("Scan QR",
+                      Text(loc.scanQR, //"Scan QR",
                           style: TextStyle( fontSize: 20,fontFamily: 'Poppins',fontWeight: FontWeight.w600)),
                       
                       
@@ -543,7 +549,8 @@ final scannedValue = await showDialog<String>(
               ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 15),
-              child: Center(child: Text('Align the QR code in the\ncenter of frame',textAlign: TextAlign.center ,style: TextStyle(fontSize: 16,fontFamily: 'Poppins'),)))
+              child: Center(child: Text(loc.alignQRInCenterOFFrame,
+              textAlign: TextAlign.center ,style: TextStyle(fontSize: 16,fontFamily: 'Poppins'),)))
             ],
           ),
         ),
@@ -558,7 +565,7 @@ final scannedValue = await showDialog<String>(
     }
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Camera permission denied")),
+       SnackBar(content: Text(loc.cameraPermissionDenied)),
     );
   }
 }
@@ -582,10 +589,12 @@ final scannedValue = await showDialog<String>(
     final basicProvider = Provider.of<BasicProvider>(context,listen: false);
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
+    final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
-     final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
      final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
+     final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: PreferredSize(
@@ -619,11 +628,19 @@ final scannedValue = await showDialog<String>(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            (browserModel.value.startsWith('http://') || browserModel.value.startsWith('https://')) ?
+            CachedNetworkImage(
+                            imageUrl: browserModel.value,
+                            width: 20,
+                            height: 20,
+                            errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:settings.searchEngine.name,size: 20,),
+                          )
+             :
             SvgPicture.asset(
-              selecteditemsProvider.value,
-              color: selecteditemsProvider.value == 'assets/images/Reddit 1.svg' ||
-                      selecteditemsProvider.value == 'assets/images/Wikipedia 1.svg' ||
-                      selecteditemsProvider.value == 'assets/images/twitter 1.svg'
+              browserModel.value,
+              color: browserModel.value == 'assets/images/Reddit 1.svg' ||
+                      browserModel.value == 'assets/images/Wikipedia 1.svg' ||
+                      browserModel.value == 'assets/images/twitter 1.svg'
                   ? themeProvider.darkTheme
                       ? Colors.white
                       : Colors.black
@@ -653,7 +670,11 @@ final scannedValue = await showDialog<String>(
                       // browserModel.updateIsNewTab(false);
                       if (widget.webViewController != null) {
                         widget.webViewController!
-                            .loadUrl(urlRequest: URLRequest(url: url));
+                            .loadUrl(urlRequest: URLRequest(url: url,
+                            headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                            ));
                       } else {
                         if (mounted) setState(() {});
                         print('comes inside new tab');
@@ -687,7 +708,7 @@ final scannedValue = await showDialog<String>(
                       buttonItems.clear(); // Clear all default options
                       if (_searchController.text.isEmpty) {
                         buttonItems.add(ContextMenuButtonItem(
-                            label: 'Paste',
+                            label:loc.paste,// 'Paste',
                             onPressed: () {
                               Clipboard.getData('text/plain').then((value) {
                                 if (value != null && value.text != null) {
@@ -729,7 +750,7 @@ final scannedValue = await showDialog<String>(
                       } else {
                         buttonItems.clear();
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Cut',
+                          label:loc.cut,// 'Cut',
                           onPressed: () {
                             editableTextState
                                 .cutSelection(SelectionChangedCause.tap);
@@ -768,7 +789,7 @@ final scannedValue = await showDialog<String>(
                         ));
                          buttonItems.add(
   ContextMenuButtonItem(
-    label: 'Copy',
+    label:loc.copy,// 'Copy',
     onPressed: () {
       final TextEditingValue value = editableTextState.textEditingValue;
       final TextSelection selection = value.selection;
@@ -815,7 +836,7 @@ final scannedValue = await showDialog<String>(
                             editableTextState.textEditingValue.selection,
                             editableTextState.textEditingValue.text)) {
                           buttonItems.add(ContextMenuButtonItem(
-                            label: 'Select All',
+                            label:loc.selectAll,// 'Select All',
                             onPressed: () {
                               // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
                               editableTextState
@@ -826,7 +847,7 @@ final scannedValue = await showDialog<String>(
                         }
                         // Add a custom "Paste" button
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Paste',
+                          label: loc.paste,// 'Paste',
                           onPressed: () {
                             Clipboard.getData('text/plain').then((value) {
                               if (value != null && value.text != null) {
@@ -887,54 +908,15 @@ final scannedValue = await showDialog<String>(
                        
                       }
                     },
-                    // onEditingComplete: (){
-                    //   setState(() {
-                    //                               print('BELDEX AI 2---------> $canShowSearchAI');
-
-                    //   });
-                    // },
                     decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(
                             top: 5.0, right: 10.0, bottom: 10.0),
                         border: InputBorder.none,
-                        hintText: "Search or enter Address",
+                        hintText:loc.searchOrEnterAddress,
                         hintStyle: TextStyle(
                             color: const Color(0xff6D6D81),
-                            fontSize: 14.0,
+                            fontSize:isLengthyLanguageInList(appLocaleProvider.selectedLanguage) ? 9 : 14.0,
                             fontWeight: FontWeight.normal),
-                            // suffix:  Visibility(
-                            //   visible: _searchController.text.trim().isEmpty, 
-                            //   child: Container(
-                            //     //color: Colors.green,
-                            //     width: 55,
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.end,
-                            //       // crossAxisAlignment: CrossAxisAlignment.baseline,
-                            //       // textBaseline: TextBaseline.alphabetic,
-                            //       children: [
-                            //         Padding(
-                            //           padding: const EdgeInsets.only(top:5.0), // added
-                            //           child: GestureDetector(
-                            //             onTap: _openQRScanner,
-                                        
-                            //             child: SvgPicture.asset('assets/images/ai-icons/qr_reader.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
-                            //         ),
-                            //           SizedBox(width: 9,),
-                            //         Padding(
-                            //            padding: const EdgeInsets.only(top:5.0), //added
-                            //           child: GestureDetector(
-                            //             onTap:_openVoiceDialog,
-                            //             // (){
-                            //             //   print('SpeechToText clciked');
-                            //             //   print('SpeechTo Text calling value ${_speechToText.isNotListening} ${_speechToText.isListening}');
-                            //             //   _speechToText.isNotListening ? _startListening() : _stopListening();
-                            //             //   },
-                            //             child: SvgPicture.asset('assets/images/ai-icons/Microphone 1.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // )
                             ),
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -1041,7 +1023,11 @@ final scannedValue = await showDialog<String>(
                                 // browserModel.updateIsNewTab(false);
                                 if (widget.webViewController != null) {
                                   widget.webViewController!.loadUrl(
-                                      urlRequest: URLRequest(url: url));
+                                      urlRequest: URLRequest(url: url,
+                                      headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          },
+                                      ));
                                   print(
                                       'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
                                 } else {
@@ -1099,7 +1085,7 @@ final scannedValue = await showDialog<String>(
                                 child: Container(
                                   child: IconButton(
                                       onPressed: () {
-                                        _shareUrl('${widget.controller.text}');
+                                        _shareUrl('${widget.controller.text}',loc);
                                         // Navigator.pop(context);
                                       },
                                       icon: SvgPicture.asset(
@@ -1134,7 +1120,7 @@ final scannedValue = await showDialog<String>(
                                   child: IconButton(
                                       onPressed: () {
                                         _copyToClipboard(
-                                            '${widget.controller.text}');
+                                            '${widget.controller.text}',loc);
                                       },
                                       icon: SvgPicture.asset(
                                           'assets/images/copy.svg')),
@@ -1219,7 +1205,11 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
                      // browserModel.updateIsNewTab(false);
                      if (widget.webViewController != null) {
                        widget.webViewController!
-                           .loadUrl(urlRequest: URLRequest(url: url));
+                           .loadUrl(urlRequest: URLRequest(url: url,
+                           headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                           ));
                      } else {
                        if (mounted) setState(() {});
                        print('comes inside new tab');
@@ -1335,8 +1325,8 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(
-              'Ask Beldex AI',
+            Text(loc.askBeldexAI,
+              //'Ask Beldex AI',
               style: TextStyle(
                 color: Color(0xff00B134),
                 fontSize: 10,
@@ -1364,18 +1354,19 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
   }
 
   // Function to copy URL to clipboard
-  void _copyToClipboard(String url) {
+  void _copyToClipboard(String url,AppLocalizations loc) {
     Clipboard.setData(ClipboardData(text: url));
-    Fluttertoast.showToast(msg: 'Copied to clipboard');
+    Fluttertoast.showToast(msg:loc.copiedToClipboard,// 'Copied to clipboard'
+    );
   }
 
   // Function to share URL
-  void _shareUrl(String url) async {
+  void _shareUrl(String url,AppLocalizations loc) async {
     if (await canLaunch(url)) {
       await Share.share(url);
       Navigator.pop(context);
     } else {
-      Fluttertoast.showToast(msg: 'Unable to share URL');
+      Fluttertoast.showToast(msg:loc.unableToShareUrl);
     }
   }
 
@@ -1383,13 +1374,13 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
     final browserModel = Provider.of<BrowserModel>(context, listen: false);
     final settings = browserModel.getSettings();
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+    //final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
     //browserModel.updateIsNewTab(false);
     url ??= settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty
         ? WebUri(settings.customUrlHomePage)
         : WebUri(settings.searchEngine.url);
- webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
-        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${selectedItemsProvider.fontSize.round()}');
+ webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
       webViewModel: WebViewModel(url: url,settings: webViewModel.settings),
@@ -1398,6 +1389,7 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
 
   PreferredSize appBars(DarkThemeProvider themeProvider) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
     return PreferredSize(
         preferredSize: Size.fromHeight(90),
         child: Container(
@@ -1426,7 +1418,7 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
                     contentPadding: const EdgeInsets.only(
                         left: 10.0, top: 10.0, right: 10.0, bottom: 10.0),
                     border: InputBorder.none,
-                    hintText: "Search or enter Address",
+                    hintText:loc.searchOrEnterAddress, //"Search or enter Address",
                     hintStyle: theme.textTheme
                         .bodyMedium, //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
                   ),

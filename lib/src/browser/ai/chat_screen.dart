@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_message.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
@@ -20,233 +21,233 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:velocity_x/velocity_x.dart';
+//import 'package:velocity_x/velocity_x.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+// class ChatScreen extends StatefulWidget {
+//   const ChatScreen({super.key});
 
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
+//   @override
+//   State<ChatScreen> createState() => _ChatScreenState();
+// }
 
-class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _controller = TextEditingController();
-  TextEditingController _tokenController = TextEditingController();
-  final ChatGPTService _chatGPTService = ChatGPTService(apiKey: 'API_KEY');
+// class _ChatScreenState extends State<ChatScreen> {
+//   final TextEditingController _controller = TextEditingController();
+//   TextEditingController _tokenController = TextEditingController();
+//   final ChatGPTService _chatGPTService = ChatGPTService(apiKey: 'API_KEY');
 
-  final List<ChatMessage> _messages = [];
-  String? token;
-  //OpenAI? openAI;
-  StreamSubscription? subscription;
-  @override
-  void initState() {
-    // final prefs = SharedPreferences.getInstance();
+//   final List<ChatMessage> _messages = [];
+//   String? token;
+//   //OpenAI? openAI;
+//   StreamSubscription? subscription;
+//   @override
+//   void initState() {
+//     // final prefs = SharedPreferences.getInstance();
 
-    // Add a listener to detect text changes
-    _tokenController.addListener(() {
-      // Move the cursor to the end whenever the text changes
-      _tokenController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _tokenController.text.length),
-      );
-    });
-    super.initState();
-  }
+//     // Add a listener to detect text changes
+//     _tokenController.addListener(() {
+//       // Move the cursor to the end whenever the text changes
+//       _tokenController.selection = TextSelection.fromPosition(
+//         TextPosition(offset: _tokenController.text.length),
+//       );
+//     });
+//     super.initState();
+//   }
 
-  // void _sendMessage() async {
-  //   ChatMessage message = ChatMessage(text: _controller.text, sender: "user");
-  //   setState(() {
-  //     _messages.insert(0, message);
-  //   });
-  //   _controller.clear();
+//   // void _sendMessage() async {
+//   //   ChatMessage message = ChatMessage(text: _controller.text, sender: "user");
+//   //   setState(() {
+//   //     _messages.insert(0, message);
+//   //   });
+//   //   _controller.clear();
 
-  //   // final request = ChatCompleteText(
-  //   //     model: Gpt4ChatModel(),
-  //   //     messages: [
-  //   //       Map.of({"role": "user", "content": message.text})
-  //   //     ],
-  //   //     maxToken: 200);
+//   //   // final request = ChatCompleteText(
+//   //   //     model: Gpt4ChatModel(),
+//   //   //     messages: [
+//   //   //       Map.of({"role": "user", "content": message.text})
+//   //   //     ],
+//   //   //     maxToken: 200);
 
-  //   final request = ChatCompleteText(messages: [
-  //     Map.of({"role": "user", "content": message.text})
-  //   ], maxToken: 200, model: GptTurboChatModel());
-  //   try {
-  //     ChatCTResponse? response =
-  //         await openAI!.onChatCompletion(request: request);
-  //     print("DATA IN the response ${response!.choices[0].message}");
-  //     for (var element in response.choices) {
-  //       print("data -> ${element.message?.content}");
-  //     }
+//   //   final request = ChatCompleteText(messages: [
+//   //     Map.of({"role": "user", "content": message.text})
+//   //   ], maxToken: 200, model: GptTurboChatModel());
+//   //   try {
+//   //     ChatCTResponse? response =
+//   //         await openAI!.onChatCompletion(request: request);
+//   //     print("DATA IN the response ${response!.choices[0].message}");
+//   //     for (var element in response.choices) {
+//   //       print("data -> ${element.message?.content}");
+//   //     }
 
-  //     if (response != null && response.choices.isNotEmpty) {
-  //       ChatMessage botMessage = ChatMessage(
-  //           text: response!.choices[0].message!.content.toString(),
-  //           sender: "bot");
+//   //     if (response != null && response.choices.isNotEmpty) {
+//   //       ChatMessage botMessage = ChatMessage(
+//   //           text: response!.choices[0].message!.content.toString(),
+//   //           sender: "bot");
 
-  //       setState(() {
-  //         _messages.insert(0, botMessage);
-  //       });
+//   //       setState(() {
+//   //         _messages.insert(0, botMessage);
+//   //       });
 
-  //       print(
-  //           "Request was successful. Data: ${response.choices[0].message?.content}");
-  //     } else {
-  //       print("Request completed but no data found.");
-  //     }
-  //   } catch (e) {
-  //     print('ERROR CODE $e');
+//   //       print(
+//   //           "Request was successful. Data: ${response.choices[0].message?.content}");
+//   //     } else {
+//   //       print("Request completed but no data found.");
+//   //     }
+//   //   } catch (e) {
+//   //     print('ERROR CODE $e');
 
-  //     setState(() {
-  //       _messages.insertT(0, ChatMessage(text: e.toString(), sender: "bot"));
-  //     });
-  //   }
-  // }
+//   //     setState(() {
+//   //       _messages.insertT(0, ChatMessage(text: e.toString(), sender: "bot"));
+//   //     });
+//   //   }
+//   // }
 
-  String _response = '';
+//   String _response = '';
 
-  // void _sendUserMessage(WebViewModel webViewModel) async {
-  //   final message = _controller.text.trim();
-  //   if (message.isEmpty) return;
+//   // void _sendUserMessage(WebViewModel webViewModel) async {
+//   //   final message = _controller.text.trim();
+//   //   if (message.isEmpty) return;
 
-  //   ChatMessage uMessage = ChatMessage(text: _controller.text, sender: "user");
-  //   setState(() {
-  //     _messages.insert(0, uMessage);
-  //   });
-  //   _controller.clear();
+//   //   ChatMessage uMessage = ChatMessage(text: _controller.text, sender: "user");
+//   //   setState(() {
+//   //     _messages.insert(0, uMessage);
+//   //   });
+//   //   _controller.clear();
 
-  //   setState(() {
-  //     _response = 'Loading...';
-  //   });
+//   //   setState(() {
+//   //     _response = 'Loading...';
+//   //   });
 
-  //   final response = await _chatGPTService.fetchAndSummarize(
-  //       '', webViewModel); //sendMessage(message);
+//   //   final response = await _chatGPTService.fetchAndSummarize(
+//   //       '', webViewModel); //sendMessage(message);
 
-  //   setState(() {
-  //     _response = response;
+//   //   setState(() {
+//   //     _response = response;
 
-  //     _messages.insert(
-  //         0, ChatMessage(text: _response.toString(), sender: 'bot'));
+//   //     _messages.insert(
+//   //         0, ChatMessage(text: _response.toString(), sender: 'bot'));
 
-  //     print('Response ------ > $_response');
-  //   });
+//   //     print('Response ------ > $_response');
+//   //   });
 
-  //   _controller.clear();
-  // }
+//   //   _controller.clear();
+//   // }
 
-  Widget _buildTextComposer() {
-    final themeProvider =
-        Provider.of<DarkThemeProvider>(context, listen: false);
-    var webViewModel = Provider.of<WebViewModel>(context, listen: true);
-    return Row(
-      children: [
-        Expanded(
-            child: TextField(
-          controller: _controller,
-          decoration: InputDecoration.collapsed(
-              hintText: "Send a Message",
-              hintStyle: TextStyle(
-                  color:
-                      themeProvider.darkTheme ? Colors.white : Colors.black)),
-        )),
-        IconButton(
-          onPressed: null, //() => _sendUserMessage(webViewModel),
-          icon: const Icon(Icons.send),
-        ),
-      ],
-    ).px16();
-  }
+//   Widget _buildTextComposer() {
+//     final themeProvider =
+//         Provider.of<DarkThemeProvider>(context, listen: false);
+//     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
+//     return Row(
+//       children: [
+//         Expanded(
+//             child: TextField(
+//           controller: _controller,
+//           decoration: InputDecoration.collapsed(
+//               hintText: "Send a Message",
+//               hintStyle: TextStyle(
+//                   color:
+//                       themeProvider.darkTheme ? Colors.white : Colors.black)),
+//         )),
+//         IconButton(
+//           onPressed: null, //() => _sendUserMessage(webViewModel),
+//           icon: const Icon(Icons.send),
+//         ),
+//       ],
+//     ).px16();
+//   }
 
-  @override
-  void dispose() {
-    subscription!.cancel();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     subscription!.cancel();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'BELDEX AI',
-          textAlign: TextAlign.center,
-        ),
-        // actions: [
-        //   IconButton(
-        //       onPressed: () => _showAllHistory(context),
-        //       icon: const Icon(Icons.settings))
-        // ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Flexible(
-                child: ListView.builder(
-                    reverse: true,
-                    padding: Vx.m8,
-                    itemCount: _messages.length,
-                    itemBuilder: (context, index) {
-                      return _messages[index];
-                    })),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         centerTitle: true,
+//         title: const Text(
+//           'BELDEX AI',
+//           textAlign: TextAlign.center,
+//         ),
+//         // actions: [
+//         //   IconButton(
+//         //       onPressed: () => _showAllHistory(context),
+//         //       icon: const Icon(Icons.settings))
+//         // ],
+//       ),
+//       body: SafeArea(
+//         child: Column(
+//           children: [
+//             Flexible(
+//                 child: ListView.builder(
+//                     reverse: true,
+//                     padding: Vx.m8,
+//                     itemCount: _messages.length,
+//                     itemBuilder: (context, index) {
+//                       return _messages[index];
+//                     })),
 
-            Container(
-              decoration: BoxDecoration(color: context.cardColor),
-              child: _buildTextComposer(),
-            ),
+//             Container(
+//               decoration: BoxDecoration(color: context.cardColor),
+//               child: _buildTextComposer(),
+//             ),
 
-            // Container(
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: Container(
-            //           padding: EdgeInsets.all(0),
-            //           decoration: BoxDecoration(
-            //             color: Color(0xff3D4354),
-            //             borderRadius: BorderRadius.circular(25.0)
-            //           ),
-            //           child: Column(
-            //             children: [
-            //               Row(
+//             // Container(
+//             //   child: Row(
+//             //     children: [
+//             //       Expanded(
+//             //         child: Container(
+//             //           padding: EdgeInsets.all(0),
+//             //           decoration: BoxDecoration(
+//             //             color: Color(0xff3D4354),
+//             //             borderRadius: BorderRadius.circular(25.0)
+//             //           ),
+//             //           child: Column(
+//             //             children: [
+//             //               Row(
 
-            //                 children: [
-            //                   IconButton(onPressed: (){},
-            //                   icon: Icon(Icons.emoji_emotions)),
-            //                   Flexible(
-            //                     child: TextField(
-            //                       minLines: 1,
-            //                       maxLines: null,
-            //                       keyboardType: TextInputType.text,
-            //                       keyboardAppearance: Brightness.dark,
-            //                       cursorColor: Colors.white54,
-            //                       style: TextStyle(color: Colors.white,),
-            //                       decoration: InputDecoration(
-            //                         counterStyle: const TextStyle(color: Colors.white54),
-            //                         hintText: 'Type Message',
-            //                         hintStyle: TextStyle(color: Colors.white54,fontSize: 15),
-            //                         border: OutlineInputBorder(
-            //                           borderRadius: BorderRadius.circular(25.0),
-            //                           borderSide: BorderSide.none
-            //                         ),
-            //                         contentPadding: EdgeInsets.symmetric(vertical: 12.0)
-            //                       ),
-            //                     )
-            //                   ),
-            //                 ],
-            //               )
-            //             ],
-            //           ),
-            //         ),
+//             //                 children: [
+//             //                   IconButton(onPressed: (){},
+//             //                   icon: Icon(Icons.emoji_emotions)),
+//             //                   Flexible(
+//             //                     child: TextField(
+//             //                       minLines: 1,
+//             //                       maxLines: null,
+//             //                       keyboardType: TextInputType.text,
+//             //                       keyboardAppearance: Brightness.dark,
+//             //                       cursorColor: Colors.white54,
+//             //                       style: TextStyle(color: Colors.white,),
+//             //                       decoration: InputDecoration(
+//             //                         counterStyle: const TextStyle(color: Colors.white54),
+//             //                         hintText: 'Type Message',
+//             //                         hintStyle: TextStyle(color: Colors.white54,fontSize: 15),
+//             //                         border: OutlineInputBorder(
+//             //                           borderRadius: BorderRadius.circular(25.0),
+//             //                           borderSide: BorderSide.none
+//             //                         ),
+//             //                         contentPadding: EdgeInsets.symmetric(vertical: 12.0)
+//             //                       ),
+//             //                     )
+//             //                   ),
+//             //                 ],
+//             //               )
+//             //             ],
+//             //           ),
+//             //         ),
 
-            //       )
-            //     ],
-            //   ),
-            // )
-          ],
-        ),
-      ),
-    );
-  }
-}
+//             //       )
+//             //     ],
+//             //   ),
+//             // )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class SummariseUrlResult extends StatefulWidget {
   final AIModelProvider aiModelProvider;
@@ -409,6 +410,7 @@ void callSummaryRetry(BuildContext context) async {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final webViewModel = Provider.of<WebViewModel>(context);
     final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     // return BaseView<ChatViewModel>(
     //   onModelReady: (model){
     //     this.model = model;
@@ -446,8 +448,8 @@ void callSummaryRetry(BuildContext context) async {
                                 height: 20,
                               ),
                             ),
-                            Text(
-                              StringConstants.beldexAI,
+                            Text(loc.beldexAI,
+                              //StringConstants.beldexAI,
                               style: TextStyle(
                                // color: Colors.white,
                                fontFamily: 'Poppins',
@@ -466,8 +468,11 @@ void callSummaryRetry(BuildContext context) async {
                                       color: themeProvider.darkTheme ? Color(0xff2C2C3B): Color(0xffFDFDFD),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(StringConstants.hideSummarise,style: TextStyle(fontFamily: 'Poppins',fontSize: 13),),
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(loc.hideSummarise,maxLines:1,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',fontSize: 10,overflow: TextOverflow.ellipsis,))),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: SvgPicture.asset(
@@ -490,8 +495,11 @@ void callSummaryRetry(BuildContext context) async {
                             children: [
                               SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical:10.0),
-                                child: Text(StringConstants.retryMessage,style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),),
+                                padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 8.0),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(StringConstants.retryMessage, //loc.thereWasAnErrorGenerateResponse,
+                                  textAlign: TextAlign.center,maxLines: 2,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),)),
                               ),
                               // Padding(
                               //            padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -516,22 +524,54 @@ void callSummaryRetry(BuildContext context) async {
                    copyResult = '';
                    });                              
                 },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                   padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
-                   width: 93,
-                   decoration: BoxDecoration(
-                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-                    borderRadius: BorderRadius.circular(12)
-                   ),
-                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                       children: [
-                        SvgPicture.asset('assets/images/ai-icons/retry.svg'),
-                         Text('Retry',style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
-                       ],
-                     ),
-                ),
+                child: 
+                Container(
+  margin: const EdgeInsets.symmetric(vertical: 10),
+  padding: const EdgeInsets.symmetric(
+    vertical: 9.0,
+    horizontal: 12.0,
+  ),
+  decoration: BoxDecoration(
+    color: themeProvider.darkTheme
+        ? const Color(0xff282836)
+        : const Color(0xffFFFFFF),
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SvgPicture.asset(
+        'assets/images/ai-icons/retry.svg',
+        width: 18,
+        height: 18,
+      ),
+      const SizedBox(width: 8),
+      Text(
+        loc.retry,
+        style: const TextStyle(
+          fontFamily: 'Poppins',
+          color: Color(0xff00B134),
+        ),
+      ),
+    ],
+  ),
+),
+                // Container(
+                //   margin: EdgeInsets.symmetric(vertical: 10),
+                //    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
+                //    width:double.infinity,// 93,
+                //    decoration: BoxDecoration(
+                //     color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
+                //     borderRadius: BorderRadius.circular(12)
+                //    ),
+                //      child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //        children: [
+                //         SvgPicture.asset('assets/images/ai-icons/retry.svg'),
+                //          Text(loc.retry,style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
+                //        ],
+                //      ),
+                // ),
               ),
                             ],
                           )
@@ -714,7 +754,7 @@ void callSummaryRetry(BuildContext context) async {
                         child: GestureDetector(
                           onTap: () {
                             Clipboard.setData(ClipboardData(text:copyResult));
-                            showMessage('Copied');
+                            showMessage(loc.copied);
 
                           },
                           child: Container(
@@ -754,6 +794,7 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
     return Container(
       //color: Colors.green,
       child: Column(
@@ -769,21 +810,29 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
                     : IconConstants.welcomeBeldexAIWhite),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Text(
-                    StringConstants.welcomeAIContent,
+                  child: Text(loc.beldexAIEnhancesTheBeldexBrowser,
+                   // StringConstants.welcomeAIContent,
                     //textAlign: TextAlign.center,
-                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 14,fontWeight: FontWeight.w300),
+                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 13,fontWeight: FontWeight.w300),
                   ),
                 )
               ],
             ),
           ),
-          SizedBox(
-            height: 10
-            // model.canshowWelcome &&
-            //                         browserModel.webViewTabs.isNotEmpty &&
-            //                         model.isSummariseAvailable ? 10 : 80,
-          ),
+          // SizedBox(
+          //   height: 10
+          //   // model.canshowWelcome &&
+          //   //                         browserModel.webViewTabs.isNotEmpty &&
+          //   //                         model.isSummariseAvailable ? 10 : 80,
+          // ),
+         
+         
+         
+         
+         
+         
+         
+         
           // Container(
           //   height: 180,
           //   width: MediaQuery.of(context).size.width,

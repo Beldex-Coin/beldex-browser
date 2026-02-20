@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class NoInternetConnection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -51,7 +53,7 @@ class NoInternetConnection extends StatelessWidget {
                   ),
                   child: Center(
                     child: TextWidget(
-                      text:'No internet connection.',
+                      text:loc.noInternetConnection,// 'No internet connection.',
                       style: TextStyle(
                           color: themeProvider.darkTheme
                               ?const Color(0xffA1A1C1)
@@ -71,7 +73,7 @@ class NoInternetConnection extends StatelessWidget {
                         top: 5.0),
                     child: Center(
                         child: TextWidget(
-                           text: 'You are not connected to the internet. Make sure WiFi/Mobile data is on.',
+                           text:loc.youAreNotConnectedToInternet,// 'You are not connected to the internet. Make sure WiFi/Mobile data is on.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: themeProvider.darkTheme
@@ -92,7 +94,7 @@ class NoInternetConnection extends StatelessWidget {
                               Border.all(color: Color(0xff00DC00), width: 2)),
                       child: TextButton(
                         child: TextWidget(
-                         text: 'Retry',
+                         text:loc.retry,// 'Retry',
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Poppins',

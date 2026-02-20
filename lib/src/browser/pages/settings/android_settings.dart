@@ -1,4 +1,6 @@
 import 'package:beldex_browser/ad_blocker_filter.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -29,9 +31,10 @@ class _AndroidSettingsState extends State<AndroidSettings> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final browserModel = Provider.of<BrowserModel>(context);
    // var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
-    final selectedItemProvider = Provider.of<SelectedItemsProvider>(context, listen: true);
-    double fontvalue =  selectedItemProvider.fontSize; 
+    //final selectedItemProvider = Provider.of<SelectedItemsProvider>(context, listen: true);
+    double fontvalue =  browserModel.fontSize; 
     // double fontSizePercentage =
     //     ((currentWebViewModel.settings?.textZoom) ?? 100.0).toDouble();
     var vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
@@ -55,7 +58,7 @@ class _AndroidSettingsState extends State<AndroidSettings> {
                 Expanded(
                   child: ListView(
                     children: _buildAndroidWebViewTabSettings(
-                        themeProvider, fontvalue, constraints,selectedItemProvider,vpnStatusProvider),
+                        themeProvider, fontvalue, constraints,vpnStatusProvider),
                   ),
                 ),
               ],
@@ -107,13 +110,15 @@ String getPercentage(double value) {
 
 
   List<Widget> _buildAndroidWebViewTabSettings(DarkThemeProvider themeProvider,
-      double fontvalue, BoxConstraints constraints,SelectedItemsProvider selectedItemProvider,VpnStatusProvider vpnStatusProvider) {
+      double fontvalue, BoxConstraints constraints,VpnStatusProvider vpnStatusProvider) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = currentWebViewModel.webViewController;
     final basicProvider = Provider.of<BasicProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
+    final appLocaleProvider = Provider.of<LocaleProvider>(context);
     var widgets = <Widget>[
       Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -124,7 +129,7 @@ String getPercentage(double value) {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                TextWidget(text:"Text Zoom",
+                TextWidget(text:loc.textZoom, //"Text Zoom",
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
@@ -133,7 +138,7 @@ String getPercentage(double value) {
                   children: [
                     Expanded(
                         child: TextWidget(
-                           text: "Customize text size in percentage for comfortable reading on any website.",
+                           text:loc.textZoomContent, //"Customize text size in percentage for comfortable reading on any website.",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -168,8 +173,8 @@ String getPercentage(double value) {
 
             setState(() {
               fontvalue = value;
-               selectedItemProvider.updateFontSize(fontvalue);
-               print('The WEBVIEW model fontSize 4--- ${currentWebViewModel.settings?.minimumFontSize} --- ${selectedItemProvider.fontSize}');
+               browserModel.updateFontSize(fontvalue);
+               print('The WEBVIEW model fontSize 4--- ${currentWebViewModel.settings?.minimumFontSize} --- ${browserModel.fontSize}');
              // browserModel.updateSettings(currentWebViewModel);
               browserModel.save();
             });
@@ -216,7 +221,7 @@ String getPercentage(double value) {
                   textBaseline: TextBaseline.alphabetic,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    TextWidget(text:"Ad Blocker",
+                    TextWidget(text:loc.adBlocker, //"Ad Blocker",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -225,7 +230,7 @@ String getPercentage(double value) {
                         // fontWeight: FontWeight.w600),
                         ),
                     TextWidget(
-                        text:'Toggle to block intrusive ads while browsing and enhance your browsing experience',
+                        text:loc.adBlockerContent, //'Toggle to block intrusive ads while browsing and enhance your browsing experience',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -307,7 +312,9 @@ String getPercentage(double value) {
               currentWebViewModel.settings = webSet;
               vpnStatusProvider.updateFAB(false);
              // await webViewController.reload();
-             await webViewController.loadUrl(urlRequest: URLRequest(url: currentWebViewModel.url));
+             await webViewController.loadUrl(urlRequest: URLRequest(url: currentWebViewModel.url,headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }));
 
             } catch (e) {}
 
@@ -333,7 +340,7 @@ String getPercentage(double value) {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Auto Connect",
+                    TextWidget(text:loc.autoConnect, //"Auto Connect",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -348,7 +355,7 @@ String getPercentage(double value) {
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                          text:"Automatically connect when the app launches",
+                          text:loc.autoConnectContent, //"Automatically connect when the app launches",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -407,7 +414,7 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Auto Suggestion",
+                    TextWidget(text:loc.autoSuggestion, //"Auto Suggestion",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -422,7 +429,7 @@ Padding(
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                          text:"Automatically display suggestions while searching",
+                          text:loc.autoSuggestionContent, //"Automatically display suggestions while searching",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -479,7 +486,7 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Clear Session Cache",
+                    TextWidget(text:loc.clearSessionCache, //"Clear Session Cache",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
@@ -489,7 +496,7 @@ Padding(
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                          text:"Automatically clear the current session's cache for confidentiality.",
+                          text:loc.clearSessionCacheContent, //"Automatically clear the current session's cache for confidentiality.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -548,13 +555,13 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Built In Zoom Controls",
+                    TextWidget(text:loc.builtinZoomControls, //"Built In Zoom Controls",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                         text: "Control your browsing experience with built-in zoom functionality.",
+                         text:loc.builtinZoomControlsContent, //"Control your browsing experience with built-in zoom functionality.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -614,13 +621,13 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Display Zoom Controls",
+                    TextWidget(text:loc.displayZoomControls, //"Display Zoom Controls",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                         text: "Show on-screen zoom controls for easy accessibility.",
+                         text: loc.displayZoomControlsContent, //"Show on-screen zoom controls for easy accessibility.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -680,13 +687,13 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Third Party Cookies Enabled",
+                    TextWidget(text:loc.thirdpartCookiesEnabled, //"Third Party Cookies Enabled",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                         text: "Enable or disable third-party cookies to manage your confidentiality while browsing.",
+                         text:loc.thirdpartyCookiesEnabledContent, //"Enable or disable third-party cookies to manage your confidentiality while browsing.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -747,13 +754,13 @@ Padding(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    TextWidget(text:"Debugging Enabled",
+                    TextWidget(text:loc.debuggingEnabled, //"Debugging Enabled",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
-                         text: "Activate debugging mode for advanced insights into performance.",
+                         text:loc.debuggingEnabledContent, //"Activate debugging mode for advanced insights into performance.",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!

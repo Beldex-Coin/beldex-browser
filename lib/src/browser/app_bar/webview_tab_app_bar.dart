@@ -2,12 +2,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
 //import 'package:beldex_browser/src/browser/app_bar/content_translate_page.dart';
-import 'package:beldex_browser/src/browser/app_bar/reader_mode_screen.dart';
+// import 'package:beldex_browser/src/browser/app_bar/reader_mode_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
@@ -23,6 +25,7 @@ import 'package:beldex_browser/src/browser/pages/developers/main.dart';
 import 'package:beldex_browser/src/browser/pages/download_page.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_screen.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
@@ -35,7 +38,6 @@ import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/theme_setter.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
-import 'package:beldex_browser/src/utils/themes/sample_download_page.dart';
 import 'package:beldex_browser/src/widget/aboutpage.dart';
 import 'package:beldex_browser/src/widget/animated_toggle_switch.dart';
 import 'package:beldex_browser/src/widget/downloads/download_ui.dart';
@@ -45,6 +47,7 @@ import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -121,7 +124,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
             (await webViewController?.getUrl())?.toString() ?? "";
       }
     });
-    Provider.of<SelectedItemsProvider>(context, listen: false)
+    Provider.of<BrowserModel>(context, listen: false)
         .initSharedPreferences();
            // _configureTts(context);
     //  loadSearchShortcutListItems();
@@ -181,6 +184,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     var webViewModel = browserModel.getCurrentTab()?.webViewModel;
     var webViewModelPro = Provider.of<WebViewModel>(context, listen: false);
     var webViewController = webViewModelPro.webViewController;
+    final loc = AppLocalizations.of(context)!;
     var findInteractionController = webViewModel?.findInteractionController;
    // final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     isFullScreen(webViewController);
@@ -229,7 +233,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                         // Clipboard.getData('text/plain').then((clipboardContent) {
                         //    if(clipboardContent != null && clipboardContent.text!.isNotEmpty){
                         buttonItems.add(ContextMenuButtonItem(
-                            label: 'Paste',
+                            label:loc.paste, //'Paste',
                             onPressed: () {
                               Clipboard.getData('text/plain').then((value) {
                                 if (value != null && value.text != null) {
@@ -258,7 +262,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                       } else {
                         buttonItems.clear();
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Cut',
+                          label:loc.cut,// 'Cut',
                           onPressed: () {
                             editableTextState
                                 .cutSelection(SelectionChangedCause.tap);
@@ -299,7 +303,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                         ));
 
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Copy',
+                          label:loc.copy,// 'Copy',
                           onPressed: () {
                             final TextEditingValue value =
                                 editableTextState.textEditingValue;
@@ -320,7 +324,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                             editableTextState.textEditingValue.selection,
                             editableTextState.textEditingValue.text)) {
                           buttonItems.add(ContextMenuButtonItem(
-                            label: 'Select All',
+                            label:loc.selectAll,// 'Select All',
                             onPressed: () {
                               // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
                               editableTextState
@@ -331,7 +335,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                         }
                         // Add a custom "Paste" button
                         buttonItems.add(ContextMenuButtonItem(
-                          label: 'Paste',
+                          label:loc.paste,// 'Paste',
                           onPressed: () {
                             Clipboard.getData('text/plain').then((value) {
                               if (value != null && value.text != null) {
@@ -378,7 +382,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                         contentPadding: const EdgeInsets.only(
                             top: 5.0, left: 15, right: 10.0, bottom: 10.0),
                         border: InputBorder.none,
-                        hintText: "Find on page ...",
+                        hintText:"${loc.findOnPage}...",  //"Find on page ...",
                         hintStyle: TextStyle(
                             color:const Color(0xff6D6D81),
                            // fontSize: 14.0,
@@ -449,6 +453,8 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     var settings = browserModel.getSettings();
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
+    final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
+    final loc = AppLocalizations.of(context)!;
     var webViewController = webViewModel.webViewController;
     final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
     return PreferredSize(
@@ -675,7 +681,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                             contentPadding: const EdgeInsets.only(
                                 top: 5.0, right: 10.0, bottom: 10.0),
                             border: InputBorder.none,
-                            hintText: "Search or enter Address",
+                            hintText: loc.searchOrEnterAddress, // "Search or enter Address",
                             hintStyle: TextStyle(
                                 color: themeProvider.darkTheme
                                     ?const Color(0xff6D6D81)
@@ -683,7 +689,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                                 fontWeight: FontWeight
                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
                             ),
-                        style: theme.textTheme.bodyMedium,
+                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
                       ):
                       TextField(
                         readOnly: true,
@@ -713,7 +719,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                             contentPadding: const EdgeInsets.only(
                                 top: 5.0, right: 10.0, bottom: 10.0),
                             border: InputBorder.none,
-                            hintText: "Search or enter Address",
+                            hintText:loc.searchOrEnterAddress, // "Search or enter Address",
                             hintStyle: TextStyle(
                                 color: themeProvider.darkTheme
                                     ? const Color(0xff6D6D81)
@@ -724,7 +730,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                                 fontWeight: FontWeight
                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
                             ),
-                        style:theme.textTheme.bodyMedium,
+                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
                       ),
                     ),
                   ),
@@ -791,9 +797,29 @@ if (article != null) {
         }));
   }
 
+
+String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations loc) {
+ // final loc = AppLocalizations.of(context)!;
+
+  switch (actionName) {
+    case TabPopupMenuActions.NEW_TAB : return loc.newtab;
+    case TabPopupMenuActions.CLOSE_TABS : return loc.closeTabs;
+    default: return loc.newtab;
+  }
+}
+
+
+
+
+
+
+
+
+
   Widget tabList(DarkThemeProvider themeProvider,ThemeData theme) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+     final loc = AppLocalizations.of(context)!;
     return InkWell(
       key: tabInkWellKey,
       onLongPress: () {
@@ -857,7 +883,8 @@ if (article != null) {
                           ),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
-                        child: TextWidget(text: tabPopupMenuAction,style:theme
+                        child: TextWidget(text:getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
+                        style:theme
                                           .textTheme
                                           .bodySmall ,),
                       )
@@ -931,7 +958,8 @@ if (article != null) {
                           ),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
-                        child: TextWidget(text: tabPopupMenuAction,style:theme
+                        child: TextWidget(text:getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
+                        style:theme
                                           .textTheme
                                           .bodySmall ,),
                       )
@@ -1080,8 +1108,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = webViewModel.webViewController;
     final width = MediaQuery.of(context).size.width;
+    final loc = AppLocalizations.of(context)!;
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen:true);
         final ttsProvider = Provider.of<TtsProvider>(context);
+        final localeProvider =  Provider.of<LocaleProvider>(context);
 
     return Container(
       //color: Colors.yellow,
@@ -1283,20 +1313,19 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                         favicon: webViewModel.favicon,
                                         timestamp: DateTime.now());
                                     if (isAlreadyExist) {
-                                      showMessage(
-                                          'This page is alrady saved offline');
+                                      showMessage(loc.thispageAlreadySavedOffline);
                                       // return;
                                     } else {
                                       if (savedPath != null) {
                                         browserModel.addWebArchive(
                                             url.toString(), webArchiveModel);
                                         if (mounted) {
-                                          showMessage('Page is saved offline!');
+                                          showMessage(loc.pageSavedOffline );
                                         }
                                         browserModel.save();
                                       } else {
                                         if (mounted) {
-                                          showMessage('Unable to save');
+                                          showMessage(loc.unabledToSave);
                                         }
                                       }
                                     }
@@ -1342,8 +1371,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                     takeScreenshotAndShow();
                                   } else {
                                     Fluttertoast.showToast(
-                                        msg:
-                                            'Screen security is currently enabled.Make sure to disable it in the settings screen');
+                                        msg:loc.screensecurityCurrentlyEnabled);
                                   }
                                 }:null)),
                       
@@ -1417,10 +1445,12 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
-                                  child: TextWidget(text:choice,
-                                      style: theme
+                                  child: TextWidget(text:loc.newtab, //choice,
+                                      style: isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
                                           .textTheme
-                                          .bodySmall //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme
+                                          .bodySmall  //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
                                       ),
                                 ),
                               ]),
@@ -1428,31 +1458,6 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                       ),
                     ),
                   );
-                // case PopupMenuActions.NEW_INCOGNITO_TAB:
-                //   return CustomPopupMenuItem<String>(
-                //     enabled: true,
-                //     value: choice,
-                //     height: 35,
-                //     child: Padding(
-                //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //       child: Row(
-                //           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             SvgPicture.asset('assets/images/private_tab.svg',
-                //                 color: themeProvider.darkTheme
-                //                     ?const Color(0xffFFFFFF)
-                //                     :const Color(0xff282836)),
-                //             Padding(
-                //               padding:
-                //                   const EdgeInsets.symmetric(horizontal: 8.0),
-                //               child: TextWidget(
-                //                 text:choice,
-                //                 style: theme.textTheme.bodySmall,
-                //               ),
-                //             ),
-                //           ]),
-                //     ),
-                //   );
                 case PopupMenuActions.FAVORITES:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
@@ -1472,8 +1477,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
                               child: TextWidget(
-                               text: choice,
-                                style: theme.textTheme.bodySmall,
+                               text: loc.favorites,// choice,
+                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                               ),
                             ),
                             // const Icon(
@@ -1483,45 +1491,6 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           ]),
                     ),
                   );
-                // case PopupMenuActions.READING_MODE:
-                //   return CustomPopupMenuItem<String>(
-                //     enabled: ttsProvider.canTTSDisplay,
-                //     value: choice,
-                //     height: 35,
-                //     child: Padding(
-                //       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                //       child: Row(
-                //           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Icon(Icons.record_voice_over,size: 21,color: checkCanGoforward
-                //                       ? themeProvider.darkTheme
-                //                           ? const Color(0xffFFFFFF)
-                //                           : const Color(0xff282836)
-                //                       : Colors.grey.shade500,),
-                //             // SvgPicture.asset(
-                //             //     'assets/images/Favorites_white_theme.svg',
-                //             //     color: themeProvider.darkTheme
-                //             //         ? const Color(0xffFFFFFF)
-                //             //         : const Color(0xff282836)),
-                //             Padding(
-                //               padding:
-                //                   const EdgeInsets.symmetric(horizontal: 4.0),
-                //               child: TextWidget(
-                //                text: choice,
-                //                 style: theme.textTheme.bodySmall!.copyWith(color: ttsProvider.canTTSDisplay
-                //                       ? themeProvider.darkTheme
-                //                           ? const Color(0xffFFFFFF)
-                //                           : const Color(0xff282836)
-                //                       : Colors.grey.shade500),
-                //               ),
-                //             ),
-                //             // const Icon(
-                //             //   Icons.star,
-                //             //   color: Colors.yellow,
-                //             // )
-                //           ]),
-                //     ),
-                //   );
                 case PopupMenuActions.BELNET:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
@@ -1539,8 +1508,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextWidget(text:choice,
-                                  style: theme.textTheme.bodySmall),
+                              child: TextWidget(text:loc.changeNode, //choice,
+                                  style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                             ),
                           ]),
                     ),
@@ -1571,8 +1543,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                 :const Color(0xff282836)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:choice,
-                              style: theme.textTheme.bodySmall),
+                          child: TextWidget(text:loc.webArchives, //choice,
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1593,8 +1568,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                 ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:choice,
-                              style: theme.textTheme.bodySmall),
+                          child: TextWidget(text:loc.beldexAI, //choice,
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1613,8 +1591,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                 :const Color(0xff282836)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:choice,
-                              style: theme.textTheme.bodySmall),
+                          child: TextWidget(text:loc.downloads, //choice,
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1651,8 +1632,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: TextWidget(
-                            text:choice,
-                            style: theme.textTheme.bodySmall,
+                            text:loc.desktopMode, //choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1687,8 +1671,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
-                           text: choice,
-                            style: theme.textTheme.bodySmall,
+                           text:loc.share, //choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1709,8 +1696,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
-                           text: choice,
-                            style:theme.textTheme.bodySmall,
+                           text:loc.settings, //choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) :theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1745,8 +1735,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
-                           text: choice,
-                            style: theme.textTheme.bodySmall,
+                           text:loc.findOnPage, // choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1771,8 +1764,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8.0, vertical: 5),
                               child: TextWidget(
-                               text: choice,
-                                style: theme.textTheme.bodySmall,
+                               text:loc.dark, //choice,
+                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                               ),
                             ),
                           ]),
@@ -1800,8 +1796,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
-                           text: choice,
-                            style: theme.textTheme.bodySmall,
+                           text:loc.about, //choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1822,8 +1821,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
-                           text: choice,
-                            style: theme.textTheme.bodySmall,
+                           text:loc.reportAnIssue, //choice,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1848,8 +1850,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 7.0),
                                   child: TextWidget(
-                                   text: choice,
-                                    style:
+                                   text:loc.quit, // choice,
+                                    style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) :
                                         theme.textTheme.bodySmall,
                                   ),
                                 ),
@@ -2049,6 +2054,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
      var webViewModel = Provider.of<WebViewModel>(context, listen: false);
     var webViewController = webViewModel.webViewController;
+    final loc = AppLocalizations.of(context)!;
     switch (choice) {
       case PopupMenuActions.NEW_TAB:
       vpnStatusProvider.updateCanShowHomeScreen(false);
@@ -2058,13 +2064,13 @@ Future<Map<String, dynamic>?> extractReadableContent(
       //   addNewIncognitoTab();
       //   break;
       case PopupMenuActions.FAVORITES:
-        showFavorites();
+        showFavorites(loc);
         break;
       case PopupMenuActions.HISTORY:
         showHistory();
         break;
       case PopupMenuActions.WEB_ARCHIVES:
-        showWebArchives(themeProvider,vpnStatusProvider);
+        showWebArchives(themeProvider,vpnStatusProvider,loc);
         break;
       case PopupMenuActions.BELDEX_AI:
         goToBeldexAIPage();
@@ -2175,6 +2181,8 @@ Future<Map<String, dynamic>?> extractReadableContent(
   void quitVpnAndApp() async {
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
+        final loc = AppLocalizations.of(context)!;
+        final localeProvider = Provider.of<LocaleProvider>(context,listen:false);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -2184,7 +2192,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
           insetPadding: EdgeInsets.all(20),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 170,
+            //height: 170,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: themeProvider.darkTheme
@@ -2198,13 +2206,13 @@ Future<Map<String, dynamic>?> extractReadableContent(
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child:const TextWidget(
-                   text: 'Quit Browser',
+                  child: TextWidget(
+                   text:loc.quitBrowser,// 'Quit Browser',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-               const TextWidget(
-                 text: 'Are you sure you want to quit?',
+                TextWidget(
+                 text:loc.rUSureWantToQuitApp, // 'Are you sure you want to quit?',
                   style: TextStyle(fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -2224,7 +2232,8 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget(text:'Cancel', style: TextStyle(fontSize: 18)),
+                          child: TextWidget(text:loc.cancel, // 'Cancel',
+                           style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -2250,9 +2259,9 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget(text:'Quit',
+                          child: TextWidget(text:loc.quit, //'Quit',
                               style:
-                                  TextStyle(color: Colors.red, fontSize: 18)),
+                                  TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -2282,13 +2291,13 @@ Future<Map<String, dynamic>?> extractReadableContent(
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
 
 
     url ??=
         WebUri(settings.searchEngine.url);
-        webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
-        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${selectedItemsProvider.fontSize.round()}');
+        webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
@@ -2300,12 +2309,12 @@ Future<Map<String, dynamic>?> extractReadableContent(
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
      final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+    //final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
 
 
     url ??=
         WebUri(settings.searchEngine.url);
-     webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
+     webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
@@ -2339,7 +2348,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
 }
 
 
-  void showFavorites() async {
+  void showFavorites(AppLocalizations loc) async {
     await showDialog<void>(
         barrierDismissible: false,
         context: context,
@@ -2368,15 +2377,16 @@ Future<Map<String, dynamic>?> extractReadableContent(
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 8.0, bottom: 15, left: 8, right: 8),
-                        child:const TextWidget(
-                         text: 'Favorites',
+                        child: TextWidget(
+                         text:loc.favorites, //'Favorites',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Expanded(
                           child: browserModel.favorites.isEmpty
-                              ? Center(child:const TextWidget(text:'No Favorites'))
+                              ? Center(child: TextWidget(text:loc.noFavorites, //'No Favorites'
+                              ))
                               :
                               // listViewChildren.isEmpty ?  Center(child: Text('No Web archives')):
                               ListView(
@@ -2556,7 +2566,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
         });
   }
 
-  void showWebArchives(DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider) async {
+  void showWebArchives(DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider, AppLocalizations loc) async {
     await showDialog<void>(
         barrierDismissible: false,
         context: context,
@@ -2673,14 +2683,15 @@ Future<Map<String, dynamic>?> extractReadableContent(
                         padding: const EdgeInsets.only(
                             top: 8.0, bottom: 15, left: 8, right: 8),
                         child: TextWidget(
-                         text: 'Web Archives',
+                         text:loc.webArchives, // 'Web Archives',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Expanded(
                           child: listViewChildren.isEmpty
-                              ? Center(child: TextWidget(text:'No Web Archives'))
+                              ? Center(child: TextWidget(text:loc.noWebArchives, //'No Web Archives'
+                              ))
                               : ListView(
                                   children: listViewChildren,
                                 ))
