@@ -42,7 +42,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchOrEnterAddress => '検索またはアドレスを入力';
 
   @override
-  String get beldexBrowserForAndroid => 'Android 用ブラウザはあなたの機密性を保護しています!';
+  String get beldexBrowserForAndroid => 'Android 用ブラウザは\nあなたの機密性を保護しています!';
 
   @override
   String get applanguage => 'アプリの言語';
@@ -441,7 +441,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get titleChangeNode => 'ノードを変更';
 
   @override
-  String get hasExperiancedTraffic => 'で前例のないトラフィックが発生しています。出口ノードを切り替えるには「ノードを変更」をクリックしてください。';
+  String get hasExperiancedTraffic => 'で前例のないトラフィックが発生しています。出口ノードを切り替えるには';
+
+  @override
+  String get toSwitchExitnode => 'をクリックしてください';
 
   @override
   String get theResponseHasBeenInterrupted => '応答が中断されました';
@@ -760,4 +763,37 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get languageMarathi => 'マラーティー語';
+
+  @override
+  String get languageAfrikaans => 'アフリカーンス語';
+
+  @override
+  String get languagePolish => 'ポーランド語';
+
+  @override
+  String get languageRomanian => 'ルーマニア語';
+
+  @override
+  String get languageUkrainian => 'ウクライナ語';
+
+  @override
+  String get languageLithuanian => 'リトアニア語';
+
+  @override
+  String get languageNorwegian => 'ノルウェー語';
+
+  @override
+  String get languageGreek => 'ギリシャ語';
+
+  @override
+  String get languageChineseTraditional => '中国語（繁体）';
+
+  @override
+  String get languageChineseHongKong => '中国語（香港）';
+
+  @override
+  String get languagePortuguesePortugal => 'ポルトガル語（ポルトガル）';
+
+  @override
+  String get languageSwedish => 'スウェーデン語';
 }

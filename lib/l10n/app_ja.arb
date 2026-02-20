@@ -13,7 +13,7 @@
   "searchOrEnterAddress": "検索またはアドレスを入力",
 
 
-  "beldexBrowserForAndroid": "Android 用ブラウザはあなたの機密性を保護しています!",
+  "beldexBrowserForAndroid": "Android 用ブラウザは\nあなたの機密性を保護しています!",
   "applanguage": "アプリの言語",
   "searchLanguage": "検索言語",
   "downloadCancelled": "ダウンロードがキャンセルされました",
@@ -151,7 +151,8 @@
   "noCompletedDownloads": "完了したダウンロードはありません",
   "cannotOpenThisFile": "このファイルを開けません",
   "titleChangeNode": "ノードを変更",
-  "hasExperiancedTraffic": "で前例のないトラフィックが発生しています。出口ノードを切り替えるには「ノードを変更」をクリックしてください。",
+  "hasExperiancedTraffic": "で前例のないトラフィックが発生しています。出口ノードを切り替えるには",
+  "toSwitchExitnode":"をクリックしてください",
   "theResponseHasBeenInterrupted": "応答が中断されました",
   "tryThis": "試してみてください:",
   "you": "あなた",
@@ -246,20 +247,21 @@
   "languageVietnameseVietnam": "ベトナム語（ベトナム）",
 
 
-"languageEnglish": "英語",
-"languageSpanish": "スペイン語",
-"languageJapanese": "日本語",
-"languagePortuguese": "ポルトガル語",
-"languageGerman": "ドイツ語",
-"languageTurkish": "トルコ語",
-"languageRussian": "ロシア語",
-"languageChinese": "中国語",
-"languageKorean": "韓国語",
-"languageVietnamese": "ベトナム語",
-"languageTamil": "タミル語",
-"languageArabic": "アラビア語",
 
 
+
+  "languageEnglish": "英語",
+  "languageSpanish": "スペイン語",
+  "languageJapanese": "日本語",
+  "languagePortuguese": "ポルトガル語",
+  "languageGerman": "ドイツ語",
+  "languageTurkish": "トルコ語",
+  "languageRussian": "ロシア語",
+  "languageChinese": "中国語",
+  "languageKorean": "韓国語",
+  "languageVietnamese": "ベトナム語",
+  "languageTamil": "タミル語",
+  "languageArabic": "アラビア語",
 
   "languageFrench": "フランス語",
   "languageItalian": "イタリア語",
@@ -273,7 +275,19 @@
   "languageHindi": "ヒンディー語",
   "languageTelugu": "テルグ語",
   "languageMalayalam": "マラヤーラム語",
-  "languageMarathi": "マラーティー語"
+  "languageMarathi": "マラーティー語",
+  "languageAfrikaans": "アフリカーンス語",
+
+  "languagePolish": "ポーランド語",
+  "languageRomanian": "ルーマニア語",
+  "languageUkrainian": "ウクライナ語",
+  "languageLithuanian": "リトアニア語",
+  "languageNorwegian": "ノルウェー語",
+  "languageGreek": "ギリシャ語",
+  "languageChineseTraditional": "中国語（繁体）",
+  "languageChineseHongKong": "中国語（香港）",
+  "languagePortuguesePortugal": "ポルトガル語（ポルトガル）",
+  "languageSwedish": "スウェーデン語"
 
 
 }
