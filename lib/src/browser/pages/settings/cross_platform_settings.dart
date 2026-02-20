@@ -1229,7 +1229,7 @@ Padding(
                   textBaseline: TextBaseline.alphabetic,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
-                    TextWidget(text:"App Language", //"Screen security",
+                    TextWidget(text:loc.applanguage, //"Screen security",
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
