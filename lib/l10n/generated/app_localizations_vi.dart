@@ -12,515 +12,788 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hello => 'Xin chào 👋';
 
   @override
-  String get connect => 'Connect';
+  String get connect => 'Kết nối';
 
   @override
-  String get connecting => 'Connecting...';
+  String get connecting => 'Đang kết nối...';
 
   @override
   String get exitnode => 'Exit Node';
 
   @override
-  String get beldexofficial => 'Beldex official';
+  String get beldexofficial => 'Beldex Official';
 
   @override
-  String get contributorExitNode => 'Contributor exit node';
+  String get contributorExitNode => 'nút thoát Contributor';
 
   @override
-  String get belnetServiceStarted => 'Belnet service started';
+  String get belnetServiceStarted => 'Dịch vụ Belnet đã khởi động';
 
   @override
-  String get checkingConnection => 'Checking for connection...';
+  String get checkingConnection => 'Đang kiểm tra kết nối...';
 
   @override
-  String get connectingBelnetdVPN => 'Connecting to belnet dVPN';
+  String get connectingBelnetdVPN => 'Đang kết nối tới belnet dVPN';
 
   @override
-  String get prepareDaemonConnection => 'Preparing Daemon connection';
+  String get prepareDaemonConnection => 'Đang chuẩn bị kết nối Daemon';
 
   @override
-  String get searchOrEnterAddress => 'Search or enter address';
+  String get searchOrEnterAddress => 'Tìm kiếm hoặc nhập Địa chỉ';
 
   @override
-  String get thistimeSearchIn => 'This time Search in';
+  String get beldexBrowserForAndroid => 'Trình duyệt Beldex cho Android\n đang bảo vệ quyền riêng tư của bạn!';
 
   @override
-  String get searchSettings => 'Search settings';
+  String get applanguage => 'Ngôn ngữ ứng dụng';
 
   @override
-  String get search => 'Search';
+  String get searchLanguage => 'Tìm ngôn ngữ';
 
   @override
-  String get searchEngine => 'Search Engine';
+  String get downloadCancelled => 'Tải xuống đã hủy';
 
   @override
-  String get defaultSearchEngine => 'Default Search Engine';
+  String get open => 'Mở';
 
   @override
-  String get manageSearchShortcuts => 'Manage Search shortcuts';
+  String get addSearchEngine => 'Thêm công cụ tìm kiếm';
 
   @override
-  String get editEnginesVisible => 'Edit engines visible in the search menu';
+  String get editSearchEngine => 'Chỉnh sửa công cụ tìm kiếm';
 
   @override
-  String get selectOne => 'Select one';
+  String get name => 'Tên';
 
   @override
-  String get engineVisibleOnSearchMenu => 'Engine visible on the search menu';
+  String get url => 'URL';
 
   @override
-  String get newtab => 'New tab';
+  String get enterSEName => 'Nhập tên công cụ tìm kiếm';
 
   @override
-  String get favorites => 'Favorites';
+  String get enterSEURL => 'Nhập URL công cụ tìm kiếm';
 
   @override
-  String get changeNode => 'Change Node';
+  String get add => 'Thêm';
 
   @override
-  String get share => 'Share';
+  String get save => 'Lưu';
+
+  @override
+  String get edit => 'Chỉnh sửa';
+
+  @override
+  String get thistimeSearchIn => 'Lần này Tìm kiếm trong';
+
+  @override
+  String get searchSettings => 'Cài đặt tìm kiếm';
+
+  @override
+  String get search => 'Tìm kiếm';
+
+  @override
+  String get searchEngine => 'Công cụ tìm kiếm';
+
+  @override
+  String get defaultSearchEngine => 'Công cụ tìm kiếm mặc định';
+
+  @override
+  String get manageSearchShortcuts => 'Quản lý lối tắt tìm kiếm';
+
+  @override
+  String get editEnginesVisible => 'Chỉnh sửa các công cụ hiển thị trong menu tìm kiếm';
+
+  @override
+  String get selectOne => 'Chọn một';
+
+  @override
+  String get engineVisibleOnSearchMenu => 'Công cụ hiển thị trong menu tìm kiếm';
+
+  @override
+  String get newtab => 'Tab mới';
+
+  @override
+  String get favorites => 'Yêu thích';
+
+  @override
+  String get changeNode => 'Thay đổi nút exit';
+
+  @override
+  String get share => 'Chia sẻ';
 
   @override
   String get beldexAI => 'Beldex AI';
 
   @override
-  String get webArchives => 'Web Archives';
+  String get webArchives => 'Lưu trữ web';
 
   @override
-  String get findOnPage => 'Find on page';
+  String get findOnPage => 'Tìm trên trang';
 
   @override
-  String get downloads => 'Downloads';
+  String get downloads => 'Tải xuống';
 
   @override
-  String get desktopMode => 'Desktop mode';
+  String get desktopMode => 'Chế độ máy tính để bàn';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Cài đặt';
 
   @override
-  String get dark => 'Dark';
+  String get dark => 'Chế độ tối';
 
   @override
-  String get reportAnIssue => 'Report an Issue';
+  String get reportAnIssue => 'Báo cáo sự cố';
 
   @override
-  String get about => 'About';
+  String get about => 'Giới thiệu';
 
   @override
-  String get quit => 'Quit';
+  String get quit => 'Thoát';
 
   @override
-  String get noFavorites => 'No Favorites';
+  String get noFavorites => 'Chưa có Yêu thích';
 
   @override
-  String get noWebArchives => 'No Web archives';
+  String get noWebArchives => 'Không có lưu trữ web';
 
   @override
-  String get chooseLanguage => 'Choose Language';
+  String get chooseLanguage => 'Chọn ngôn ngữ';
 
   @override
-  String get scanQR => 'Scan QR';
+  String get scanQR => 'Quét QR';
 
   @override
-  String get alignQRInCenterOFFrame => 'Align the QR code in the\ncenter of frame';
+  String get alignQRInCenterOFFrame => 'Căn mã QR vào giữa khung hình';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI enhances the Beldex Browser with intelligent features for a seamless web experience. It summarizes page content for quick reading. By efficiently routing traffic through masternodes and exit nodes, it ensures confidentiality and faster browsing. Unlike subscription-based models, Beldex AI is free to use, delivering advanced functionality while prioritizing user convenience and a confidentiality-centered internet experience. Explore smarter, faster browsing with Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI nâng cao Trình duyệt Beldex với các tính năng thông minh, mang đến trải nghiệm web liền mạch. Nó tóm tắt nội dung trang để bạn đọc nhanh hơn. Bằng cách định tuyến hiệu quả lưu lượng qua các masternode và nút thoát, nó đảm bảo quyền riêng tư và tốc độ duyệt web nhanh hơn. Không giống các mô hình dựa trên đăng ký, Beldex AI hoàn toàn miễn phí, cung cấp chức năng nâng cao trong khi ưu tiên sự tiện lợi và trải nghiệm internet tập trung vào bảo mật. Khám phá duyệt web thông minh và nhanh hơn với Beldex AI.';
 
   @override
-  String get needHelpWithThisSite => 'Need help with this site?';
+  String get needHelpWithThisSite => 'Cần trợ giúp với trang này?';
 
   @override
-  String get beldexAICanHelpYou => 'BeldexAI can help you summarize articles,\nexpand on a site\'s content and much more.';
+  String get beldexAICanHelpYou => 'Beldex AI có thể giúp bạn tóm tắt bài viết, mở rộng nội dung trang web và nhiều tính năng khác.';
 
   @override
-  String get enterPromptHere => 'Enter prompt here..';
+  String get enterPromptHere => 'Nhập yêu cầu tại đây..';
 
   @override
-  String get summariseThisPage => 'Summarise this page';
+  String get summariseThisPage => 'Tóm tắt trang này';
 
   @override
-  String get hideSummarise => 'Hide Summarise';
+  String get hideSummarise => 'Ẩn tóm tắt';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Thử lại';
 
   @override
-  String get regenerate => 'Regenerate';
+  String get regenerate => 'Tạo lại';
 
   @override
-  String get thereWasAnErrorGenerateResponse => 'There was an error generating response';
+  String get thereWasAnErrorGenerateResponse => 'Đã xảy ra lỗi khi tạo phản hồi';
 
   @override
   String get askBeldexAI => 'Ask Beldex AI';
 
   @override
-  String get chatDeleted => 'Chat deleted successfully';
+  String get chatDeleted => 'Đã xóa trò chuyện thành công';
 
   @override
-  String get unprecidentedTrafficExitNodeError => 'Unprecedented traffic with Exit node. Please change exit node and retry';
+  String get unprecidentedTrafficExitNodeError => 'Lưu lượng chưa từng có với nút thoát. Vui lòng thay đổi nút thoát và thử lại';
 
   @override
-  String get connected => 'Connected';
+  String get connected => 'Đã kết nối';
 
   @override
-  String get disconnected => 'Disconnected';
+  String get disconnected => 'Đã ngắt kết nối';
 
   @override
-  String get switchNode => 'Switch Node';
+  String get switchNode => 'Chuyển nút';
 
   @override
-  String get switchingNode => 'Switching Node';
+  String get switchingNode => 'Đang chuyển nút';
 
   @override
-  String get nodes => 'Nodes';
+  String get nodes => 'Các nút';
 
   @override
-  String get exitNodeSwitched => 'Exit node switched successfully';
+  String get exitNodeSwitched => 'Đã chuyển nút thoát thành công';
 
   @override
-  String get thisNodeAlreadySelected => 'This node is already selected.Please select another one from the list';
+  String get thisNodeAlreadySelected => 'Nút này đã được chọn. Vui lòng chọn nút khác từ danh sách';
 
   @override
-  String get doYouWantToSwitch => 'Do you want to switch with the selected node?';
+  String get doYouWantToSwitch => 'Bạn có muốn chuyển sang nút đã chọn không?';
 
   @override
-  String get noRecentDownloads => 'No recent downloads';
+  String get noRecentDownloads => 'Chưa có tải xuống gần đây';
 
   @override
-  String get clearDownloads => 'Clear Downloads';
+  String get clearDownloads => 'Xóa Tải xuống';
 
   @override
-  String get download => 'Download';
+  String get download => 'Tải xuống';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Hủy';
 
   @override
-  String get youAreAboutToDownload => 'You are about to download';
+  String get youAreAboutToDownload => 'Bạn sắp tải xuống';
 
   @override
-  String get areYouSure => 'Are you sure?';
+  String get areYouSure => 'Bạn có chắc không?';
 
   @override
-  String get startDownloading => 'Start downloading';
+  String get startDownloading => 'Bắt đầu tải xuống';
 
   @override
-  String get downloading => 'Downloading';
+  String get downloading => 'Đang tải xuống';
 
   @override
-  String get completed => 'Completed';
+  String get completed => 'Hoàn tất';
 
   @override
-  String get fileDownloaded => 'Files downloaded successfully';
+  String get fileDownloaded => 'Tệp đã được tải xuống thành công';
 
   @override
-  String get searchEngineContent => 'Choose your preferred search engine for personalized browsing.';
+  String get searchEngineContent => 'Chọn công cụ tìm kiếm yêu thích để duyệt web cá nhân hóa.';
 
   @override
-  String get homePage => 'Home Page';
+  String get homePage => 'Trang chủ';
 
   @override
-  String get homepageContent => 'Set your homepage for quick access to favorite sites.';
+  String get homepageContent => 'Đặt trang chủ để truy cập nhanh các trang yêu thích.';
 
   @override
-  String get screenSecurity => 'Screen Security';
+  String get screenSecurity => 'Bảo mật màn hình';
 
   @override
-  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing';
+  String get screenSecurityContent => ' Thêm lớp bảo vệ bổ sung cho duyệt web an toàn.';
 
   @override
-  String get javascriptEnabled => 'JavaScript Enabled';
+  String get javascriptEnabled => 'JavaScript Bật';
 
   @override
-  String get javascriptEnabledContent => 'Enable or disable JavaScript for a tailored experience.';
+  String get javascriptEnabledContent => 'Bật hoặc tắt JavaScript để trải nghiệm tùy chỉnh.';
 
   @override
-  String get cacheEnabled => 'Cache Enabled';
+  String get cacheEnabled => 'Cache Bật';
 
   @override
-  String get cacheEnabledContent => 'Toggle caching for faster loading or increased confidentiality.';
+  String get cacheEnabledContent => 'Bật/tắt bộ nhớ đệm để tăng tốc hoặc nâng cao bảo mật.';
 
   @override
-  String get supportZoom => 'Support Zoom';
+  String get supportZoom => 'Hỗ trợ Thu phóng';
 
   @override
-  String get supportZoomContent => 'Enable zoom for a closer look at web content.';
+  String get supportZoomContent => 'Bật tính năng phóng to để xem nội dung web rõ hơn.';
 
   @override
-  String get setAsDefaultBrowser => 'Set as Default Browser';
+  String get setAsDefaultBrowser => 'Đặt làm trình duyệt mặc định';
 
   @override
-  String get appPermissions => 'App Permissions';
+  String get appPermissions => 'Quyền ứng dụng';
 
   @override
-  String get aboutBeldexBrowser => 'About Beldex Browser';
+  String get aboutBeldexBrowser => 'Giới thiệu Trình duyệt Beldex';
 
   @override
-  String get resetSettings => 'Reset settings';
+  String get resetSettings => 'Đặt lại cài đặt';
 
   @override
-  String get doYouWanttoReset => 'Do you want to reset the browser\nsettings?';
+  String get doYouWanttoReset => 'Bạn có muốn đặt lại cài đặt trình duyệt không?';
 
   @override
-  String get textZoom => 'Text Zoom';
+  String get textZoom => 'Thu phóng văn bản';
 
   @override
-  String get textZoomContent => 'Customize text size in percentage for comfortable reading on any website.';
+  String get textZoomContent => 'Tùy chỉnh kích thước chữ theo phần trăm để đọc thoải mái trên mọi trang web.';
 
   @override
-  String get adBlocker => 'Ad Blocker';
+  String get adBlocker => 'Chặn quảng cáo';
 
   @override
-  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience';
+  String get adBlockerContent => 'Bật/tắt để chặn quảng cáo gây phiền nhiễu và nâng cao trải nghiệm duyệt web.';
 
   @override
-  String get autoConnect => 'Auto-Connect';
+  String get autoConnect => 'Tự động kết nối';
 
   @override
-  String get autoConnectContent => 'Automatically connect when the app launches.';
+  String get autoConnectContent => 'Tự động kết nối khi ứng dụng khởi chạy.';
 
   @override
-  String get autoSuggestion => 'Auto-Suggestion';
+  String get autoSuggestion => 'Gợi ý tự động';
 
   @override
-  String get autoSuggestionContent => 'Automatically display suggestions while searching.';
+  String get autoSuggestionContent => 'Hiển thị gợi ý khi tìm kiếm.';
 
   @override
-  String get clearSessionCache => 'Clear Session Cache';
+  String get clearSessionCache => 'Xóa bộ nhớ đệm phiên';
 
   @override
-  String get clearSessionCacheContent => 'Automatically clear the current session\'s cache for confidentiality.';
+  String get clearSessionCacheContent => 'Tự động xóa bộ nhớ đệm của phiên hiện tại để bảo mật.';
 
   @override
-  String get builtinZoomControls => 'Built-In Zoom Controls';
+  String get builtinZoomControls => 'Điều khiển thu phóng tích hợp';
 
   @override
-  String get builtinZoomControlsContent => 'Control your browsing experience with built-in zoom functionality.';
+  String get builtinZoomControlsContent => 'Kiểm soát trải nghiệm duyệt web với tính năng thu phóng tích hợp.';
 
   @override
-  String get displayZoomControls => 'Display Zoom Controls';
+  String get displayZoomControls => 'Hiển thị điều khiển thu phóng';
 
   @override
-  String get displayZoomControlsContent => 'Show on-screen zoom controls for easy accessibility.';
+  String get displayZoomControlsContent => 'Hiển thị nút điều khiển thu phóng trên màn hình để dễ sử dụng.';
 
   @override
-  String get thirdpartCookiesEnabled => 'Third-Party Cookies Enabled';
+  String get thirdpartCookiesEnabled => 'Cookie bên thứ ba Bật';
 
   @override
-  String get thirdpartyCookiesEnabledContent => 'Enable or disable third-party cookies to manage your confidentiality while browsing.';
+  String get thirdpartyCookiesEnabledContent => 'Bật hoặc tắt cookie bên thứ ba để quản lý bảo mật khi duyệt web.';
 
   @override
-  String get debuggingEnabled => 'Debugging Enabled';
+  String get debuggingEnabled => 'Bật chế độ gỡ lỗi';
 
   @override
-  String get debuggingEnabledContent => 'Activate debugging mode for advanced insights into performance.';
+  String get debuggingEnabledContent => 'Kích hoạt chế độ gỡ lỗi để có thông tin nâng cao về hiệu suất.';
 
   @override
-  String get closeTabs => 'Close tabs';
+  String get closeTabs => 'Đóng tabs';
 
   @override
-  String get closeAllTabs => 'Close all tabs';
+  String get closeAllTabs => 'Đóng tất cả tab';
 
   @override
-  String get copy => 'Copy';
+  String get copy => 'Sao chép';
 
   @override
-  String get cut => 'Cut';
+  String get cut => 'Cắt';
 
   @override
-  String get paste => 'Paste';
+  String get paste => 'Dán';
 
   @override
-  String get selectAll => 'Select all';
+  String get selectAll => 'Chọn tất cả';
 
   @override
-  String get copied => 'Copied';
+  String get copied => 'Đã sao chép';
 
   @override
-  String get copiedToClipboard => 'Copied to clipboard';
+  String get copiedToClipboard => 'Đã sao chép vào bộ nhớ tạm';
 
   @override
-  String get unableToShareUrl => 'Unable to share URL';
+  String get unableToShareUrl => 'Không thể chia sẻ URL';
 
   @override
-  String get openInNewTab => 'Open in new tab';
+  String get openInNewTab => 'Mở trong tab mới';
 
   @override
-  String get copyAddressLink => 'Copy address link';
+  String get copyAddressLink => 'Sao chép liên kết địa chỉ';
 
   @override
-  String get shareLink => 'Share link';
+  String get shareLink => 'Chia sẻ liên kết';
 
   @override
-  String get downloadimage => 'Download image';
+  String get downloadimage => 'Tải xuống hình ảnh';
 
   @override
-  String get shareImage => 'Share image';
+  String get shareImage => 'Chia sẻ hình ảnh';
 
   @override
-  String get openImageInNewTab => 'Open image in new tab';
+  String get openImageInNewTab => 'Mở hình ảnh trong tab mới';
 
   @override
-  String get searchImageWith => 'Search image with';
+  String get searchImageWith => 'Tìm kiếm hình ảnh bằng';
 
   @override
-  String get youRaboutToDownloadImage => 'You are about to download image. \n Are you sure?';
+  String get youRaboutToDownloadImage => 'Bạn sắp tải xuống hình ảnh.\nBạn có chắc chắn không?';
 
   @override
-  String get rUSureWantToQuitApp => 'Are you sure you want to quit?';
+  String get rUSureWantToQuitApp => 'Bạn có chắc chắn muốn thoát không?';
 
   @override
-  String get quitBrowser => 'Quit Browser';
+  String get quitBrowser => 'Thoát trình duyệt';
 
   @override
-  String get delete => 'Delete';
+  String get delete => 'Xóa';
 
   @override
-  String get reset => 'Reset';
+  String get reset => 'Đặt lại';
 
   @override
-  String get customUrlHomePage => 'Custom URL Home Page';
+  String get customUrlHomePage => 'Trang chủ URL tùy chỉnh';
 
   @override
   String get ok => 'OK';
 
   @override
-  String get downloadFailed => 'Download Failed!';
+  String get downloadFailed => 'Tải xuống thất bại!';
 
   @override
-  String get noCompletedDownloads => 'No completed downloads';
+  String get noCompletedDownloads => 'Không có lượt tải xuống nào hoàn tất';
 
   @override
-  String get cannotOpenThisFile => 'Cannot open this file';
+  String get cannotOpenThisFile => 'Không thể mở tệp này';
 
   @override
   String get titleChangeNode => 'Change Node';
 
   @override
-  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node';
+  String get hasExperiancedTraffic => 'đang gặp lưu lượng truy cập chưa từng có. Vui lòng nhấn';
 
   @override
-  String get theResponseHasBeenInterrupted => 'The response has been interrupted';
+  String get toSwitchExitnode => 'để chuyển nút thoát';
 
   @override
-  String get tryThis => 'Try this:';
+  String get theResponseHasBeenInterrupted => 'Phản hồi đã bị gián đoạn';
 
   @override
-  String get you => 'You';
+  String get tryThis => 'Hãy thử cách này:';
 
   @override
-  String get chat => 'Chat';
+  String get you => 'Bạn';
 
   @override
-  String get cameraPermissionDenied => 'Camera permission denied';
+  String get chat => 'Trò chuyện';
 
   @override
-  String get micPermissionRequired => 'Microphone Permission Required';
+  String get cameraPermissionDenied => 'Quyền truy cập camera bị từ chối';
 
   @override
-  String get uPermanentlyDeniedMicAccess => 'You have permanently denied microphone access';
+  String get micPermissionRequired => 'Cần quyền truy cập micrô';
 
   @override
-  String get plsEnableMicInAppSettings => 'Please enable it in app settings to use voice search';
+  String get uPermanentlyDeniedMicAccess => 'Bạn đã từ chối quyền truy cập micrô vĩnh viễn';
 
   @override
-  String get thispageAlreadySavedOffline => 'This page is already saved offline';
+  String get plsEnableMicInAppSettings => 'Vui lòng bật quyền trong cài đặt ứng dụng để sử dụng tìm kiếm bằng giọng nói';
 
   @override
-  String get pageSavedOffline => 'Page is saved offline!';
+  String get thispageAlreadySavedOffline => 'Trang này đã được lưu ngoại tuyến';
 
   @override
-  String get unabledToSave => 'Unable to save';
+  String get pageSavedOffline => 'Trang đã được lưu ngoại tuyến!';
 
   @override
-  String get basic => 'Basic';
+  String get unabledToSave => 'Không thể lưu';
 
   @override
-  String get advanced => 'Advanced';
+  String get basic => 'Cơ bản';
 
   @override
-  String get downloadCompelete => 'Download complete';
+  String get advanced => 'Nâng cao';
 
   @override
-  String get screensecurityCurrentlyEnabled => 'Screen security is currently enabled.Make sure to disable it in the settings screen';
+  String get downloadCompelete => 'Tải xuống hoàn tất';
 
   @override
-  String get openSettings => 'Open Settings';
+  String get screensecurityCurrentlyEnabled => 'Bảo mật màn hình hiện đang được bật. Hãy chắc chắn tắt nó trong màn hình cài đặt';
 
   @override
-  String get noInternetConnection => 'No internet connection';
+  String get openSettings => 'Mở cài đặt';
 
   @override
-  String get youAreNotConnectedToInternet => 'You are not connected to the internet. Make sure WiFi/Mobile data is on';
+  String get noInternetConnection => 'Không có kết nối internet';
 
   @override
-  String get pleaseEnterValidCustomURL => 'Please enter valid custom URL';
+  String get youAreNotConnectedToInternet => 'Bạn chưa kết nối với internet. Hãy đảm bảo WiFi/Dữ liệu di động đã được bật';
 
   @override
-  String get beldexIsAnEcosystem => 'Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.';
+  String get pleaseEnterValidCustomURL => 'Vui lòng nhập URL tùy chỉnh hợp lệ';
 
   @override
-  String get atBeldex => ' \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.';
+  String get enterSearchEngineName => 'Vui lòng nhập tên công cụ tìm kiếm';
+
+  @override
+  String get enterSearchEngineURL => 'Vui lòng nhập URL của công cụ tìm kiếm';
+
+  @override
+  String get entervalidURL => 'Vui lòng nhập một URL hợp lệ';
+
+  @override
+  String get pleaseEnterCorrectSEName => 'Vui lòng nhập đúng tên công cụ tìm kiếm cho URL đã cho';
+
+  @override
+  String get urlUnreachable => 'URL không thể truy cập. Vui lòng thử URL hợp lệ';
+
+  @override
+  String get notvalidSearchEngine => 'Đây không phải là công cụ tìm kiếm hợp lệ';
+
+  @override
+  String get searchEngineAlreadyExist => 'Công cụ tìm kiếm này đã tồn tại';
+
+  @override
+  String get searchEngineAdded => 'Thêm công cụ tìm kiếm thành công!';
+
+  @override
+  String get searchEngineUpdated => 'Cập nhật công cụ tìm kiếm thành công!';
+
+  @override
+  String get beldexIsAnEcosystem => 'Beldex là một hệ sinh thái gồm các ứng dụng phi tập trung và bảo vệ quyền riêng tư. Ứng dụng Trình duyệt Beldex là một phần trong hệ sinh thái này, cùng với các ứng dụng như BChat, BelNet và giao thức Beldex. Trình duyệt Beldex là cổng vào trải nghiệm trực tuyến liền mạch và bảo mật, nơi dữ liệu của bạn chỉ thuộc về bạn. Được xây dựng trên cơ sở hạ tầng blockchain mạnh mẽ, trình duyệt Beldex đảm bảo quyền riêng tư và ẩn danh cho người dùng.';
+
+  @override
+  String get atBeldex => ' \n Tại Beldex, chúng tôi tin tưởng vào việc trao quyền cho cá nhân có quyền kiểm soát dấu chân kỹ thuật số của họ. Trình duyệt Beldex được thiết kế để cung cấp một môi trường trực tuyến an toàn và bảo mật, cho phép người dùng giao tiếp và tương tác với thế giới kỹ thuật số.';
 
   @override
   String get titlebns => '\nBNS';
 
   @override
-  String get theBeldexBrowserSupports => 'The Beldex browser supports BNS domains. BNS domains are inherently hosted on BelNet. They can only be accessed by connecting to BelNet. However, since the Beldex Browser has BelNet in-built, users can freely access BNS domains.';
+  String get theBeldexBrowserSupports => 'Trình duyệt Beldex hỗ trợ các tên miền BNS. Các tên miền BNS vốn được lưu trữ trên BelNet và chỉ có thể truy cập khi kết nối với BelNet. Tuy nhiên, vì trình duyệt Beldex đã tích hợp sẵn BelNet, người dùng có thể truy cập các tên miền BNS một cách tự do.';
 
   @override
   String get titleMNApp => '\nMNApps';
 
   @override
-  String get asTheBrowser => 'As the browser itself supports BelNet as an added confidentiality feature, users can easily access MNApps hosting on the .bdx domain address.';
+  String get asTheBrowser => 'Vì trình duyệt hỗ trợ BelNet như một tính năng bảo mật bổ sung, người dùng có thể dễ dàng truy cập các MNApps được lưu trữ trên địa chỉ miền .bdx';
 
   @override
-  String get titleCrossplatformAccess => '\nCross Platform Access';
+  String get titleCrossplatformAccess => '\nTruy cập đa nền tảng';
 
   @override
-  String get theBeldexBrowserIsCrossplatform => 'The Beldex browser is cross-platform as it is being developed for both mobile and desktop devices.';
+  String get theBeldexBrowserIsCrossplatform => 'Trình duyệt Beldex hỗ trợ đa nền tảng, được phát triển cho cả thiết bị di động và máy tính để bàn.';
 
   @override
-  String get titleKeyFeature => '\nKey Features';
+  String get titleKeyFeature => '\nCác tính năng chính';
 
   @override
-  String get followingAreTheFeatures => '\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n';
+  String get followingAreTheFeatures => '\nDưới đây là các tính năng có trên phiên bản Beta của trình duyệt Beldex. Nhiều tính năng hơn sẽ được thêm vào phiên bản Alpha.\n';
 
   @override
-  String get blockJavascript => 'Blocks Javascript: The Beldex browser prioritizes user security by blocking Javascript, thereby reducing the risk of malicious scripts that could compromise user confidentiality and security. This ensures a safe browsing experience and protects users from threats that involve javascript vulnerabilities.';
+  String get blockJavascript => 'Chặn JavaScript: Trình duyệt Beldex ưu tiên bảo mật người dùng bằng cách chặn JavaScript, giảm rủi ro từ các script độc hại có thể xâm phạm quyền riêng tư và bảo mật của người dùng. Điều này đảm bảo trải nghiệm duyệt web an toàn và bảo vệ người dùng khỏi các lỗ hổng JavaScript.';
 
   @override
-  String get blockcookies => 'Blocks Cookies: Cookies collect a user’s personal information that help determine their behavioural and usage patterns. This in-turn helps the website to show relevant ads, manage active sessions, and provide big data analytics.';
+  String get blockcookies => 'Chặn Cookies: Cookies thu thập thông tin cá nhân của người dùng, giúp xác định hành vi và mô hình sử dụng. Điều này giúp trang web hiển thị quảng cáo phù hợp, quản lý phiên hoạt động và cung cấp phân tích dữ liệu lớn.';
 
   @override
-  String get ipAddressMasked => 'IP Address is Masked: The browser’s in-built dVPN, the BelNet, masks the client IP address from the websites they visit. This provides confidentiality and anonymity to the user and prevents websites from identifying and tracking the user based on their IP address.';
+  String get ipAddressMasked => 'Ẩn địa chỉ IP: dVPN tích hợp trong trình duyệt, BelNet, che giấu địa chỉ IP của người dùng khỏi các trang web họ truy cập. Điều này đảm bảo quyền riêng tư và ẩn danh, đồng thời ngăn các trang web xác định và theo dõi người dùng dựa trên địa chỉ IP.';
 
   @override
-  String get locationObfuscated => 'Location is Obfuscated: To further enhance confidentiality, the browser obfuscates the user\'s location, making it challenging for websites and third parties to determine the actual geographical location of the user. This ensures that users can browse without revealing sensitive information about their whereabouts.';
+  String get locationObfuscated => 'Che giấu vị trí: Để tăng cường quyền riêng tư, trình duyệt làm mờ vị trí người dùng, khiến các trang web và bên thứ ba khó xác định vị trí địa lý thực tế của người dùng.';
 
   @override
-  String get noMetadataCallected => 'No Metadata is Collected: The browser abstains from collecting metadata, ensuring that no additional information about the user\'s browsing habits or preferences is stored. This minimizes the risk of data leakage and unauthorized access to user information.';
+  String get noMetadataCallected => 'Không thu thập metadata: Trình duyệt không thu thập metadata, đảm bảo không lưu trữ thông tin bổ sung về thói quen duyệt web hoặc sở thích của người dùng. Điều này giảm thiểu nguy cơ rò rỉ dữ liệu và truy cập trái phép.';
 
   @override
-  String get inbuiltdVPN => 'In-built dVPN Service: The inclusion of an in-built decentralized VPN (dVPN) service like BelNet encrypts the user’s internet traffic and ensures a secure and confidential connection for users.';
+  String get inbuiltdVPN => 'Dịch vụ dVPN tích hợp: Dịch vụ VPN phi tập trung (dVPN) tích hợp như BelNet mã hóa lưu lượng internet của người dùng và đảm bảo kết nối an toàn, bảo mật.';
 
   @override
-  String get unrestrictedAccess => 'Unrestricted Access: The Beldex browser promotes unrestricted access to information on the Internet, thus aiding free speech and resistance to censorship. Users can easily access geo-restricted content.';
+  String get unrestrictedAccess => 'Truy cập không giới hạn: Trình duyệt Beldex thúc đẩy quyền truy cập không giới hạn vào thông tin trên Internet, hỗ trợ tự do ngôn luận và chống kiểm duyệt. Người dùng có thể dễ dàng truy cập nội dung bị giới hạn theo địa lý.';
 
   @override
-  String get censorshipResistance => 'Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.\n';
+  String get censorshipResistance => 'CKháng kiểm duyệt: Bằng việc sử dụng blockchain Beldex và mạng lưới các nút phi tập trung, trình duyệt Beldex tăng khả năng chống kiểm duyệt. Không một server nào bị lỗi có thể hạn chế quyền truy cập dịch vụ.\n';
 
   @override
-  String get aboutAdblocker => 'Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n';
+  String get aboutAdblocker => 'Chặn quảng cáo: Chặn quảng cáo, trình theo dõi và cửa sổ bật lên gây phiền nhiễu, mang đến trải nghiệm duyệt web sạch sẽ và tập trung. Tăng tốc tải trang và giảm sử dụng dữ liệu trong khi vẫn kiểm soát hoàn toàn tương tác trực tuyến.\n';
 
   @override
-  String get aboutBeldexAI => 'Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you\'re searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n';
+  String get aboutBeldexAI => 'Beldex AI: Beldex AI cung cấp câu trả lời ngay lập tức cho các truy vấn của bạn, dựa trên nội dung trang web. Cho dù bạn đang tìm kiếm thông tin cụ thể hay cần nhanh các insight, Beldex AI nâng cao trải nghiệm duyệt web với các phản hồi phù hợp và có ngữ cảnh.\n';
 
   @override
-  String get thusbeldexbrowserOffers => '\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.';
+  String get thusbeldexbrowserOffers => '\nTrình duyệt Beldex mang đến một không gian đơn giản và an toàn cho những người dùng tìm kiếm quyền riêng tư trong thế giới ngày càng kết nối. Hãy cùng chúng tôi trên hành trình hướng tới một tương lai kỹ thuật số an toàn và bảo mật hơn. Trải nghiệm tự do duyệt web, giao tiếp và khám phá Internet mà không làm tổn hại đến quyền riêng tư của bạn. Mạng Beldex – Nơi Quyền Riêng Tư Gặp Gỡ Sáng Tạo.';
 
   @override
-  String get credits => '\nCredits: Beldex & BelNet.\n';
+  String get credits => '\nGhi nhận: Beldex & BelNet.\n';
+
+  @override
+  String get languageChineseSimplifiedChina => 'Tiếng Trung (Giản thể, Trung Quốc)';
+
+  @override
+  String get languageChineseTraditionalTaiwan => 'Tiếng Trung (Phồn thể, Đài Loan)';
+
+  @override
+  String get languageEnglishAustralia => 'Tiếng Anh (Úc)';
+
+  @override
+  String get languageEnglishCanada => 'Tiếng Anh (Canada)';
+
+  @override
+  String get languageEnglishIndia => 'Tiếng Anh (Ấn Độ)';
+
+  @override
+  String get languageEnglishIreland => 'Tiếng Anh (Ireland)';
+
+  @override
+  String get languageEnglishSingapore => 'Tiếng Anh (Singapore)';
+
+  @override
+  String get languageEnglishUnitedKingdom => 'Tiếng Anh (Vương quốc Anh)';
+
+  @override
+  String get languageEnglishUnitedStates => 'Tiếng Anh (Hoa Kỳ)';
+
+  @override
+  String get languageFrenchBelgium => 'Tiếng Pháp (Bỉ)';
+
+  @override
+  String get languageFrenchCanada => 'Tiếng Pháp (Canada)';
+
+  @override
+  String get languageFrenchFrance => 'Tiếng Pháp (Pháp)';
+
+  @override
+  String get languageFrenchSwitzerland => 'Tiếng Pháp (Thụy Sĩ)';
+
+  @override
+  String get languageGermanAustria => 'Tiếng Đức (Áo)';
+
+  @override
+  String get languageGermanBelgium => 'Tiếng Đức (Bỉ)';
+
+  @override
+  String get languageGermanGermany => 'Tiếng Đức (Đức)';
+
+  @override
+  String get languageGermanSwitzerland => 'Tiếng Đức (Thụy Sĩ)';
+
+  @override
+  String get languageHindiIndia => 'Tiếng Hindi (Ấn Độ)';
+
+  @override
+  String get languageIndonesianIndonesia => 'Tiếng Indonesia (Indonesia)';
+
+  @override
+  String get languageItalianItaly => 'Tiếng Ý (Ý)';
+
+  @override
+  String get languageItalianSwitzerland => 'Tiếng Ý (Thụy Sĩ)';
+
+  @override
+  String get languageJapaneseJapan => 'Tiếng Nhật (Nhật Bản)';
+
+  @override
+  String get languageKoreanSouthKorea => 'Tiếng Hàn (Hàn Quốc)';
+
+  @override
+  String get languagePolishPoland => 'Tiếng Ba Lan (Ba Lan)';
+
+  @override
+  String get languagePortugueseBrazil => 'Tiếng Bồ Đào Nha (Brazil)';
+
+  @override
+  String get languageRussianRussia => 'Tiếng Nga (Nga)';
+
+  @override
+  String get languageSpanishSpain => 'Tiếng Tây Ban Nha (Tây Ban Nha)';
+
+  @override
+  String get languageSpanishUnitedStates => 'Tiếng Tây Ban Nha (Hoa Kỳ)';
+
+  @override
+  String get languageThaiThailand => 'Tiếng Thái (Thái Lan)';
+
+  @override
+  String get languageTurkishTurkey => 'Tiếng Thổ Nhĩ Kỳ (Thổ Nhĩ Kỳ)';
+
+  @override
+  String get languageVietnameseVietnam => 'Tiếng Việt (Việt Nam)';
+
+  @override
+  String get languageEnglish => 'Tiếng Anh';
+
+  @override
+  String get languageSpanish => 'Tiếng Tây Ban Nha';
+
+  @override
+  String get languageJapanese => 'Tiếng Nhật';
+
+  @override
+  String get languagePortuguese => 'Tiếng Bồ Đào Nha';
+
+  @override
+  String get languageGerman => 'Tiếng Đức';
+
+  @override
+  String get languageTurkish => 'Tiếng Thổ Nhĩ Kỳ';
+
+  @override
+  String get languageRussian => 'Tiếng Nga';
+
+  @override
+  String get languageChinese => 'Tiếng Trung';
+
+  @override
+  String get languageKorean => 'Tiếng Hàn';
+
+  @override
+  String get languageVietnamese => 'Tiếng Việt';
+
+  @override
+  String get languageTamil => 'Tiếng Tamil';
+
+  @override
+  String get languageArabic => 'Tiếng Ả Rập';
+
+  @override
+  String get languageFrench => 'Tiếng Pháp';
+
+  @override
+  String get languageItalian => 'Tiếng Ý';
+
+  @override
+  String get languageDanish => 'Tiếng Đan Mạch';
+
+  @override
+  String get languageDutch => 'Tiếng Hà Lan';
+
+  @override
+  String get languageFinnish => 'Tiếng Phần Lan';
+
+  @override
+  String get languageFilipino => 'Tiếng Filipino';
+
+  @override
+  String get languageIndonesian => 'Tiếng Indonesia';
+
+  @override
+  String get languageMalay => 'Tiếng Mã Lai';
+
+  @override
+  String get languageThai => 'Tiếng Thái';
+
+  @override
+  String get languageHindi => 'Tiếng Hindi';
+
+  @override
+  String get languageTelugu => 'Tiếng Telugu';
+
+  @override
+  String get languageMalayalam => 'Tiếng Malayalam';
+
+  @override
+  String get languageMarathi => 'Tiếng Marathi';
+
+  @override
+  String get languageAfrikaans => 'Tiếng Afrikaans';
+
+  @override
+  String get languagePolish => 'Tiếng Ba Lan';
+
+  @override
+  String get languageRomanian => 'Tiếng Romania';
+
+  @override
+  String get languageUkrainian => 'Tiếng Ukraina';
+
+  @override
+  String get languageLithuanian => 'Tiếng Litva';
+
+  @override
+  String get languageNorwegian => 'Tiếng Na Uy';
+
+  @override
+  String get languageGreek => 'Tiếng Hy Lạp';
+
+  @override
+  String get languageChineseTraditional => 'Tiếng Trung (Phồn thể)';
+
+  @override
+  String get languageChineseHongKong => 'Tiếng Trung (Hồng Kông)';
+
+  @override
+  String get languagePortuguesePortugal => 'Tiếng Bồ Đào Nha (Bồ Đào Nha)';
+
+  @override
+  String get languageSwedish => 'Tiếng Thụy Điển';
 }
