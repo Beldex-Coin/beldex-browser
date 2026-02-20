@@ -388,8 +388,8 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildOpenNewTab(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-    final selectedItemsProvider =
-        Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selectedItemsProvider =
+    //     Provider.of<SelectedItemsProvider>(context, listen: false);
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     final loc = AppLocalizations.of(context)!;
@@ -400,7 +400,7 @@ Widget _buildDialogLongPressHitTestResult(
       ),
       onTap: () {
         webViewModel.settings?.minimumFontSize =
-            selectedItemsProvider.fontSize.round();
+            browserModel.fontSize.round();
             vpnStatusProvider.updateCanShowHomeScreen(false);
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
@@ -415,8 +415,8 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildOpenNewIncognitoTab(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-    final selectedItemsProvider =
-        Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selectedItemsProvider =
+    //     Provider.of<SelectedItemsProvider>(context, listen: false);
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
     return ListTile(
       title:  TextWidget(
@@ -425,7 +425,7 @@ Widget _buildDialogLongPressHitTestResult(
       ),
       onTap: () {
         webViewModel.settings?.minimumFontSize =
-            selectedItemsProvider.fontSize.round();
+            browserModel.fontSize.round();
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
           webViewModel: WebViewModel(

@@ -132,8 +132,8 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
     var settings = browserModel.getSettings();
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var webViewController = currentWebViewModel.webViewController;
-    var selectedItemsProvider =
-        Provider.of<SelectedItemsProvider>(context, listen: false);
+    // var selectedItemsProvider =
+    //     Provider.of<SelectedItemsProvider>(context, listen: false);
     var basicProvider = Provider.of<BasicProvider>(context, listen: false);
     bool _showError = false;
     final localeProvider = Provider.of<LocaleProvider>(context,listen: true);
@@ -260,22 +260,23 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     settings.searchEngine = value;
                     browserModel.updateSettings(settings);
                   });
-                  if (value.name == 'Google') {
-                    selectedItemsProvider
-                        .updateIconValue('assets/images/Google 1.svg');
-                  } else if (value.name == 'Yahoo') {
-                    selectedItemsProvider
-                        .updateIconValue('assets/images/Yahoo 1.svg');
-                  } else if (value.name == 'Bing') {
-                    selectedItemsProvider
-                        .updateIconValue('assets/images/Bing 1.svg');
-                  } else if (value.name == 'DuckDuckGo') {
-                    selectedItemsProvider
-                        .updateIconValue('assets/images/DuckDuckGo 2.svg');
-                  } else if (value.name == 'Ecosia') {
-                    selectedItemsProvider
-                        .updateIconValue('assets/images/Ecosia.svg');
-                  }
+                    browserModel.updateIconValue(value.assetIcon);
+                  // if (value.name == 'Google') {
+                  //   selectedItemsProvider
+                  //       .updateIconValue('assets/images/Google 1.svg');
+                  // } else if (value.name == 'Yahoo') {
+                  //   selectedItemsProvider
+                  //       .updateIconValue('assets/images/Yahoo 1.svg');
+                  // } else if (value.name == 'Bing') {
+                  //   selectedItemsProvider
+                  //       .updateIconValue('assets/images/Bing 1.svg');
+                  // } else if (value.name == 'DuckDuckGo') {
+                  //   selectedItemsProvider
+                  //       .updateIconValue('assets/images/DuckDuckGo 2.svg');
+                  // } else if (value.name == 'Ecosia') {
+                  //   selectedItemsProvider
+                  //       .updateIconValue('assets/images/Ecosia.svg');
+                  // }
                 },
                 itemBuilder: ((context) {
                   return addSearchEngineProvider.allEngines.map((searchEngine) {

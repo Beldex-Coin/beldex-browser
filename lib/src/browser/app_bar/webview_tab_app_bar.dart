@@ -123,7 +123,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
             (await webViewController?.getUrl())?.toString() ?? "";
       }
     });
-    Provider.of<SelectedItemsProvider>(context, listen: false)
+    Provider.of<BrowserModel>(context, listen: false)
         .initSharedPreferences();
            // _configureTts(context);
     //  loadSearchShortcutListItems();
@@ -2288,13 +2288,13 @@ Future<Map<String, dynamic>?> extractReadableContent(
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
 
 
     url ??=
         WebUri(settings.searchEngine.url);
-        webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
-        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${selectedItemsProvider.fontSize.round()}');
+        webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
@@ -2306,12 +2306,12 @@ Future<Map<String, dynamic>?> extractReadableContent(
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
      final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+    //final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
 
 
     url ??=
         WebUri(settings.searchEngine.url);
-     webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
+     webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),

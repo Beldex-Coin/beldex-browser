@@ -31,9 +31,10 @@ class _AndroidSettingsState extends State<AndroidSettings> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final browserModel = Provider.of<BrowserModel>(context);
    // var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
-    final selectedItemProvider = Provider.of<SelectedItemsProvider>(context, listen: true);
-    double fontvalue =  selectedItemProvider.fontSize; 
+    //final selectedItemProvider = Provider.of<SelectedItemsProvider>(context, listen: true);
+    double fontvalue =  browserModel.fontSize; 
     // double fontSizePercentage =
     //     ((currentWebViewModel.settings?.textZoom) ?? 100.0).toDouble();
     var vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
@@ -57,7 +58,7 @@ class _AndroidSettingsState extends State<AndroidSettings> {
                 Expanded(
                   child: ListView(
                     children: _buildAndroidWebViewTabSettings(
-                        themeProvider, fontvalue, constraints,selectedItemProvider,vpnStatusProvider),
+                        themeProvider, fontvalue, constraints,vpnStatusProvider),
                   ),
                 ),
               ],
@@ -109,7 +110,7 @@ String getPercentage(double value) {
 
 
   List<Widget> _buildAndroidWebViewTabSettings(DarkThemeProvider themeProvider,
-      double fontvalue, BoxConstraints constraints,SelectedItemsProvider selectedItemProvider,VpnStatusProvider vpnStatusProvider) {
+      double fontvalue, BoxConstraints constraints,VpnStatusProvider vpnStatusProvider) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
@@ -172,8 +173,8 @@ String getPercentage(double value) {
 
             setState(() {
               fontvalue = value;
-               selectedItemProvider.updateFontSize(fontvalue);
-               print('The WEBVIEW model fontSize 4--- ${currentWebViewModel.settings?.minimumFontSize} --- ${selectedItemProvider.fontSize}');
+               browserModel.updateFontSize(fontvalue);
+               print('The WEBVIEW model fontSize 4--- ${currentWebViewModel.settings?.minimumFontSize} --- ${browserModel.fontSize}');
              // browserModel.updateSettings(currentWebViewModel);
               browserModel.save();
             });

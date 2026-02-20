@@ -4,6 +4,11 @@ import 'dart:ffi';
 import 'dart:math';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
+import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
+import 'package:beldex_browser/src/browser/models/browser_model.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
@@ -113,6 +118,17 @@ Map<String,dynamic> nearest = {};
 getNodeInitialSelection(basicProvider,context);
 
 
+WidgetsBinding.instance.addPostFrameCallback((_) {
+   final addSearchEngineProvider = Provider.of<AddSearchEngineProvider>(context, listen: false);
+    // final selectedItemProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+     final browserModel = Provider.of<BrowserModel>(context,listen: false);
+     final settings = browserModel.getSettings();
+   addSearchEngineProvider.clearSessionEngines(browserModel.getSettings(), browserModel,context);
+  // if(settings.searchEngine.name == 'Google'){
+  //   selectedItemProvider.updateIconValue('assets/images/Google 1.svg');
+  // }
+ });
+
     //WidgetsBinding.instance.addObserver(this);
     //getRandomExitData();
     // super.initState();
@@ -151,6 +167,19 @@ getNodeInitialSelection(basicProvider,context);
 //   });
 
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

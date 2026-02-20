@@ -10,6 +10,8 @@ import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 // import 'package:beldex_browser/src/browser/app_bar/sample_webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/searchengine_icon_placeholder.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/util.dart';
@@ -18,6 +20,7 @@ import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -589,7 +592,7 @@ final scannedValue = await showDialog<String>(
     final loc = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
-     final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
      final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
      final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     return Scaffold(
@@ -625,11 +628,19 @@ final scannedValue = await showDialog<String>(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            (browserModel.value.startsWith('http://') || browserModel.value.startsWith('https://')) ?
+            CachedNetworkImage(
+                            imageUrl: browserModel.value,
+                            width: 20,
+                            height: 20,
+                            errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:settings.searchEngine.name,size: 20,),
+                          )
+             :
             SvgPicture.asset(
-              selecteditemsProvider.value,
-              color: selecteditemsProvider.value == 'assets/images/Reddit 1.svg' ||
-                      selecteditemsProvider.value == 'assets/images/Wikipedia 1.svg' ||
-                      selecteditemsProvider.value == 'assets/images/twitter 1.svg'
+              browserModel.value,
+              color: browserModel.value == 'assets/images/Reddit 1.svg' ||
+                      browserModel.value == 'assets/images/Wikipedia 1.svg' ||
+                      browserModel.value == 'assets/images/twitter 1.svg'
                   ? themeProvider.darkTheme
                       ? Colors.white
                       : Colors.black
@@ -1363,13 +1374,13 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
     final browserModel = Provider.of<BrowserModel>(context, listen: false);
     final settings = browserModel.getSettings();
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+    //final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
     //browserModel.updateIsNewTab(false);
     url ??= settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty
         ? WebUri(settings.customUrlHomePage)
         : WebUri(settings.searchEngine.url);
- webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
-        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${selectedItemsProvider.fontSize.round()}');
+ webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
       webViewModel: WebViewModel(url: url,settings: webViewModel.settings),

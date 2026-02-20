@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:beldex_browser/ad_blocker_filter.dart';
+import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/favorite_model.dart';
 import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -11,6 +12,7 @@ import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'search_engine_model.dart';
 import 'package:collection/collection.dart';
@@ -71,6 +73,120 @@ class BrowserModel extends ChangeNotifier {
   int _currentTabIndex = -1;
   BrowserSettings _settings = BrowserSettings();
   late WebViewModel _currentWebViewModel;
+
+
+
+
+
+  List<int> _selectedItems = [];
+
+  List<int> get selectedItems => _selectedItems;
+
+  List<Item> items = [
+    Item('This time Search in', ''),
+    Item('Beldex Search Engine', 'assets/images/Beldex_logo_svg 1.svg'),
+    Item('Google', 'assets/images/Google 1.svg'),
+    Item('DuckDuckGo', 'assets/images/DuckDuckGo 2.svg'),
+    Item('Yahoo', 'assets/images/Yahoo 1.svg'),
+    Item('Bing', 'assets/images/Bing 1.svg'),
+    Item('Ecosia', 'assets/images/Ecosia.svg'),
+    Item('Baidu', 'assets/images/Baidu.svg'),
+    Item('Yandex', 'assets/images/Yandex.svg'),
+    Item('Youtube', 'assets/images/youtube.svg'),
+    Item('Twitter', 'assets/images/twitter 1.svg'),
+    Item('Wikipedia', 'assets/images/Wikipedia 1.svg'),
+    Item('Reddit', 'assets/images/Reddit 1.svg'),
+    Item('Search setting', 'assets/images/settings.svg')
+    // Item('Search setting','assets/images/settings.svg')
+    // Add more items as needed
+  ];
+
+ // late SharedPreferences _prefs;
+  String _value = 'assets/images/Google 1.svg';
+   double _fontSize = 8.0;
+  SelectedItemsProvider() {
+    initSharedPreferences();
+  }
+
+  String get value => _value;
+  double get fontSize => _fontSize;
+  Future<void> initSharedPreferences() async {
+   final _prefs = await SharedPreferences.getInstance();
+    String? storedValue = _prefs.getString('icon_value');
+    if (storedValue != null) {
+      _value = storedValue;
+      notifyListeners();
+    }
+     double? storedFontSize = _prefs.getDouble('fontSize');
+    if(storedFontSize != null){
+      _fontSize = storedFontSize;
+      notifyListeners();
+    }
+  }
+
+
+ void updateFontSize(double fontSizes)async{
+  final _prefs = await SharedPreferences.getInstance();
+  _fontSize = fontSizes;
+  notifyListeners();
+  await _prefs.setDouble('fontSize', fontSizes);
+ }
+
+
+
+  Future<void> updateIconValue(String newvalue) async {
+    final _prefs = await SharedPreferences.getInstance();
+    _value = newvalue;
+    notifyListeners();
+    await _prefs.setString('icon_value', newvalue);
+  }
+
+void updateIconWhenNotSerchEngine() async {
+    final _prefs = await SharedPreferences.getInstance();
+    final value = _prefs.getString('icon_value');
+    if(value == 'assets/images/youtube.svg' ||value == 'assets/images/Reddit 1.svg' || value == 'assets/images/Wikipedia 1.svg' || value == 'assets/images/twitter 1.svg'){
+      _value = 'assets/images/Google 1.svg';
+      notifyListeners();
+     await _prefs.setString('icon_value', _value);
+    }
+   
+  }
+  void initializeSelectedItems() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? selectedItemsStr = prefs.getStringList('selectedItems');
+    if (selectedItemsStr != null) {
+      _selectedItems = selectedItemsStr.map((e) => int.parse(e)).toList();
+      notifyListeners();
+    } else {
+      _selectedItems = [0, 2, 3, 4, 5, 6,7, 8, 9, 11,13]; // Default selected indices
+      prefs.setStringList(
+          'selectedItems', _selectedItems.map((e) => e.toString()).toList());
+      notifyListeners();
+    }
+  }
+
+  void toggleItem(int index) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_selectedItems.contains(index)) {
+      _selectedItems.remove(index);
+    } else {
+      _selectedItems.add(index);
+      _selectedItems.sort();
+    }
+
+    prefs.setStringList(
+        'selectedItems', _selectedItems.map((e) => e.toString()).toList());
+    notifyListeners();
+  }
+
+
+
+
+
+
+
+
+
 
   bool _showTabScroller = false;
 
@@ -213,6 +329,8 @@ setAdblocker() async {
 
   BrowserModel() {
     _currentWebViewModel = WebViewModel();
+    initializeSelectedItems();
+    updateIconWhenNotSerchEngine();
     setAdblocker();
   }
 
@@ -410,6 +528,7 @@ setAdblocker() async {
   Future<void> restore() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> browserData;
+    
     try {
       String? source = prefs.getString("browser");
       if (source != null) {
@@ -460,7 +579,11 @@ setAdblocker() async {
         // addTabs(webViewTabs);
        }
         //addTabs(webViewTabs);
-
+        if(settings.searchEngine.name == 'Google'){
+          updateIconValue('assets/images/Google 1.svg');
+         // await selectedItemsProvider.updateIconValue('assets/images/Google 1.svg');
+          print('THE SELECTED SEARCH ENGINE IN BROWSER MODEL1 --- ${settings.searchEngine} --- ${_value}');
+        }
         int currentTabIndex =
             browserData["currentTabIndex"] ?? _currentTabIndex;
         currentTabIndex = min(currentTabIndex, _webViewTabs.length - 1);

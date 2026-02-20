@@ -304,17 +304,23 @@ Container defaultSearchEngineList(DarkThemeProvider themeProvider) {
                }
                 browserModel.updateSettings(settings);
               });
-              if(index == 0){
-                 provider.updateIconValue('assets/images/Google 1.svg');
-              }else if(index == 1){
-                 provider.updateIconValue('assets/images/Yahoo 1.svg');
-              }else if(index == 2){
-                provider.updateIconValue('assets/images/Bing 1.svg');
-              }else if(index == 3){
-                provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
-              }else if(index == 4){
-                provider.updateIconValue('assets/images/Ecosia.svg');
-              }
+
+              browserModel.updateIconValue(addSearchEngineProvider.allEngines[index].assetIcon);
+              // if(index == 0){
+              //    provider.updateIconValue('assets/images/Google 1.svg');
+              // }else if(index == 1){
+              //    provider.updateIconValue('assets/images/Yahoo 1.svg');
+              // }else if(index == 2){
+              //   provider.updateIconValue('assets/images/Bing 1.svg');
+              // }else if(index == 3){
+              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
+              // }else if(index == 4){
+              //   provider.updateIconValue('assets/images/Ecosia.svg');
+              // }else if(index == 5){
+              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
+              // }else if(index == 6){
+              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
+              // }
              
             },
             title: Container(
@@ -597,6 +603,7 @@ class _SearchShortcutsState extends State<SearchShortcuts> {
                     fontWeight: FontWeight.w500),
               ),
             ),
+          // manageShortcuts(themeProvider),
             manageSearchShortcuts(themeProvider)
           ],
         ),

@@ -708,7 +708,7 @@ String currentUrl = '';
     var themeProvider = Provider.of<DarkThemeProvider>(context);
     var webviewmodel = browserModel.getCurrentTab()?.webViewModel;
     var webviewController = webviewmodel?.webViewController;
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final ttsProvider = Provider.of<TtsProvider>(context);
 final appLocaleProvider = Provider.of<LocaleProvider>(context);
@@ -737,7 +737,7 @@ final appLocaleProvider = Provider.of<LocaleProvider>(context);
                               Image.memory(screenshotData, fit: BoxFit.cover))
                       : null,
                 );
-                webViewTab.webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.toInt();
+                webViewTab.webViewModel.settings?.minimumFontSize = browserModel.fontSize.toInt();
                 var url = webViewTab.webViewModel.url;
                 setState(() {
                   currentUrl = url.toString();
