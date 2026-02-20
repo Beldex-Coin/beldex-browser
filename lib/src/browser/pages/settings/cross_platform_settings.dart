@@ -526,223 +526,238 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                     // ),
                                     StatefulBuilder(
                                         builder: (context, setState) {
-                                      return Row(
-                                          // mainAxisAlignment: MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 8),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: themeProvider
-                                                                .darkTheme
-                                                            ? Color(0xff42425F)
-                                                            : Color(
-                                                                0xffDADADA)),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                child: TextField(
-                                                  onSubmitted: (value) {
-                                                    if (value.isEmpty ||
-                                                        value == '') {
-                                                      settings.homePageEnabled =
-                                                          false;
-                                                      browserModel
-                                                          .updateSettings(
-                                                              settings);
-                                                      setState(() {
-                                                        _showError = true;
-                                                        return;
-                                                      });
-                                                    } else if(!isValidURL(value)){
-                                                   _showError = true;
-                                                       return ;
-                                                     }else {
-                                                      setState(() {
-                                                        settings.customUrlHomePage =
-                                                            formatUrl(
-                                                                value.trim());
-
-                                                        settings.homePageEnabled =
-                                                            true;
-                                                        browserModel
-                                                            .updateSettings(
-                                                                settings);
-                                                        Navigator.pop(context);
-                                                      });
-                                                    }
-                                                  },
-                                                  keyboardType:
-                                                      TextInputType.url,
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    contentPadding: EdgeInsets.only(left:5),
-                                                    hintText:loc.customUrlHomePage,
-                                                        //'Custom URL Home Page',
-                                                    hintStyle: TextStyle(
-                                                      fontSize: 14,
-                                                        color:  const Color(0xff77778B),
-                                                                fontWeight: FontWeight.w400
-                                                                ),
-                                                  ),
-                                                  controller:
-                                                      _customHomePageController,
-                                                      magnifierConfiguration:TextMagnifierConfiguration.disabled,
-                                                contextMenuBuilder: (context, editableTextState) {
-                      //final List<ContextMenuButtonItem>
-                      buttonItems = editableTextState.contextMenuButtonItems;
-
-                      editableState = editableTextState;
-
-                      buttonItems.clear(); // Clear all default options
-                      if (_customHomePageController.text.isEmpty) {
-                        buttonItems.add(ContextMenuButtonItem(
-                            label:loc.paste,// 'Paste',
-                            onPressed: () {
-                              Clipboard.getData('text/plain').then((value) {
-                                if (value != null && value.text != null) {
-                                  final text = _customHomePageController.text;
-                                  //final selection = _searchController.selection;
-                                  final selection = editableTextState
-                                      .textEditingValue.selection;
-                                  final newText = text.replaceRange(
-                                    selection.start,
-                                    selection.end,
-                                    value.text!,
-                                  );
-                                  print(
-                                      'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                  _customHomePageController.text = newText;
-                                  // if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
-                                  //   print("The User Message Contains Url 1");
-                                  // canShowSearchAI= '';
-                                  //   }else
-                                  //     canShowSearchAI= _searchController.text;
-                         // print('BELDEX AI ---------> $canShowSearchAI');
-        
-                                  //canShowSearchAI = _searchController.text;
-                                  final newSelection = TextSelection.collapsed(
-                                    offset:
-                                        selection.start + value.text!.length,
-                                  );
-                                  _customHomePageController.selection = newSelection;
-                                  editableTextState.hideToolbar(false);
-                                }
+                                          //  Local dialog state
+                  bool isButtonEnabled =
+                      _customHomePageController.text.trim().isNotEmpty;
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                              // mainAxisAlignment: MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                    decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: themeProvider
+                                                                    .darkTheme
+                                                                ? Color(0xff42425F)
+                                                                : Color(
+                                                                    0xffDADADA)),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8)),
+                                                    child: TextField(
+                                                      onSubmitted: (value) {
+                                                        if (value.isEmpty ||
+                                                            value == '') {
+                                                          settings.homePageEnabled =
+                                                              false;
+                                                          browserModel
+                                                              .updateSettings(
+                                                                  settings);
+                                                          setState(() {
+                                                            _showError = true;
+                                                            return;
+                                                          });
+                                                        } else if(!isValidURL(value)){
+                                                       _showError = true;
+                                                           return ;
+                                                         }else {
+                                                          setState(() {
+                                                            settings.customUrlHomePage =
+                                                                formatUrl(
+                                                                    value.trim());
+                                          
+                                                            settings.homePageEnabled =
+                                                                true;
+                                                            browserModel
+                                                                .updateSettings(
+                                                                    settings);
+                                                            Navigator.pop(context);
+                                                          });
+                                                        }
+                                                      },
+                                                      onChanged: (value){
+                                                          setState(() {
+                                _showError = false;
+                                isButtonEnabled =
+                                    value.trim().isNotEmpty;
                               });
-                            }));
-                      } else {
-                        buttonItems.clear();
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.cut,// 'Cut',
-                          onPressed: () {
-                            editableTextState
-                                .cutSelection(SelectionChangedCause.tap);
-                            final TextEditingController controller =
-                                editableTextState.widget.controller;
-                            final TextEditingValue value = controller.value;
-                            final TextSelection selection = value.selection;
-                            if (!selection.isCollapsed) {
-                              final String cutText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(ClipboardData(text: cutText));
-
-                              final String newText = value.text.replaceRange(
-                                  selection.start, selection.end, '');
-                              controller.value = TextEditingValue(
-                                  text: newText,
-                                  selection: TextSelection.collapsed(
-                                      offset: selection.start));
-
-                              final String findOnPageText =
-                                  _customHomePageController.text;
-                              final String newFindOnPageText =
-                                  findOnPageText.replaceRange(
-                                      selection.start, selection.end, '');
-
-                              print(
-                                  'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
-                              _customHomePageController.text =
-                                  findOnPageText; //newFindOnPageText;
-                            }
-                            //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                            //   editableTextState.cutSelection(SelectionChangedCause.tap);
-                            //   _searchController.clear();
-                            //   //editableTextState.hideToolbar(false);
-                          },
-                        ));
-
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.copy,// 'Copy',
-                          onPressed: () {
-                            final TextEditingValue value =
-                                editableTextState.textEditingValue;
-                            final TextSelection selection = value.selection;
-
-                            if (!selection.isCollapsed) {
-                              final String selectedText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(
-                                  ClipboardData(text: selectedText));
-                              print("Copied value --> $selectedText");
-                            }
-                            editableTextState.hideToolbar(false);
-                          },
-                        ));
-                        if (!isAllTextSelected(
-                            editableTextState.textEditingValue.selection,
-                            editableTextState.textEditingValue.text)) {
-                          buttonItems.add(ContextMenuButtonItem(
-                            label:loc.selectAll, // 'Select All',
-                            onPressed: () {
-                              // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                              editableTextState
-                                  .selectAll(SelectionChangedCause.tap);
-                              //editableTextState.hideToolbar(false);
-                            },
-                          ));
-                        }
-                        // Add a custom "Paste" button
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.paste, // 'Paste',
-                          onPressed: () {
-                            Clipboard.getData('text/plain').then((value) {
-                              if (value != null && value.text != null) {
-                                final text = _customHomePageController.text;
-                                // final selection = _searchController.selection;
-                                final selection = editableTextState
-                                    .textEditingValue.selection;
-                                final newText = text.replaceRange(
-                                  selection.start,
-                                  selection.end,
-                                  value.text!,
-                                );
-                                print(
-                                    'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                _customHomePageController.text = newText;
-                                final newSelection = TextSelection.collapsed(
-                                  offset: selection.start + value.text!.length,
-                                );
-                                _customHomePageController.selection = newSelection;
-                                editableTextState.hideToolbar(false);
-                              }
-                            });
-                          },
-                        ));
-                      }
-                      return  AdaptiveTextSelectionToolbar.buttonItems(
-                        anchors: editableTextState.contextMenuAnchors,
-                        buttonItems: buttonItems,
-                      );
-                    },
+                          
+                                                      },
+                                                      keyboardType:
+                                                          TextInputType.url,
+                                                      decoration: InputDecoration(
+                                                        border: InputBorder.none,
+                                                        contentPadding: EdgeInsets.only(left:5),
+                                                        hintText:loc.customUrlHomePage,
+                                                            //'Custom URL Home Page',
+                                                        hintStyle: TextStyle(
+                                                          fontSize: 14,
+                                                            color:  const Color(0xff77778B),
+                                                                    fontWeight: FontWeight.w400
+                                                                    ),
+                                                      ),
+                                                      controller:
+                                                          _customHomePageController,
+                                                          magnifierConfiguration:TextMagnifierConfiguration.disabled,
+                                                    contextMenuBuilder: (context, editableTextState) {
+                                                                //final List<ContextMenuButtonItem>
+                                                                buttonItems = editableTextState.contextMenuButtonItems;
+                                          
+                                                                editableState = editableTextState;
+                                          
+                                                                buttonItems.clear(); // Clear all default options
+                                                                if (_customHomePageController.text.isEmpty) {
+                                                                  buttonItems.add(ContextMenuButtonItem(
+                                                                      label:loc.paste,// 'Paste',
+                                                                      onPressed: () {
+                                                                        Clipboard.getData('text/plain').then((value) {
+                                                                          if (value != null && value.text != null) {
+                                                                            final text = _customHomePageController.text;
+                                                                            //final selection = _searchController.selection;
+                                                                            final selection = editableTextState
+                                          .textEditingValue.selection;
+                                                                            final newText = text.replaceRange(
+                                                                              selection.start,
+                                                                              selection.end,
+                                                                              value.text!,
+                                                                            );
+                                                                            print(
+                                          'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                                                            _customHomePageController.text = newText;
+                                                                            // if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                                                            //   print("The User Message Contains Url 1");
+                                                                            // canShowSearchAI= '';
+                                                                            //   }else
+                                                                            //     canShowSearchAI= _searchController.text;
+                                                                   // print('BELDEX AI ---------> $canShowSearchAI');
                                                   
-                                                ),
-                                              ),
-                                            )
-                                          ]);
-                                    }),
-                                    Visibility(
+                                                                            //canShowSearchAI = _searchController.text;
+                                                                            final newSelection = TextSelection.collapsed(
+                                                                              offset:
+                                            selection.start + value.text!.length,
+                                                                            );
+                                                                            _customHomePageController.selection = newSelection;
+                                                                            editableTextState.hideToolbar(false);
+                                                                          }
+                                                                        });
+                                                                      }));
+                                                                } else {
+                                                                  buttonItems.clear();
+                                                                  buttonItems.add(ContextMenuButtonItem(
+                                                                    label:loc.cut,// 'Cut',
+                                                                    onPressed: () {
+                                                                      editableTextState
+                                                                          .cutSelection(SelectionChangedCause.tap);
+                                                                      final TextEditingController controller =
+                                                                          editableTextState.widget.controller;
+                                                                      final TextEditingValue value = controller.value;
+                                                                      final TextSelection selection = value.selection;
+                                                                      if (!selection.isCollapsed) {
+                                                                        final String cutText =
+                                                                            selection.textInside(value.text);
+                                                                        Clipboard.setData(ClipboardData(text: cutText));
+                                          
+                                                                        final String newText = value.text.replaceRange(
+                                                                            selection.start, selection.end, '');
+                                                                        controller.value = TextEditingValue(
+                                                                            text: newText,
+                                                                            selection: TextSelection.collapsed(
+                                          offset: selection.start));
+                                          
+                                                                        final String findOnPageText =
+                                                                            _customHomePageController.text;
+                                                                        final String newFindOnPageText =
+                                                                            findOnPageText.replaceRange(
+                                          selection.start, selection.end, '');
+                                          
+                                                                        print(
+                                                                            'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                                                                        _customHomePageController.text =
+                                                                            findOnPageText; //newFindOnPageText;
+                                                                      }
+                                                                      //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                                                      //   editableTextState.cutSelection(SelectionChangedCause.tap);
+                                                                      //   _searchController.clear();
+                                                                      //   //editableTextState.hideToolbar(false);
+                                                                    },
+                                                                  ));
+                                          
+                                                                  buttonItems.add(ContextMenuButtonItem(
+                                                                    label:loc.copy,// 'Copy',
+                                                                    onPressed: () {
+                                                                      final TextEditingValue value =
+                                                                          editableTextState.textEditingValue;
+                                                                      final TextSelection selection = value.selection;
+                                          
+                                                                      if (!selection.isCollapsed) {
+                                                                        final String selectedText =
+                                                                            selection.textInside(value.text);
+                                                                        Clipboard.setData(
+                                                                            ClipboardData(text: selectedText));
+                                                                        print("Copied value --> $selectedText");
+                                                                      }
+                                                                      editableTextState.hideToolbar(false);
+                                                                    },
+                                                                  ));
+                                                                  if (!isAllTextSelected(
+                                                                      editableTextState.textEditingValue.selection,
+                                                                      editableTextState.textEditingValue.text)) {
+                                                                    buttonItems.add(ContextMenuButtonItem(
+                                                                      label:loc.selectAll, // 'Select All',
+                                                                      onPressed: () {
+                                                                        // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                                                        editableTextState
+                                                                            .selectAll(SelectionChangedCause.tap);
+                                                                        //editableTextState.hideToolbar(false);
+                                                                      },
+                                                                    ));
+                                                                  }
+                                                                  // Add a custom "Paste" button
+                                                                  buttonItems.add(ContextMenuButtonItem(
+                                                                    label:loc.paste, // 'Paste',
+                                                                    onPressed: () {
+                                                                      Clipboard.getData('text/plain').then((value) {
+                                                                        if (value != null && value.text != null) {
+                                                                          final text = _customHomePageController.text;
+                                                                          // final selection = _searchController.selection;
+                                                                          final selection = editableTextState
+                                                                              .textEditingValue.selection;
+                                                                          final newText = text.replaceRange(
+                                                                            selection.start,
+                                                                            selection.end,
+                                                                            value.text!,
+                                                                          );
+                                                                          print(
+                                                                              'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                                                          _customHomePageController.text = newText;
+                                                                          final newSelection = TextSelection.collapsed(
+                                                                            offset: selection.start + value.text!.length,
+                                                                          );
+                                                                          _customHomePageController.selection = newSelection;
+                                                                          editableTextState.hideToolbar(false);
+                                                                        }
+                                                                      });
+                                                                    },
+                                                                  ));
+                                                                }
+                                                                return  AdaptiveTextSelectionToolbar.buttonItems(
+                                                                  anchors: editableTextState.contextMenuAnchors,
+                                                                  buttonItems: buttonItems,
+                                                                );
+                                                              },
+                                                      
+                                                    ),
+                                                  ),
+                                                )
+                                              ]),
+                                       
+                                       
+                                       Visibility(
                                       visible: _showError,
                                       child: TextWidget(
                                        text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
@@ -754,19 +769,23 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8.0),
                                       child: MaterialButton(
-                                        color: Color(0xff0BA70F), //const Color(0xff00B134),
-                                        disabledColor: Color(0xff2C2C3B),
+                                        color: isButtonEnabled ? Color(0xff0BA70F) : Colors.grey, //const Color(0xff00B134),
+                                        disabledColor:themeProvider.darkTheme ? Color(0xff2C2C3B) : Colors.grey.shade100,
                                         minWidth: double.maxFinite,
                                         height: 50,
                                         child:  Text(loc.ok, // 'OK',
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color:isButtonEnabled ? Colors.white : themeProvider
+                                                                    .darkTheme
+                                                                ? Color(0xff42425F)
+                                                                : Color(
+                                                                    0xffDADADA),
                                                 fontSize: 18)),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
                                               10.0), // Adjust the radius as needed
                                         ),
-                                        onPressed: () {
+                                        onPressed:isButtonEnabled ? () {
                                          setState(() {
                                             if (_customHomePageController
                                               .text.isEmpty) {
@@ -794,9 +813,69 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                                            // });
                                           }
                                           });
-                                        },
+                                        }:null,
                                       ),
                                     )
+                                       
+                                       
+                                        ],
+                                      );
+                                    }),
+                                    // Visibility(
+                                    //   visible: _showError,
+                                    //   child: TextWidget(
+                                    //    text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
+                                    //     style: TextStyle(color: Colors.red),
+                                    //   ),
+                                    // ),
+                                    // SizedBox(height: 8,),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.symmetric(
+                                    //       vertical: 8.0),
+                                    //   child: MaterialButton(
+                                    //     color: Color(0xff0BA70F), //const Color(0xff00B134),
+                                    //     disabledColor: Color(0xff2C2C3B),
+                                    //     minWidth: double.maxFinite,
+                                    //     height: 50,
+                                    //     child:  Text(loc.ok, // 'OK',
+                                    //         style: TextStyle(
+                                    //             color: Colors.white,
+                                    //             fontSize: 18)),
+                                    //     shape: RoundedRectangleBorder(
+                                    //       borderRadius: BorderRadius.circular(
+                                    //           10.0), // Adjust the radius as needed
+                                    //     ),
+                                    //     onPressed: () {
+                                    //      setState(() {
+                                    //         if (_customHomePageController
+                                    //           .text.isEmpty) {
+                                    //         settings.homePageEnabled = false;
+                                    //         //setState(() {
+                                    //           _showError = true;
+                                    //           return;
+                                    //         //});
+                                    //       }else if(!isValidURL(_customHomePageController.text)){
+                                    //          _showError = true;
+                                    //          return ;
+                                    //       } else {
+                                    //         //setState(() {
+                                    //           // _customHomePageController.text = settings.customUrlHomePage;
+                                    //           _showError = false;
+                                    //           settings.customUrlHomePage =
+                                    //               formatUrl(
+                                    //                   (_customHomePageController
+                                    //                           .text)
+                                    //                       .trim());
+                                    //           settings.homePageEnabled = true;
+                                    //           browserModel
+                                    //               .updateSettings(settings);
+                                    //           Navigator.pop(context);
+                                    //        // });
+                                    //       }
+                                    //       });
+                                    //     },
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               ),
