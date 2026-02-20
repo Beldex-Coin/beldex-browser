@@ -7,6 +7,7 @@ import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
@@ -139,6 +140,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
         final loc = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
+    final addSearchEngineProvider = Provider.of<AddSearchEngineProvider>(context,listen: false);
 
 //
 
@@ -276,7 +278,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   }
                 },
                 itemBuilder: ((context) {
-                  return SearchEngines.map((searchEngine) {
+                  return addSearchEngineProvider.allEngines.map((searchEngine) {
                     return PopupMenuItem<SearchEngineModel>(
                         enabled: true,
                         value: searchEngine,
