@@ -470,7 +470,9 @@ void callSummaryRetry(BuildContext context) async {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(loc.hideSummarise,style: TextStyle(fontFamily: 'Poppins',fontSize: 13,overflow: TextOverflow.ellipsis,),maxLines: 2,),
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(loc.hideSummarise,maxLines:1,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',fontSize: 10,overflow: TextOverflow.ellipsis,))),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: SvgPicture.asset(
@@ -493,8 +495,11 @@ void callSummaryRetry(BuildContext context) async {
                             children: [
                               SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical:10.0),
-                                child: Text(loc.thereWasAnErrorGenerateResponse,style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),),
+                                padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 8.0),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(StringConstants.retryMessage, //loc.thereWasAnErrorGenerateResponse,
+                                  textAlign: TextAlign.center,maxLines: 2,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),)),
                               ),
                               // Padding(
                               //            padding: const EdgeInsets.symmetric(vertical: 10.0),

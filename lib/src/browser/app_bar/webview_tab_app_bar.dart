@@ -24,6 +24,7 @@ import 'package:beldex_browser/src/browser/pages/developers/main.dart';
 import 'package:beldex_browser/src/browser/pages/download_page.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_screen.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
@@ -45,6 +46,7 @@ import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -450,6 +452,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     var settings = browserModel.getSettings();
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     var webViewModel = Provider.of<WebViewModel>(context, listen: true);
+    final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
     final loc = AppLocalizations.of(context)!;
     var webViewController = webViewModel.webViewController;
     final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
@@ -685,7 +688,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                                 fontWeight: FontWeight
                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
                             ),
-                        style: theme.textTheme.bodyMedium,
+                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
                       ):
                       TextField(
                         readOnly: true,
@@ -726,7 +729,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                                 fontWeight: FontWeight
                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
                             ),
-                        style:theme.textTheme.bodyMedium,
+                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
                       ),
                     ),
                   ),
@@ -1441,9 +1444,11 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   child: TextWidget(text:loc.newtab, //choice,
-                                      style: theme
+                                      style: isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
                                           .textTheme
-                                          .bodySmall //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme
+                                          .bodySmall  //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
                                       ),
                                 ),
                               ]),
@@ -1471,7 +1476,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                   const EdgeInsets.symmetric(horizontal: 4.0),
                               child: TextWidget(
                                text: loc.favorites,// choice,
-                                style: theme.textTheme.bodySmall,
+                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                               ),
                             ),
                             // const Icon(
@@ -1499,7 +1507,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: TextWidget(text:loc.changeNode, //choice,
-                                  style: theme.textTheme.bodySmall),
+                                  style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                             ),
                           ]),
                     ),
@@ -1531,7 +1542,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(text:loc.webArchives, //choice,
-                              style: theme.textTheme.bodySmall),
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1553,7 +1567,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(text:loc.beldexAI, //choice,
-                              style: theme.textTheme.bodySmall),
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1573,7 +1590,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(text:loc.downloads, //choice,
-                              style: theme.textTheme.bodySmall),
+                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
                         ),
                       ]),
                     ),
@@ -1611,7 +1631,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: TextWidget(
                             text:loc.desktopMode, //choice,
-                            style: theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1647,7 +1670,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
                            text:loc.share, //choice,
-                            style: theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1669,7 +1695,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
                            text:loc.settings, //choice,
-                            style:theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) :theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1705,7 +1734,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
                            text:loc.findOnPage, // choice,
-                            style: theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1731,7 +1763,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                   horizontal: 8.0, vertical: 5),
                               child: TextWidget(
                                text:loc.dark, //choice,
-                                style: theme.textTheme.bodySmall,
+                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                               ),
                             ),
                           ]),
@@ -1760,7 +1795,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
                            text:loc.about, //choice,
-                            style: theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1782,7 +1820,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: TextWidget(
                            text:loc.reportAnIssue, //choice,
-                            style: theme.textTheme.bodySmall,
+                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
                           ),
                         ),
                       ]),
@@ -1808,7 +1849,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                       horizontal: 7.0),
                                   child: TextWidget(
                                    text:loc.quit, // choice,
-                                    style:
+                                    style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                                      theme
+                                          .textTheme
+                                          .bodySmall!.copyWith(fontSize: 9) :
                                         theme.textTheme.bodySmall,
                                   ),
                                 ),
@@ -2145,7 +2189,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
           insetPadding: EdgeInsets.all(20),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 170,
+            //height: 170,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: themeProvider.darkTheme
@@ -2186,7 +2230,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           minWidth: double.maxFinite,
                           height: 50,
                           child: TextWidget(text:loc.cancel, // 'Cancel',
-                           style: TextStyle(fontSize: 18)),
+                           style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed

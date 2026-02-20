@@ -815,60 +815,128 @@ try{
                                   // : vpnStatusProvider.value == 'Connected'
                                   // ? () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Browser()))
                                   : null,
-                              child: Container(
-                                width: constraint.maxWidth / 1.6,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                    color: vpnStatusProvider.value ==
-                                            'Disconnected'
-                                        ? Color(0xff00B134)
-                                        : themeProvider.darkTheme
-                                            ? Color(0xff282836)
-                                            : Color(0xffF3F3F3),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: vpnStatusProvider.value == 'Disconnected'
-                                    ? Center(
-                                        child: Text(
-                                         loc.connect,
-                                          // vpnStatusProvider.value == 'Disconnected'
-                                          //     ? 'Connect'
-                                          //     : vpnStatusProvider.value == 'Connected'
-                                          //         ? 'Connecting..'
-                                          //         : vpnStatusProvider.value,
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            themeProvider.darkTheme
-                                                ? 'assets/images/Load.gif'
-                                                : 'assets/images/Load_white_theme.gif',
-                                            height: 30,
-                                            width: 40,
-                                          ),
-                                          Text(
-                                           loc.connecting,
-                                            // vpnStatusProvider.value == 'Disconnected'
-                                            //     ? 'Connect'
-                                            //     : vpnStatusProvider.value == 'Connected'
-                                            //         ? 'Connecting..'
-                                            //         : vpnStatusProvider.value,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                              ),
+                              child: 
+                              IntrinsicWidth(
+  child: ConstrainedBox(
+    constraints: BoxConstraints(
+      minWidth: constraint.maxWidth / 1.6, // same width as Connect
+      maxWidth: constraint.maxWidth * 0.95, // allow expansion limit
+    ),
+    child: Container(
+      height: 55,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: vpnStatusProvider.value == 'Disconnected'
+            ? const Color(0xff00B134)
+            : themeProvider.darkTheme
+                ? const Color(0xff282836)
+                : const Color(0xffF3F3F3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+
+      child: vpnStatusProvider.value == 'Disconnected'
+          ? Center(
+              child: Text(
+                loc.connect,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            )
+
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  themeProvider.darkTheme
+                      ? 'assets/images/Load.gif'
+                      : 'assets/images/Load_white_theme.gif',
+                  height: 28,
+                  width: 28,
+                ),
+                const SizedBox(width: 8),
+
+                Flexible(
+                  child: Text(
+                    loc.connecting,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: themeProvider.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    ),
+  ),
+)
+
+                              // Container(
+                              //   width: constraint.maxWidth / 1.6,
+                              //   height: 55,
+                              //   decoration: BoxDecoration(
+                              //       color: vpnStatusProvider.value ==
+                              //               'Disconnected'
+                              //           ? Color(0xff00B134)
+                              //           : themeProvider.darkTheme
+                              //               ? Color(0xff282836)
+                              //               : Color(0xffF3F3F3),
+                              //       borderRadius: BorderRadius.circular(10)),
+                              //   child: vpnStatusProvider.value == 'Disconnected'
+                              //       ? Center(
+                              //           child: Text(
+                              //            loc.connect,
+                              //             // vpnStatusProvider.value == 'Disconnected'
+                              //             //     ? 'Connect'
+                              //             //     : vpnStatusProvider.value == 'Connected'
+                              //             //         ? 'Connecting..'
+                              //             //         : vpnStatusProvider.value,
+                                          
+                              //             style: TextStyle(
+                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                              //                 fontWeight: FontWeight.w600,
+                              //                 color: Colors.white),
+                              //             textAlign: TextAlign.center,
+                              //           ),
+                              //         )
+                              //       : 
+                              //       Row(
+                              //           mainAxisSize: MainAxisSize.min,
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           children: [
+                              //             Image.asset(
+                              //               themeProvider.darkTheme
+                              //                   ? 'assets/images/Load.gif'
+                              //                   : 'assets/images/Load_white_theme.gif',
+                              //               height: 30,
+                              //               width: 40,
+                              //             ),
+                              //             Text(
+                              //              loc.connecting,
+                              //               // vpnStatusProvider.value == 'Disconnected'
+                              //               //     ? 'Connect'
+                              //               //     : vpnStatusProvider.value == 'Connected'
+                              //               //         ? 'Connecting..'
+                              //               //         : vpnStatusProvider.value,
+                              //               overflow: TextOverflow.ellipsis,
+                              //               maxLines: 2,
+                              //               style: TextStyle(
+                              //                 fontWeight: FontWeight.w600,
+                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              // ),
                             );
                           }),
                           SizedBox(height: 10,),

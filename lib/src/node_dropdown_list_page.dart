@@ -832,10 +832,13 @@ void setRandomNode() async {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
-                      child: Text( loc.switchNode,
-                       // 'Switch Node',
-                        style: TextStyle(fontSize: 18 ,fontWeight: FontWeight.w600,color: !isChangeNodeEnable ? themeProvider.darkTheme? Color(0xff6D6D81) : Color(0xffC5C5C5) :  Colors.white //: Colors.black
-                         ),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text( loc.switchNode,
+                         // 'Switch Node',
+                          style: TextStyle(fontSize: 18 ,fontWeight: FontWeight.w600,color: !isChangeNodeEnable ? themeProvider.darkTheme? Color(0xff6D6D81) : Color(0xffC5C5C5) :  Colors.white //: Colors.black
+                           ),
+                        ),
                       ),
                     )
                   ],
