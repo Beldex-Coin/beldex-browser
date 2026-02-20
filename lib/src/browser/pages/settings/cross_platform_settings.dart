@@ -456,11 +456,30 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
 
                       if (value) {
                         //_customHomePageController.text = settings.customUrlHomePage;
-
+                        
                         showDialog(
                           context: context,
                           // barrierDismissible: false,
                           builder: (context) {
+
+
+                           // SHOW SAVED HOMEPAGE URL IF ALREADY SET
+            // if (settings.homePageEnabled &&
+            //     settings.customUrlHomePage.trim().isNotEmpty) {
+            //   _customHomePageController.text =
+            //       settings.customUrlHomePage;
+            // } else {
+            //   _customHomePageController.clear();
+            // }
+
+
+               if(!isValidURL(_customHomePageController.text.trim())){
+                 _customHomePageController.clear();
+               }
+
+
+
+
                             return Dialog(
                               backgroundColor: themeProvider.darkTheme
                                   ? const Color(0xff282836)
