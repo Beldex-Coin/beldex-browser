@@ -252,7 +252,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get downloading => '다운로드 중';
 
   @override
-  String get completed => 'Completed';
+  String get completed => '완료되었습니다';
 
   @override
   String get fileDownloaded => '파일이 성공적으로 다운로드되었습니다';
