@@ -11,6 +11,7 @@ import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
@@ -522,6 +523,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
         final loc = AppLocalizations.of(context)!;
+        final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -531,7 +533,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
           insetPadding:const EdgeInsets.all(20),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 170,
+            //height: 170,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: themeProvider.darkTheme
@@ -572,7 +574,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           minWidth: double.maxFinite,
                           height: 50,
                           child: TextWidget(text:loc.cancel ,// 'Cancel',
-                           style: TextStyle(fontSize: 18)),
+                           style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -600,7 +602,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           height: 50,
                           child: TextWidget( text:loc.quit, // 'Quit',
                               style:
-                                  TextStyle(color: Colors.red, fontSize: 18)),
+                                  TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed

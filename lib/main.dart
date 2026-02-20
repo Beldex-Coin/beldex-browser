@@ -14,6 +14,7 @@ import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/lang_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
@@ -433,6 +434,15 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           routes: {
             '/': (context) => const ConnectVpnHome() //Browser(),
           },
+           builder: (context, child) {
+          final l10n = AppLocalizations.of(context);
+
+          if (l10n != null) {
+            context.read<DownloadProvider>().setLocalizationObject(l10n);
+          }
+
+          return child!;
+        },
         );
       },
     ));

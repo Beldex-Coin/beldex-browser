@@ -915,7 +915,7 @@ final scannedValue = await showDialog<String>(
                         hintText:loc.searchOrEnterAddress,
                         hintStyle: TextStyle(
                             color: const Color(0xff6D6D81),
-                            fontSize: 14.0,
+                            fontSize:isLengthyLanguageInList(appLocaleProvider.selectedLanguage) ? 9 : 14.0,
                             fontWeight: FontWeight.normal),
                             ),
                     style: theme.textTheme.bodyMedium,

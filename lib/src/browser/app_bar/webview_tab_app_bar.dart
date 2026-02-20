@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
@@ -680,7 +681,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
                             contentPadding: const EdgeInsets.only(
                                 top: 5.0, right: 10.0, bottom: 10.0),
                             border: InputBorder.none,
-                            hintText:loc.searchOrEnterAddress, // "Search or enter Address",
+                            hintText: loc.searchOrEnterAddress, // "Search or enter Address",
                             hintStyle: TextStyle(
                                 color: themeProvider.darkTheme
                                     ?const Color(0xff6D6D81)
@@ -1110,6 +1111,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
     final loc = AppLocalizations.of(context)!;
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen:true);
         final ttsProvider = Provider.of<TtsProvider>(context);
+        final localeProvider =  Provider.of<LocaleProvider>(context);
 
     return Container(
       //color: Colors.yellow,
@@ -2180,6 +2182,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
         final loc = AppLocalizations.of(context)!;
+        final localeProvider = Provider.of<LocaleProvider>(context,listen:false);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -2258,7 +2261,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           height: 50,
                           child: TextWidget(text:loc.quit, //'Quit',
                               style:
-                                  TextStyle(color: Colors.red, fontSize: 18)),
+                                  TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed

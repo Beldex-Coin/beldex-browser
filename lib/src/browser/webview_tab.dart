@@ -948,8 +948,8 @@ line-height:27px;
         </div></div>
         <div class="footer" id="footer">
             <p class="title-text">Change Node</p>
-            <p class="content-style">Exit node <span class="content-text">${await getConnectedExitnode()}</span> has experienced unprecedented traffic. Please click on <span class="content-text">Change Node</span> to switch exit node.</p>
-            <button class="change-button" id="changeNodeButton">Change node</button>
+            <p class="content-style">Exit node <span class="content-text">${await getConnectedExitnode()}</span> ${loc.hasExperiancedTraffic} <span class="content-text">${loc.changeNode}</span> ${loc.toSwitchExitnode}.</p>
+            <button class="change-button" id="changeNodeButton">${loc.changeNode}</button>
         </div>
     </div>
 
@@ -1711,8 +1711,10 @@ String getDownloadFile(String name){
                   ),
                 ),
                 Text( 
-                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. \n ${loc.areYouSure}',
+                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
                   textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
                 ),
                 Row(
                   children: [

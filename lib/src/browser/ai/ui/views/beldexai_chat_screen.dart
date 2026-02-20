@@ -816,7 +816,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                         '';
                                                 Future.delayed(Duration(milliseconds: 100),(){});
                                                 model.getTextAndSummariseInfo(
-                                                    webViewModel,aiModelProvider.selectedModel
+                                                    webViewModel,aiModelProvider.selectedModel,loc
                                                     );
                                                 urlSummaryProvider.updateCanStop(false);
                                                   },
@@ -952,7 +952,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                   webViewModel.url.toString() ??
                                                       '';
                                               model.getTextAndSummariseInfo(
-                                                  webViewModel,aiModelProvider.selectedModel);
+                                                  webViewModel,aiModelProvider.selectedModel,loc);
                                               urlSummaryProvider.updateCanStop(false);
                                               model.messageController.clear();
                                              // urlSummaryProvider.updateSummariser(true);

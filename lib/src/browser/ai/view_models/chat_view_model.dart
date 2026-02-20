@@ -251,7 +251,7 @@ Future<void> getSummariseForFloatingActionButton(WebViewModel webViewModel)async
 // }
 
 
-Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType, {String? sumText, bool isRegenerate = false}) async {
+Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType,AppLocalizations loc, {String? sumText, bool isRegenerate = false}) async {
     String summariseUrlText = sumText ?? summariseText ?? "";
 
     if (!isRegenerate) {
@@ -304,7 +304,7 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType
         // if(!isSummariseCancelled){
           if (response.isEmpty || response == 'Erroring') {
             //  Show retry only if API explicitly fails
-            addSummarizeRetryMessage(webViewModel, modelType, sumText);
+            addSummarizeRetryMessage(webViewModel, modelType, sumText,loc);
         } else {
             // Display the valid response
             messages.add(ChatModel(
@@ -325,7 +325,7 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType
     } catch (e) {
         //  Catch API errors properly and show retry
         print("Error during summarization: $e");
-        addSummarizeRetryMessage(webViewModel, modelType, sumText);
+        addSummarizeRetryMessage(webViewModel, modelType, sumText,loc);
     }
 
     updateUI();
@@ -333,10 +333,10 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType
 }
 
 
-void addSummarizeRetryMessage(WebViewModel webViewModel, String modelType, String? sumText) {
+void addSummarizeRetryMessage(WebViewModel webViewModel, String modelType, String? sumText,AppLocalizations loc) {
     messages.add(ChatModel(
         role: Roles.model,
-        text: StringConstants.retryMessage,
+        text: loc.thereWasAnErrorGenerateResponse, //StringConstants.retryMessage,
         isTypingComplete: true,
         canShowRegenerate: false,
         isRetry: true,
@@ -347,7 +347,7 @@ void addSummarizeRetryMessage(WebViewModel webViewModel, String modelType, Strin
 }
 
 
-void regenerateSummarization(WebViewModel webViewModel, String modelType) {
+void regenerateSummarization(WebViewModel webViewModel, String modelType,AppLocalizations loc) {
     if (modelResponseIndex == null) return;
 
     // Reset only the last AI message instead of adding a new one
@@ -362,7 +362,7 @@ void regenerateSummarization(WebViewModel webViewModel, String modelType) {
     );
 
     updateUI();
-    getTextAndSummariseInfo(webViewModel, modelType, isRegenerate: true); // Restart response
+    getTextAndSummariseInfo(webViewModel, modelType,loc, isRegenerate: true); // Restart response
 }
 
 
@@ -487,7 +487,8 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
   isTyping = true;
   String wrd = '';
   // Listen to the streaming response and update existing message
-  _streamSubscription = apiRepository.sendTextForStreamWithModel(modelType,messageToSend).listen((word) {
+  _streamSubscription = apiRepository.sendTextForStreamWithModel(modelType,
+  messageToSend).listen((word) {
     print('onData coming ---$word');
     if (modelResponseIndex == null) return;
     wrd = word;
@@ -598,7 +599,7 @@ void checkNetworkConnectivity(AppLocalizations loc)async{
   bool hasInternet = await _hasInternetAccess();
 
   if (!hasInternet) {
-    showMessage('Unprecedented traffic with Exit node. Please change exit node and retry');
+    showMessage(loc.unprecidentedTrafficExitNodeError);
     print("Network is ON & Internet is Working");
   }
   }
