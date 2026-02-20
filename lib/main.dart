@@ -370,7 +370,8 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
 
   checkIsScreenSecure() async {
     final basicProvider = Provider.of<BasicProvider>(context, listen: false);
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false );
+    final browserModel = Provider.of<BrowserModel>(context,listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false );
    // final webViewModel = Provider.of<WebViewModel>(context,listen: false);
     //print('screen security 3---->${basicProvider.scrnSecurity}');
     if (basicProvider.scrnSecurity) {
@@ -380,7 +381,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
       await BelnetLib.disableScreenSecurity();
       //await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
     }
-    selectedItemsProvider.updateFontSize(8.0);
+    browserModel.updateFontSize(8.0);
     //print('The WEBView fontSize ---> fontSize ${selectedItemsProvider.fontSize} ${webViewModel.settings?.minimumFontSize}');
   }
 
