@@ -546,6 +546,7 @@ try{
      final loc = AppLocalizations.of(context)!;
     final mHeight = MediaQuery.of(context).size.height;
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     if (BelnetLib.isConnected) {
       print('is connected true ${BelnetLib.isConnected}');
     }
@@ -614,11 +615,13 @@ try{
                               duration: Duration(seconds: 1),
                               child: themeProvider.darkTheme
                                   ? Lottie.asset(
-                                      'assets/images/dark_welcome_scrn.json',
+                                     'assets/images/dark.json', //'assets/images/dark_welcome_scrn.json',
                                       fit: BoxFit.fitWidth)
                                   : LottieBuilder.asset(
-                                      'assets/images/white_welcome_scrn.json',
+                                      'assets/images/white.json',
                                       fit: BoxFit.fitWidth)),
+                              Text(loc.beldexBrowserForAndroid,textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Poppins'),),
+                              SizedBox(height: 10,),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10.0,

@@ -5,16 +5,37 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_af.dart';
 import 'app_localizations_ar.dart';
+import 'app_localizations_da.dart';
 import 'app_localizations_de.dart';
+import 'app_localizations_el.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
+import 'app_localizations_fi.dart';
+import 'app_localizations_fil.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_id.dart';
+import 'app_localizations_it.dart';
 import 'app_localizations_ja.dart';
 import 'app_localizations_ko.dart';
+import 'app_localizations_lt.dart';
+import 'app_localizations_ml.dart';
+import 'app_localizations_mr.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_nb.dart';
+import 'app_localizations_nl.dart';
+import 'app_localizations_pl.dart';
 import 'app_localizations_pt.dart';
+import 'app_localizations_ro.dart';
 import 'app_localizations_ru.dart';
+import 'app_localizations_sv.dart';
 import 'app_localizations_ta.dart';
+import 'app_localizations_te.dart';
+import 'app_localizations_th.dart';
 import 'app_localizations_tr.dart';
+import 'app_localizations_uk.dart';
 import 'app_localizations_vi.dart';
 import 'app_localizations_zh.dart';
 
@@ -101,18 +122,42 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('af'),
     Locale('ar'),
+    Locale('da'),
     Locale('de'),
+    Locale('el'),
     Locale('en'),
     Locale('es'),
+    Locale('fi'),
+    Locale('fil'),
+    Locale('fr'),
+    Locale('hi'),
+    Locale('id'),
+    Locale('it'),
     Locale('ja'),
     Locale('ko'),
+    Locale('lt'),
+    Locale('ml'),
+    Locale('mr'),
+    Locale('ms'),
+    Locale('nb'),
+    Locale('nl'),
+    Locale('pl'),
     Locale('pt'),
+    Locale('pt', 'PT'),
+    Locale('ro'),
     Locale('ru'),
+    Locale('sv'),
     Locale('ta'),
+    Locale('te'),
+    Locale('th'),
     Locale('tr'),
+    Locale('uk'),
     Locale('vi'),
-    Locale('zh')
+    Locale('zh'),
+    Locale('zh', 'HK'),
+    Locale('zh', 'TW')
   ];
 
   /// No description provided for @hello.
@@ -180,6 +225,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search or enter address'**
   String get searchOrEnterAddress;
+
+  /// No description provided for @beldexBrowserForAndroid.
+  ///
+  /// In en, this message translates to:
+  /// **'Beldex Browser for android is\n protecting your confidentiality!'**
+  String get beldexBrowserForAndroid;
+
+  /// No description provided for @applanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get applanguage;
+
+  /// No description provided for @searchLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Search language'**
+  String get searchLanguage;
+
+  /// No description provided for @downloadCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Cancelled'**
+  String get downloadCancelled;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
+  /// No description provided for @addSearchEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Add search engine'**
+  String get addSearchEngine;
+
+  /// No description provided for @editSearchEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit search engine'**
+  String get editSearchEngine;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @url.
+  ///
+  /// In en, this message translates to:
+  /// **'URL'**
+  String get url;
+
+  /// No description provided for @enterSEName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter search engine name'**
+  String get enterSEName;
+
+  /// No description provided for @enterSEURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter search engine URL'**
+  String get enterSEURL;
+
+  /// No description provided for @add.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get add;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
 
   /// No description provided for @thistimeSearchIn.
   ///
@@ -898,8 +1027,14 @@ abstract class AppLocalizations {
   /// No description provided for @hasExperiancedTraffic.
   ///
   /// In en, this message translates to:
-  /// **'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node'**
+  /// **'has experienced unprecedented traffic. Please click on'**
   String get hasExperiancedTraffic;
+
+  /// No description provided for @toSwitchExitnode.
+  ///
+  /// In en, this message translates to:
+  /// **'to switch exit node'**
+  String get toSwitchExitnode;
 
   /// No description provided for @theResponseHasBeenInterrupted.
   ///
@@ -1458,6 +1593,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Arabic'**
   String get languageArabic;
+
+  /// No description provided for @languageFrench.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get languageFrench;
+
+  /// No description provided for @languageItalian.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get languageItalian;
+
+  /// No description provided for @languageDanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Danish'**
+  String get languageDanish;
+
+  /// No description provided for @languageDutch.
+  ///
+  /// In en, this message translates to:
+  /// **'Dutch'**
+  String get languageDutch;
+
+  /// No description provided for @languageFinnish.
+  ///
+  /// In en, this message translates to:
+  /// **'Finnish'**
+  String get languageFinnish;
+
+  /// No description provided for @languageFilipino.
+  ///
+  /// In en, this message translates to:
+  /// **'Filipino'**
+  String get languageFilipino;
+
+  /// No description provided for @languageIndonesian.
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesian'**
+  String get languageIndonesian;
+
+  /// No description provided for @languageMalay.
+  ///
+  /// In en, this message translates to:
+  /// **'Malay'**
+  String get languageMalay;
+
+  /// No description provided for @languageThai.
+  ///
+  /// In en, this message translates to:
+  /// **'Thai'**
+  String get languageThai;
+
+  /// No description provided for @languageHindi.
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get languageHindi;
+
+  /// No description provided for @languageTelugu.
+  ///
+  /// In en, this message translates to:
+  /// **'Telugu'**
+  String get languageTelugu;
+
+  /// No description provided for @languageMalayalam.
+  ///
+  /// In en, this message translates to:
+  /// **'Malayalam'**
+  String get languageMalayalam;
+
+  /// No description provided for @languageMarathi.
+  ///
+  /// In en, this message translates to:
+  /// **'Marathi'**
+  String get languageMarathi;
+
+  /// No description provided for @languageAfrikaans.
+  ///
+  /// In en, this message translates to:
+  /// **'Afrikaans'**
+  String get languageAfrikaans;
+
+  /// No description provided for @languagePolish.
+  ///
+  /// In en, this message translates to:
+  /// **'Polish'**
+  String get languagePolish;
+
+  /// No description provided for @languageRomanian.
+  ///
+  /// In en, this message translates to:
+  /// **'Romanian'**
+  String get languageRomanian;
+
+  /// No description provided for @languageUkrainian.
+  ///
+  /// In en, this message translates to:
+  /// **'Ukrainian'**
+  String get languageUkrainian;
+
+  /// No description provided for @languageLithuanian.
+  ///
+  /// In en, this message translates to:
+  /// **'Lithuanian'**
+  String get languageLithuanian;
+
+  /// No description provided for @languageNorwegian.
+  ///
+  /// In en, this message translates to:
+  /// **'Norwegian'**
+  String get languageNorwegian;
+
+  /// No description provided for @languageGreek.
+  ///
+  /// In en, this message translates to:
+  /// **'Greek'**
+  String get languageGreek;
+
+  /// No description provided for @languageChineseTraditional.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese (Traditional)'**
+  String get languageChineseTraditional;
+
+  /// No description provided for @languageChineseHongKong.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese (Hong Kong)'**
+  String get languageChineseHongKong;
+
+  /// No description provided for @languagePortuguesePortugal.
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese (Portugal)'**
+  String get languagePortuguesePortugal;
+
+  /// No description provided for @languageSwedish.
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish'**
+  String get languageSwedish;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
@@ -1469,7 +1748,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ar', 'de', 'en', 'es', 'ja', 'ko', 'pt', 'ru', 'ta', 'tr', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['af', 'ar', 'da', 'de', 'el', 'en', 'es', 'fi', 'fil', 'fr', 'hi', 'id', 'it', 'ja', 'ko', 'lt', 'ml', 'mr', 'ms', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sv', 'ta', 'te', 'th', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1477,19 +1756,56 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
 
+  // Lookup logic when language+country codes are specified.
+  switch (locale.languageCode) {
+    case 'pt': {
+  switch (locale.countryCode) {
+    case 'PT': return AppLocalizationsPtPt();
+   }
+  break;
+   }
+    case 'zh': {
+  switch (locale.countryCode) {
+    case 'HK': return AppLocalizationsZhHk();
+case 'TW': return AppLocalizationsZhTw();
+   }
+  break;
+   }
+  }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'af': return AppLocalizationsAf();
     case 'ar': return AppLocalizationsAr();
+    case 'da': return AppLocalizationsDa();
     case 'de': return AppLocalizationsDe();
+    case 'el': return AppLocalizationsEl();
     case 'en': return AppLocalizationsEn();
     case 'es': return AppLocalizationsEs();
+    case 'fi': return AppLocalizationsFi();
+    case 'fil': return AppLocalizationsFil();
+    case 'fr': return AppLocalizationsFr();
+    case 'hi': return AppLocalizationsHi();
+    case 'id': return AppLocalizationsId();
+    case 'it': return AppLocalizationsIt();
     case 'ja': return AppLocalizationsJa();
     case 'ko': return AppLocalizationsKo();
+    case 'lt': return AppLocalizationsLt();
+    case 'ml': return AppLocalizationsMl();
+    case 'mr': return AppLocalizationsMr();
+    case 'ms': return AppLocalizationsMs();
+    case 'nb': return AppLocalizationsNb();
+    case 'nl': return AppLocalizationsNl();
+    case 'pl': return AppLocalizationsPl();
     case 'pt': return AppLocalizationsPt();
+    case 'ro': return AppLocalizationsRo();
     case 'ru': return AppLocalizationsRu();
+    case 'sv': return AppLocalizationsSv();
     case 'ta': return AppLocalizationsTa();
+    case 'te': return AppLocalizationsTe();
+    case 'th': return AppLocalizationsTh();
     case 'tr': return AppLocalizationsTr();
+    case 'uk': return AppLocalizationsUk();
     case 'vi': return AppLocalizationsVi();
     case 'zh': return AppLocalizationsZh();
   }

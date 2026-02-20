@@ -36,6 +36,10 @@ final Map<String, Map<String, String>> localizedMessages = {
     'speak': 'Speak to search',
     'tryAgain': 'Couldn’t hear that.\nTry again!',
   },
+  'zh-TW':{
+    'speak': '請說出要搜尋的內容',
+    'tryAgain': '沒有聽清楚。\n請再試一次。',
+  },
   'en-CA': {
     'speak': 'Speak to search',
     'tryAgain': 'Couldn’t hear that.\nTry again!',
