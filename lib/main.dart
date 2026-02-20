@@ -7,6 +7,8 @@ import 'dart:ui';
 import 'package:beldex_browser/fetch_price.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
+import 'package:beldex_browser/security/api_key_initializer.dart';
+import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
@@ -160,6 +162,12 @@ void main() async {
   await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
   await FlutterDownloader.registerCallback(downloadCallback);
   await SharedPreferences.getInstance();
+ await ApiKeyManager.instance.loadDecryptedKeys();
+
+
+
+
+  initializeApiKeysOnLaunch();
   WEB_ARCHIVE_DIR = (await getApplicationSupportDirectory()).path;
 
   TAB_VIEWER_BOTTOM_OFFSET_1 = 130.0;
@@ -177,6 +185,8 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
+
+NetworkReinitializer.start();
   // await Permission.camera.request();
   // await Permission.microphone.request();
   // await Permission.storage.request();
@@ -192,10 +202,10 @@ void main() async {
         ChangeNotifierProvider(create: ((context) => SearchEngineProvider())),
         ChangeNotifierProvider(
             create: ((context) => LoadingtickValueProvider())),
-        ChangeNotifierProvider(create: (context) => DownloadProvider()),
-        ChangeNotifierProvider(
-            create: (context) =>
-                SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
+        ChangeNotifierProvider(create: (context) => DownloadProvider()),// AppLocalizations.of(context)!)),
+        // ChangeNotifierProvider(
+        //     create: (context) =>
+        //         SelectedItemsProvider()..initializeSelectedItems()..updateIconWhenNotSerchEngine()),
         ChangeNotifierProvider(
             create: (context) => BasicProvider()..loadFromPrefs()),
         ChangeNotifierProvider(create: (context)=> UrlSummaryProvider()),
@@ -217,7 +227,8 @@ void main() async {
          //ChangeNotifierProvider(create: (_)=> LanguageProvider()),
          //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
          //ChangeNotifierProvider(create: (_)=> TextToSpeechProvider('')),
-         ChangeNotifierProvider(create: (_)=> ReaderProvider(''))
+         ChangeNotifierProvider(create: (_)=> ReaderProvider('')),
+         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
         
       ],
       child:
