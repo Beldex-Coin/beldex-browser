@@ -125,6 +125,7 @@ checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvide
     //var webViewController = webViewModel.webViewController;
     //var languageProvider = Provider.of<LanguageProvider>(context);
    // final translatingProvider = Provider.of<TranslatingProvider>(context);
+   final loc = AppLocalizations.of(context)!;
     final readerProvider = Provider.of<ReaderProvider>(context);
     return SafeArea(
       child: Container(
@@ -446,7 +447,8 @@ checkForNetwork(VpnStatusProvider vpnStatusProvider,ReaderProvider readerProvide
                                                               horizontal: 10,
                                                               vertical: 8),
                                                       child: Text(
-                                                        "Text Zoom",
+                                                        loc.textZoom,
+                                                        //"Text Zoom",
                                                         style: TextStyle(
                                                             color: themeProvider
                                                                     .darkTheme

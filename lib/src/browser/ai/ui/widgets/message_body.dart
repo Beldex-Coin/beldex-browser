@@ -133,7 +133,7 @@ void checkNetworkConnectivity(AppLocalizations loc)async{
   bool hasInternet = await _hasInternetAccess();
 
    if (!hasInternet) {
-     showMessage('Unprecedented traffic with Exit node. Please change exit node and retry');
+     showMessage(loc.unprecidentedTrafficExitNodeError);
     print("mobile network is ON & Internet is Working");
   }
   }
@@ -260,7 +260,7 @@ setNewModel(AIModelProvider aiModelProvider)async{
                   if(widget.message.isSummariseResult){
                     print('Error retry button is calling');
               
-                    widget.model.regenerateSummarization(webViewModel,aiModelProvider.selectedModel);
+                    widget.model.regenerateSummarization(webViewModel,aiModelProvider.selectedModel,loc);
                    }else{
                     print('Error else retry button is calling');
                     widget.model.retryResponse(aiModelProvider);
