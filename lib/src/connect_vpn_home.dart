@@ -3,6 +3,12 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:math';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
+import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
+import 'package:beldex_browser/src/browser/models/browser_model.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
@@ -13,7 +19,7 @@ import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/no_internet_screen.dart';
-import 'package:beldex_browser/src/widget/nointernet_connection.dart';
+//import 'package:beldex_browser/src/widget/nointernet_connection.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:beldex_browser/src/browser/browser.dart';
@@ -64,11 +70,11 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
 Map<String,dynamic> nearest = {};
 
 
-  void displayMessages() {
-    showMessage('Checking for connection...', 0);
-    showMessage('Belnet service started', 6);
-    showMessage('Connecting to belnet dVPN', 5);
-    showMessage('Preparing Daemon connection', 7);
+  void displayMessages(AppLocalizations appLoc) {
+    showMessage(appLoc.checkingConnection, 0);
+    showMessage(appLoc.belnetServiceStarted, 6);
+    showMessage(appLoc.connectingBelnetdVPN, 5);
+    showMessage(appLoc.prepareDaemonConnection, 7);
   }
 
   void showMessage(String message, int delaySeconds) {
@@ -109,9 +115,19 @@ Map<String,dynamic> nearest = {};
     checkInternetConnection();
     //getExitNodeData();
 
+getNodeInitialSelection(basicProvider,context);
 
-getNodeInitialSelection(basicProvider);
 
+WidgetsBinding.instance.addPostFrameCallback((_) {
+   final addSearchEngineProvider = Provider.of<AddSearchEngineProvider>(context, listen: false);
+    // final selectedItemProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+     final browserModel = Provider.of<BrowserModel>(context,listen: false);
+     final settings = browserModel.getSettings();
+   addSearchEngineProvider.clearSessionEngines(browserModel.getSettings(), browserModel,context);
+  // if(settings.searchEngine.name == 'Google'){
+  //   selectedItemProvider.updateIconValue('assets/images/Google 1.svg');
+  // }
+ });
 
     //WidgetsBinding.instance.addObserver(this);
     //getRandomExitData();
@@ -154,10 +170,24 @@ getNodeInitialSelection(basicProvider);
 
 
 
- getNodeInitialSelection(BasicProvider basicProvider)async{
+
+
+
+
+
+
+
+
+
+
+
+
+
+ getNodeInitialSelection(BasicProvider basicProvider,BuildContext context)async{
   final isVpnPermit = await BelnetLib.isPrepared;
     final vpnProvider = Provider.of<VpnStatusProvider>(context, listen: false);
      final loadingProvider = Provider.of<LoadingtickValueProvider>(context, listen: false);
+        final appLoc = AppLocalizations.of(context)!;
    final prefs = await SharedPreferences.getInstance();
     await prefs.setString('selectedExitNode', '$selectedValue');
     await prefs.setString('selectedCountryIcon', '$selectedConIcon');
@@ -200,7 +230,7 @@ try{
       if(nearest.isNotEmpty){
               print('USER BAB TWO --> ${nearest}');
         if(isVpnPermit)
-          toggleBelnet(vpnProvider, loadingProvider);
+          toggleBelnet(vpnProvider, loadingProvider,appLoc);
                      // print('USER BAB Three --> ${nearest}');
 
        // toggleBelnet(vpnProvider, loadingProvider);
@@ -362,7 +392,7 @@ try{
   bool isLoading = false;
   int count = 1;
   Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
-      LoadingtickValueProvider loadingtickValueProvider) async {
+      LoadingtickValueProvider loadingtickValueProvider,AppLocalizations appLoc) async {
     const totalDuration = Duration(seconds: 20);
     if (count == 1) {
       try {
@@ -392,7 +422,7 @@ try{
               final con = await BelnetLib.connectToBelnet(
                   exitNode: customExitnode, //exitnodeName, //customExitnode,
                   upstreamDNS: "9.9.9.9");
-              displayMessages();
+              displayMessages(appLoc);
               // vpnStatusProvider.updateValue('Connecting...');
               simulateDelayedProgress(loadingtickValueProvider);
               Future.delayed(totalDuration, () {
@@ -513,8 +543,10 @@ try{
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
     final loadingtickValueProvider =
         Provider.of<LoadingtickValueProvider>(context);
+     final loc = AppLocalizations.of(context)!;
     final mHeight = MediaQuery.of(context).size.height;
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     if (BelnetLib.isConnected) {
       print('is connected true ${BelnetLib.isConnected}');
     }
@@ -583,11 +615,13 @@ try{
                               duration: Duration(seconds: 1),
                               child: themeProvider.darkTheme
                                   ? Lottie.asset(
-                                      'assets/images/dark_welcome_scrn.json',
+                                     'assets/images/dark.json', //'assets/images/dark_welcome_scrn.json',
                                       fit: BoxFit.fitWidth)
                                   : LottieBuilder.asset(
-                                      'assets/images/white_welcome_scrn.json',
+                                      'assets/images/white.json',
                                       fit: BoxFit.fitWidth)),
+                              Text(loc.beldexBrowserForAndroid,textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Poppins'),),
+                              SizedBox(height: 10,),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 10.0,
@@ -598,8 +632,8 @@ try{
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 8.0, horizontal: 9),
-                                  child: const Text(
-                                    'Exit Node',
+                                  child: Text(loc.exitnode,
+                                    //'Exit Node',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
@@ -704,7 +738,9 @@ try{
                                                     return _buildExitnodeListView(
                                                         mHeight,
                                                         themeProvider,
-                                                        vpnStatusProvider);
+                                                        vpnStatusProvider,
+                                                        loc
+                                                        );
                                                   },
                                                 );
                                                 overlayState
@@ -807,64 +843,132 @@ try{
                               onTap: vpnStatusProvider.value ==
                                       'Disconnected' //isLoading
                                   ? () => toggleBelnet(vpnStatusProvider,
-                                      loadingtickValueProvider)
+                                      loadingtickValueProvider,loc)
                                   // : vpnStatusProvider.value == 'Connected'
                                   // ? () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Browser()))
                                   : null,
-                              child: Container(
-                                width: constraint.maxWidth / 1.6,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                    color: vpnStatusProvider.value ==
-                                            'Disconnected'
-                                        ? Color(0xff00B134)
-                                        : themeProvider.darkTheme
-                                            ? Color(0xff282836)
-                                            : Color(0xffF3F3F3),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: vpnStatusProvider.value == 'Disconnected'
-                                    ? Center(
-                                        child: Text(
-                                          'Connect',
-                                          // vpnStatusProvider.value == 'Disconnected'
-                                          //     ? 'Connect'
-                                          //     : vpnStatusProvider.value == 'Connected'
-                                          //         ? 'Connecting..'
-                                          //         : vpnStatusProvider.value,
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      )
-                                    : Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Image.asset(
-                                            themeProvider.darkTheme
-                                                ? 'assets/images/Load.gif'
-                                                : 'assets/images/Load_white_theme.gif',
-                                            height: 30,
-                                            width: 40,
-                                          ),
-                                          Text(
-                                            'Connecting...',
-                                            // vpnStatusProvider.value == 'Disconnected'
-                                            //     ? 'Connect'
-                                            //     : vpnStatusProvider.value == 'Connected'
-                                            //         ? 'Connecting..'
-                                            //         : vpnStatusProvider.value,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                              ),
+                              child: 
+                              IntrinsicWidth(
+  child: ConstrainedBox(
+    constraints: BoxConstraints(
+      minWidth: constraint.maxWidth / 1.6, // same width as Connect
+      maxWidth: constraint.maxWidth * 0.95, // allow expansion limit
+    ),
+    child: Container(
+      height: 55,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: vpnStatusProvider.value == 'Disconnected'
+            ? const Color(0xff00B134)
+            : themeProvider.darkTheme
+                ? const Color(0xff282836)
+                : const Color(0xffF3F3F3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+
+      child: vpnStatusProvider.value == 'Disconnected'
+          ? Center(
+              child: Text(
+                loc.connect,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
+            )
+
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  themeProvider.darkTheme
+                      ? 'assets/images/Load.gif'
+                      : 'assets/images/Load_white_theme.gif',
+                  height: 28,
+                  width: 28,
+                ),
+                const SizedBox(width: 8),
+
+                Flexible(
+                  child: Text(
+                    loc.connecting,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: themeProvider.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    ),
+  ),
+)
+
+                              // Container(
+                              //   width: constraint.maxWidth / 1.6,
+                              //   height: 55,
+                              //   decoration: BoxDecoration(
+                              //       color: vpnStatusProvider.value ==
+                              //               'Disconnected'
+                              //           ? Color(0xff00B134)
+                              //           : themeProvider.darkTheme
+                              //               ? Color(0xff282836)
+                              //               : Color(0xffF3F3F3),
+                              //       borderRadius: BorderRadius.circular(10)),
+                              //   child: vpnStatusProvider.value == 'Disconnected'
+                              //       ? Center(
+                              //           child: Text(
+                              //            loc.connect,
+                              //             // vpnStatusProvider.value == 'Disconnected'
+                              //             //     ? 'Connect'
+                              //             //     : vpnStatusProvider.value == 'Connected'
+                              //             //         ? 'Connecting..'
+                              //             //         : vpnStatusProvider.value,
+                                          
+                              //             style: TextStyle(
+                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                              //                 fontWeight: FontWeight.w600,
+                              //                 color: Colors.white),
+                              //             textAlign: TextAlign.center,
+                              //           ),
+                              //         )
+                              //       : 
+                              //       Row(
+                              //           mainAxisSize: MainAxisSize.min,
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.center,
+                              //           children: [
+                              //             Image.asset(
+                              //               themeProvider.darkTheme
+                              //                   ? 'assets/images/Load.gif'
+                              //                   : 'assets/images/Load_white_theme.gif',
+                              //               height: 30,
+                              //               width: 40,
+                              //             ),
+                              //             Text(
+                              //              loc.connecting,
+                              //               // vpnStatusProvider.value == 'Disconnected'
+                              //               //     ? 'Connect'
+                              //               //     : vpnStatusProvider.value == 'Connected'
+                              //               //         ? 'Connecting..'
+                              //               //         : vpnStatusProvider.value,
+                              //               overflow: TextOverflow.ellipsis,
+                              //               maxLines: 2,
+                              //               style: TextStyle(
+                              //                 fontWeight: FontWeight.w600,
+                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              // ),
                             );
                           }),
                           SizedBox(height: 10,),
@@ -1225,7 +1329,7 @@ try{
   }
 
   Widget _buildExitnodeListView(double mHeight, DarkThemeProvider themeProvider,
-      VpnStatusProvider vpnStatusProvider) {
+      VpnStatusProvider vpnStatusProvider,AppLocalizations loc) {
     // print('${exitData1.length}');
     try {
       return Material(
@@ -1286,7 +1390,7 @@ try{
                                 left: mHeight * 0.05 / 3,
                                 right: mHeight * 0.03 / 3),
                             title: Text(
-                              exitNodeDataList[index].type,
+                              exitNodeDataList[index].type == 'Beldex Official' ? loc.beldexofficial : loc.contributorExitNode,
                               style: TextStyle(
                                   color: index == 0
                                       ? const Color(0xff1CBE20)
@@ -1306,7 +1410,7 @@ try{
                               // exitData[index].type == "Custom Exit Node" &&
                               //         customExitAdd.isNotEmpty
                               //     ? "${customExitAdd.length} Nodes":
-                              "${exitNodeDataList[index].node.length} Nodes",
+                              "${exitNodeDataList[index].node.length} ${loc.nodes}",
                               style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: MediaQuery.of(context).size.height *

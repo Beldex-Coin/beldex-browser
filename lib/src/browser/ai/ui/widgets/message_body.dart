@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
@@ -118,13 +119,13 @@ void parseResponse(String response,BuildContext context) {
 //
 
 
-void checkNetworkConnectivity()async{
+void checkNetworkConnectivity(AppLocalizations loc)async{
   final connectivityResult = await Connectivity().checkConnectivity();
 
  // if(connectivityResult.contains(ConnectivityResult.vpn)){
    if(!(connectivityResult.contains(ConnectivityResult.mobile)) && !(connectivityResult.contains(ConnectivityResult.wifi))){
        print('mobile network not connected $connectivityResult');
-    showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+    showMessage(loc.youAreNotConnectedToInternet);
     return;
    }
   else{
@@ -132,7 +133,7 @@ void checkNetworkConnectivity()async{
   bool hasInternet = await _hasInternetAccess();
 
    if (!hasInternet) {
-     showMessage('Unprecedented traffic with Exit node. Please change exit node and retry');
+     showMessage(loc.unprecidentedTrafficExitNodeError);
     print("mobile network is ON & Internet is Working");
   }
   }
@@ -190,6 +191,7 @@ setNewModel(AIModelProvider aiModelProvider)async{
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final aiModelProvider = Provider.of<AIModelProvider>(context);
     final webViewModel = Provider.of<WebViewModel>(context);
+    final loc = AppLocalizations.of(context)!;
     //final typingProvider = Provider.of<TypingProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -252,13 +254,13 @@ setNewModel(AIModelProvider aiModelProvider)async{
                             child: GestureDetector(
                   onTap:widget.message.isRetry ? (){
                      // typingProvider.updateAITypingState(true);
-                   checkNetworkConnectivity();
+                   checkNetworkConnectivity(loc);
                    
                   setNewModel(aiModelProvider);
                   if(widget.message.isSummariseResult){
                     print('Error retry button is calling');
               
-                    widget.model.regenerateSummarization(webViewModel,aiModelProvider.selectedModel);
+                    widget.model.regenerateSummarization(webViewModel,aiModelProvider.selectedModel,loc);
                    }else{
                     print('Error else retry button is calling');
                     widget.model.retryResponse(aiModelProvider);
@@ -289,7 +291,7 @@ setNewModel(AIModelProvider aiModelProvider)async{
                             SvgPicture.asset('assets/images/ai-icons/retry.svg',color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC),),
                              Padding(
                                padding: const EdgeInsets.only(left:5.0),
-                               child: Text('Retry',style: TextStyle(fontFamily: 'Poppins', color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC)),),
+                               child: Text(loc.retry,style: TextStyle(fontFamily: 'Poppins', color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC)),),
                              ),
                            ],
                          ),
@@ -361,16 +363,18 @@ setNewModel(AIModelProvider aiModelProvider)async{
                 child: Container(
                   margin: EdgeInsets.symmetric(vertical: 10),
                    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
-                   width: 127,
+                  // width: 127,
                    decoration: BoxDecoration(
                     color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
                     borderRadius: BorderRadius.circular(12)
                    ),
                      child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       mainAxisSize: MainAxisSize.min,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
                         SvgPicture.asset('assets/images/ai-icons/Vector.svg'),
-                         Text('Regenerate',style: TextStyle(fontFamily: 'Poppins'),),
+                        SizedBox(width: 5,),
+                         Text(loc.regenerate,style: TextStyle(fontFamily: 'Poppins'),),
                        ],
                      ),
                 ),

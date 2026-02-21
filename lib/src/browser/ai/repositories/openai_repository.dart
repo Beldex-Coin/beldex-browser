@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:beldex_browser/constants_key.dart';
+import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:dio/dio.dart';
@@ -48,7 +49,7 @@ Stream<String> sendTextForStream(String userMessage) async* {
       "https://api.openai.com/v1/chat/completions",
       options: Options(
         headers: {
-          "Authorization": "Bearer ${APIClass.OPENAI_API_KEY}",
+          "Authorization": "Bearer ${ApiKeyManager.instance.getKey('openai')}",
           "Content-Type": "application/json",
         },
         responseType: ResponseType.stream,
@@ -66,11 +67,11 @@ Stream<String> sendTextForStream(String userMessage) async* {
 
 
 if (cancelToken.isCancelled) {
-    print("🚨 Request was canceled: ");
+    print(" Request was canceled: ");
     yield "Request was canceled by the user."; // Send as single string
   } 
   // else {
-  //   print("❌ Network error: ");
+  //   print(" Network error: ");
   //   yield "Network errors:";
   // }
     await for (var chunk in response.data!.stream) {
@@ -165,7 +166,7 @@ Future<String> sendText(String text) async {
       Uri.parse(APIClass.OPENAI_API_URL),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+        'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
       },
       body: utf8.encode(
          
@@ -224,7 +225,7 @@ Future<String> sendTextForSummarise(String text) async {
       Uri.parse(APIClass.OPENAI_API_URL),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+        'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
       },
       body:utf8.encode( jsonEncode({
         "model": "gpt-4o-mini", // Replace with the desired model
@@ -271,7 +272,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
         },
         body: jsonEncode({
           'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
@@ -344,7 +345,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
                try {
                 apiUrl = "https://api.openai.com/v1/chat/completions";
   headers = {
-    "Authorization": "Bearer ${APIClass.OPENAI_API_KEY}",
+    "Authorization": "Bearer ${ApiKeyManager.instance.getKey('openai')}",
     "Content-Type": "application/json",
   };
   requestData = {
@@ -459,7 +460,7 @@ String fullContent = '';
       case "mistral":
       apiUrl = "https://api.mistral.ai/v1/chat/completions";
   headers = {
-    "Authorization": "Bearer ${APIClass.MISTRAL_API_KEY}",
+    "Authorization": "Bearer ${ApiKeyManager.instance.getKey('mistral')}",
     "Content-Type": "application/json",
   };
   requestData = {
@@ -558,7 +559,7 @@ String fullContent = '';
 //         String jsonString = completeChunk.substring(6).trim(); 
 
 //         if (jsonString == "[DONE]") {
-//           print("✅ Stream finished");
+//           print("Stream finished");
 //           return;
 //         }
 
@@ -658,7 +659,7 @@ String fullContent = '';
   case "deepseek":
                 apiUrl = 'https://api.deepseek.com/v1/chat/completions';
               headers = {
-    "Authorization": "Bearer ${APIClass.DEEPSEEK_API_KEY}",
+    "Authorization": "Bearer ${ApiKeyManager.instance.getKey('deepseek')}",
     "Content-Type": "application/json",
   };
 
@@ -822,7 +823,7 @@ String fullContent = '';
 //             String newText = jsonData["choices"]?[0]["delta"]?["content"] ?? "";
 
 //             if (newText.isNotEmpty) {
-//               print("✅ Yielding new content: $newText");
+//               print(" Yielding new content: $newText");
 //                _history[modelType]?.add({"role": "assistant", "content": newText});
 //               yield newText;  // Yield the new content
 //             }
@@ -855,7 +856,7 @@ String fullContent = '';
       
 
       final String apiUrl =
-      "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:streamGenerateContent?key=${APIClass.GEMINI_API_KEY}";
+      "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:streamGenerateContent?key=${ApiKeyManager.instance.getKey('gemini')}";
 
   final Map<String, dynamic> requestData = {
     "contents": [
@@ -885,8 +886,8 @@ String buffer = '';
   String fullContent = ''; // Accumulate full response here
   final utf8Decoder = Utf8Decoder(allowMalformed: true);
 
-print("✅ Response received. Status: ${response.statusCode}");
-print("✅ Response received. Status: ${response.statusCode}");
+print("Response received. Status: ${response.statusCode}");
+print("Response received. Status: ${response.statusCode}");
 
     await for (var chunk in response.data!.stream) {
       final decoded = utf8Decoder.convert(chunk);
@@ -918,7 +919,7 @@ print("✅ Response received. Status: ${response.statusCode}");
         String jsonSnippet = buffer.substring(nextOpen, endIndex + 1);
         try {
           final List<dynamic> jsonResponse = jsonDecode(jsonSnippet);
-          print("✅ Parsed JSON: $jsonResponse");
+          print(" Parsed JSON: $jsonResponse");
 
           for (var item in jsonResponse) {
             if (item.containsKey("candidates")) {
@@ -928,7 +929,7 @@ print("✅ Response received. Status: ${response.statusCode}");
                   String text = part["text"];
                   if (text.isNotEmpty) {
                     fullContent += text;
-                    print("✅ Yielding content: '$text'");
+                    print(" Yielding content: '$text'");
                     yield text; // Yield immediately
                   }
                 }
@@ -938,13 +939,13 @@ print("✅ Response received. Status: ${response.statusCode}");
           buffer = buffer.substring(endIndex + 1).trim(); // Remove processed part
           startIndex = 0; // Reset to start of remaining buffer
         } catch (e) {
-          print("❌ Error decoding JSON: $e");
+          print("Error decoding JSON: $e");
           break; // Wait for more data if parsing fails
         }
 
         // Check for [DONE] after processing
         if (buffer.contains('[DONE]')) {
-          print("🏁 Stream ended with [DONE]");
+          print(" Stream ended with [DONE]");
           if (fullContent.isNotEmpty) {
             if (_history["gemini"] == null || _history["gemini"] is! List) {
               _history["gemini"] = [];
@@ -953,14 +954,14 @@ print("✅ Response received. Status: ${response.statusCode}");
               "role": "assistant",
               "content": fullContent,
             });
-            print("📜 Stored in history: '$fullContent'");
+            print("Stored in history: '$fullContent'");
           }
           buffer = '';
           break;
         }
       }
     }
-    print("🔚 Stream processing completed");
+    print(" Stream processing completed");
 
 
 
@@ -1195,7 +1196,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
       case 'openai':
         url = 'https://api.openai.com/v1/chat/completions';
         headers = {
-          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
           'Content-Type': 'application/json',
         };
         body = {
@@ -1212,7 +1213,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
       case 'mistral':
         url = 'https://api.mistral.ai/v1/chat/completions';
         headers = {
-          'Authorization': 'Bearer ${APIClass.MISTRAL_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('mistral')}',
           'Content-Type': 'application/json',
         };
         body = {
@@ -1227,7 +1228,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
         
        url = 'https://api.deepseek.com/v1/chat/completions';
         headers = {
-          'Authorization': 'Bearer ${APIClass.DEEPSEEK_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('deepseek')}',
           'Content-Type': 'application/json',
         };
         body = {
@@ -1242,7 +1243,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
 
       case 'gemini':
           url =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${APIClass.GEMINI_API_KEY}'; //'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${APIClass.GEMINI_API_KEY}';
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${ApiKeyManager.instance.getKey('gemini')}'; //'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${APIClass.GEMINI_API_KEY}';
 
    headers = {
     'Content-Type': 'application/json',

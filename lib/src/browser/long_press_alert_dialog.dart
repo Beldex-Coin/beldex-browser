@@ -2,6 +2,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations_ar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/custom_image.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
@@ -386,18 +388,19 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildOpenNewTab(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-    final selectedItemsProvider =
-        Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selectedItemsProvider =
+    //     Provider.of<SelectedItemsProvider>(context, listen: false);
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+    final loc = AppLocalizations.of(context)!;
     return ListTile(
-      title: const TextWidget(
-        text: "Open in new tab",
+      title: TextWidget(
+        text: loc.openInNewTab,// "Open in new tab",
         style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
       ),
       onTap: () {
         webViewModel.settings?.minimumFontSize =
-            selectedItemsProvider.fontSize.round();
+            browserModel.fontSize.round();
             vpnStatusProvider.updateCanShowHomeScreen(false);
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
@@ -412,17 +415,17 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildOpenNewIncognitoTab(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-    final selectedItemsProvider =
-        Provider.of<SelectedItemsProvider>(context, listen: false);
+    // final selectedItemsProvider =
+    //     Provider.of<SelectedItemsProvider>(context, listen: false);
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
     return ListTile(
-      title: const TextWidget(
+      title:  TextWidget(
         text: "Open in new private tab",
         style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
       ),
       onTap: () {
         webViewModel.settings?.minimumFontSize =
-            selectedItemsProvider.fontSize.round();
+            browserModel.fontSize.round();
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
           webViewModel: WebViewModel(
@@ -436,9 +439,10 @@ Widget _buildDialogLongPressHitTestResult(
   }
 
   Widget _buildCopyAddressLink(BoxConstraints constraints) {
+    final loc = AppLocalizations.of(context)!;
     return ListTile(
-      title: const TextWidget(
-        text: "Copy address link",
+      title:  TextWidget(
+        text: loc.copyAddressLink,// "Copy address link",
         style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
       ),
       onTap: () {
@@ -452,12 +456,13 @@ Widget _buildDialogLongPressHitTestResult(
   }
 
   Widget _buildShareLink(BoxConstraints constraints) {
+    final loc = AppLocalizations.of(context)!;
     return ListTile(
-      title: const Row(
+      title:  Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextWidget(
-              text: "Share link",
+              text:loc.shareLink, //"Share link",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
             ),
             Icon(
@@ -479,7 +484,7 @@ Widget _buildDialogLongPressHitTestResult(
   Widget _buildImageTile(BoxConstraints constraints) {
     final image =
         widget.hitTestResult.extra != null ? widget.hitTestResult.extra! : "";
-    print('the image is ------> $image');
+   // print('the image is ------> $image');
 
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
@@ -579,11 +584,12 @@ Widget _buildDialogLongPressHitTestResult(
   Widget _buildDownloadImage(BoxConstraints constraints) {
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
+        final loc = AppLocalizations.of(context)!;
     return SizedBox(
       //height: 40,
       child: ListTile(
-        title: const TextWidget(
-          text: "Download image",
+        title:  TextWidget(
+          text:loc.downloadimage,// "Download image",
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
         ),
         onTap: () async {
@@ -623,7 +629,7 @@ Widget _buildDialogLongPressHitTestResult(
               bool? downloadConfirmed =
                   await _showDownloadConfirmationDialog(context, url);
               if (downloadConfirmed == true) {
-                downloadProvider.addTask(url.toString(), _dir, imageName
+                downloadProvider.addTask(url.toString(), _dir, imageName,loc
                     //'IMG_B${DateTime.now().microsecondsSinceEpoch}.jpg'
                     );
               }
@@ -651,14 +657,15 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildShareImage(BoxConstraints constraints) {
     // bool _isSharing = false;
+    final loc = AppLocalizations.of(context)!;
     return SizedBox(
       //height: 40,
       child: ListTile(
-        title: const Row(
+        title:  Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextWidget(
-                text: "Share image",
+                text:loc.shareImage,// "Share image",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
               ),
               Icon(
@@ -825,12 +832,12 @@ Widget _buildDialogLongPressHitTestResult(
 
   Widget _buildOpenImageNewTab(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-
+    final loc = AppLocalizations.of(context)!;
     return SizedBox(
       // height: 40,
       child: ListTile(
-        title:const TextWidget(
-          text: "Open image in new tab",
+        title: TextWidget(
+          text:loc.openImageInNewTab, //"Open image in new tab",
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
         ),
         onTap: () {
@@ -848,11 +855,12 @@ Widget _buildDialogLongPressHitTestResult(
 Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
      var settings = browserModel.getSettings();
+     final loc = AppLocalizations.of(context)!;
     return SizedBox(
       // height: 40,
       child: ListTile(
         title: Text(
-          "Search image with ${settings.searchEngine.name == 'Bing' ? 'Microsoft Bing' : 'Google Lens'}",
+          "${loc.searchImageWith} ${settings.searchEngine.name == 'Bing' ? 'Microsoft Bing' : 'Google Lens'}",
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
         ),
         onTap: () {
@@ -908,6 +916,7 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
   ) {
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
+        final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -930,13 +939,13 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: const TextWidget(
-                    text: 'Download',
+                  child:  TextWidget(
+                    text:loc.download, //'Download',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const TextWidget(
-                  text: 'You are about to download image. \n Are you sure?',
+                 TextWidget(
+                  text:loc.youRaboutToDownloadImage, //'You are about to download image. \n Are you sure?',
                   textAlign: TextAlign.center,
                 ),
                 Row(
@@ -955,8 +964,8 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
                           disabledColor:const Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: const TextWidget(
-                              text: 'Cancel', style: TextStyle(fontSize: 18)),
+                          child:  TextWidget(
+                              text: loc.cancel, style: TextStyle(fontSize: 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -979,8 +988,8 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
                           disabledColor:const Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: const TextWidget(
-                              text: 'Download',
+                          child:  TextWidget(
+                              text:loc.download, //'Download',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           shape: RoundedRectangleBorder(

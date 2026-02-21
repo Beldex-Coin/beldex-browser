@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:beldex_browser/ad_blocker_filter.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -241,7 +243,8 @@ bool _isValidUrl(String url) {
         final urlSummaryProvider = Provider.of<UrlSummaryProvider>(context);
         final basicProvider = Provider.of<BasicProvider>(context);
     final ttsProvider = Provider.of<TtsProvider>(context);
-
+  final loc= AppLocalizations.of(context)!;
+  final appLocaleProvider = Provider.of<LocaleProvider>(context);
     //final DownloadController _downloadCon = Get.put(DownloadController());
     final downloadProvider =
         Provider.of<DownloadProvider>(context, listen: false);
@@ -256,8 +259,8 @@ bool _isValidUrl(String url) {
     initialSettings.useOnLoadResource = true;
     initialSettings.useShouldOverrideUrlLoading = true;
     initialSettings.javaScriptCanOpenWindowsAutomatically = true;
-    initialSettings.userAgent =
-        "Mozilla/5.0 (Linux; Android 10; Pixel Build/QP1A.190711.019; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Mobile Safari/537.36";
+    initialSettings.userAgent =     "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.86 Mobile Safari/537.36";
+       // "Mozilla/5.0 (Linux; Android 10; Pixel Build/QP1A.190711.019; wv) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Mobile Safari/537.36";
     //"Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36";
     initialSettings.transparentBackground = true;
     initialSettings.contentBlockers = basicProvider.adblock ? contentBlockers : []; // for adblocker
@@ -276,7 +279,11 @@ bool _isValidUrl(String url) {
     //print('selected text is ---> ${_webViewController?.getSelectedText().toString()}');
     return InAppWebView(
       // keepAlive: widget.webViewModel.keepAlive,
-      initialUrlRequest: URLRequest(url: widget.webViewModel.url),
+      initialUrlRequest: URLRequest(url: widget.webViewModel.url,
+       headers: {
+        "Accept-Language": appLocaleProvider.fullLocaleId //"ta-IN"
+      }
+      ),
       initialSettings: initialSettings,
       windowId: widget.webViewModel.windowId,
       pullToRefreshController: _pullToRefreshController,
@@ -670,6 +677,28 @@ await _webViewController!.evaluateJavascript(source: """
           //   return NavigationActionPolicy.CANCEL;
           // }
         }
+        if (url != null &&
+      (url.scheme == "http" || url.scheme == "https")) {
+
+    // prevent infinite loops
+    bool alreadyHasTamilHeader =
+        navigationAction.request.headers?["Accept-Language"] != null;
+
+    if (!alreadyHasTamilHeader) {
+      print("Applying language Headers for: $url");
+
+      await controller.loadUrl(
+        urlRequest: URLRequest(
+          url: WebUri(url.toString()),
+          headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId //"ta-IN,ta;q=0.9",
+          },
+        ),
+      );
+
+      return NavigationActionPolicy.CANCEL;
+    }
+  }
 
         return NavigationActionPolicy.ALLOW;
       },
@@ -715,7 +744,7 @@ await _webViewController!.evaluateJavascript(source: """
               await _showDownloadConfirmationDialog(context, url);
           if (downloadConfirmed == true) {
             downloadProvider.addTask(
-                url.url.toString(), _dir, url.suggestedFilename);
+                url.url.toString(), _dir, url.suggestedFilename,loc);
           }
           //
 
@@ -919,8 +948,8 @@ line-height:27px;
         </div></div>
         <div class="footer" id="footer">
             <p class="title-text">Change Node</p>
-            <p class="content-style">Exit node <span class="content-text">${await getConnectedExitnode()}</span> has experienced unprecedented traffic. Please click on <span class="content-text">Change Node</span> to switch exit node.</p>
-            <button class="change-button" id="changeNodeButton">Change node</button>
+            <p class="content-style">Exit node <span class="content-text">${await getConnectedExitnode()}</span> ${loc.hasExperiancedTraffic} <span class="content-text">${loc.changeNode}</span> ${loc.toSwitchExitnode}.</p>
+            <button class="change-button" id="changeNodeButton">${loc.changeNode}</button>
         </div>
     </div>
 
@@ -1653,6 +1682,7 @@ String getDownloadFile(String name){
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
         final width = MediaQuery.of(context).size.width;
+        final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -1675,14 +1705,16 @@ String getDownloadFile(String name){
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child:const Text(
-                    'Download',
+                  child: Text(loc.download,
+                    //'Download',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text(
-                  'You are about to download ${getDownloadFile(url.suggestedFilename)}. \n Are you sure?',
+                Text( 
+                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
                   textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
                 ),
                 Row(
                   children: [
@@ -1700,7 +1732,7 @@ String getDownloadFile(String name){
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child:const Text('Cancel', style: TextStyle(fontSize: 18)),
+                          child: Text(loc.cancel, style: TextStyle(fontSize: 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -1723,7 +1755,7 @@ String getDownloadFile(String name){
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: Text('Download',
+                          child: Text(loc.download,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           shape: RoundedRectangleBorder(

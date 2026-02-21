@@ -1,3 +1,4 @@
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/providers.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:velocity_x/velocity_x.dart';
+//import 'package:velocity_x/velocity_x.dart';
 
 class ChatMessage extends StatelessWidget {
    ChatMessage({super.key, required this.text, required this.sender, required this.ai, this.aiResponse='loading'});
@@ -19,6 +20,7 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,7 +34,7 @@ class ChatMessage extends StatelessWidget {
                                         : 'assets/images/ai-icons/Male User 1.svg'),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text('You',style: TextStyle(color: Color(0xff9595B5))),
+                                        child: Text(loc.you,style: TextStyle(color: Color(0xff9595B5))),
                                       ),
                                       Spacer(),
                                       SvgPicture.asset(IconConstants.copyIconDark),

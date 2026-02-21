@@ -1,6 +1,8 @@
 import 'dart:async';
 
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
@@ -9,6 +11,7 @@ import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
@@ -62,9 +65,12 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
     super.initState();
     //getIntentData();
     
-    checkForNetwork();
+    // checkForNetwork(AppLocalizations.of(context)!);
 
      WidgetsBinding.instance.addObserver(this);
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+    checkForNetwork(AppLocalizations.of(context)!);
+  });
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
     // Listen for incoming text or URL when the app is running or resumed
    
@@ -153,12 +159,12 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   }
 
 
-checkForNetwork(){
+checkForNetwork(AppLocalizations loc){
   _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
       if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
-         showMessage("You are not connected to the internet. Make sure WiFi/Mobile data is on");
+         showMessage(loc.youAreNotConnectedToInternet);
       }
     });
 }
@@ -170,6 +176,7 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
         Provider.of<VpnStatusProvider>(context, listen: false);
     var webViewModel = Provider.of<WebViewModel>(context, listen: false);
     var webViewController = webViewModel.webViewController;
+    final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
     var url = WebUri(formatUrl(_sharedUrl!.trim()));
     url ??= WebUri(settings.searchEngine.url);
    // print('THE WEB URL ADD NEW TANS--> $url ${ModalRoute.of(context)?.settings.name}');
@@ -202,7 +209,9 @@ void openLink(String? _sharedUrl,isInitialLaunch)async {
    if ((webViewController != null && vpnStatusProvider.canShowHomeScreen == true) //|| (webViewController != null && settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty)
    ) {
       vpnStatusProvider.updateCanShowHomeScreen(false);
-        webViewController.loadUrl(urlRequest: URLRequest(url: url));
+        webViewController.loadUrl(urlRequest: URLRequest(url: url,headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }));
         print('THE URL loading 2 --> ${webViewModel.url}');
     } 
     else {
@@ -513,6 +522,8 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
   Future<bool?> _showDownloadConfirmationDialog(BuildContext context) {
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
+        final loc = AppLocalizations.of(context)!;
+        final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -522,7 +533,7 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
           insetPadding:const EdgeInsets.all(20),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 170,
+            //height: 170,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: themeProvider.darkTheme
@@ -537,12 +548,12 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextWidget(
-                    text:'Quit Browser',
+                    text: loc.quitBrowser, //'Quit Browser',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
                 TextWidget(
-                 text: 'Are you sure you want to quit?',
+                 text:loc.rUSureWantToQuitApp,// 'Are you sure you want to quit?',
                   style: TextStyle(fontWeight: FontWeight.w500),
                   textAlign: TextAlign.center,
                 ),
@@ -562,7 +573,8 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget(text:'Cancel', style: TextStyle(fontSize: 18)),
+                          child: TextWidget(text:loc.cancel ,// 'Cancel',
+                           style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -588,9 +600,9 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
-                          child: TextWidget( text:'Quit',
+                          child: TextWidget( text:loc.quit, // 'Quit',
                               style:
-                                  TextStyle(color: Colors.red, fontSize: 18)),
+                                  TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 10.0), // Adjust the radius as needed
@@ -698,10 +710,10 @@ String currentUrl = '';
     var themeProvider = Provider.of<DarkThemeProvider>(context);
     var webviewmodel = browserModel.getCurrentTab()?.webViewModel;
     var webviewController = webviewmodel?.webViewController;
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final ttsProvider = Provider.of<TtsProvider>(context);
-
+final appLocaleProvider = Provider.of<LocaleProvider>(context);
     return WillPopScope(
         onWillPop: () async {
           browserModel.showTabScroller = false;
@@ -727,7 +739,7 @@ String currentUrl = '';
                               Image.memory(screenshotData, fit: BoxFit.cover))
                       : null,
                 );
-                webViewTab.webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.toInt();
+                webViewTab.webViewModel.settings?.minimumFontSize = browserModel.fontSize.toInt();
                 var url = webViewTab.webViewModel.url;
                 setState(() {
                   currentUrl = url.toString();
@@ -804,7 +816,11 @@ String currentUrl = '';
                 browserModel.showTabScroller = false;
                 // ttsProvider.updateTTSDisplayStatus(false);
                 browserModel.showTab(index);
-               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString())));
+               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString()),
+                headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          },
+               ));
                // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
               },
             )));

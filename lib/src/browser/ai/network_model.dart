@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:beldex_browser/constants_key.dart';
+import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,7 +47,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
         },
         body: jsonEncode({
           'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
@@ -103,7 +104,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${APIClass.OPENAI_API_KEY}',
+          'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
         },
         body: jsonEncode({
           'model': 'gpt-4o-mini', // Or 'gpt-4' if you have access

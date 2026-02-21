@@ -253,7 +253,7 @@ class ItemListWidget extends StatelessWidget {
     final browserModel = Provider.of<BrowserModel>(context, listen: false);
     final webViewModel = Provider.of<WebViewModel>(context, listen: false);
     final settings = browserModel.getSettings();
-    final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
     url ??=
         // settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty
         //     ? WebUri(settings.customUrlHomePage)
@@ -262,7 +262,7 @@ class ItemListWidget extends StatelessWidget {
     // browserModel.updateIsNewTab(true);
     print('THE WEB TEST --> $url');
     print('The WEBVIEW model fontSize ${webViewModel.settings?.minimumFontSize}');
-    webViewModel.settings?.minimumFontSize = selectedItemsProvider.fontSize.round();
+    webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
     browserModel.save();
     print('The WEBVIEW model fontSize 2--- ${webViewModel.settings?.minimumFontSize}');
     browserModel.addTab(WebViewTab(

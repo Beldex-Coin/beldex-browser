@@ -40,6 +40,9 @@ lib/generated_plugin_registrant.dart
 #api key gen
 lib/constants_key.dart
 
+#api key folder
+lib/security/
+
 #ad blocker domain filter list
 lib/ad_blocker_filter.dart
 
