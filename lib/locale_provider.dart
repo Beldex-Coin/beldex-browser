@@ -29,14 +29,28 @@ String get localeId => _locale.toLanguageTag();
     'English': const Locale('en'),
     'Español': const Locale('es'),
     '日本語': const Locale('ja'),
-    'Português': const Locale('pt'),
+    'Português (Brasil)': const Locale('pt'),
     'Deutsch': const Locale('de'),
     'Türkçe': const Locale('tr'),
     'Русский': const Locale('ru'),
-    '中文': const Locale('zh'),
+    '中文（简体）': const Locale('zh'),
     '한국어': const Locale('ko'),
     'Tiếng Việt': const Locale('vi'),
     'العربية': const Locale('ar'),
+
+
+
+    'Français': const Locale('fr'),        // French
+   'Italiano': const Locale('it'),         // Italian
+   'Dansk': const Locale('da'),            // Danish
+   'Nederlands': const Locale('nl'),       // Dutch
+   'Suomi': const Locale('fi'),            // Finnish
+   'Filipino': const Locale('fil'),        // Filipino
+   'Bahasa Indonesia': const Locale('id'), // Indonesian
+   'Bahasa Melayu': const Locale('ms'),    // Malay
+   'ไทย': const Locale('th'),              // Thai
+   
+   'Afrikaans': const Locale('af'),        // Afrikaans
   };
 
   LocaleProvider() {
@@ -76,14 +90,26 @@ String getLocalizedLanguageName(BuildContext context, String staticName) {
     case 'English': return loc.languageEnglish;
     case 'Español': return loc.languageSpanish;
     case '日本語': return loc.languageJapanese;
-    case 'Português': return loc.languagePortuguese;
+    case 'Português (Brasil)': return loc.languagePortuguese;
     case 'Deutsch': return loc.languageGerman;
     case 'Türkçe': return loc.languageTurkish;
     case 'Русский': return loc.languageRussian;
-    case '中文': return loc.languageChinese;
+    case '中文（简体）': return loc.languageChinese;
     case '한국어': return loc.languageKorean;
     case 'Tiếng Việt': return loc.languageVietnamese;
     case 'العربية': return loc.languageArabic;
+
+    case 'Français': return loc.languageFrench;
+    case 'Italiano': return loc.languageItalian;
+    case 'Dansk': return loc.languageDanish;
+    case 'Nederlands': return loc.languageDutch;
+    case 'Suomi': return loc.languageFinnish;
+    case 'Filipino': return loc.languageFilipino;        // Filipino
+    case 'Bahasa Indonesia': return loc.languageIndonesian; // Indonesian
+    case 'Bahasa Melayu': return loc.languageMalay;  // Malay
+    case 'ไทย': return loc.languageThai;           // Thai
+    case 'Afrikaans': return loc.languageAfrikaans;      // Afrikaans
+
     default: return loc.languageEnglish;
   }
 }
