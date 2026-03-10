@@ -538,6 +538,9 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
         addEngineProvider.selectedSessionEngines;
 
     return PopupMenuButton<List<int>>(
+      constraints: BoxConstraints(
+        minWidth: 210
+      ),
       offset: Offset(0, 47),
       color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
       surfaceTintColor:

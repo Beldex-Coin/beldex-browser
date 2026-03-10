@@ -99,7 +99,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get defaultSearchEngine => 'Moteur de recherche par défaut';
 
   @override
-  String get manageSearchShortcuts => 'Manage Search shortcuts';
+  String get manageSearchShortcuts => 'Gérer les raccourcis de recherche';
 
   @override
   String get editEnginesVisible => 'Modifier les moteurs visibles dans le menu de recherche';
@@ -480,10 +480,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get unabledToSave => 'Impossible d’enregistrer';
 
   @override
-  String get basic => 'Basic';
+  String get basic => 'Basique';
 
   @override
-  String get advanced => 'Advanced';
+  String get advanced => 'Avancé';
 
   @override
   String get downloadCompelete => 'Téléchargement terminé';
@@ -699,7 +699,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageJapanese => 'Japonais';
 
   @override
-  String get languagePortuguese => 'Portugais';
+  String get languagePortuguese => 'Portugais (Brésil)';
 
   @override
   String get languageGerman => 'Allemand';
@@ -711,16 +711,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageRussian => 'Russe';
 
   @override
-  String get languageChinese => 'Chinois';
+  String get languageChinese => 'Chinois (Simplifié)';
 
   @override
   String get languageKorean => 'Coréen';
 
   @override
   String get languageVietnamese => 'Vietnamien';
-
-  @override
-  String get languageTamil => 'Tamoul';
 
   @override
   String get languageArabic => 'Arabe';
@@ -756,15 +753,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Télougou';
-
-  @override
-  String get languageMalayalam => 'Malayalam';
-
-  @override
-  String get languageMarathi => 'Marathi';
-
-  @override
   String get languageAfrikaans => 'Afrikaans';
 
   @override
@@ -796,4 +784,52 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get languageSwedish => 'Suédois';
+
+  @override
+  String get languageAmharic => 'Amharique';
+
+  @override
+  String get languageSwahili => 'Swahili';
+
+  @override
+  String get languageSlovenian => 'Slovène';
+
+  @override
+  String get languageEstonian => 'Estonien';
+
+  @override
+  String get languageCzech => 'Tchèque';
+
+  @override
+  String get languageHungarian => 'Hongrois';
+
+  @override
+  String get languageHebrew => 'Hébreu';
+
+  @override
+  String get languageBulgarian => 'Bulgare';
+
+  @override
+  String get languageLatvian => 'Letton';
+
+  @override
+  String get languageCroatian => 'Croate';
+
+  @override
+  String get languageIcelandic => 'Islandais';
+
+  @override
+  String get languageBasque => 'Basque';
+
+  @override
+  String get languageCatalan => 'Catalan';
+
+  @override
+  String get languageSlovak => 'Slovaque';
+
+  @override
+  String get languageWelsh => 'Gallois';
+
+  @override
+  String get languageSerbian => 'Serbe';
 }
