@@ -243,11 +243,11 @@
 "languageEnglish": "Anglų",
 "languageSpanish": "Ispanų",
 "languageJapanese": "Japonų",
-"languagePortuguese": "Portugalų",
+"languagePortuguese": "Portugalų (Brazilija)",
 "languageGerman": "Vokiečių",
 "languageTurkish": "Turkų",
 "languageRussian": "Rusų",
-"languageChinese": "Kinų",
+"languageChinese": "Kinų (Supaprastinta)",
 "languageKorean": "Korėjiečių",
 "languageVietnamese": "Vietnamiečių",
 "languageTamil": "Tamilų",
@@ -278,7 +278,25 @@
 "languageChineseTraditional": "Kinų (tradicinė)",
 "languageChineseHongKong": "Kinų (Honkongas)",
 "languagePortuguesePortugal": "Portugalų (Portugalija)",
-"languageSwedish": "Švedų"
+"languageSwedish": "Švedų",
+
+ "languageAmharic": "Amharų",
+  "languageSwahili": "Svahili",
+  "languageSlovenian": "Slovėnų",
+  "languageEstonian": "Estų",
+  "languageCzech": "Čekų",
+  "languageHungarian": "Vengrų",
+  "languageHebrew": "Hebrajų",
+  "languageBulgarian": "Bulgarų",
+  "languageLatvian": "Latvių",
+  "languageCroatian": "Kroatų",
+  "languageIcelandic": "Islandų",
+  "languageBasque": "Baskų",
+  "languageCatalan": "Katalonų",
+  "languageSlovak": "Slovakų",
+  "languageWelsh": "Valų",
+  "languageSerbian": "Serbų"
+
 
 
 }
