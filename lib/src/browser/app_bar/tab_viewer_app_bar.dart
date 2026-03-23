@@ -82,6 +82,9 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
       ),
       PopupMenuButton<String>(
         color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+        constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
               icon: Icon(Icons.more_horiz,
                   color: themeProvider.darkTheme ? Colors.white : Colors.black),
         onSelected: _popupMenuChoiceAction,
@@ -112,11 +115,11 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                        SvgPicture.asset('assets/images/new_tab.svg' ,color: themeProvider.darkTheme
                                                 ?const Color(0xffFFFFFF)
                                                 :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0),
+                                                SizedBox(width: 8,),
+                        Expanded(
                           child: Text(loc.newtab, style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall),
+                                              .bodySmall,overflow: TextOverflow.ellipsis,maxLines: 1,),
                         ),
                       ]),
                 );
@@ -125,16 +128,17 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                   enabled: browserModel.webViewTabs.isNotEmpty,
                   value: choice,
                   height: 35,
+                  padding: EdgeInsets.only(left: 14,right: 16),
                   child: Row(
                       children: [
                          Container(
                            child:Icon(Icons.close,size: 20,),
                          ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:5.0),
+                         SizedBox(width: 5,),
+                        Expanded(
                           child: Text(loc.closeAllTabs, style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall),
+                                              .bodySmall,overflow: TextOverflow.ellipsis,maxLines: 1,),
                         ),
                       ]),
                 );
@@ -151,11 +155,11 @@ class _TabViewerAppBarState extends State<TabViewerAppBar> {
                                                 ?const Color(0xffFFFFFF)
                                                 :const Color(0xff282836)),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:8.0),
+SizedBox(width: 8,),
+                        Expanded(
                           child: Text(loc.settings,style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall),
+                                              .bodySmall,overflow: TextOverflow.ellipsis,maxLines: 1,),
                         ),
                       ]),
                 );
