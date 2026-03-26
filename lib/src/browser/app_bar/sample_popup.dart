@@ -539,7 +539,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
 
     return PopupMenuButton<List<int>>(
       constraints: BoxConstraints(
-        minWidth: 210
+        minWidth: 210, maxWidth: 220
       ),
       offset: Offset(0, 47),
       color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
@@ -628,6 +628,8 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                       padding: const EdgeInsets.only(top: 10),
                       child: Text('${loc.thistimeSearchIn}:',
                         style: Theme.of(context).textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     )
                   : Row(
@@ -644,10 +646,14 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          browserModel.items[index].name,
-                          style:
-                              Theme.of(context).textTheme.bodySmall,
+                        Expanded(
+                          child: Text(
+                            browserModel.items[index].name,
+                            style:
+                                Theme.of(context).textTheme.bodySmall,
+                                overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                          ),
                         ),
                       ],
                     ),
@@ -677,10 +683,14 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    engine.name,
-                    style:
-                        Theme.of(context).textTheme.bodySmall,
+                  Expanded(
+                    child: Text(
+                      engine.name,
+                      style:
+                          Theme.of(context).textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                    ),
                   ),
                 ],
               ),
@@ -702,10 +712,14 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
                         browserModel.items[searchSettingIndex].imageUrl,color: themeProvider.darkTheme ? Colors.white : Colors.black,),
                   ),
                   const SizedBox(width: 8),
-                  Text(loc.searchSettings,
-                   // provider.items[searchSettingIndex].name,
-                    style:
-                        Theme.of(context).textTheme.bodySmall,
+                  Expanded(
+                    child: Text(loc.searchSettings,
+                     // provider.items[searchSettingIndex].name,
+                      style:
+                          Theme.of(context).textTheme.bodySmall,
+                          overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                    ),
                   ),
                 ],
               ),

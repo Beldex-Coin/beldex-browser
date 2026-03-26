@@ -261,11 +261,11 @@
 "languageEnglish": "Αγγλικά",
 "languageSpanish": "Ισπανικά",
 "languageJapanese": "Ιαπωνικά",
-"languagePortuguese": "Πορτογαλικά",
+"languagePortuguese": "Πορτογαλικά (Βραζιλία)",
 "languageGerman": "Γερμανικά",
 "languageTurkish": "Τουρκικά",
 "languageRussian": "Ρωσικά",
-"languageChinese": "Κινέζικα",
+"languageChinese": "Κινέζικα (Απλοποιημένα)",
 "languageKorean": "Κορεατικά",
 "languageVietnamese": "Βιετναμέζικα",
 "languageTamil": "Ταμίλ",
@@ -296,7 +296,24 @@
 "languageChineseTraditional": "Κινέζικα (Παραδοσιακά)",
 "languageChineseHongKong": "Κινέζικα (Χονγκ Κονγκ)",
 "languagePortuguesePortugal": "Πορτογαλικά (Πορτογαλία)",
-"languageSwedish": "Σουηδικά"
+"languageSwedish": "Σουηδικά",
+
+"languageAmharic": "Αμχαρικά",
+  "languageSwahili": "Σουαχίλι",
+  "languageSlovenian": "Σλοβενικά",
+  "languageEstonian": "Εσθονικά",
+  "languageCzech": "Τσεχικά",
+  "languageHungarian": "Ουγγρικά",
+  "languageHebrew": "Εβραϊκά",
+  "languageBulgarian": "Βουλγαρικά",
+  "languageLatvian": "Λετονικά",
+  "languageCroatian": "Κροατικά",
+  "languageIcelandic": "Ισλανδικά",
+  "languageBasque": "Βασκικά",
+  "languageCatalan": "Καταλανικά",
+  "languageSlovak": "Σλοβακικά",
+  "languageWelsh": "Ουαλικά",
+  "languageSerbian": "Σερβικά"
 
 
 }
