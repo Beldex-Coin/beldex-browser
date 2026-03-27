@@ -835,6 +835,9 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
           showMenu(
                 context: context,
                  color: themeProvider.darkTheme ?const Color(0xff282836) : const Color(0xffF3F3F3),
+                 constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
                 // surfaceTintColor: Colors.green,
                shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -881,13 +884,11 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
                               ? Colors.white
                               : Colors.black //black,
                           ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: TextWidget(text:getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
-                        style:theme
-                                          .textTheme
-                                          .bodySmall ,),
-                      )
+                          SizedBox(width: 10,),
+                      Text(getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
+                      style:theme
+                                        .textTheme
+                                        .bodySmall ,overflow: TextOverflow.ellipsis,maxLines: 1,)
                     ]),
                   );
                 }).toList())
@@ -910,6 +911,9 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
         :showMenu(
                 context: context,
                  color: themeProvider.darkTheme ?const Color(0xff282836) : const Color(0xffF3F3F3),
+                 constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
                 // surfaceTintColor: Colors.green,
                shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -956,12 +960,12 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
                               ? Colors.white
                               : Colors.black //black,
                           ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: TextWidget(text:getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
+                          SizedBox(width: 10,),
+                      Expanded(
+                        child: Text(getLocalizedTabListPopupMenuItemsName(tabPopupMenuAction, loc), //tabPopupMenuAction,
                         style:theme
                                           .textTheme
-                                          .bodySmall ,),
+                                          .bodySmall ,overflow: TextOverflow.ellipsis,maxLines: 1,),
                       )
                     ]),
                   );
@@ -1118,6 +1122,10 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
       width: 33,
       child: StatefulBuilder(builder: (context, setState) {
         return PopupMenuButton<String>(
+          constraints: BoxConstraints(
+            minWidth: 230,maxWidth: 230
+          ),
+          padding: EdgeInsets.zero,
           //offset: Offset(9, 47),
          // offset: Offset(position.dx, position.dy + box.size.height-35),
           offset:  Offset(width/13.0,width/7.6),
@@ -1430,31 +1438,27 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: [
-                          //SizedBox(height: 10),
-                          Row(
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SvgPicture.asset('assets/images/new_tab.svg',
-                                    color: themeProvider.darkTheme
-                                        ?const Color(0xffFFFFFF)
-                                        :const Color(0xff282836)),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: TextWidget(text:loc.newtab, //choice,
-                                      style: isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme
-                                          .bodySmall  //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
-                                      ),
-                                ),
-                              ]),
-                        ],
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SvgPicture.asset('assets/images/new_tab.svg',
+                                  color: themeProvider.darkTheme
+                                      ?const Color(0xffFFFFFF)
+                                      :const Color(0xff282836)),
+                                      SizedBox(width: 8),
+                              Expanded(
+                                child: Text(loc.newtab, //choice,
+                                    style: theme.textTheme
+                                        .bodySmall , //TextStyle(color:Colors.white,fontSize: 13,fontWeight: FontWeight.normal),
+                                   maxLines: 1,overflow: TextOverflow.ellipsis,
+                                    ),
+                              ),
+                            ]),
                       ),
                     ),
                   );
@@ -1463,32 +1467,32 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(
-                                'assets/images/Favorites_white_theme.svg',
-                                color: themeProvider.darkTheme
-                                    ? const Color(0xffFFFFFF)
-                                    : const Color(0xff282836)),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: TextWidget(
-                               text: loc.favorites,// choice,
-                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SvgPicture.asset(
+                                  'assets/images/Favorites_white_theme.svg',
+                                  color: themeProvider.darkTheme
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff282836)),
+                                 SizedBox(width: 5),     
+                              Expanded(
+                                child: Text(
+                                  loc.favorites,// choice,
+                                  style: theme.textTheme.bodySmall,maxLines: 1,overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                            // const Icon(
-                            //   Icons.star,
-                            //   color: Colors.yellow,
-                            // )
-                          ]),
+                              // const Icon(
+                              //   Icons.star,
+                              //   color: Colors.yellow,
+                              // )
+                            ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.BELNET:
@@ -1496,25 +1500,25 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset('assets/images/Belnet.svg',
-                                color: themeProvider.darkTheme
-                                    ? const Color(0xffFFFFFF)
-                                    : const Color(0xff282836)),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: TextWidget(text:loc.changeNode, //choice,
-                                  style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
-                            ),
-                          ]),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(
+                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SvgPicture.asset('assets/images/Belnet.svg',
+                                  color: themeProvider.darkTheme
+                                      ? const Color(0xffFFFFFF)
+                                      : const Color(0xff282836)),
+                                      SizedBox(width: 8),
+                              Expanded(
+                                child: Text(loc.changeNode, //choice,
+                                    style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                              ),
+                            ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.DIVIDER:
@@ -1534,22 +1538,21 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/Web Archieves.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:loc.webArchives, //choice,
-                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
-                        ),
-                      ]),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/Web Archieves.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                                   SizedBox(width: 8),
+                          Text(loc.webArchives, //choice,
+                              style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.BELDEX_AI:
@@ -1557,24 +1560,25 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/ai-icons/Group-1.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836),
-                                height: 18,
-                                ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:loc.beldexAI, //choice,
-                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
-                        ),
-                      ]),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/ai-icons/Group-1.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836),
+                                  height: 18,
+                                  ),
+                                  SizedBox(width: 8),
+                          Expanded(
+                            child: Text(loc.beldexAI, //choice,
+                                style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                          ),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.DOWNLOADS:
@@ -1582,22 +1586,23 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/downloads-2.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(text:loc.downloads, //choice,
-                              style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall),
-                        ),
-                      ]),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/downloads-2.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                              SizedBox(width: 8),    
+                          Expanded(
+                            child: Text(loc.downloads, //choice,
+                                style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                          ),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.DESKTOP_MODE:
@@ -1605,41 +1610,43 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: browserModel.getCurrentTab() != null,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        Selector<WebViewModel, bool>(
-                          selector: (context, webViewModel) =>
-                              webViewModel.isDesktopMode,
-                          builder: (context, value, child) {
-                            return vpnStatusProvider.canShowHomeScreen ? 
-                            SvgPicture.asset(
-                              'assets/images/desktop_mode.svg',
-                              color:themeProvider.darkTheme
-                                      ?const Color(0xffFFFFFF)
-                                      : const Color(0xff282836),
-                            )
-                            : SvgPicture.asset(
-                              'assets/images/desktop_mode.svg',
-                              color: value
-                                  ?const Color(0xff00B134)
-                                  : themeProvider.darkTheme
-                                      ?const Color(0xffFFFFFF)
-                                      : const Color(0xff282836),
-                            );
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: TextWidget(
-                            text:loc.desktopMode, //choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          Selector<WebViewModel, bool>(
+                            selector: (context, webViewModel) =>
+                                webViewModel.isDesktopMode,
+                            builder: (context, value, child) {
+                              return vpnStatusProvider.canShowHomeScreen ? 
+                              SvgPicture.asset(
+                                'assets/images/desktop_mode.svg',
+                                color:themeProvider.darkTheme
+                                        ?const Color(0xffFFFFFF)
+                                        : const Color(0xff282836),
+                              )
+                              : SvgPicture.asset(
+                                'assets/images/desktop_mode.svg',
+                                color: value
+                                    ?const Color(0xff00B134)
+                                    : themeProvider.darkTheme
+                                        ?const Color(0xffFFFFFF)
+                                        : const Color(0xff282836),
+                              );
+                            },
                           ),
-                        ),
-                      ]),
+                          SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              loc.desktopMode, //choice,
+                              style: theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ]),
+                      ),
                     ),
                   );
                 // case PopupMenuActions.HISTORY:
@@ -1661,24 +1668,26 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: browserModel.getCurrentTab() != null,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/Share.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(
-                           text:loc.share, //choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/Share.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                                  SizedBox(width: 8,),
+                          Expanded(
+                            child: Text(
+                             loc.share, //choice,
+                              style: theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.SETTINGS:
@@ -1686,24 +1695,26 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 9),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/settings.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(
-                           text:loc.settings, //choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) :theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/settings.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                                  SizedBox(width: 8,),
+                          Expanded(
+                            child: Text(
+                             loc.settings, //choice,
+                              style:theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
                   );
                 // case PopupMenuActions.DEVELOPERS:
@@ -1725,85 +1736,122 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: browserModel.getCurrentTab() != null,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/find_on_page.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                :const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(
-                           text:loc.findOnPage, // choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
-                          ),
-                        ),
-                      ]),
-                    ),
-                  );
-                case PopupMenuActions.DARKMODE:
-                  return CustomPopupMenuItem<String>(
-                    enabled: false,
-                    value: choice,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Row(children: [
-                            SvgPicture.asset('assets/images/theme.svg',
-                                color: themeProvider.darkTheme
-                                    ? const Color(0xffFFFFFF)
-                                    :const Color(0xff282836)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 5),
-                              child: TextWidget(
-                               text:loc.dark, //choice,
-                                style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
-                              ),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/find_on_page.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                                  SizedBox(width: 8,),
+                          Expanded(
+                            child: Text(
+                             loc.findOnPage, // choice,
+                              style: theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
                             ),
-                          ]),
-                          Positioned(
-                              right: 0,
-                              // bottom: 5,
-                              child:
-                                  AnimatedToggleSwitch(appbarKey: _appBarKey))
-                        ],
+                          ),
+                        ]),
                       ),
                     ),
                   );
+                case PopupMenuActions.DARKMODE:
+                return CustomPopupMenuItem<String>(
+  enabled: false,
+  value: choice,
+  height: 55,
+  padding: const EdgeInsets.symmetric(horizontal: 14),
+  child: Row(
+    children: [
+      SvgPicture.asset(
+        'assets/images/theme.svg',
+        color: themeProvider.darkTheme
+            ? const Color(0xffFFFFFF)
+            : const Color(0xff282836),
+      ),
+      const SizedBox(width: 8),
+  
+      Expanded(
+        child: Text(
+          choice,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.bodySmall,
+        ),
+      ),
+    
+      Container(
+        margin: EdgeInsets.only(left: 5),
+        //width: 50,
+        height: 28,
+        child: AnimatedToggleSwitch(appbarKey: _appBarKey)),
+    ],
+  ),
+);
+                  // return CustomPopupMenuItem<String>(
+                  //   enabled: false,
+                  //   value: choice,
+                  //   height: 50,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  //     child: Stack(
+                  //       alignment: AlignmentDirectional.center,
+                  //       children: [
+                  //         Row(children: [
+                  //           SvgPicture.asset('assets/images/theme.svg',
+                  //               color: themeProvider.darkTheme
+                  //                   ? const Color(0xffFFFFFF)
+                  //                   :const Color(0xff282836)),
+                  //           Padding(
+                  //             padding: const EdgeInsets.symmetric(
+                  //                 horizontal: 8.0, vertical: 5),
+                  //             child: TextWidget(
+                  //              text:loc.dark, //choice,
+                  //               style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
+                  //                     theme
+                  //                         .textTheme
+                  //                         .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                  //                          maxLines: 1,overflow: TextOverflow.ellipsis,
+                  //             ),
+                  //           ),
+                  //         ]),
+                  //         Positioned(
+                  //             right: 0,
+                  //             // bottom: 5,
+                  //             child:
+                  //                 AnimatedToggleSwitch(appbarKey: _appBarKey))
+                  //       ],
+                  //     ),
+                  //   ),
+                  // );
                 case PopupMenuActions.ABOUT:
                   return CustomPopupMenuItem<String>(
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/about.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                : const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(
-                           text:loc.about, //choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/about.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  : const Color(0xff282836)),
+                                  SizedBox(width: 8,),
+                          Expanded(
+                            child: Text(
+                             loc.about, //choice,
+                              style: theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.REPORT_AN_ISSUE:
@@ -1811,24 +1859,26 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                     enabled: true,
                     value: choice,
                     height: 35,
+                    padding: EdgeInsets.only(left: 8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(children: [
-                        SvgPicture.asset('assets/images/ai-icons/report_issue.svg',
-                            color: themeProvider.darkTheme
-                                ?const Color(0xffFFFFFF)
-                                : const Color(0xff282836)),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: TextWidget(
-                           text:loc.reportAnIssue, //choice,
-                            style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) : theme.textTheme.bodySmall,
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/ai-icons/report_issue.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  : const Color(0xff282836)),
+                                  SizedBox(width: 8.0,),
+                          Expanded(
+                            child: Text(
+                             loc.reportAnIssue, //choice,
+                              style: theme.textTheme.bodySmall,
+                                             maxLines: 1,overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ]),
+                        ]),
+                      ),
                     ),
                   );
                 case PopupMenuActions.QUIT_VPN:
@@ -1836,34 +1886,28 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                       enabled: true,
                       value: choice,
                       height: 50,
+                      padding: EdgeInsets.only(left: 8),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset('assets/images/quit.svg',
-                                    color: themeProvider.darkTheme
-                                        ?const Color(0xffFFFFFF)
-                                        :const Color(0xff282836)),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 7.0),
-                                  child: TextWidget(
-                                   text:loc.quit, // choice,
-                                    style:isLengthyLanguageInList(localeProvider.selectedLanguage) ?
-                                      theme
-                                          .textTheme
-                                          .bodySmall!.copyWith(fontSize: 9) :
-                                        theme.textTheme.bodySmall,
-                                  ),
+                        child: SizedBox(
+                          width: 190,
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/images/quit.svg',
+                                  color: themeProvider.darkTheme
+                                      ?const Color(0xffFFFFFF)
+                                      :const Color(0xff282836)),
+                                      SizedBox(width: 8,),
+                              Expanded(
+                                child: Text(
+                                 loc.quit, // choice,
+                                  style:
+                                      theme.textTheme.bodySmall,
+                                       maxLines: 1,overflow: TextOverflow.ellipsis,
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            )
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ));
                 // case PopupMenuActions.INAPPWEBVIEW_PROJECT:

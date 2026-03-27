@@ -40,7 +40,7 @@ String get localeId => _locale.toLanguageTag();
 
 
 
-    'Français': const Locale('fr'),        // French
+   'Français': const Locale('fr'),        // French
    'Italiano': const Locale('it'),         // Italian
    'Dansk': const Locale('da'),            // Danish
    'Nederlands': const Locale('nl'),       // Dutch
@@ -49,8 +49,23 @@ String get localeId => _locale.toLanguageTag();
    'Bahasa Indonesia': const Locale('id'), // Indonesian
    'Bahasa Melayu': const Locale('ms'),    // Malay
    'ไทย': const Locale('th'),              // Thai
-   
    'Afrikaans': const Locale('af'),        // Afrikaans
+
+
+   
+   'Kiswahili': const Locale('sw'),         // Swahili
+   'Polski': const Locale('pl'),
+   'Română': const Locale('ro'),
+   'Українська': const Locale('uk'),       // Ukrainian
+   'Svenska': const Locale('sv'),          // Swedish
+   'Slovenščina': const Locale('sl'),      // Slovenian
+   'Norsk': const Locale('nb'),            // Norwegian
+   'Lietuvių': const Locale('lt'),         // Lithuanian
+   'Ελληνικά': const Locale('el'),         // Greek
+   'Eesti': const Locale('et'),            // Estonian
+
+
+
   };
 
   LocaleProvider() {
@@ -109,6 +124,20 @@ String getLocalizedLanguageName(BuildContext context, String staticName) {
     case 'Bahasa Melayu': return loc.languageMalay;  // Malay
     case 'ไทย': return loc.languageThai;           // Thai
     case 'Afrikaans': return loc.languageAfrikaans;      // Afrikaans
+
+  
+
+   case 'Kiswahili': return loc.languageSwahili;       // Swahili
+   case 'Polski': return loc.languagePolish;
+   case 'Română': return loc.languageRomanian;
+   case 'Українська': return loc.languageUkrainian;
+   case 'Svenska': return loc.languageSwedish;
+   case 'Slovenščina': return loc.languageSlovenian;   // Slovenian
+   case 'Norsk': return loc.languageNorwegian;
+   case 'Lietuvių': return loc.languageLithuanian;
+   case 'Ελληνικά': return loc.languageGreek;
+   case 'Eesti': return loc.languageEstonian;        // Estonian
+
 
     default: return loc.languageEnglish;
   }

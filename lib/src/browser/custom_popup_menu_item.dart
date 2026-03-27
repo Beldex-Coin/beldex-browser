@@ -8,10 +8,13 @@ class CustomPopupMenuItem<T> extends PopupMenuEntry<T> {
     this.height = kMinInteractiveDimension,
     this.textStyle,
     this.isIconButtonRow = false,
+     this.padding = const EdgeInsets.symmetric(horizontal: 16.0), 
     required this.child,
   }) : super(key: key);
 
   final T? value;
+
+  final EdgeInsetsGeometry padding; 
 
   final bool enabled;
 
@@ -58,7 +61,7 @@ class CustomPopupMenuItemState<T, W extends CustomPopupMenuItem<T>>
       child: Container(
         alignment: AlignmentDirectional.centerStart,
         constraints: BoxConstraints(minHeight: widget.height),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding:  widget.padding,
         child: buildChild(),
       ),
     );
