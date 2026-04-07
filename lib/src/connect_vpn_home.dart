@@ -852,7 +852,7 @@ try{
   child: ConstrainedBox(
     constraints: BoxConstraints(
       minWidth: constraint.maxWidth / 1.6, // same width as Connect
-      maxWidth: constraint.maxWidth * 0.95, // allow expansion limit
+      maxWidth: constraint.maxWidth * 0.70, // 0.95 allow expansion limit
     ),
     child: Container(
       height: 55,

@@ -65,6 +65,16 @@ String get localeId => _locale.toLanguageTag();
    'Eesti': const Locale('et'),            // Estonian
 
 
+   'Čeština': const Locale('cs'),          // Czech
+   'Magyar': const Locale('hu'),           // Hungarian
+   'עברית': const Locale('he'),            // Hebrew
+   'Български': const Locale('bg'),        // Bulgarian
+   'Latviešu': const Locale('lv'),         // Latvian
+   'Hrvatski': const Locale('hr'),         // Croatian
+   'Íslenska': const Locale('is'),         // Icelandic
+   'Euskara': const Locale('eu'),          // Basque
+   'Català': const Locale('ca'),           // Catalan
+   'Slovenčina': const Locale('sk'),       // Slovak
 
   };
 
@@ -138,6 +148,18 @@ String getLocalizedLanguageName(BuildContext context, String staticName) {
    case 'Ελληνικά': return loc.languageGreek;
    case 'Eesti': return loc.languageEstonian;        // Estonian
 
+
+
+   case 'Čeština': return loc.languageCzech;    // Czech
+   case 'Magyar': return loc.languageHungarian;          // Hungarian
+   case 'עברית': return loc.languageHebrew;           // Hebrew
+   case 'Български': return loc.languageBulgarian;       // Bulgarian
+   case 'Latviešu': return loc.languageLatvian;     // Latvian
+   case 'Hrvatski': return loc.languageCroatian;     // Croatian
+   case 'Íslenska': return loc.languageIcelandic;     // Icelandic
+   case 'Euskara': return loc.languageBasque;     // Basque
+   case 'Català': return loc.languageCatalan;         // Catalan
+   case 'Slovenčina': return loc.languageSlovak;     // Slovak
 
     default: return loc.languageEnglish;
   }

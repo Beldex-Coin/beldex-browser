@@ -726,7 +726,7 @@ void setRandomNode() async {
           insetPadding: EdgeInsets.all(20),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: 185,
+            //height: 185,
             padding: EdgeInsets.all(15),
             decoration: BoxDecoration(
                 color: themeProvider.darkTheme
@@ -742,7 +742,7 @@ void setRandomNode() async {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text( loc.switchingNode,
                    // 'Switching Node',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.center,
                   ),
                 ),
                 Text( loc.doYouWantToSwitch,
