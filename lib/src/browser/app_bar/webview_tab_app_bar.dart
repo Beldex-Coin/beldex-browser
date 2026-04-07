@@ -1776,7 +1776,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
   
       Expanded(
         child: Text(
-          choice,
+          loc.dark,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.bodySmall,
