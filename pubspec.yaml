@@ -185,6 +185,7 @@ flutter:
     - assets/images/flags/
     - assets/images/ai-icons/
     - assets/readability.js
+    - assets/tldList.txt
     # - assets/images/Belnet_Text_White.png
   generate: true
   # An image asset can refer to one or more resolution-specific "variants", see
