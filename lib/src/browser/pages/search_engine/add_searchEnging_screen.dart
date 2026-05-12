@@ -183,7 +183,7 @@ Return JSON for: "$engineName"
   Future<Map<String, dynamic>?> fetchEngineDataFromGemini(
       String engineName) async {
     final url = Uri.parse(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${ApiKeyManager.instance.getKey('gemini')}",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${ApiKeyManager.instance.getKey('gemini')}",
     );
 
 //   final payload = {
@@ -323,7 +323,7 @@ Future<Map<String, dynamic>?> callChatGPT(
         "Content-Type": "application/json",
       },
       body: jsonEncode({
-        "model": "gpt-4-turbo",
+        "model": 'gpt-5.4',//"gpt-4-turbo",
         "messages": [
           {
             "role": "user",
@@ -361,7 +361,7 @@ Future<Map<String, dynamic>?> callDeepSeek(
         "Content-Type": "application/json",
       },
       body: jsonEncode({
-        "model": "deepseek-chat",
+        "model": 'deepseek-v4-flash', //"deepseek-chat",
         "messages": [
           {
             "role": "user",
@@ -404,7 +404,7 @@ Future<Map<String, dynamic>?> callMistral(
         "Content-Type": "application/json",
       },
       body: jsonEncode({
-        "model": "mistral-small-latest", // best for JSON tasks
+        "model": 'mistral-large-latest',//"mistral-small-latest", // best for JSON tasks
         "messages": [
           {
             "role": "user",

@@ -56,7 +56,7 @@ Stream<String> sendTextForStream(String userMessage) async* {
       ),
       cancelToken: cancelToken,
       data: jsonEncode({
-        "model": "gpt-4-turbo",
+        "model": 'gpt-5.4',//"gpt-4-turbo",
         "messages": [
           {"role": "system", "content": "You are a helpful assistant. provide in bullet points if response more than 2 sentences"},
           {"role": "user", "content": userMessage}
@@ -171,7 +171,7 @@ Future<String> sendText(String text) async {
       body: utf8.encode(
          
       jsonEncode({
-        "model": "gpt-4o-mini", // Replace with the desired model
+        "model": 'gpt-5.4',//"gpt-4o-mini", // Replace with the desired model
         "messages": [
           {"role": "user", "content": text}
         ],
@@ -228,7 +228,7 @@ Future<String> sendTextForSummarise(String text) async {
         'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
       },
       body:utf8.encode( jsonEncode({
-        "model": "gpt-4o-mini", // Replace with the desired model
+        "model": 'gpt-5.4',//"gpt-4o-mini", // Replace with the desired model
         "messages": [
           {"role": "user", "content": "$text summarise this webpage in bullet points"}
         ],
@@ -275,7 +275,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
           'Authorization': 'Bearer ${ApiKeyManager.instance.getKey('openai')}',
         },
         body: jsonEncode({
-          'model': 'gpt-4o-mini',//'gpt-3.5-turbo',
+          'model': 'gpt-5.4', //'gpt-4o-mini',//'gpt-3.5-turbo',
           'messages': [
             {'role': 'system', 'content': 'Summarize the following webpage in bullet dot points:'},
             {'role': 'user', 'content': '${webViewModel.url} summarise this webpage' //extractedContent  
@@ -856,7 +856,7 @@ String fullContent = '';
       
 
       final String apiUrl =
-      "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash-001:streamGenerateContent?key=${ApiKeyManager.instance.getKey('gemini')}";
+      "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:streamGenerateContent?key=${ApiKeyManager.instance.getKey('gemini')}";
 
   final Map<String, dynamic> requestData = {
     "contents": [
@@ -1122,11 +1122,11 @@ print("Response received. Status: ${response.statusCode}");
   String _getModelName(String modelType) {
     switch (modelType) {
       case "openai":
-        return "gpt-4o-mini";
+        return 'gpt-5.4';//"gpt-4o-mini";
       case "deepseek":
-        return "deepseek-chat";
+        return 'deepseek-v4-flash';//"deepseek-chat";
       case "mistral":
-        return "mistral-small-latest";
+        return 'mistral-large-latest';//"mistral-small-latest";
       default:
         return "";
     }
@@ -1200,7 +1200,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
           'Content-Type': 'application/json',
         };
         body = {
-          'model': 'gpt-4-turbo',
+          'model': 'gpt-5.4',//'gpt-4-turbo',
           'messages': [
              {'role': 'system', 'content': 'You are nice assistant.Provide response in bullet points:'},
             {'role': 'user', 'content': text}
@@ -1217,7 +1217,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
           'Content-Type': 'application/json',
         };
         body = {
-          'model': 'mistral-small-latest',
+          'model': 'mistral-large-latest',//'mistral-small-latest',
           'messages': [
                // {'role': 'system', 'content': 'You are nice assistant.Provide response in bullet points:'},
             {'role': 'user', 'content': text}
@@ -1232,7 +1232,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
           'Content-Type': 'application/json',
         };
         body = {
-          'model': 'deepseek-chat',
+          'model': 'deepseek-v4-flash',//'deepseek-chat',
           'messages': [
             // {'role': 'system', 'content': 'You are nice assistant.Provide response in bullet points:'},
             {'role': 'user', 'content': text}
@@ -1243,7 +1243,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
 
       case 'gemini':
           url =
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${ApiKeyManager.instance.getKey('gemini')}'; //'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${APIClass.GEMINI_API_KEY}';
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${ApiKeyManager.instance.getKey('gemini')}'; //'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${APIClass.GEMINI_API_KEY}';
 
    headers = {
     'Content-Type': 'application/json',
