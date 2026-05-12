@@ -15,7 +15,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get connect => 'कनेक्ट';
 
   @override
-  String get connecting => 'कंनेक्टिंग...';
+  String get connecting => 'कनेक्ट हो रहा है...';
 
   @override
   String get exitnode => 'एग्ज़िट नोड';
@@ -42,7 +42,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchOrEnterAddress => 'खोजें या पता दर्ज करें';
 
   @override
-  String get beldexBrowserForAndroid => 'एंड्रॉइड के लिए बेल्डेक्स ब्राउज़र आपकी गोपनीयता की रक्षा करता है!';
+  String get beldexBrowserForAndroid => 'एंड्रॉइड के लिए बेल्डेक्स ब्राउज़र\n आपकी गोपनीयता की रक्षा करता है!';
 
   @override
   String get applanguage => 'ऐप भाषा';
@@ -339,7 +339,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get builtinZoomControls => 'इन-बिल्ट ज़ूम कंट्रोल्स';
 
   @override
-  String get builtinZoomControlsContent => '-बिल्ट ज़ूम फ़ंक्शन के साथ अपने ब्राउज़िंग अनुभव को नियंत्रित करें।.';
+  String get builtinZoomControlsContent => 'इन-बिल्ट ज़ूम फ़ंक्शन के साथ अपने ब्राउज़िंग अनुभव को नियंत्रित करें।.';
 
   @override
   String get displayZoomControls => 'ज़ूम कंट्रोल्स दिखाएँ';
@@ -441,7 +441,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get titleChangeNode => 'नोड बदलें';
 
   @override
-  String get hasExperiancedTraffic => 'पर असाधारण ट्रैफ़िक हुआ है। कृपया एग्ज़िट नोड बदलने के लिए ‘नोड बदलें’ पर क्लिक करें';
+  String get hasExperiancedTraffic => 'पर असाधारण ट्रैफ़िक हुआ है। कृपया एग्ज़िट नोड बदलने के लिए';
+
+  @override
+  String get toSwitchExitnode => 'पर क्लिक करें';
 
   @override
   String get theResponseHasBeenInterrupted => 'प्रतिक्रिया बाधित हो गई';
@@ -687,40 +690,37 @@ class AppLocalizationsHi extends AppLocalizations {
   String get languageVietnameseVietnam => 'वियतनामी (वियतनाम)';
 
   @override
-  String get languageEnglish => 'English';
+  String get languageEnglish => 'अंग्रेज़ी';
 
   @override
-  String get languageSpanish => 'Spanish';
+  String get languageSpanish => 'स्पेनिश';
 
   @override
-  String get languageJapanese => 'Japanese';
+  String get languageJapanese => 'जापानी';
 
   @override
-  String get languagePortuguese => 'Portuguese';
+  String get languagePortuguese => 'पुर्तगाली (ब्राज़ील)';
 
   @override
-  String get languageGerman => 'German';
+  String get languageGerman => 'जर्मन';
 
   @override
-  String get languageTurkish => 'Turkish';
+  String get languageTurkish => 'तुर्की';
 
   @override
-  String get languageRussian => 'Russian';
+  String get languageRussian => 'रूसी';
 
   @override
-  String get languageChinese => 'Chinese';
+  String get languageChinese => 'चीनी (सरलीकृत)';
 
   @override
-  String get languageKorean => 'Korean';
+  String get languageKorean => 'कोरियाई';
 
   @override
-  String get languageVietnamese => 'Vietnamese';
+  String get languageVietnamese => 'वियतनामी';
 
   @override
-  String get languageTamil => 'Tamil';
-
-  @override
-  String get languageArabic => 'Arabic';
+  String get languageArabic => 'अरबी';
 
   @override
   String get languageFrench => 'फ़्रेंच';
@@ -738,10 +738,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get languageFinnish => 'फिनिश';
 
   @override
-  String get languageFilipino => 'फिलिपिनो';
+  String get languageFilipino => 'फिलिपीनो';
 
   @override
-  String get languageIndonesian => 'इंडोनेशियन';
+  String get languageIndonesian => 'इंडोनेशियाई';
 
   @override
   String get languageMalay => 'मलय';
@@ -750,14 +750,86 @@ class AppLocalizationsHi extends AppLocalizations {
   String get languageThai => 'थाई';
 
   @override
-  String get languageHindi => 'हिन्दी';
+  String get languageHindi => 'हिंदी';
 
   @override
-  String get languageTelugu => 'तेलुगु';
+  String get languageAfrikaans => 'अफ़्रीकांस';
 
   @override
-  String get languageMalayalam => 'मलयालम';
+  String get languagePolish => 'पोलिश';
 
   @override
-  String get languageMarathi => 'मराठी';
+  String get languageRomanian => 'रोमानियाई';
+
+  @override
+  String get languageUkrainian => 'यूक्रेनी';
+
+  @override
+  String get languageLithuanian => 'लिथुआनियाई';
+
+  @override
+  String get languageNorwegian => 'नॉर्वेजियन';
+
+  @override
+  String get languageGreek => 'ग्रीक';
+
+  @override
+  String get languageChineseTraditional => 'चीनी (पारंपरिक)';
+
+  @override
+  String get languageChineseHongKong => 'चीनी (हांगकांग)';
+
+  @override
+  String get languagePortuguesePortugal => 'पुर्तगाली (पुर्तगाल)';
+
+  @override
+  String get languageSwedish => 'स्वीडिश';
+
+  @override
+  String get languageAmharic => 'अम्हारिक';
+
+  @override
+  String get languageSwahili => 'स्वाहिली';
+
+  @override
+  String get languageSlovenian => 'स्लोवेनियाई';
+
+  @override
+  String get languageEstonian => 'एस्टोनियाई';
+
+  @override
+  String get languageCzech => 'चेक';
+
+  @override
+  String get languageHungarian => 'हंगेरियन';
+
+  @override
+  String get languageHebrew => 'हिब्रू';
+
+  @override
+  String get languageBulgarian => 'बल्गेरियन';
+
+  @override
+  String get languageLatvian => 'लातवियाई';
+
+  @override
+  String get languageCroatian => 'क्रोएशियाई';
+
+  @override
+  String get languageIcelandic => 'आइसलैंडिक';
+
+  @override
+  String get languageBasque => 'बास्क';
+
+  @override
+  String get languageCatalan => 'कैटलन';
+
+  @override
+  String get languageSlovak => 'स्लोवाक';
+
+  @override
+  String get languageWelsh => 'वेल्श';
+
+  @override
+  String get languageSerbian => 'सर्बियाई';
 }
