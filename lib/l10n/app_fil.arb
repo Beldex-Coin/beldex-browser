@@ -250,20 +250,17 @@
 
 
 
-
   "languageEnglish": "Ingles",
   "languageSpanish": "Espanyol",
-  "languageJapanese": "Hapones",
-  "languagePortuguese": "Portuges",
+  "languageJapanese": "Hapon",
+  "languagePortuguese": "Portuges (Brazil)",
   "languageGerman": "Aleman",
   "languageTurkish": "Turko",
   "languageRussian": "Ruso",
-  "languageChinese": "Tsino",
+  "languageChinese": "Tsino (Pinasimple)",
   "languageKorean": "Koreano",
   "languageVietnamese": "Biyetnames",
-  "languageTamil": "Tamil",
   "languageArabic": "Arabe",
-
   "languageFrench": "Pranses",
   "languageItalian": "Italyano",
   "languageDanish": "Danish",
@@ -274,20 +271,33 @@
   "languageMalay": "Malay",
   "languageThai": "Thai",
   "languageHindi": "Hindi",
-  "languageTelugu": "Telugu",
-  "languageMalayalam": "Malayalam",
-  "languageMarathi": "Marathi",
   "languageAfrikaans": "Afrikaans",
-
-  "languagePolish": "Polako",
+  "languagePolish": "Polish",
   "languageRomanian": "Rumano",
   "languageUkrainian": "Ukranyano",
-  "languageLithuanian": "Litwano",
+  "languageLithuanian": "Lithuanian",
   "languageNorwegian": "Norwegian",
   "languageGreek": "Griyego",
   "languageChineseTraditional": "Tsino (Tradisyonal)",
   "languageChineseHongKong": "Tsino (Hong Kong)",
   "languagePortuguesePortugal": "Portuges (Portugal)",
-  "languageSwedish": "Suweko"
+  "languageSwedish": "Swedish",
+  "languageAmharic": "Amharic",
+  "languageSwahili": "Swahili",
+  "languageSlovenian": "Slovenian",
+  "languageEstonian": "Estonian",
+  "languageCzech": "Czech",
+  "languageHungarian": "Hungarian",
+  "languageHebrew": "Hebreo",
+  "languageBulgarian": "Bulgarian",
+  "languageLatvian": "Latvian",
+  "languageCroatian": "Croatian",
+  "languageIcelandic": "Icelandic",
+  "languageBasque": "Basque",
+  "languageCatalan": "Catalan",
+  "languageSlovak": "Slovak",
+  "languageWelsh": "Welsh",
+  "languageSerbian": "Serbian"
+
 
 }

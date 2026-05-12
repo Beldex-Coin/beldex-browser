@@ -246,21 +246,17 @@
 
 
 
-
-
   "languageEnglish": "ภาษาอังกฤษ",
   "languageSpanish": "ภาษาสเปน",
   "languageJapanese": "ภาษาญี่ปุ่น",
-  "languagePortuguese": "ภาษาโปรตุเกส",
+  "languagePortuguese": "ภาษาโปรตุเกส (บราซิล)",
   "languageGerman": "ภาษาเยอรมัน",
   "languageTurkish": "ภาษาตุรกี",
   "languageRussian": "ภาษารัสเซีย",
-  "languageChinese": "ภาษาจีน",
+  "languageChinese": "ภาษาจีน (ตัวย่อ)",
   "languageKorean": "ภาษาเกาหลี",
   "languageVietnamese": "ภาษาเวียดนาม",
-  "languageTamil": "ภาษาทมิฬ",
   "languageArabic": "ภาษาอาหรับ",
-
   "languageFrench": "ภาษาฝรั่งเศส",
   "languageItalian": "ภาษาอิตาลี",
   "languageDanish": "ภาษาเดนมาร์ก",
@@ -271,20 +267,33 @@
   "languageMalay": "ภาษามลายู",
   "languageThai": "ภาษาไทย",
   "languageHindi": "ภาษาฮินดี",
-  "languageTelugu": "ภาษาเตลูกู",
-  "languageMalayalam": "ภาษามลายาลัม",
-  "languageMarathi": "ภาษามราฐี",
-  "languageAfrikaans": "ภาษาแอฟริกานส์",
-
+  "languageAfrikaans": "ภาษาแอฟริกันส์",
   "languagePolish": "ภาษาโปแลนด์",
   "languageRomanian": "ภาษาโรมาเนีย",
   "languageUkrainian": "ภาษายูเครน",
   "languageLithuanian": "ภาษาลิทัวเนีย",
   "languageNorwegian": "ภาษานอร์เวย์",
   "languageGreek": "ภาษากรีก",
-  "languageChineseTraditional": "ภาษาจีน (ดั้งเดิม)",
+  "languageChineseTraditional": "ภาษาจีน (ตัวเต็ม)",
   "languageChineseHongKong": "ภาษาจีน (ฮ่องกง)",
   "languagePortuguesePortugal": "ภาษาโปรตุเกส (โปรตุเกส)",
-  "languageSwedish": "ภาษาสวีเดน"
+  "languageSwedish": "ภาษาสวีเดน",
+  "languageAmharic": "ภาษาอัมฮาริก",
+  "languageSwahili": "ภาษาสวาฮีลี",
+  "languageSlovenian": "ภาษาสโลวีเนีย",
+  "languageEstonian": "ภาษาเอสโตเนีย",
+  "languageCzech": "ภาษาเช็ก",
+  "languageHungarian": "ภาษาฮังการี",
+  "languageHebrew": "ภาษาฮีบรู",
+  "languageBulgarian": "ภาษาบัลแกเรีย",
+  "languageLatvian": "ภาษาลัตเวีย",
+  "languageCroatian": "ภาษาโครเอเชีย",
+  "languageIcelandic": "ภาษาไอซ์แลนด์",
+  "languageBasque": "ภาษาบาสก์",
+  "languageCatalan": "ภาษาคาตาลัน",
+  "languageSlovak": "ภาษาสโลวัก",
+  "languageWelsh": "ภาษาเวลส์",
+  "languageSerbian": "ภาษาเซอร์เบีย"
+
 
 }

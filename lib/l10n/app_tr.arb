@@ -259,11 +259,11 @@
   "languageEnglish": "İngilizce",
   "languageSpanish": "İspanyolca",
   "languageJapanese": "Japonca",
-  "languagePortuguese": "Portekizce",
+  "languagePortuguese": "Portekizce (Brezilya)",
   "languageGerman": "Almanca",
   "languageTurkish": "Türkçe",
   "languageRussian": "Rusça",
-  "languageChinese": "Çince",
+  "languageChinese": "Çince (Basitleştirilmiş)",
   "languageKorean": "Korece",
   "languageVietnamese": "Vietnamca",
   "languageTamil": "Tamilce",
@@ -293,7 +293,24 @@
   "languageChineseTraditional": "Çince (Geleneksel)",
   "languageChineseHongKong": "Çince (Hong Kong)",
   "languagePortuguesePortugal": "Portekizce (Portekiz)",
-  "languageSwedish": "İsveççe"
+  "languageSwedish": "İsveççe",
+
+  "languageAmharic": "Amharca",
+  "languageSwahili": "Svahili",
+  "languageSlovenian": "Slovence",
+  "languageEstonian": "Estonca",
+  "languageCzech": "Çekçe",
+  "languageHungarian": "Macarca",
+  "languageHebrew": "İbranice",
+  "languageBulgarian": "Bulgarca",
+  "languageLatvian": "Letonca",
+  "languageCroatian": "Hırvatça",
+  "languageIcelandic": "İzlandaca",
+  "languageBasque": "Baskça",
+  "languageCatalan": "Katalanca",
+  "languageSlovak": "Slovakça",
+  "languageWelsh": "Galce",
+  "languageSerbian": "Sırpça"
 
 
 

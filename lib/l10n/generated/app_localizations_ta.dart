@@ -270,7 +270,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get screenSecurity => 'Screen Security';
 
   @override
-  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing';
+  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing.';
 
   @override
   String get javascriptEnabled => 'JavaScript Enabled';
@@ -315,7 +315,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get adBlocker => 'Ad Blocker';
 
   @override
-  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience';
+  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience.';
 
   @override
   String get autoConnect => 'Auto-Connect';
@@ -441,7 +441,10 @@ class AppLocalizationsTa extends AppLocalizations {
   String get titleChangeNode => 'Change Node';
 
   @override
-  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on \'Change Node\' to switch exit node';
+  String get hasExperiancedTraffic => 'has experienced unprecedented traffic. Please click on';
+
+  @override
+  String get toSwitchExitnode => 'to switch exit node';
 
   @override
   String get theResponseHasBeenInterrupted => 'The response has been interrupted';
@@ -696,7 +699,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get languageJapanese => 'Japanese';
 
   @override
-  String get languagePortuguese => 'Portuguese';
+  String get languagePortuguese => 'Portuguese (Brazil)';
 
   @override
   String get languageGerman => 'German';
@@ -708,16 +711,13 @@ class AppLocalizationsTa extends AppLocalizations {
   String get languageRussian => 'Russian';
 
   @override
-  String get languageChinese => 'Chinese';
+  String get languageChinese => 'Chinese (Simplified)';
 
   @override
   String get languageKorean => 'Korean';
 
   @override
   String get languageVietnamese => 'Vietnamese';
-
-  @override
-  String get languageTamil => 'Tamil';
 
   @override
   String get languageArabic => 'Arabic';
@@ -753,11 +753,83 @@ class AppLocalizationsTa extends AppLocalizations {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Telugu';
+  String get languageAfrikaans => 'Afrikaans';
 
   @override
-  String get languageMalayalam => 'Malayalam';
+  String get languagePolish => 'Polish';
 
   @override
-  String get languageMarathi => 'Marathi';
+  String get languageRomanian => 'Romanian';
+
+  @override
+  String get languageUkrainian => 'Ukrainian';
+
+  @override
+  String get languageLithuanian => 'Lithuanian';
+
+  @override
+  String get languageNorwegian => 'Norwegian';
+
+  @override
+  String get languageGreek => 'Greek';
+
+  @override
+  String get languageChineseTraditional => 'Chinese (Traditional)';
+
+  @override
+  String get languageChineseHongKong => 'Chinese (Hong Kong)';
+
+  @override
+  String get languagePortuguesePortugal => 'Portuguese (Portugal)';
+
+  @override
+  String get languageSwedish => 'Swedish';
+
+  @override
+  String get languageAmharic => 'Amharic';
+
+  @override
+  String get languageSwahili => 'Swahili';
+
+  @override
+  String get languageSlovenian => 'Slovenian';
+
+  @override
+  String get languageEstonian => 'Estonian';
+
+  @override
+  String get languageCzech => 'Czech';
+
+  @override
+  String get languageHungarian => 'Hungarian';
+
+  @override
+  String get languageHebrew => 'Hebrew';
+
+  @override
+  String get languageBulgarian => 'Bulgarian';
+
+  @override
+  String get languageLatvian => 'Latvian';
+
+  @override
+  String get languageCroatian => 'Croatian';
+
+  @override
+  String get languageIcelandic => 'Icelandic';
+
+  @override
+  String get languageBasque => 'Basque';
+
+  @override
+  String get languageCatalan => 'Catalan';
+
+  @override
+  String get languageSlovak => 'Slovak';
+
+  @override
+  String get languageWelsh => 'Welsh';
+
+  @override
+  String get languageSerbian => 'Serbian';
 }

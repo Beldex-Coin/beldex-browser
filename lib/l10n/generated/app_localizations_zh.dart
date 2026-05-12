@@ -699,7 +699,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageJapanese => '日语';
 
   @override
-  String get languagePortuguese => '葡萄牙语';
+  String get languagePortuguese => '葡萄牙语（巴西）';
 
   @override
   String get languageGerman => '德语';
@@ -711,16 +711,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageRussian => '俄语';
 
   @override
-  String get languageChinese => '中文';
+  String get languageChinese => '中文（简体）';
 
   @override
   String get languageKorean => '韩语';
 
   @override
   String get languageVietnamese => '越南语';
-
-  @override
-  String get languageTamil => '泰米尔语';
 
   @override
   String get languageArabic => '阿拉伯语';
@@ -756,15 +753,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageHindi => '印地语';
 
   @override
-  String get languageTelugu => '泰卢固语';
-
-  @override
-  String get languageMalayalam => '马拉雅拉姆语';
-
-  @override
-  String get languageMarathi => '马拉地语';
-
-  @override
   String get languageAfrikaans => '南非语';
 
   @override
@@ -796,6 +784,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get languageSwedish => '瑞典语';
+
+  @override
+  String get languageAmharic => '阿姆哈拉语';
+
+  @override
+  String get languageSwahili => '斯瓦希里语';
+
+  @override
+  String get languageSlovenian => '斯洛文尼亚语';
+
+  @override
+  String get languageEstonian => '爱沙尼亚语';
+
+  @override
+  String get languageCzech => '捷克语';
+
+  @override
+  String get languageHungarian => '匈牙利语';
+
+  @override
+  String get languageHebrew => '希伯来语';
+
+  @override
+  String get languageBulgarian => '保加利亚语';
+
+  @override
+  String get languageLatvian => '拉脱维亚语';
+
+  @override
+  String get languageCroatian => '克罗地亚语';
+
+  @override
+  String get languageIcelandic => '冰岛语';
+
+  @override
+  String get languageBasque => '巴斯克语';
+
+  @override
+  String get languageCatalan => '加泰罗尼亚语';
+
+  @override
+  String get languageSlovak => '斯洛伐克语';
+
+  @override
+  String get languageWelsh => '威尔士语';
+
+  @override
+  String get languageSerbian => '塞尔维亚语';
 }
 
 /// The translations for Chinese, as used in Hong Kong (`zh_HK`).
@@ -1481,100 +1517,88 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   String get languageVietnameseVietnam => '越南文（越南）';
 
   @override
-  String get languageEnglish => '英文';
+  String get languageEnglish => '英語';
 
   @override
-  String get languageSpanish => '西班牙文';
+  String get languageSpanish => '西班牙語';
 
   @override
-  String get languageJapanese => '日文';
+  String get languageJapanese => '日語';
 
   @override
-  String get languagePortuguese => '葡萄牙文';
+  String get languagePortuguese => '葡萄牙語（巴西）';
 
   @override
-  String get languageGerman => '德文';
+  String get languageGerman => '德語';
 
   @override
-  String get languageTurkish => '土耳其文';
+  String get languageTurkish => '土耳其語';
 
   @override
-  String get languageRussian => '俄文';
+  String get languageRussian => '俄語';
 
   @override
-  String get languageChinese => '中文';
+  String get languageChinese => '中文（簡體）';
 
   @override
-  String get languageKorean => '韓文';
+  String get languageKorean => '韓語';
 
   @override
-  String get languageVietnamese => '越南文';
+  String get languageVietnamese => '越南語';
 
   @override
-  String get languageTamil => '泰米爾文';
+  String get languageArabic => '阿拉伯語';
 
   @override
-  String get languageArabic => '阿拉伯文';
+  String get languageFrench => '法語';
 
   @override
-  String get languageFrench => '法文';
+  String get languageItalian => '意大利語';
 
   @override
-  String get languageItalian => '意大利文';
+  String get languageDanish => '丹麥語';
 
   @override
-  String get languageDanish => '丹麥文';
+  String get languageDutch => '荷蘭語';
 
   @override
-  String get languageDutch => '荷蘭文';
+  String get languageFinnish => '芬蘭語';
 
   @override
-  String get languageFinnish => '芬蘭文';
+  String get languageFilipino => '菲律賓語';
 
   @override
-  String get languageFilipino => '菲律賓文';
+  String get languageIndonesian => '印尼語';
 
   @override
-  String get languageIndonesian => '印尼文';
+  String get languageMalay => '馬來語';
 
   @override
-  String get languageMalay => '馬來文';
+  String get languageThai => '泰語';
 
   @override
-  String get languageThai => '泰文';
+  String get languageHindi => '印地語';
 
   @override
-  String get languageHindi => '印地文';
+  String get languageAfrikaans => '南非語';
 
   @override
-  String get languageTelugu => '泰盧固文';
+  String get languagePolish => '波蘭語';
 
   @override
-  String get languageMalayalam => '馬拉雅拉姆文';
+  String get languageRomanian => '羅馬尼亞語';
 
   @override
-  String get languageMarathi => '馬拉地文';
+  String get languageUkrainian => '烏克蘭語';
 
   @override
-  String get languageAfrikaans => '南非荷蘭文';
+  String get languageLithuanian => '立陶宛語';
 
   @override
-  String get languagePolish => '波蘭文';
+  String get languageNorwegian => '挪威語';
 
   @override
-  String get languageRomanian => '羅馬尼亞文';
-
-  @override
-  String get languageUkrainian => '烏克蘭文';
-
-  @override
-  String get languageLithuanian => '立陶宛文';
-
-  @override
-  String get languageNorwegian => '挪威文';
-
-  @override
-  String get languageGreek => '希臘文';
+  String get languageGreek => '希臘語';
 
   @override
   String get languageChineseTraditional => '中文（繁體）';
@@ -1583,10 +1607,58 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   String get languageChineseHongKong => '中文（香港）';
 
   @override
-  String get languagePortuguesePortugal => '葡萄牙文（葡萄牙）';
+  String get languagePortuguesePortugal => '葡萄牙語（葡萄牙）';
 
   @override
-  String get languageSwedish => '瑞典文';
+  String get languageSwedish => '瑞典語';
+
+  @override
+  String get languageAmharic => '阿姆哈拉語';
+
+  @override
+  String get languageSwahili => '斯瓦希里語';
+
+  @override
+  String get languageSlovenian => '斯洛文尼亞語';
+
+  @override
+  String get languageEstonian => '愛沙尼亞語';
+
+  @override
+  String get languageCzech => '捷克語';
+
+  @override
+  String get languageHungarian => '匈牙利語';
+
+  @override
+  String get languageHebrew => '希伯來語';
+
+  @override
+  String get languageBulgarian => '保加利亞語';
+
+  @override
+  String get languageLatvian => '拉脫維亞語';
+
+  @override
+  String get languageCroatian => '克羅地亞語';
+
+  @override
+  String get languageIcelandic => '冰島語';
+
+  @override
+  String get languageBasque => '巴斯克語';
+
+  @override
+  String get languageCatalan => '加泰羅尼亞語';
+
+  @override
+  String get languageSlovak => '斯洛伐克語';
+
+  @override
+  String get languageWelsh => '威爾斯語';
+
+  @override
+  String get languageSerbian => '塞爾維亞語';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -2281,7 +2353,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get languageJapanese => '日語';
 
   @override
-  String get languagePortuguese => '葡萄牙語';
+  String get languagePortuguese => '葡萄牙語（巴西）';
 
   @override
   String get languageGerman => '德語';
@@ -2293,16 +2365,13 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get languageRussian => '俄語';
 
   @override
-  String get languageChinese => '中文';
+  String get languageChinese => '中文（簡體）';
 
   @override
   String get languageKorean => '韓語';
 
   @override
   String get languageVietnamese => '越南語';
-
-  @override
-  String get languageTamil => '泰米爾語';
 
   @override
   String get languageArabic => '阿拉伯語';
@@ -2338,15 +2407,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get languageHindi => '印地語';
 
   @override
-  String get languageTelugu => '泰盧固語';
-
-  @override
-  String get languageMalayalam => '馬拉雅拉姆語';
-
-  @override
-  String get languageMarathi => '馬拉地語';
-
-  @override
   String get languageAfrikaans => '南非荷蘭語';
 
   @override
@@ -2378,4 +2438,52 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get languageSwedish => '瑞典語';
+
+  @override
+  String get languageAmharic => '阿姆哈拉語';
+
+  @override
+  String get languageSwahili => '史瓦希里語';
+
+  @override
+  String get languageSlovenian => '斯洛維尼亞語';
+
+  @override
+  String get languageEstonian => '愛沙尼亞語';
+
+  @override
+  String get languageCzech => '捷克語';
+
+  @override
+  String get languageHungarian => '匈牙利語';
+
+  @override
+  String get languageHebrew => '希伯來語';
+
+  @override
+  String get languageBulgarian => '保加利亞語';
+
+  @override
+  String get languageLatvian => '拉脫維亞語';
+
+  @override
+  String get languageCroatian => '克羅埃西亞語';
+
+  @override
+  String get languageIcelandic => '冰島語';
+
+  @override
+  String get languageBasque => '巴斯克語';
+
+  @override
+  String get languageCatalan => '加泰隆尼亞語';
+
+  @override
+  String get languageSlovak => '斯洛伐克語';
+
+  @override
+  String get languageWelsh => '威爾斯語';
+
+  @override
+  String get languageSerbian => '塞爾維亞語';
 }

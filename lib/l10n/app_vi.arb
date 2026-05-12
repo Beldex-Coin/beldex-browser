@@ -252,11 +252,11 @@
   "languageEnglish": "Tiếng Anh",
   "languageSpanish": "Tiếng Tây Ban Nha",
   "languageJapanese": "Tiếng Nhật",
-  "languagePortuguese": "Tiếng Bồ Đào Nha",
+  "languagePortuguese": "Tiếng Bồ Đào Nha (Brazil)",
   "languageGerman": "Tiếng Đức",
   "languageTurkish": "Tiếng Thổ Nhĩ Kỳ",
   "languageRussian": "Tiếng Nga",
-  "languageChinese": "Tiếng Trung",
+  "languageChinese": "Tiếng Trung (Giản thể)",
   "languageKorean": "Tiếng Hàn",
   "languageVietnamese": "Tiếng Việt",
   "languageTamil": "Tiếng Tamil",
@@ -286,7 +286,24 @@
   "languageChineseTraditional": "Tiếng Trung (Phồn thể)",
   "languageChineseHongKong": "Tiếng Trung (Hồng Kông)",
   "languagePortuguesePortugal": "Tiếng Bồ Đào Nha (Bồ Đào Nha)",
-  "languageSwedish": "Tiếng Thụy Điển"
+  "languageSwedish": "Tiếng Thụy Điển",
+
+  "languageAmharic": "Tiếng Amharic",
+  "languageSwahili": "Tiếng Swahili",
+  "languageSlovenian": "Tiếng Slovenia",
+  "languageEstonian": "Tiếng Estonia",
+  "languageCzech": "Tiếng Séc",
+  "languageHungarian": "Tiếng Hungary",
+  "languageHebrew": "Tiếng Do Thái",
+  "languageBulgarian": "Tiếng Bulgaria",
+  "languageLatvian": "Tiếng Latvia",
+  "languageCroatian": "Tiếng Croatia",
+  "languageIcelandic": "Tiếng Iceland",
+  "languageBasque": "Tiếng Basque",
+  "languageCatalan": "Tiếng Catalan",
+  "languageSlovak": "Tiếng Slovakia",
+  "languageWelsh": "Tiếng Wales",
+  "languageSerbian": "Tiếng Serbia"
 
 
 }

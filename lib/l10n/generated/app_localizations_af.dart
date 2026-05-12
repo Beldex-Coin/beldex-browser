@@ -558,7 +558,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get titleKeyFeature => '\nKey Features';
 
   @override
-  String get followingAreTheFeatures => '\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n';
+  String get followingAreTheFeatures => '\nHieronder volg die kenmerke wat beskikbaar is in die Beta-weergawe van die Beldex-blaaiertoepassing. Meer kenmerke sal by die alfa-weergawe gevoeg word.\n';
 
   @override
   String get blockJavascript => 'Blokkeer JavaScript: Die Beldex Browser prioritiseer gebruikersveiligheid deur JavaScript te blokkeer, wat die risiko van kwaadwillige skrifte verminder wat gebruikers se vertroulikheid en sekuriteit kan benadeel. Dit verseker ’n veilige blaai-ervaring en beskerm gebruikers teen bedreigings wat JavaScript-kwesbaarhede behels.';
@@ -699,7 +699,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get languageJapanese => 'Japannees';
 
   @override
-  String get languagePortuguese => 'Portugees';
+  String get languagePortuguese => 'Portugees (Brasilië)';
 
   @override
   String get languageGerman => 'Duits';
@@ -711,16 +711,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get languageRussian => 'Russies';
 
   @override
-  String get languageChinese => 'Chinees';
+  String get languageChinese => 'Chinees (Vereenvoudig)';
 
   @override
   String get languageKorean => 'Koreaans';
 
   @override
   String get languageVietnamese => 'Viëtnamees';
-
-  @override
-  String get languageTamil => 'Tamil';
 
   @override
   String get languageArabic => 'Arabies';
@@ -756,15 +753,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Telugu';
-
-  @override
-  String get languageMalayalam => 'Malayalam';
-
-  @override
-  String get languageMarathi => 'Marathi';
-
-  @override
   String get languageAfrikaans => 'Afrikaans';
 
   @override
@@ -789,11 +777,59 @@ class AppLocalizationsAf extends AppLocalizations {
   String get languageChineseTraditional => 'Chinees (Tradisioneel)';
 
   @override
-  String get languageChineseHongKong => 'Chinees (Hong Kong)';
+  String get languageChineseHongKong => 'Chinees (Hongkong)';
 
   @override
   String get languagePortuguesePortugal => 'Portugees (Portugal)';
 
   @override
   String get languageSwedish => 'Sweeds';
+
+  @override
+  String get languageAmharic => 'Amharies';
+
+  @override
+  String get languageSwahili => 'Swahili';
+
+  @override
+  String get languageSlovenian => 'Sloveens';
+
+  @override
+  String get languageEstonian => 'Esties';
+
+  @override
+  String get languageCzech => 'Tsjeggies';
+
+  @override
+  String get languageHungarian => 'Hongaars';
+
+  @override
+  String get languageHebrew => 'Hebreeus';
+
+  @override
+  String get languageBulgarian => 'Bulgaars';
+
+  @override
+  String get languageLatvian => 'Letties';
+
+  @override
+  String get languageCroatian => 'Kroaties';
+
+  @override
+  String get languageIcelandic => 'Yslands';
+
+  @override
+  String get languageBasque => 'Baskies';
+
+  @override
+  String get languageCatalan => 'Katalaans';
+
+  @override
+  String get languageSlovak => 'Slowaaks';
+
+  @override
+  String get languageWelsh => 'Wallies';
+
+  @override
+  String get languageSerbian => 'Serwies';
 }

@@ -12,7 +12,7 @@
   "prepareDaemonConnection": "Valmistellaan daemon-yhteyttä",
   "searchOrEnterAddress": "Hae tai kirjoita osoite",
 
-  "beldexBrowserForAndroid": "Beldex-selain Androidille suojaa luottamuksellisuuttasi!",
+  "beldexBrowserForAndroid": "Beldex-selain Androidille\n suojaa luottamuksellisuuttasi!",
   "applanguage": "Sovelluksen kieli",
   "searchLanguage": "Hae kieltä",
   "downloadCancelled": "Lataus peruutettu",
@@ -151,7 +151,8 @@
   "noCompletedDownloads": "Ei valmiita latauksia",
   "cannotOpenThisFile": "Tätä tiedostoa ei voi avata",
   "titleChangeNode": "Vaihda solmu",
-  "hasExperiancedTraffic": "on poikkeuksellisen paljon liikennettä. Napsauta ”Vaihda solmu” vaihtaaksesi poistumissolmua",
+  "hasExperiancedTraffic": "on poikkeuksellisen paljon liikennettä. Napsauta",
+  "toSwitchExitnode": "vaihtaaksesi poistumissolmua",
   "theResponseHasBeenInterrupted": "Vastaus keskeytyi",
   "tryThis": "Kokeile tätä:",
   "you": "Sinä",
@@ -248,6 +249,20 @@
   "languageVietnameseVietnam": "Vietnam (Vietnam)",
 
 
+
+  "languageEnglish": "Englanti",
+  "languageSpanish": "Espanja",
+  "languageJapanese": "Japani",
+  "languagePortuguese": "Portugali (Brasilia)",
+  "languageGerman": "Saksa",
+  "languageTurkish": "Turkki",
+  "languageRussian": "Venäjä",
+  "languageChinese": "Kiina (yksinkertaistettu)",
+  "languageKorean": "Korea",
+  "languageVietnamese": "Vietnam",
+  "languageTamil": "Tamil",
+  "languageArabic": "Arabia",
+
   "languageFrench": "Ranska",
   "languageItalian": "Italia",
   "languageDanish": "Tanska",
@@ -259,6 +274,36 @@
   "languageThai": "Thai",
   "languageHindi": "Hindi",
   "languageTelugu": "Telugu",
-  "languageMalayalam": "Malajalam",
-  "languageMarathi": "Marathi"
+  "languageMalayalam": "Malayalam",
+  "languageMarathi": "Marathi",
+  "languageAfrikaans": "Afrikaans",
+
+  "languagePolish": "Puola",
+  "languageRomanian": "Romania",
+  "languageUkrainian": "Ukraina",
+  "languageLithuanian": "Liettua",
+  "languageNorwegian": "Norja",
+  "languageGreek": "Kreikka",
+  "languageChineseTraditional": "Kiina (Perinteinen)",
+  "languageChineseHongKong": "Kiina (Hongkong)",
+  "languagePortuguesePortugal": "Portugali (Portugali)",
+  "languageSwedish": "Ruotsi",
+
+   "languageAmharic": "Amhara",
+  "languageSwahili": "Swahili",
+  "languageSlovenian": "Sloveeni",
+  "languageEstonian": "Viro",
+  "languageCzech": "Tšekki",
+  "languageHungarian": "Unkari",
+  "languageHebrew": "Heprea",
+  "languageBulgarian": "Bulgaria",
+  "languageLatvian": "Latvia",
+  "languageCroatian": "Kroatia",
+  "languageIcelandic": "Islanti",
+  "languageBasque": "Baski",
+  "languageCatalan": "Katalaani",
+  "languageSlovak": "Slovakia",
+  "languageWelsh": "Wales",
+  "languageSerbian": "Serbia"
+
 }

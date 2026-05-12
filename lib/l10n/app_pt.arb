@@ -252,11 +252,11 @@
   "languageEnglish": "Inglês",
   "languageSpanish": "Espanhol",
   "languageJapanese": "Japonês",
-  "languagePortuguese": "Português",
+  "languagePortuguese": "Português (Brasil)",
   "languageGerman": "Alemão",
   "languageTurkish": "Turco",
   "languageRussian": "Russo",
-  "languageChinese": "Chinês",
+  "languageChinese": "Chinês (Simplificado)",
   "languageKorean": "Coreano",
   "languageVietnamese": "Vietnamita",
   "languageTamil": "Tâmil",
@@ -286,7 +286,25 @@
   "languageChineseTraditional": "Chinês (Tradicional)",
   "languageChineseHongKong": "Chinês (Hong Kong)",
   "languagePortuguesePortugal": "Português (Portugal)",
-  "languageSwedish": "Sueco"
+  "languageSwedish": "Sueco",
+
+
+  "languageAmharic": "Amárico",
+  "languageSwahili": "Suaíli",
+  "languageSlovenian": "Esloveno",
+  "languageEstonian": "Estoniano",
+  "languageCzech": "Tcheco",
+  "languageHungarian": "Húngaro",
+  "languageHebrew": "Hebraico",
+  "languageBulgarian": "Búlgaro",
+  "languageLatvian": "Letão",
+  "languageCroatian": "Croata",
+  "languageIcelandic": "Islandês",
+  "languageBasque": "Basco",
+  "languageCatalan": "Catalão",
+  "languageSlovak": "Eslovaco",
+  "languageWelsh": "Galês",
+  "languageSerbian": "Sérvio"
 
 
 }

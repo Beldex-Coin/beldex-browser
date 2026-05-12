@@ -699,7 +699,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageJapanese => '일본어';
 
   @override
-  String get languagePortuguese => '포르투갈어';
+  String get languagePortuguese => '포르투갈어 (브라질)';
 
   @override
   String get languageGerman => '독일어';
@@ -711,16 +711,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageRussian => '러시아어';
 
   @override
-  String get languageChinese => '중국어';
+  String get languageChinese => '중국어 (간체)';
 
   @override
   String get languageKorean => '한국어';
 
   @override
   String get languageVietnamese => '베트남어';
-
-  @override
-  String get languageTamil => '타밀어';
 
   @override
   String get languageArabic => '아랍어';
@@ -756,15 +753,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageHindi => '힌디어';
 
   @override
-  String get languageTelugu => '텔루구어';
-
-  @override
-  String get languageMalayalam => '말라얄람어';
-
-  @override
-  String get languageMarathi => '마라티어';
-
-  @override
   String get languageAfrikaans => '아프리칸스어';
 
   @override
@@ -796,4 +784,52 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get languageSwedish => '스웨덴어';
+
+  @override
+  String get languageAmharic => '암하라어';
+
+  @override
+  String get languageSwahili => '스와힐리어';
+
+  @override
+  String get languageSlovenian => '슬로베니아어';
+
+  @override
+  String get languageEstonian => '에스토니아어';
+
+  @override
+  String get languageCzech => '체코어';
+
+  @override
+  String get languageHungarian => '헝가리어';
+
+  @override
+  String get languageHebrew => '히브리어';
+
+  @override
+  String get languageBulgarian => '불가리아어';
+
+  @override
+  String get languageLatvian => '라트비아어';
+
+  @override
+  String get languageCroatian => '크로아티아어';
+
+  @override
+  String get languageIcelandic => '아이슬란드어';
+
+  @override
+  String get languageBasque => '바스크어';
+
+  @override
+  String get languageCatalan => '카탈루냐어';
+
+  @override
+  String get languageSlovak => '슬로바키아어';
+
+  @override
+  String get languageWelsh => '웨일스어';
+
+  @override
+  String get languageSerbian => '세르비아어';
 }

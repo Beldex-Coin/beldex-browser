@@ -699,7 +699,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageJapanese => 'Japonês';
 
   @override
-  String get languagePortuguese => 'Português';
+  String get languagePortuguese => 'Português (Brasil)';
 
   @override
   String get languageGerman => 'Alemão';
@@ -711,16 +711,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageRussian => 'Russo';
 
   @override
-  String get languageChinese => 'Chinês';
+  String get languageChinese => 'Chinês (Simplificado)';
 
   @override
   String get languageKorean => 'Coreano';
 
   @override
   String get languageVietnamese => 'Vietnamita';
-
-  @override
-  String get languageTamil => 'Tâmil';
 
   @override
   String get languageArabic => 'Árabe';
@@ -756,15 +753,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Telugu';
-
-  @override
-  String get languageMalayalam => 'Malaiala';
-
-  @override
-  String get languageMarathi => 'Marata';
-
-  @override
   String get languageAfrikaans => 'Africâner';
 
   @override
@@ -796,6 +784,54 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get languageSwedish => 'Sueco';
+
+  @override
+  String get languageAmharic => 'Amárico';
+
+  @override
+  String get languageSwahili => 'Suaíli';
+
+  @override
+  String get languageSlovenian => 'Esloveno';
+
+  @override
+  String get languageEstonian => 'Estoniano';
+
+  @override
+  String get languageCzech => 'Tcheco';
+
+  @override
+  String get languageHungarian => 'Húngaro';
+
+  @override
+  String get languageHebrew => 'Hebraico';
+
+  @override
+  String get languageBulgarian => 'Búlgaro';
+
+  @override
+  String get languageLatvian => 'Letão';
+
+  @override
+  String get languageCroatian => 'Croata';
+
+  @override
+  String get languageIcelandic => 'Islandês';
+
+  @override
+  String get languageBasque => 'Basco';
+
+  @override
+  String get languageCatalan => 'Catalão';
+
+  @override
+  String get languageSlovak => 'Eslovaco';
+
+  @override
+  String get languageWelsh => 'Galês';
+
+  @override
+  String get languageSerbian => 'Sérvio';
 }
 
 /// The translations for Portuguese, as used in Portugal (`pt_PT`).
@@ -884,7 +920,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get search => 'Pesquisar';
 
   @override
-  String get searchEngine => 'Search Engine';
+  String get searchEngine => 'Motor de pesquisa';
 
   @override
   String get defaultSearchEngine => 'Motor de pesquisa predefinido';
@@ -1490,7 +1526,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get languageJapanese => 'Japonês';
 
   @override
-  String get languagePortuguese => 'Português';
+  String get languagePortuguese => 'Português (Brasil)';
 
   @override
   String get languageGerman => 'Alemão';
@@ -1502,16 +1538,13 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get languageRussian => 'Russo';
 
   @override
-  String get languageChinese => 'Chinês';
+  String get languageChinese => 'Chinês (Simplificado)';
 
   @override
   String get languageKorean => 'Coreano';
 
   @override
   String get languageVietnamese => 'Vietnamita';
-
-  @override
-  String get languageTamil => 'Tâmil';
 
   @override
   String get languageArabic => 'Árabe';
@@ -1547,15 +1580,6 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Télugo';
-
-  @override
-  String get languageMalayalam => 'Malaiala';
-
-  @override
-  String get languageMarathi => 'Marata';
-
-  @override
   String get languageAfrikaans => 'Africâner';
 
   @override
@@ -1587,4 +1611,52 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get languageSwedish => 'Sueco';
+
+  @override
+  String get languageAmharic => 'Amárico';
+
+  @override
+  String get languageSwahili => 'Suaíli';
+
+  @override
+  String get languageSlovenian => 'Esloveno';
+
+  @override
+  String get languageEstonian => 'Estónio';
+
+  @override
+  String get languageCzech => 'Checo';
+
+  @override
+  String get languageHungarian => 'Húngaro';
+
+  @override
+  String get languageHebrew => 'Hebraico';
+
+  @override
+  String get languageBulgarian => 'Búlgaro';
+
+  @override
+  String get languageLatvian => 'Letão';
+
+  @override
+  String get languageCroatian => 'Croata';
+
+  @override
+  String get languageIcelandic => 'Islandês';
+
+  @override
+  String get languageBasque => 'Basco';
+
+  @override
+  String get languageCatalan => 'Catalão';
+
+  @override
+  String get languageSlovak => 'Eslovaco';
+
+  @override
+  String get languageWelsh => 'Galês';
+
+  @override
+  String get languageSerbian => 'Sérvio';
 }

@@ -265,11 +265,11 @@
   "languageEnglish": "الإنجليزية",
   "languageSpanish": "الإسبانية",
   "languageJapanese": "اليابانية",
-  "languagePortuguese": "البرتغالية",
+  "languagePortuguese": "البرتغالية (البرازيل)",
   "languageGerman": "الألمانية",
   "languageTurkish": "التركية",
   "languageRussian": "الروسية",
-  "languageChinese": "الصينية",
+  "languageChinese": "الصينية (المبسطة)",
   "languageKorean": "الكورية",
   "languageVietnamese": "الفيتنامية",
   "languageTamil": "التاميلية",
@@ -299,7 +299,24 @@
   "languageChineseTraditional": "الصينية (التقليدية)",
   "languageChineseHongKong": "الصينية (هونغ كونغ)",
   "languagePortuguesePortugal": "البرتغالية (البرتغال)",
-  "languageSwedish": "السويدية"
+  "languageSwedish": "السويدية",
+
+  "languageAmharic": "الأمهرية",
+  "languageSwahili": "السواحيلية",
+  "languageSlovenian": "السلوفينية",
+  "languageEstonian": "الإستونية",
+  "languageCzech": "التشيكية",
+  "languageHungarian": "الهنغارية",
+  "languageHebrew": "العبرية",
+  "languageBulgarian": "البلغارية",
+  "languageLatvian": "اللاتفية",
+  "languageCroatian": "الكرواتية",
+  "languageIcelandic": "الأيسلندية",
+  "languageBasque": "الباسكية",
+  "languageCatalan": "الكتالونية",
+  "languageSlovak": "السلوفاكية",
+  "languageWelsh": "الويلزية",
+  "languageSerbian": "الصربية"
 
 
 }

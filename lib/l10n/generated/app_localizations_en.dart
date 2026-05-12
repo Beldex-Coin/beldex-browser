@@ -270,7 +270,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get screenSecurity => 'Screen Security';
 
   @override
-  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing';
+  String get screenSecurityContent => 'Add an extra layer of protection for secure browsing.';
 
   @override
   String get javascriptEnabled => 'JavaScript Enabled';
@@ -315,7 +315,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get adBlocker => 'Ad Blocker';
 
   @override
-  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience';
+  String get adBlockerContent => 'Toggle to block intrusive ads while browsing and enhance your browsing experience.';
 
   @override
   String get autoConnect => 'Auto-Connect';
@@ -699,7 +699,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageJapanese => 'Japanese';
 
   @override
-  String get languagePortuguese => 'Portuguese';
+  String get languagePortuguese => 'Portuguese (Brazil)';
 
   @override
   String get languageGerman => 'German';
@@ -711,16 +711,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageRussian => 'Russian';
 
   @override
-  String get languageChinese => 'Chinese';
+  String get languageChinese => 'Chinese (Simplified)';
 
   @override
   String get languageKorean => 'Korean';
 
   @override
   String get languageVietnamese => 'Vietnamese';
-
-  @override
-  String get languageTamil => 'Tamil';
 
   @override
   String get languageArabic => 'Arabic';
@@ -756,15 +753,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageHindi => 'Hindi';
 
   @override
-  String get languageTelugu => 'Telugu';
-
-  @override
-  String get languageMalayalam => 'Malayalam';
-
-  @override
-  String get languageMarathi => 'Marathi';
-
-  @override
   String get languageAfrikaans => 'Afrikaans';
 
   @override
@@ -796,4 +784,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageSwedish => 'Swedish';
+
+  @override
+  String get languageAmharic => 'Amharic';
+
+  @override
+  String get languageSwahili => 'Swahili';
+
+  @override
+  String get languageSlovenian => 'Slovenian';
+
+  @override
+  String get languageEstonian => 'Estonian';
+
+  @override
+  String get languageCzech => 'Czech';
+
+  @override
+  String get languageHungarian => 'Hungarian';
+
+  @override
+  String get languageHebrew => 'Hebrew';
+
+  @override
+  String get languageBulgarian => 'Bulgarian';
+
+  @override
+  String get languageLatvian => 'Latvian';
+
+  @override
+  String get languageCroatian => 'Croatian';
+
+  @override
+  String get languageIcelandic => 'Icelandic';
+
+  @override
+  String get languageBasque => 'Basque';
+
+  @override
+  String get languageCatalan => 'Catalan';
+
+  @override
+  String get languageSlovak => 'Slovak';
+
+  @override
+  String get languageWelsh => 'Welsh';
+
+  @override
+  String get languageSerbian => 'Serbian';
 }

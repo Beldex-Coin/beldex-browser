@@ -90,7 +90,7 @@
   "homePage": "Home Page",
   "homepageContent": "Set your homepage for quick access to favorite sites.",
   "screenSecurity": "Screen Security",
-  "screenSecurityContent": "Add an extra layer of protection for secure browsing",
+  "screenSecurityContent": "Add an extra layer of protection for secure browsing.",
   "javascriptEnabled": "JavaScript Enabled",
   "javascriptEnabledContent": "Enable or disable JavaScript for a tailored experience.",
   "cacheEnabled": "Cache Enabled",
@@ -108,7 +108,7 @@
   "textZoom": "Text Zoom",
   "textZoomContent" :"Customize text size in percentage for comfortable reading on any website.",
   "adBlocker": "Ad Blocker",
-  "adBlockerContent": "Toggle to block intrusive ads while browsing and enhance your browsing experience",
+  "adBlockerContent": "Toggle to block intrusive ads while browsing and enhance your browsing experience.",
   "autoConnect": "Auto-Connect",
   "autoConnectContent": "Automatically connect when the app launches.",
   "autoSuggestion": "Auto-Suggestion",
@@ -212,52 +212,7 @@
 
 
 
-  "languageChineseSimplifiedChina": "Chineză (Simplificată, China)",
-  "languageChineseTraditionalTaiwan": "Chineză (Tradițională, Taiwan)",
-
-  "languageEnglishAustralia": "Engleză (Australia)",
-  "languageEnglishCanada": "Engleză (Canada)",
-  "languageEnglishIndia": "Engleză (India)",
-  "languageEnglishIreland": "Engleză (Irlanda)",
-  "languageEnglishSingapore": "Engleză (Singapore)",
-  "languageEnglishUnitedKingdom": "Engleză (Regatul Unit)",
-  "languageEnglishUnitedStates": "Engleză (Statele Unite)",
-
-  "languageFrenchBelgium": "Franceză (Belgia)",
-  "languageFrenchCanada": "Franceză (Canada)",
-  "languageFrenchFrance": "Franceză (Franța)",
-  "languageFrenchSwitzerland": "Franceză (Elveția)",
-
-  "languageGermanAustria": "Germană (Austria)",
-  "languageGermanBelgium": "Germană (Belgia)",
-  "languageGermanGermany": "Germană (Germania)",
-  "languageGermanSwitzerland": "Germană (Elveția)",
-
-  "languageHindiIndia": "Hindi (India)",
-
-  "languageIndonesianIndonesia": "Indoneziană (Indonezia)",
-
-  "languageItalianItaly": "Italiană (Italia)",
-  "languageItalianSwitzerland": "Italiană (Elveția)",
-
-  "languageJapaneseJapan": "Japoneză (Japonia)",
-
-  "languageKoreanSouthKorea": "Coreeană (Coreea de Sud)",
-
-  "languagePolishPoland": "Poloneză (Polonia)",
-
-  "languagePortugueseBrazil": "Portugheză (Brazilia)",
-
-  "languageRussianRussia": "Rusă (Rusia)",
-
-  "languageSpanishSpain": "Spaniolă (Spania)",
-  "languageSpanishUnitedStates": "Spaniolă (Statele Unite)",
-
-  "languageThaiThailand": "Thailandeză (Thailanda)",
-
-  "languageTurkishTurkey": "Turcă (Turcia)",
-
-  "languageVietnameseVietnam": "Vietnameză (Vietnam)",
+  
 
 
 "languageChineseSimplifiedChina": "Chinese (Simplified, China)",
@@ -297,14 +252,13 @@
 "languageEnglish": "English",
 "languageSpanish": "Spanish",
 "languageJapanese": "Japanese",
-"languagePortuguese": "Portuguese",
+"languagePortuguese": "Portuguese (Brazil)",
 "languageGerman": "German",
 "languageTurkish": "Turkish",
 "languageRussian": "Russian",
-"languageChinese": "Chinese",
+"languageChinese": "Chinese (Simplified)",
 "languageKorean": "Korean",
 "languageVietnamese": "Vietnamese",
-"languageTamil": "Tamil",
 "languageArabic": "Arabic",
 
   "languageFrench": "French",
@@ -317,9 +271,6 @@
   "languageMalay": "Malay",
   "languageThai": "Thai",
   "languageHindi": "Hindi",
-  "languageTelugu": "Telugu",
-  "languageMalayalam": "Malayalam",
-  "languageMarathi": "Marathi",
 
   "languageAfrikaans": "Afrikaans",
 
@@ -332,7 +283,25 @@
 "languageChineseTraditional": "Chinese (Traditional)",
 "languageChineseHongKong": "Chinese (Hong Kong)",
 "languagePortuguesePortugal": "Portuguese (Portugal)",
-"languageSwedish": "Swedish"
+"languageSwedish": "Swedish",
+
+  "languageAmharic": "Amharic",
+  "languageSwahili": "Swahili",
+  "languageSlovenian": "Slovenian",
+  "languageEstonian": "Estonian",
+  "languageCzech": "Czech",
+  "languageHungarian": "Hungarian",
+  "languageHebrew": "Hebrew",
+  "languageBulgarian": "Bulgarian",
+  "languageLatvian": "Latvian",
+  "languageCroatian": "Croatian",
+  "languageIcelandic": "Icelandic",
+  "languageBasque": "Basque",
+  "languageCatalan": "Catalan",
+  "languageSlovak": "Slovak",
+  "languageWelsh": "Welsh",
+  "languageSerbian": "Serbian"
+
 
 
   

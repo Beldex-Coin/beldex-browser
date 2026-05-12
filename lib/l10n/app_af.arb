@@ -193,7 +193,7 @@
 "titleCrossplatformAccess": "\nKruisplatformtoegang",
 "theBeldexBrowserIsCrossplatform": "Die Beldex Browser is kruisplatform, aangesien dit vir beide mobiele en lessenaar-toestelle ontwikkel word.",
 "titleKeyFeature": "\nKey Features",
-"followingAreTheFeatures": "\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n",
+"followingAreTheFeatures": "\nHieronder volg die kenmerke wat beskikbaar is in die Beta-weergawe van die Beldex-blaaiertoepassing. Meer kenmerke sal by die alfa-weergawe gevoeg word.\n",
 "blockJavascript": "Blokkeer JavaScript: Die Beldex Browser prioritiseer gebruikersveiligheid deur JavaScript te blokkeer, wat die risiko van kwaadwillige skrifte verminder wat gebruikers se vertroulikheid en sekuriteit kan benadeel. Dit verseker ’n veilige blaai-ervaring en beskerm gebruikers teen bedreigings wat JavaScript-kwesbaarhede behels.",
 "blockcookies": "Blokkeer koekies: Koekies versamel ’n gebruiker se persoonlike inligting wat help om hul gedrag- en gebruikspatrone te bepaal. Dit help weer webwerwe om relevante advertensies te wys, aktiewe sessies te bestuur en grootdata-analises te verskaf.",
 "ipAddressMasked": "IP-adres word gemasker: Die blaaier se ingeboude dVPN, BelNet, masker die kliënt se IP-adres teen die webwerwe wat hulle besoek. Dit bied vertroulikheid en anonimiteit aan die gebruiker en verhoed dat webwerwe die gebruiker op grond van hul IP-adres identifiseer en opspoor.",
@@ -258,17 +258,17 @@
 
 
 
+
   "languageEnglish": "Engels",
   "languageSpanish": "Spaans",
   "languageJapanese": "Japannees",
-  "languagePortuguese": "Portugees",
+  "languagePortuguese": "Portugees (Brasilië)",
   "languageGerman": "Duits",
   "languageTurkish": "Turks",
   "languageRussian": "Russies",
-  "languageChinese": "Chinees",
+  "languageChinese": "Chinees (Vereenvoudig)",
   "languageKorean": "Koreaans",
   "languageVietnamese": "Viëtnamees",
-  "languageTamil": "Tamil",
   "languageArabic": "Arabies",
   "languageFrench": "Frans",
   "languageItalian": "Italiaans",
@@ -280,9 +280,6 @@
   "languageMalay": "Maleis",
   "languageThai": "Thai",
   "languageHindi": "Hindi",
-  "languageTelugu": "Telugu",
-  "languageMalayalam": "Malayalam",
-  "languageMarathi": "Marathi",
   "languageAfrikaans": "Afrikaans",
   "languagePolish": "Pools",
   "languageRomanian": "Roemeens",
@@ -291,9 +288,25 @@
   "languageNorwegian": "Noors",
   "languageGreek": "Grieks",
   "languageChineseTraditional": "Chinees (Tradisioneel)",
-  "languageChineseHongKong": "Chinees (Hong Kong)",
+  "languageChineseHongKong": "Chinees (Hongkong)",
   "languagePortuguesePortugal": "Portugees (Portugal)",
-  "languageSwedish": "Sweeds"
+  "languageSwedish": "Sweeds",
+  "languageAmharic": "Amharies",
+  "languageSwahili": "Swahili",
+  "languageSlovenian": "Sloveens",
+  "languageEstonian": "Esties",
+  "languageCzech": "Tsjeggies",
+  "languageHungarian": "Hongaars",
+  "languageHebrew": "Hebreeus",
+  "languageBulgarian": "Bulgaars",
+  "languageLatvian": "Letties",
+  "languageCroatian": "Kroaties",
+  "languageIcelandic": "Yslands",
+  "languageBasque": "Baskies",
+  "languageCatalan": "Katalaans",
+  "languageSlovak": "Slowaaks",
+  "languageWelsh": "Wallies",
+  "languageSerbian": "Serwies"
 
 
 
