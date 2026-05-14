@@ -2838,10 +2838,23 @@ Future<Map<String, dynamic>?> extractReadableContent(
 
   void share() {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
+
+        final addEngineProvider =
+        Provider.of<AddSearchEngineProvider>(context, listen: false);
+
+    final selectedSessionEngines =
+        addEngineProvider.selectedSessionEngines;
     var webViewModel = browserModel.getCurrentTab()?.webViewModel;
+
     var url = webViewModel?.url;
     if (url != null) {
-      Share.share(url.toString(), subject: webViewModel?.title);
+      if(url.toString().isNotEmpty && !(url.toString().startsWith('https://') && checkSearchEngineInUrl(SearchEngines, selectedSessionEngines, url))){
+
+      Share.share(browserModel.getDisplayUrl(url.toString()), subject: webViewModel?.title);
+      }else{
+               Share.share(url.toString(), subject: webViewModel?.title);
+      }
+      //Share.share(url.toString(), subject: webViewModel?.title);
     }
   }
 
