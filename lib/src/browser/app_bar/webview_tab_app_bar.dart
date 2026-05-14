@@ -25,6 +25,7 @@ import 'package:beldex_browser/src/browser/pages/developers/main.dart';
 import 'package:beldex_browser/src/browser/pages/download_page.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_screen.dart';
+import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
@@ -2556,9 +2557,9 @@ Future<Map<String, dynamic>?> extractReadableContent(
                                                         overflow: TextOverflow
                                                             .ellipsis),
                                                     TextWidget(
-                                                     text: favorite.url
+                                                     text:  browserModel.getDisplayUrl(favorite.url
                                                               ?.toString() ??
-                                                          "",
+                                                          ""),
                                                       maxLines: 1,
                                                       overflow:
                                                           TextOverflow.ellipsis,
