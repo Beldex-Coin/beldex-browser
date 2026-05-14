@@ -9,6 +9,8 @@ import 'package:beldex_browser/src/browser/models/favorite_model.dart';
 import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
+import 'package:beldex_browser/src/web2_domain_list.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -180,7 +182,115 @@ void updateIconWhenNotSerchEngine() async {
   }
 
 
+////// FOR WEB3 DOMAIN /////////
 
+final List<Map<String, dynamic>> _domainList = [];
+
+  List<Map<String, dynamic>> get domainList => _domainList;
+
+  bool _isWeb3Domain = false;
+
+  bool get isWeb3Domain => _isWeb3Domain;
+
+ void setIsWeb3Domain(bool value){
+    _isWeb3Domain = value;
+    notifyListeners();
+  }
+
+  void addDomain({
+    required String domain,
+    required String resolvedValue,
+    required String redirectValue,
+    required String type,
+  }) {
+    _domainList.add({
+      "domain": domain,
+      "resolvedValue": resolvedValue,
+      "redirectValue": redirectValue,
+      "type": type,
+    });
+
+    notifyListeners();
+  }
+
+
+
+
+void updateRedirectValue(String newRedirectValue) {
+  if (_domainList.isEmpty) return;
+
+  final lastItem = _domainList.last;
+  if (lastItem.containsKey("redirectValue")) {
+    lastItem["redirectValue"] = newRedirectValue;
+    notifyListeners();
+  }
+}
+
+
+
+
+
+
+  void clearDomains() {
+    _domainList.clear();
+    notifyListeners();
+  }
+
+String getDisplayUrl(String currentUrl) {
+  for (final item in _domainList) {
+    final resolvedValue = item["resolvedValue"]?.toString() ?? "";
+    final redirectValue = item["redirectValue"]?.toString() ?? "";
+    final domain = item["domain"]?.toString() ?? "";
+
+    // Normalize values
+    final normalizedCurrent = currentUrl.toLowerCase();
+    final normalizedResolved = resolvedValue.toLowerCase();
+    final normalizedRedirect = redirectValue.toLowerCase();
+
+    // ✅ Case 1: match resolvedValue (IP)
+    if (normalizedCurrent.contains(normalizedResolved)) {
+      return "http://$domain/";
+    }
+
+    if (_isWeb3Domain){
+      return "http://$domain/";
+    }
+
+    // ✅ Case 2: match redirectValue (final URL)
+    if (normalizedCurrent == normalizedRedirect) {
+      return "http://$domain/";
+    }
+  }
+
+  // ❌ No match → return original
+  return currentUrl;
+}
+
+
+bool isUrlInDomainList(String url) {
+  final normalizedUrl = url.toLowerCase().trim();
+
+  for (final item in _domainList) {
+    final resolvedValue = item["resolvedValue"]?.toString().toLowerCase() ?? "";
+    final redirectValue = item["redirectValue"]?.toString().toLowerCase() ?? "";
+
+    // ✅ Match with resolvedValue (contains for IP cases)
+    if (resolvedValue.isNotEmpty && normalizedUrl.contains(resolvedValue)) {
+      return true;
+    }
+
+    // ✅ Match with redirectValue (exact match preferred)
+    if (redirectValue.isNotEmpty && normalizedUrl == redirectValue) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+
+///////////////////////////////
 
 
 
