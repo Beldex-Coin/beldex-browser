@@ -1,7 +1,10 @@
 import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
+import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:beldex_browser/src/web2_domain_list.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -153,6 +156,8 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final browserModel = Provider.of<BrowserModel>(context,listen: false);
     final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
+        final webViewModel = Provider.of<WebViewModel>(context,listen: false);
+
     checkLoading(vpnStatusProvider);
     return SizedBox(
         width: 25.0,
@@ -171,13 +176,176 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
                 Navigator.pop(widget.popupMenuContext);
                 if (widget.webViewController != null &&
                     widget.searchController != null) {
-                  await widget.webViewController!.loadUrl(
+
+String trimmedValue = widget.searchController!.text.trim();
+if (trimmedValue.isEmpty) return;
+
+//widget.webViewModel.setResolveData(trimmedValue);
+
+
+//REMOVE http/https for detection + resolver
+// String normalizedInput = trimmedValue
+//     .replaceFirst(RegExp(r'^https?:\/\/'), '')
+//     .trim();
+
+
+String normalizedInput;
+
+try {
+  final uri = Uri.parse(
+    trimmedValue.startsWith("http")
+        ? trimmedValue
+        : "http://$trimmedValue",
+  );
+  normalizedInput = uri.host;
+} catch (_) {
+  normalizedInput = trimmedValue
+      .replaceFirst(RegExp(r'^https?:\/\/'), '')
+      .split("/")
+      .first;
+}
+
+
+
+String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
+
+bool isFullResolverUrl = input.contains("/resolver/fns/");
+
+
+// NEW: plain text check
+bool isPlainText = !input.contains(".");
+
+
+bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
+    // input.contains(".com") ||
+    // input.contains(".in") ||
+    // input.contains(".org") ||
+    // input.contains(".net") ||
+    // input.contains(".io");
+
+
+// bool isPotentialWeb3Domain =
+//     !input.startsWith("http") &&
+//     !input.contains(" ") &&
+//     input.split(".").length >= 2;
+
+bool isPotentialWeb3Domain =
+    input.contains(".") &&
+    !input.startsWith("http") &&
+    !input.contains(" ") &&
+    !isWeb2Domain;
+
+                  
+
+
+
+if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
+  try {
+    final apiUrl = isFullResolverUrl
+        ? trimmedValue
+        : "https://apis.freename.io/api/v1/resolver/FNS/$input";
+
+    final res = await Dio().get(apiUrl);
+
+    final records = res.data?["data"]?["records"];
+
+    if (records != null && records.isNotEmpty) {
+
+      String resolvedValue;
+      String resolvedType;
+
+      final aRecord = records.firstWhere(
+        (r) => r["type"]?.toString().trim().toUpperCase() == "A",
+        orElse: () => null,
+      );
+
+      if (aRecord != null) {
+        resolvedValue = aRecord["value"];
+        resolvedType = "A";
+      } else {
+        final first = records.first;
+        resolvedValue = first["value"];
+        resolvedType = first["type"]?.toString() ?? "UNKNOWN";
+      }
+
+      final domainName =
+          res.data?["data"]?["asciiName"] ?? trimmedValue;
+
+      // ✅ CLEAR + STORE immediately
+      //widget.webViewModel.clearResolvedData();
+
+     // widget.webViewModel.setActiveDomain(domainName);
+
+      
+
+      String finalUrl = resolvedValue.startsWith("http")
+          ? resolvedValue
+          : "http://$resolvedValue";
+
+      if (widget.webViewController != null) {
+           await widget.webViewController!.loadUrl(
+                      urlRequest: URLRequest(
+                          url: WebUri(finalUrl),
+                          headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          },
+                          ));
+        // widget.webViewController!.loadUrl(
+        //   urlRequest: URLRequest(
+        //     url: WebUri(finalUrl),
+        //   ),
+        // );
+      } 
+      // else {
+      //   addNewTab(url: WebUri(finalUrl));
+      //   widget.webViewModel.url = WebUri(finalUrl);
+      // }
+    browserModel.setIsWeb3Domain(true);
+   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
+
+//Future.delayed(Duration(milliseconds: 450),()async{
+  print('RESOLVE DOMAIN REDIRECT DATA IS ${webViewModel.url.toString()}');
+ // final value = await webViewModel.webViewController?.getUrl();
+  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
+  type: resolvedType, redirectValue: //value?.toString() ?? 
+  webViewModel.url.toString() //.url.toString()
+  );
+//});
+
+
+
+
+
+
+      // Navigator.pop(context, WebUri(finalUrl));
+      // return;
+    }
+  } catch (e) {
+    print("Resolver failed: $e");
+   // return;
+  }
+}else{
+   await widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
                           url: WebUri(widget.searchController!.text),
                           headers: {
             "Accept-Language": appLocaleProvider.fullLocaleId,
-          }
+          },
                           ));
+}
+
+
+
+
+
+
+          //         await widget.webViewController!.loadUrl(
+          //             urlRequest: URLRequest(
+          //                 url: WebUri(widget.searchController!.text),
+          //                 headers: {
+          //   "Accept-Language": appLocaleProvider.fullLocaleId,
+          // }
+          //                 ));
                   vpnStatusProvider.updateFAB(true);
                 }
               } else {
