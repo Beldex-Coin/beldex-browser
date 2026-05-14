@@ -657,7 +657,11 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
                                     image = themeProvider.darkTheme
                                            ? 'assets/images/Web Archieves.svg'
                                            : 'assets/images/web_arc-black.svg';
-                                  } else {
+                                  } else if(isSecure && browserModel.isUrlInDomainList(webViewModel.url.toString())){
+                                    image = themeProvider.darkTheme
+                                      ? 'assets/images/http.svg'
+                                      : 'assets/images/http_white_theme.svg';
+                                  }else {
                                     image = themeProvider.darkTheme
                                         ? 'assets/images/https.svg'
                                         : 'assets/images/https_white_theme.svg';
