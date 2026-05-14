@@ -66,6 +66,40 @@ import '../webview_tab.dart';
 
 TextEditingController? findOnPageController = TextEditingController();
 
+bool checkSearchEngineInUrl(
+  List<SearchEngineModel> firstList,
+  List<SearchEngineModel> secondList,
+  WebUri givenUrl,
+) {
+  final urlString = givenUrl.toString().toLowerCase();
+
+  // // Check only HTTPS urls
+  // if (!urlString.startsWith('https://')) {
+  //   return false;
+  // }
+
+  // Check first list
+  for (final engine in firstList) {
+    final host = Uri.parse(engine.url).host.toLowerCase();
+
+    if (urlString.contains(host)) {
+      return true;
+    }
+  }
+
+  // Check second list
+  for (final engine in secondList) {
+    final host = Uri.parse(engine.url).host.toLowerCase();
+
+    if (urlString.contains(host)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
 class WebViewTabAppBar extends StatefulWidget {
   final void Function()? showFindOnPage;
   final void Function()? hideFindOnPage;
