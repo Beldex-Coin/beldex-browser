@@ -70,6 +70,9 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
 Map<String,dynamic> nearest = {};
 
 
+ var _isRestored = false;
+
+
   void displayMessages(AppLocalizations appLoc) {
     showMessage(appLoc.checkingConnection, 0);
     showMessage(appLoc.belnetServiceStarted, 6);
@@ -516,6 +519,26 @@ try{
     // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+restore() async {
+    var browserModel = Provider.of<BrowserModel>(context, listen: true);
+    browserModel.restore();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isRestored) {
+      _isRestored = true;
+      restore();
+    }
+    precacheImage(const AssetImage("assets/icon/icon.png"), context);
+  }
+
+
+
+
+
 
   updateExitNodeValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -46,7 +46,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   static const platform =
       MethodChannel('com.beldex.beldex_browser.intent_data');
 
-  var _isRestored = false;
+  //var _isRestored = false;
 
   late Connectivity _connectivity;
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
@@ -307,20 +307,20 @@ void closeTabListPage(){
     clearCookie();
   }
 
-  restore() async {
-    var browserModel = Provider.of<BrowserModel>(context, listen: true);
-    browserModel.restore();
-  }
+  // restore() async {
+  //   var browserModel = Provider.of<BrowserModel>(context, listen: true);
+  //   browserModel.restore();
+  // }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isRestored) {
-      _isRestored = true;
-      restore();
-    }
-    precacheImage(const AssetImage("assets/icon/icon.png"), context);
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (!_isRestored) {
+  //     _isRestored = true;
+  //     restore();
+  //   }
+  //   precacheImage(const AssetImage("assets/icon/icon.png"), context);
+  // }
 
   @override
   Widget build(BuildContext context) {
