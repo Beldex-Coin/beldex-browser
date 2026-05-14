@@ -119,7 +119,7 @@ final MethodChannel _methodChannel = MethodChannel('belnet_lib_method_channel');
 
   static const String geminiApiKey = '';
   static const String geminiApiUrl =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
   ReaderProvider(String htmlContent, {String initialLanguage = 'en-US'}) {
     selectedLanguage = initialLanguage;
