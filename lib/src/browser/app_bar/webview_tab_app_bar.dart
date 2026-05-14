@@ -155,16 +155,54 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     final browserModel = Provider.of<BrowserModel>(context);
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final theme = Theme.of(context);
-    return Selector<WebViewModel, WebUri?>(
-        selector: (context, webViewModel) => webViewModel.url,
-        builder: (context, url, child) {
-          if (url == null) {
-            print('this search controller is calling');
-            _searchController?.text = "";
-          }
-          if (url != null && _focusNode != null && !_focusNode!.hasFocus) {
-            _searchController?.text = url.toString();
-          }
+     final addEngineProvider =
+        Provider.of<AddSearchEngineProvider>(context, listen: true);
+
+    final selectedSessionEngines =
+        addEngineProvider.selectedSessionEngines;
+    return Selector<WebViewModel, WebViewModel>(
+        selector: (context, webViewModel) => webViewModel,
+        builder: (context, webViewModel, child) {
+          // if (url == null) {
+          //   print('this search controller is calling');
+          //   _searchController?.text = "";
+          // }
+final domains = browserModel.domainList;
+
+for (var item in domains) {
+  print("RESOLVER DOMAINS ${item['domain']}");
+  print("RESOLVER DOMAINS value ${item['resolvedValue']}");
+  print("RESOLVER DOMAINS REDIRECTS ${item['redirectValue']}");
+  print("RESOLVER DOMAINS TYPE ${item['type']}");
+}
+
+
+
+final displayText =
+      webViewModel.url?.toString() ??
+      "";
+      final host = webViewModel.url?.host ?? '';
+
+  if (_focusNode != null && !_focusNode!.hasFocus) {
+    // if(isIpAddress(webViewModel.url.toString())){
+    //         _searchController?.text = webViewModel.getDomainFromIp(host) ?? ''; //webViewModel.resolveData; //'metaverse';
+    //       }else
+    final currentUrl = webViewModel.url?.toString() ?? "";
+
+if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && checkSearchEngineInUrl(SearchEngines, selectedSessionEngines, webViewModel.url!))){
+  _searchController?.text =
+    currentUrl.isEmpty
+        ? ""
+        : browserModel.getDisplayUrl(currentUrl);
+
+}else{
+    _searchController?.text = currentUrl;
+}
+
+  // _searchController?.text = webViewModel.getDisplayUrl(webViewModel.url.toString());
+    //_searchController?.text = displayText;
+   print('Return the IP URL 1 $currentUrl -- ${_searchController?.text}');
+ }
 
           return browserModel.isFindingOnPage
                   ? findOnPageAppBar(themeProvider,theme)
