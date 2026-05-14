@@ -20,6 +20,7 @@ import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:beldex_browser/src/web2_domain_list.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -107,6 +108,7 @@ class _SearchScreenState extends State<SearchScreen> {
   late int duration;
   String canShowSearchAI = '';
 
+bool isClicked = false;
 
 
 
@@ -657,39 +659,219 @@ final scannedValue = await showDialog<String>(
                 Expanded(
                   flex: 4,
                   child: TextField(
-                    onSubmitted: (value) {
-                      String trimmedValue = value.trim();
-                     if(trimmedValue.isNotEmpty){
-                       var url = WebUri(formatUrl(value.trim()));
-                      if (!url.scheme.startsWith("http") &&
-                          !Util.isLocalizedContent(url)) {
-                        url = WebUri(
-                            widget.settings.searchEngine.searchUrl + value);
-                      }
-                      //Navigator.pop(context, url);
-                      // browserModel.updateIsNewTab(false);
-                      if (widget.webViewController != null) {
-                        widget.webViewController!
-                            .loadUrl(urlRequest: URLRequest(url: url,
-                            headers: {
-            "Accept-Language": appLocaleProvider.fullLocaleId,
-          }
-                            ));
-                      } else {
-                        if (mounted) setState(() {});
-                        print('comes inside new tab');
-                        //  browserModel.updateIsNewTab(false);
-                        addNewTab(url: url);
-                        widget.webViewModel.url = url;
+                    onSubmitted: (value)async {
 
-                        // widget.webViewController!.getTitle();
-                      }
-                      vpnStatusProvider.updateCanShowHomeScreen(false);
-                      ttsProvider.updateTTSDisplayStatus(false);
-                      Future.delayed(Duration(milliseconds: duration), () {
-                        Navigator.pop(context, url);
-                      });
-                     }
+String trimmedValue = value.trim();
+if (trimmedValue.isEmpty) return;
+
+//widget.webViewModel.setResolveData(trimmedValue);
+
+
+// ✅ REMOVE http/https for detection + resolver
+// String normalizedInput = trimmedValue
+//     .replaceFirst(RegExp(r'^https?:\/\/'), '')
+//     .trim();
+
+
+String normalizedInput;
+
+try {
+  final uri = Uri.parse(
+    trimmedValue.startsWith("http")
+        ? trimmedValue
+        : "http://$trimmedValue",
+  );
+  normalizedInput = uri.host;
+} catch (_) {
+  normalizedInput = trimmedValue
+      .replaceFirst(RegExp(r'^https?:\/\/'), '')
+      .split("/")
+      .first;
+}
+
+
+
+String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
+
+bool isFullResolverUrl = input.contains("/resolver/fns/");
+
+
+// NEW: plain text check
+bool isPlainText = !input.contains(".");
+
+
+bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
+    // input.contains(".com") ||
+    // input.contains(".in") ||
+    // input.contains(".org") ||
+    // input.contains(".net") ||
+    // input.contains(".io");
+
+
+// bool isPotentialWeb3Domain =
+//     !input.startsWith("http") &&
+//     !input.contains(" ") &&
+//     input.split(".").length >= 2;
+
+bool isPotentialWeb3Domain =
+    input.contains(".") &&
+    !input.startsWith("http") &&
+    !input.contains(" ") &&
+    !isWeb2Domain;
+  
+  print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
+
+if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
+  try {
+    final apiUrl = isFullResolverUrl
+        ? trimmedValue
+        : "https://apis.freename.io/api/v1/resolver/FNS/$input";
+
+    final res = await Dio().get(apiUrl);
+
+    final records = res.data?["data"]?["records"];
+
+    if (records != null && records.isNotEmpty) {
+
+      String resolvedValue;
+      String resolvedType;
+
+      final aRecord = records.firstWhere(
+        (r) => r["type"]?.toString().trim().toUpperCase() == "A",
+        orElse: () => null,
+      );
+
+      if (aRecord != null) {
+        resolvedValue = aRecord["value"];
+        resolvedType = "A";
+      } else {
+        final first = records.first;
+        resolvedValue = first["value"];
+        resolvedType = first["type"]?.toString() ?? "UNKNOWN";
+      }
+
+      final domainName =
+          res.data?["data"]?["asciiName"] ?? trimmedValue;
+
+      //  CLEAR + STORE immediately
+      //widget.webViewModel.clearResolvedData();
+
+      // widget.webViewModel.setActiveDomain(domainName);
+
+      
+
+      String finalUrl = resolvedValue.startsWith("http")
+          ? resolvedValue
+          : "http://$resolvedValue";
+
+      if (widget.webViewController != null) {
+        widget.webViewController!.loadUrl(
+          urlRequest: URLRequest(
+            url: WebUri(finalUrl),
+          ),
+        );
+      } else {
+        addNewTab(url: WebUri(finalUrl));
+        widget.webViewModel.url = WebUri(finalUrl);
+      }
+    browserModel.setIsWeb3Domain(true);
+   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
+
+Future.delayed(Duration(milliseconds: 450),()async{
+  print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
+  final value = await widget.webViewModel.webViewController?.getUrl();
+  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
+  type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
+  );
+});
+
+
+
+
+
+
+      Navigator.pop(context, WebUri(finalUrl));
+      return;
+    }
+  } catch (e) {
+    print("Resolver failed: $e");
+   // return;
+  }
+}
+
+
+ // NORMAL FLOW (unchanged)
+  // ----------------------------
+  var url = WebUri(formatUrl(trimmedValue));
+
+  if (!url.scheme.startsWith("http") &&
+      !Util.isLocalizedContent(url)) {
+    url = WebUri(
+      widget.settings.searchEngine.searchUrl + trimmedValue,
+    );
+  }
+
+   browserModel.setIsWeb3Domain(false);
+   print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
+
+  if (widget.webViewController != null) {
+    widget.webViewController!.loadUrl(
+      urlRequest: URLRequest(
+        url: url,
+        headers: {
+          "Accept-Language":
+              appLocaleProvider.fullLocaleId,
+        },
+      ),
+    );
+  } else {
+    if (mounted) setState(() {});
+    addNewTab(url: url);
+    widget.webViewModel.url = url;
+  }
+
+  vpnStatusProvider.updateCanShowHomeScreen(false);
+  ttsProvider.updateTTSDisplayStatus(false);
+
+  Future.delayed(Duration(milliseconds: duration), () {
+    Navigator.pop(context, url);
+  });
+
+
+
+
+          //             String trimmedValue = value.trim();
+          //            if(trimmedValue.isNotEmpty){
+          //              var url = WebUri(formatUrl(value.trim()));
+          //             if (!url.scheme.startsWith("http") &&
+          //                 !Util.isLocalizedContent(url)) {
+          //               url = WebUri(
+          //                   widget.settings.searchEngine.searchUrl + value);
+          //             }
+          //             //Navigator.pop(context, url);
+          //             // browserModel.updateIsNewTab(false);
+          //             if (widget.webViewController != null) {
+          //               widget.webViewController!
+          //                   .loadUrl(urlRequest: URLRequest(url: url,
+          //                   headers: {
+          //   "Accept-Language": appLocaleProvider.fullLocaleId,
+          // }
+          //                   ));
+          //             } else {
+          //               if (mounted) setState(() {});
+          //               print('comes inside new tab');
+          //               //  browserModel.updateIsNewTab(false);
+          //               addNewTab(url: url);
+          //               widget.webViewModel.url = url;
+
+          //               // widget.webViewController!.getTitle();
+          //             }
+          //             vpnStatusProvider.updateCanShowHomeScreen(false);
+          //             ttsProvider.updateTTSDisplayStatus(false);
+          //             Future.delayed(Duration(milliseconds: duration), () {
+          //               Navigator.pop(context, url);
+          //             });
+          //            }
 
                       
                     },
@@ -1008,43 +1190,212 @@ final scannedValue = await showDialog<String>(
                       Expanded(
                           flex: 5,
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: isClicked ? null :()async {
                               
-                              if (widget.controller.text.isNotEmpty) {
+
+ setState(() {
+                                isClicked = true;
+                              });
+                              String trimmedValue = widget.controller.text; //value.trim();
+if (trimmedValue.isEmpty) return;
+
+//widget.webViewModel.setResolveData(trimmedValue);
+
+
+String normalizedInput;
+
+try {
+  final uri = Uri.parse(
+    trimmedValue.startsWith("http")
+        ? trimmedValue
+        : "http://$trimmedValue",
+  );
+  normalizedInput = uri.host;
+} catch (_) {
+  normalizedInput = trimmedValue
+      .replaceFirst(RegExp(r'^https?:\/\/'), '')
+      .split("/")
+      .first;
+}
+
+
+
+String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
+
+bool isFullResolverUrl = input.contains("/resolver/fns/");
+
+
+// NEW: plain text check
+bool isPlainText = !input.contains(".");
+
+
+bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
+
+bool isPotentialWeb3Domain =
+    input.contains(".") &&
+    !input.startsWith("http") &&
+    !input.contains(" ") &&
+    !isWeb2Domain;
+  
+  print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
+
+if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
+  try {
+    final apiUrl = isFullResolverUrl
+        ? trimmedValue
+        : "https://apis.freename.io/api/v1/resolver/FNS/$input";
+
+    final res = await Dio().get(apiUrl);
+
+    final records = res.data?["data"]?["records"];
+
+    if (records != null && records.isNotEmpty) {
+
+      String resolvedValue;
+      String resolvedType;
+
+      final aRecord = records.firstWhere(
+        (r) => r["type"]?.toString().trim().toUpperCase() == "A",
+        orElse: () => null,
+      );
+
+      if (aRecord != null) {
+        resolvedValue = aRecord["value"];
+        resolvedType = "A";
+      } else {
+        final first = records.first;
+        resolvedValue = first["value"];
+        resolvedType = first["type"]?.toString() ?? "UNKNOWN";
+      }
+
+      final domainName =
+          res.data?["data"]?["asciiName"] ?? trimmedValue;
+
+      // ✅ CLEAR + STORE immediately
+      //widget.webViewModel.clearResolvedData();
+
+      //widget.webViewModel.setActiveDomain(domainName);
+
+      
+
+      String finalUrl = resolvedValue.startsWith("http")
+          ? resolvedValue
+          : "http://$resolvedValue";
+
+      if (widget.webViewController != null) {
+        widget.webViewController!.loadUrl(
+          urlRequest: URLRequest(
+            url: WebUri(finalUrl),
+          ),
+        );
+      }
+      //  else {
+      //   addNewTab(url: WebUri(finalUrl));
+      //   widget.webViewModel.url = WebUri(finalUrl);
+      // }
+    browserModel.setIsWeb3Domain(true);
+   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
+
+//Future.delayed(Duration(milliseconds: 450),()async{
+  print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
+  final value = await widget.webViewModel.webViewController?.getUrl();
+  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
+  type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
+  );
+//});
+
+
+
+
+
+
+      Navigator.pop(context, WebUri(finalUrl));
+      return;
+    }
+  } catch (e) {
+    print("Resolver failed: $e");
+    // setState(() {
+    //                             isClicked = false;
+    //                           });
+   // return;
+  }
+}
+  // NORMAL FLOW (unchanged)
+  var url = WebUri(formatUrl(trimmedValue));
+
+  if (!url.scheme.startsWith("http") &&
+      !Util.isLocalizedContent(url)) {
+    url = WebUri(
+      widget.settings.searchEngine.searchUrl + trimmedValue,
+    );
+  }
+
+  //  RESET resolver state
+  // widget.webViewModel.displayUrl = null;
+  // widget.webViewModel.isResolvedDomain = false;
+   browserModel.setIsWeb3Domain(false);
+   print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
+
+  if (widget.webViewController != null) {
+    widget.webViewController!.loadUrl(
+      urlRequest: URLRequest(
+        url: url,
+        headers: {
+          "Accept-Language":
+              appLocaleProvider.fullLocaleId,
+        },
+      ),
+    );
+  } else {
+    if (mounted) setState(() {});
+    addNewTab(url: url);
+    widget.webViewModel.url = url;
+  }
+
+  vpnStatusProvider.updateCanShowHomeScreen(false);
+  ttsProvider.updateTTSDisplayStatus(false);
+
+  Future.delayed(Duration(milliseconds: duration), () {
+    Navigator.pop(context, url);
+  });
+
+
+
+          //                     if (widget.controller.text.isNotEmpty) {
                                 
-                                var url = WebUri(
-                                    formatUrl(widget.controller.text.trim()));
-                                if (!url.scheme.startsWith("http") &&
-                                    !Util.isLocalizedContent(url)) {
-                                  url = WebUri(
-                                      widget.settings.searchEngine.searchUrl +
-                                          widget.controller.text);
-                                }
-                                // browserModel.updateIsNewTab(false);
-                                if (widget.webViewController != null) {
-                                  widget.webViewController!.loadUrl(
-                                      urlRequest: URLRequest(url: url,
-                                      headers: {
-            "Accept-Language": appLocaleProvider.fullLocaleId,
-          },
-                                      ));
-                                  print(
-                                      'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
-                                } else {
-                                  if (mounted) setState(() {});
-                                  print('comes inside new tab');
-                                  //  browserModel.updateIsNewTab(false);
-                                  addNewTab(url: url);
-                                  widget.webViewModel.url = url;
-                                  print('THE WEBVIEWMODEL 3 --> ${widget.webViewModel.url}');
-                                  // widget.webViewController!.getTitle();
-                                }
-                                 vpnStatusProvider.updateCanShowHomeScreen(false);
-                                Future.delayed(Duration(milliseconds: duration),
-                                    () {
-                                  Navigator.pop(context, url);
-                                });
-                              }
+          //                       var url = WebUri(
+          //                           formatUrl(widget.controller.text.trim()));
+          //                       if (!url.scheme.startsWith("http") &&
+          //                           !Util.isLocalizedContent(url)) {
+          //                         url = WebUri(
+          //                             widget.settings.searchEngine.searchUrl +
+          //                                 widget.controller.text);
+          //                       }
+          //                       // browserModel.updateIsNewTab(false);
+          //                       if (widget.webViewController != null) {
+          //                         widget.webViewController!.loadUrl(
+          //                             urlRequest: URLRequest(url: url,
+          //                             headers: {
+          //   "Accept-Language": appLocaleProvider.fullLocaleId,
+          // },
+          //                             ));
+          //                         print(
+          //                             'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
+          //                       } else {
+          //                         if (mounted) setState(() {});
+          //                         print('comes inside new tab');
+          //                         //  browserModel.updateIsNewTab(false);
+          //                         addNewTab(url: url);
+          //                         widget.webViewModel.url = url;
+          //                         print('THE WEBVIEWMODEL 3 --> ${widget.webViewModel.url}');
+          //                         // widget.webViewController!.getTitle();
+          //                       }
+          //                        vpnStatusProvider.updateCanShowHomeScreen(false);
+          //                       Future.delayed(Duration(milliseconds: duration),
+          //                           () {
+          //                         Navigator.pop(context, url);
+          //                       });
+          //                     }
                             },
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
