@@ -2748,7 +2748,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
                               style: TextStyle(fontWeight: FontWeight.w600),
                             ),
                             TextWidget(
-                             text: url?.toString() ?? "",
+                             text:browserModel.getDisplayUrl(url?.toString() ?? ""),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
