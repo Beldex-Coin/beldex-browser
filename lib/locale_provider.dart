@@ -76,6 +76,17 @@ String get localeId => _locale.toLanguageTag();
    'Català': const Locale('ca'),           // Catalan
    'Slovenčina': const Locale('sk'),       // Slovak
 
+
+
+   'Cymraeg': const Locale('cy'),          // Welsh
+   '繁體中文': const Locale('zh', 'TW'),    // Chinese (Traditional)
+   '中文（香港）': const Locale('zh', 'HK'), // Chinese (Hong Kong)
+   'Português (Portugal)': const Locale('pt', 'PT'), // Portuguese (Portugal)
+   'Српски': const Locale('sr'),           // Serbian
+   'हिन्दी': const Locale('hi'),            // Hindi
+   'አማርኛ': const Locale('am'),            // Amharic
+
+
   };
 
   LocaleProvider() {
@@ -160,6 +171,15 @@ String getLocalizedLanguageName(BuildContext context, String staticName) {
    case 'Euskara': return loc.languageBasque;     // Basque
    case 'Català': return loc.languageCatalan;         // Catalan
    case 'Slovenčina': return loc.languageSlovak;     // Slovak
+
+
+   case 'Cymraeg': return loc.languageWelsh;         // Welsh
+   case '繁體中文': return loc.languageChineseTraditional;
+   case '中文（香港）': return loc.languageChineseHongKong;
+   case 'Português (Portugal)': return loc.languagePortuguesePortugal;
+   case 'Српски': return loc.languageSerbian;         // Serbian
+   case 'हिन्दी': return loc.languageHindi;
+   case 'አማርኛ': return loc.languageAmharic;      // Amharic
 
     default: return loc.languageEnglish;
   }
