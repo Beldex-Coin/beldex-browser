@@ -114,7 +114,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get newtab => 'Uusi välilehti';
 
   @override
-  String get favorites => 'Favorites';
+  String get favorites => 'Suosikit';
 
   @override
   String get changeNode => 'Vaihda solmua';

@@ -8,7 +8,7 @@
   "belnetServiceStarted": "Perkhidmatan Belnet telah dimulakan",
   "checkingConnection": "Menyemak sambungan...",
   "connectingBelnetdVPN": "Menyambung ke belnet dVPN",
-  "prepareDaemonConnection": "PMenyediakan sambungan Daemon",
+  "prepareDaemonConnection": "Menyediakan sambungan Daemon",
   "searchOrEnterAddress": "Cari atau masukkan alamat",
 
   "beldexBrowserForAndroid": "Pelayar Beldex untuk Android\n melindungi kerahsiaan anda!",
@@ -28,7 +28,7 @@
 
 
   "thistimeSearchIn": "Kali ini cari dalam",
-  "searchSettings": "Enjin Carian",
+  "searchSettings": "Tetapan carian",
   "search": "Cari",
   "searchEngine" : "Enjin Carian Lalai",
   "defaultSearchEngine": "Enjin Carian Lalai",
@@ -55,7 +55,7 @@
   "chooseLanguage": "Pilih bahasa",
   "scanQR": "Imbas QR",
   "alignQRInCenterOFFrame": "Selaraskan kod QR di tengah bingkai",
-  "beldexAIEnhancesTheBeldexBrowser": "AI Welcome screen: Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.",
+  "beldexAIEnhancesTheBeldexBrowser": "Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.",
   "needHelpWithThisSite": "Perlukan bantuan dengan laman ini?",
   "beldexAICanHelpYou": "BeldexAI boleh membantu anda meringkaskan artikel dan banyak lagi.",
   "enterPromptHere": "Masukkan arahan di sini..",

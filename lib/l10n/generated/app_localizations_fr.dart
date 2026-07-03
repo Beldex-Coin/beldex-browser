@@ -168,7 +168,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Alignez le code QR au\n centre du cadre';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI enhances the Beldex Browser with intelligent features for a seamless web experience. It summarizes page content for quick reading. By efficiently routing traffic through masternodes and exit nodes, it ensures confidentiality and faster browsing. Unlike subscription-based models, Beldex AI is free to use, delivering advanced functionality while prioritizing user convenience and a confidentiality-centered internet experience. Explore smarter, faster browsing with Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI améliore le navigateur Beldex grâce à des fonctionnalités intelligentes pour une expérience web fluide. Il résume le contenu des pages pour une lecture rapide. En acheminant efficacement le trafic via des nœuds maîtres et des nœuds de sortie, il garantit la confidentialité et une navigation plus rapide. Contrairement aux modèles par abonnement, Beldex AI est gratuit et offre des fonctionnalités avancées tout en plaçant la commodité de l’utilisateur et la confidentialité au cœur de l’expérience Internet. Découvrez une navigation plus intelligente et plus rapide avec Beldex AI.';
 
   @override
   String get needHelpWithThisSite => 'Besoin d’aide sur ce site?';

@@ -168,7 +168,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Joonda QR-kood kaadri keskele';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'AI tervitusekraan: Beldex AI täiustab Beldexi brauserit nutikate funktsioonidega, et pakkuda sujuvat veebikogemust. See võtab lehe sisu kokku kiireks lugemiseks. Suunates liiklust tõhusalt läbi masternode’ide ja väljumissõlmede, tagab see privaatsuse ja kiirema sirvimise. Erinevalt tellimuspõhistest mudelitest on Beldex AI tasuta kasutamiseks, pakkudes täiustatud funktsionaalsust, seades esikohale kasutajamugavuse ja privaatsusele keskendunud internetikogemuse. Avastage nutikam ja kiirem veebisirvimine koos Beldex AI-ga.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI täiustab Beldexi brauserit nutikate funktsioonidega, et pakkuda sujuvat veebikogemust. See võtab lehe sisu kokku kiireks lugemiseks. Suunates liiklust tõhusalt läbi masternode’ide ja väljumissõlmede, tagab see privaatsuse ja kiirema sirvimise. Erinevalt tellimuspõhistest mudelitest on Beldex AI tasuta kasutamiseks, pakkudes täiustatud funktsionaalsust, seades esikohale kasutajamugavuse ja privaatsusele keskendunud internetikogemuse. Avastage nutikam ja kiirem veebisirvimine koos Beldex AI-ga.';
 
   @override
   String get needHelpWithThisSite => 'Kas vajate abi selle veebisaidiga?';

@@ -36,7 +36,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get connectingBelnetdVPN => 'Menyambung ke belnet dVPN';
 
   @override
-  String get prepareDaemonConnection => 'PMenyediakan sambungan Daemon';
+  String get prepareDaemonConnection => 'Menyediakan sambungan Daemon';
 
   @override
   String get searchOrEnterAddress => 'Cari atau masukkan alamat';
@@ -87,7 +87,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get thistimeSearchIn => 'Kali ini cari dalam';
 
   @override
-  String get searchSettings => 'Enjin Carian';
+  String get searchSettings => 'Tetapan carian';
 
   @override
   String get search => 'Cari';
@@ -168,7 +168,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Selaraskan kod QR di tengah bingkai';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'AI Welcome screen: Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.';
 
   @override
   String get needHelpWithThisSite => 'Perlukan bantuan dengan laman ini?';
