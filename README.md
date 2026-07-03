@@ -86,7 +86,7 @@ flutter build ios --release
 
 ## Releases
 
-Pre-built binaries are available on the [Releases page](https://github.com/Beldex-Coin/beldex-browser/releases). You can also find the app via the [App Store](https://apps.apple.com/app/id1477376905).
+Pre-built binaries are available on the [Releases page](https://github.com/Beldex-Coin/beldex-browser/releases). You can also find the app via the [Playstore](https://play.google.com/store/apps/details?id=io.beldex.beldex_browser).
 
 ## Contributing
 
