@@ -180,6 +180,88 @@ class BelnetLib {
     return null;
   }
 
+  /// Whether the daemon reports that onion paths are built and the exit node
+  /// is mapped. Uses the native 'isExitReady' implementation when available
+  /// and falls back to interpreting the status dump on older plugin builds.
+  static Future<bool> get isExitReady async {
+    try {
+      final bool ready = await _methodChannel.invokeMethod('isExitReady');
+      return ready;
+    } catch (_) {
+      try {
+        return _statusIndicatesExitReady(await status);
+      } catch (_) {
+        return false;
+      }
+    }
+  }
+
+  /// Defensive interpretation of the DumpStatus() JSON: the exit is
+  /// considered ready when any service reports a non-empty exitMap.
+  static bool _statusIndicatesExitReady(dynamic status) {
+    if (status is! Map) return false;
+    if (status['running'] == false) return false;
+    final services = status['services'];
+    if (services is Map) {
+      for (final svc in services.values) {
+        if (svc is Map) {
+          final exitMap = svc['exitMap'];
+          if (exitMap is Map && exitMap.isNotEmpty) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  static final Uri _defaultProbeUrl =
+      Uri.parse('http://connectivitycheck.gstatic.com/generate_204');
+
+  /// Single end-to-end connectivity probe. Returns true only if a real HTTP
+  /// response comes back through the tunnel.
+  static Future<bool> probeConnectivity([Uri? url]) async {
+    final probe = url ?? _defaultProbeUrl;
+    final client = HttpClient()
+      ..connectionTimeout = const Duration(seconds: 4);
+    try {
+      final req = await client.getUrl(probe).timeout(const Duration(seconds: 5));
+      final res = await req.close().timeout(const Duration(seconds: 5));
+      await res.drain<void>().catchError((_) {});
+      return res.statusCode == 204 || res.statusCode == 200;
+    } catch (_) {
+      return false;
+    } finally {
+      client.close(force: true);
+    }
+  }
+
+  /// Waits until the tunnel is genuinely usable, or [timeout] elapses.
+  ///
+  /// Phase 1 (best effort): poll the daemon status every 500ms until it
+  /// reports the exit as mapped.
+  /// Phase 2 (authoritative): repeat an end-to-end HTTP probe through the
+  /// tunnel until it succeeds.
+  ///
+  /// This replaces the previous fixed 20-second delay in the UI, which
+  /// declared "Connected" without any verification and produced the
+  /// "connected but no internet" failure mode.
+  static Future<bool> waitForTunnelReady(
+      {Duration timeout = const Duration(seconds: 40), Uri? probeUrl}) async {
+    final deadline = DateTime.now().add(timeout);
+
+    while (DateTime.now().isBefore(deadline)) {
+      try {
+        if (await isExitReady) break;
+      } catch (_) {}
+      await Future.delayed(const Duration(milliseconds: 500));
+    }
+
+    while (DateTime.now().isBefore(deadline)) {
+      if (await probeConnectivity(probeUrl)) return true;
+      await Future.delayed(const Duration(seconds: 1));
+    }
+    return false;
+  }
+
   static Future<dynamic> get upload async {
     var uploadStatus = await _methodChannel.invokeMethod('getUploadSpeed');
     return uploadStatus;
