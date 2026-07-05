@@ -313,7 +313,11 @@ bool checkSearchEngineInUrl(
     var initialSettings = widget.webViewModel.settings!;
     initialSettings.isInspectable = settings.debuggingEnabled;
     initialSettings.useOnDownloadStart = true;
-    initialSettings.useOnLoadResource = true;
+    // Latency audit fix 8: was `true`, which fired a platform-channel event
+    // (plus a provider update) for EVERY subresource of every page — pure
+    // overhead during normal browsing. The resource log only feeds the
+    // developer Network Info page; re-enable there when needed.
+    initialSettings.useOnLoadResource = false;
     initialSettings.useShouldOverrideUrlLoading = true;
     initialSettings.javaScriptCanOpenWindowsAutomatically = true;
     initialSettings.userAgent =     "Mozilla/5.0 (Linux; Android 14; Pixel 8 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.86 Mobile Safari/537.36";

@@ -340,10 +340,8 @@ try{
 
       var resp = await DataRepo().getListData();
       exitNodeDataList.addAll(resp);
-      print('${exitNodeDataList[0].node}');
 
       String jsonString = exitNodeDataListToJson(exitNodeDataList);
-      print('JSONSTRING ____ $jsonString');
       await prefs.setString('allExitnodeList', jsonString);
 
       setState(() {});
