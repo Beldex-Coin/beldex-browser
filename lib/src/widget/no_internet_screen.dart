@@ -6,7 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class NoInternetConnection extends StatelessWidget {
-  const NoInternetConnection({Key? key}) : super(key: key);
+  /// Called when the user taps Retry. The button used to be a no-op
+  /// (latency audit 3.6), leaving users stranded on this screen even after
+  /// their connection came back.
+  final Future<void> Function()? onRetry;
+
+  const NoInternetConnection({Key? key, this.onRetry}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +108,9 @@ class NoInternetConnection extends StatelessWidget {
                             // fontWeight: FontWeight.w900
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          onRetry?.call();
+                        },
                       )),
                 )
               ],

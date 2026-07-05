@@ -629,7 +629,7 @@ restore() async {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
     return !_isConnected
-        ? NoInternetConnection()
+        ? NoInternetConnection(onRetry: checkInternetConnection)
         : WillPopScope(
             onWillPop: () async {
               if (BelnetLib.isConnected == false) {

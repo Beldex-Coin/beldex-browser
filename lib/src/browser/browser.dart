@@ -51,7 +51,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   //var _isRestored = false;
 
   late Connectivity _connectivity;
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
 
   SpeechController speechController = SpeechController();
@@ -163,9 +163,14 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
 checkForNetwork(AppLocalizations loc){
   _connectivity = Connectivity();
-    _connectivitySubscription = _connectivitySubscription =
+    // Latency audit fix (3.6): only ConnectivityResult.none means offline.
+    // The old check ("not wifi AND not mobile") produced a false "not
+    // connected" toast whenever the active transport was reported as
+    // vpn/ethernet — which is the normal state of this app while the
+    // Belnet VPN is up. Also removed the duplicated self-assignment.
+    _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
-      if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
+      if (event.contains(ConnectivityResult.none)) {
          showMessage(loc.youAreNotConnectedToInternet);
       }
     });
@@ -405,7 +410,7 @@ void closeTabListPage(){
   @override
   void dispose() {
     //closeAllTabs(context);
-    //_connectivitySubscription.cancel();
+    _connectivitySubscription?.cancel();
     //_isConnectedEventSubscription!.cancel();
     _intentDataStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
