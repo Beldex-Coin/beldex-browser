@@ -65,6 +65,11 @@ public class BelnetDaemon extends VpnService{
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
   private static final String DEFAULT_EXIT_NODE = "7a4cpzri7qgqen9a3g3hgfjrijt9337qb19rhcdmx5y7yttak33o.bdx";
   private static final String DEFAULT_UPSTREAM_DNS = "1.1.1.1";
+  // Latency audit: onion encapsulation overhead makes full-size 1500-byte
+  // packets exceed the effective path MTU, causing fragmentation/drops and
+  // stalls on large transfers. 1400 leaves headroom for the overlay headers.
+  // Benchmark on real devices before changing again.
+  private static final int TUN_MTU = 1400;
   public static Boolean isCalling =false;
   public static final int NOTIFY_ID = 1;
   private static final int ERROR_NOTIFY_ID = 3;
@@ -121,9 +126,9 @@ public class BelnetDaemon extends VpnService{
   @Override
   public void onCreate() {
     isConnected.postValue(false);
-    mUpdateIsConnectedTimer = new Timer();
-    mUpdateIsConnectedTimer.schedule(new UpdateIsConnectedTask(), 0, 500);
-    Log.d(LOG_TAG, "Connected timer is "+ mUpdateIsConnectedTimer.toString());
+    // Latency audit: the isConnected poller used to run every 500ms for the
+    // whole service lifetime, even when disconnected. It is now started in
+    // connect() and stopped in disconnect().
   //  createNotific();
 //    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 //      createNotificationChannel();
@@ -134,12 +139,23 @@ public class BelnetDaemon extends VpnService{
     super.onCreate();
   }
 
-  @Override
-  public void onDestroy() {
+  private synchronized void startIsConnectedTimer() {
+    if (mUpdateIsConnectedTimer == null) {
+      mUpdateIsConnectedTimer = new Timer();
+      mUpdateIsConnectedTimer.schedule(new UpdateIsConnectedTask(), 0, 500);
+    }
+  }
+
+  private synchronized void stopIsConnectedTimer() {
     if (mUpdateIsConnectedTimer != null) {
       mUpdateIsConnectedTimer.cancel();
       mUpdateIsConnectedTimer = null;
     }
+  }
+
+  @Override
+  public void onDestroy() {
+    stopIsConnectedTimer();
     // clearNotifications();
     disconnect();
    
@@ -558,7 +574,7 @@ public void jstUpdate(String data){
 
       VpnService.Builder builder = new VpnService.Builder();
 
-      builder.setMtu(1500);
+      builder.setMtu(TUN_MTU);
 
       String[] parts = ourRange.split("/");
       String ourIP = parts[0];
@@ -617,6 +633,7 @@ public void jstUpdate(String data){
       new BelnetLibPlugin().logDataToFrontend("already running");
     }
 
+    startIsConnectedTimer();
     updateIsConnected();
 //    Intent browserI = new Intent(Intent.ACTION_VIEW,Uri.parse("https://whatismyipaddress.com/"));
 //    startActivity(browserI);
@@ -636,6 +653,7 @@ public void jstUpdate(String data){
     // }
 
     updateIsConnected();
+    stopIsConnectedTimer();
 
   }
 
@@ -647,15 +665,62 @@ public void jstUpdate(String data){
     isConnected.postValue(IsRunning() && VpnService.prepare(BelnetDaemon.this) == null);
   }
 
-  public String unmappingNode(String newNode){  
+  /** Callback used to deliver the async result of an exit-node remap. */
+  public interface UnmapCallback {
+    void onResult(String result);
+  }
+
+  /**
+   * Remaps the exit node asynchronously and delivers the REAL result via the
+   * callback on the main thread.
+   *
+   * The previous implementation started a worker thread and immediately
+   * returned the shared {@code results} field, i.e. it always returned the
+   * previous call's value (or null) — the actual outcome of the remap was
+   * never observed by the caller (latency audit section 3.5).
+   */
+  public void unmappingNode(String newNode, UnmapCallback callback) {
     new Thread(
       () -> {
-        results = Unmap(newNode);
+        String r = Unmap(newNode);
+        results = r;
+        new Handler(Looper.getMainLooper()).post(() -> callback.onResult(r));
       })
       .start();
+  }
 
-     return results;
-   }
+  /**
+   * True when the daemon's own status dump indicates onion paths are built
+   * and the exit is mapped. This is the signal the UI must gate "Connected"
+   * on — {@link #IsRunning()} only means the mainloop thread is alive.
+   */
+  public boolean isExitReady() {
+    if (!IsRunning())
+      return false;
+    try {
+      String dump = DumpStatus();
+      if (dump == null || dump.isEmpty())
+        return false;
+      JSONObject status = new JSONObject(dump);
+      if (!status.optBoolean("running", true))
+        return false;
+      JSONObject services = status.optJSONObject("services");
+      if (services == null)
+        return false;
+      java.util.Iterator<String> keys = services.keys();
+      while (keys.hasNext()) {
+        JSONObject svc = services.optJSONObject(keys.next());
+        if (svc == null)
+          continue;
+        JSONObject exitMap = svc.optJSONObject("exitMap");
+        if (exitMap != null && exitMap.length() > 0)
+          return true;
+      }
+    } catch (JSONException e) {
+      Log.w(LOG_TAG, "isExitReady: could not parse status dump: " + e);
+    }
+    return false;
+  }
 
   /**
    * Class for clients to access. Because we know this service always runs in the

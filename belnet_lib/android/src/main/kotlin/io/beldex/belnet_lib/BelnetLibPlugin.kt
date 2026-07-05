@@ -328,7 +328,20 @@ private fun registerCallAndAudioReceivers() {
             "getMap" -> {
                 val swapNode = call.argument<String>("swap_node")
                 Log.d("Test", "Swap Node from un map")
-                result.success(mBoundService?.unmappingNode(swapNode) ?: false)
+                val service = mBoundService
+                if (service == null) {
+                    result.success(null)
+                } else {
+                    // Deliver the REAL remap result asynchronously; the old
+                    // code returned a stale field before the worker finished.
+                    service.unmappingNode(swapNode) { r ->
+                        result.success(r)
+                    }
+                }
+            }
+
+            "isExitReady" -> {
+                result.success(mBoundService?.isExitReady() ?: false)
             }
 
             "getUnmapStatus" -> {
