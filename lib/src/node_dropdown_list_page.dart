@@ -284,22 +284,24 @@ Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider 
        // if (disconnect) {
         // final prepare = await BelnetLib.prepareConnection();
         // if (prepare) {
+           // Latency audit fix (3.5): unmapExitNode now returns the REAL
+           // remap result (the native side previously returned a stale field
+           // before its worker thread finished), and the blind 5-second
+           // delay is replaced with an actual tunnel readiness check before
+           // the page is reloaded and 'Connected' is announced.
            final status = await BelnetLib.unmapExitNode(exitNode);
-         print('Print the exception whether un map ---> $status');
-          print('Change node ------> Exitnode $exitNode');
-          // await BelnetLib.connectToBelnet(
-          //     exitNode: exitNode, //customExitnode,
-          //     upstreamDNS: "9.9.9.9");
+           debugPrint('Exit node remap result: $status');
          vpnStatusProvider.updateCanClose(true);
-         Future.delayed(Duration(seconds: 5), () async{
-         vpnStatusProvider.updateValue('Connected');
+         final ready = await BelnetLib.waitForTunnelReady(
+             timeout: const Duration(seconds: 30));
          vpnStatusProvider.updateChangeNodevalue(false);
          vpnStatusProvider.updateCanClose(false);
-         showMessage(loc.exitNodeSwitched
+         if (ready) {
+           vpnStatusProvider.updateValue('Connected');
+           showMessage(loc.exitNodeSwitched
                 //'Exit node switched successfully'
                 );
-         if(widget.webViewController != null){
-          //var dds = widget.webViewController!.getUrl().toString();
+           if(widget.webViewController != null){
             widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
                           url: WebUri(webViewModel.url.toString()),
@@ -307,18 +309,21 @@ Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider 
             "Accept-Language": localeProvider.fullLocaleId,
           },
                           ));
-
-          // print('THE RELOAD URL IN HERE IS ---- $dds');
-          // await widget.webViewController!.reload();
+           }
+           if (mounted) Navigator.pop(context,true);
+         } else {
+           // TODO(l10n): localize this message.
+           showMessage(
+               'Could not verify the new exit node. Please try another node.');
+           if (mounted) {
+             setState(() {
+               isChangeNodeEnable = true;
+             });
+           }
          }
-         Navigator.pop(context,true);
           if(BelnetLib.isConnected != true || await BelnetLib.isRunning == false){
               SystemNavigator.pop();
           }
-         setState(() {
-           isChangeNodeEnable = false;
-         });
-      });
       //  }
      //}
    // }
