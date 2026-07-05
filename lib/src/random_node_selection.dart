@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
 class UserPosition {
@@ -34,49 +35,76 @@ class UserPosition {
 //     throw Exception('Failed to fetch location from IP');
 //   }
 // }
+// Latency audit fix 7: the geo-IP lookup sat on the connect critical path
+// with no timeout and no caching (and one fallback went over plain http).
+// The result is now cached for 30 minutes, every request has a 5-second
+// timeout, and both providers are HTTPS.
+const Duration _geoHttpTimeout = Duration(seconds: 5);
+const Duration _geoCacheTtl = Duration(minutes: 30);
+
 Future<UserPosition> getUserLocationFromAPI() async {
+  SharedPreferences? prefs;
   try {
-    // Try ipapi.co
-    final res1 = await http.get(Uri.parse('https://ipwho.is/'));
-    if (res1.statusCode == 200) {
-      final data = jsonDecode(res1.body);
+    prefs = await SharedPreferences.getInstance();
+    final cachedAtMs = prefs.getInt('geoIp.time') ?? 0;
+    final cached = prefs.getString('geoIp.data');
+    if (cached != null &&
+        DateTime.now().millisecondsSinceEpoch - cachedAtMs <
+            _geoCacheTtl.inMilliseconds) {
+      final data = jsonDecode(cached);
       return UserPosition(
         latitude: (data['latitude'] ?? 0).toDouble(),
         longitude: (data['longitude'] ?? 0).toDouble(),
-        country: normalizeCountryName(data['country'])  ?? "Unknown",
+        country: data['country'] ?? 'Unknown',
       );
     }
   } catch (_) {}
 
-  try {
-    //  Try ip-api.com
-    final res2 = await http.get(Uri.parse('http://ip-api.com/json/'));
-    if (res2.statusCode == 200) {
-      final data = jsonDecode(res2.body);
-      return UserPosition(
-        latitude: (data['lat'] ?? 0).toDouble(),
-        longitude: (data['lon'] ?? 0).toDouble(),
-        country: normalizeCountryName(data['country'])  ?? "Unknown",
+  Future<UserPosition?> tryProvider(
+      String url, UserPosition? Function(dynamic data) parse) async {
+    try {
+      final res =
+          await http.get(Uri.parse(url)).timeout(_geoHttpTimeout);
+      if (res.statusCode == 200) {
+        return parse(jsonDecode(res.body));
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  final position = await tryProvider(
+        'https://ipwho.is/',
+        (data) => UserPosition(
+          latitude: (data['latitude'] ?? 0).toDouble(),
+          longitude: (data['longitude'] ?? 0).toDouble(),
+          country: normalizeCountryName(data['country']),
+        ),
+      ) ??
+      await tryProvider(
+        'https://ipapi.co/json/',
+        (data) => UserPosition(
+          latitude: (data['latitude'] ?? 0).toDouble(),
+          longitude: (data['longitude'] ?? 0).toDouble(),
+          country: normalizeCountryName(data['country_name']),
+        ),
       );
-    }
-  } catch (_) {}
 
-  // try {
-  //   // Try ipinfo.io
-  //   final res3 = await http.get(Uri.parse('https://ipinfo.io/json'));
-  //   if (res3.statusCode == 200) {
-  //     final data = jsonDecode(res3.body);
-  //     List<String> loc = (data['loc'] ?? "0,0").split(",");
-  //     return UserPosition(
-  //       latitude: double.tryParse(loc[0]) ?? 0,
-  //       longitude: double.tryParse(loc[1]) ?? 0,
-  //       country: data['country'] ?? "Unknown",
-  //     );
-  //   }
-  // } catch (_) {}
+  if (position != null) {
+    try {
+      await prefs?.setString(
+          'geoIp.data',
+          jsonEncode({
+            'latitude': position.latitude,
+            'longitude': position.longitude,
+            'country': position.country,
+          }));
+      await prefs?.setInt(
+          'geoIp.time', DateTime.now().millisecondsSinceEpoch);
+    } catch (_) {}
+    return position;
+  }
 
-  // All failed → return a safe fallback, do NOT throw
-  print("All IP-Location APIs failed, using default values.");
+  // All failed -> return a safe fallback, do NOT throw
   return UserPosition(latitude: 0, longitude: 0, country: "Unknown");
 }
 
@@ -124,17 +152,28 @@ Future<Map<String, dynamic>> findNearestNode({
   required BasicProvider basicProvider,
 }) async {
   final userPos = await getUserLocationFromAPI();
-  print("User Country: ${userPos.country}");
 
   // Flatten all nodes from all nodeLists
   final allNodes = nodeLists.expand((list) => list.node).toList();
 
-  // Exclude user’s own country
-  final filteredNodes = allNodes.where((n) => n.country != userPos.country
-  ).toList();
+  // Latency audit fix 7: excluding the user's own country guarantees
+  // cross-border RTT even when a domestic exit exists. Keep the current
+  // (privacy-friendly) behaviour as the default, but make it a preference
+  // so it can be exposed as a setting.
+  final prefs = await SharedPreferences.getInstance();
+  final excludeOwnCountry = prefs.getBool('excludeOwnCountryNodes') ?? true;
 
+  var filteredNodes = excludeOwnCountry
+      ? allNodes.where((n) => n.country != userPos.country).toList()
+      : List.of(allNodes);
+
+  // Never fail outright: fall back to the full list instead of throwing
+  // when filtering leaves nothing usable.
   if (filteredNodes.isEmpty) {
-    throw Exception("No nodes available outside your current country (${userPos.country}).");
+    filteredNodes = List.of(allNodes);
+  }
+  if (filteredNodes.isEmpty) {
+    throw Exception("No exit nodes available.");
   }
 
   exitNodeModel.Node finalNode;
@@ -168,9 +207,15 @@ Future<Map<String, dynamic>> findNearestNode({
     List<exitNodeModel.Node> sameCountryNodes =
         nonZeroNodes.where((n) => n.country == nearestNode.country).toList();
 
-    //  Sort by speedScore (1 best, 0 worst) then distance
+    //  Sort by speedScore rank (1 = best) then distance.
+    //  Latency audit fix 7: unrated nodes (speedScore == 0) must sort AFTER
+    //  rated ones. When the earlier non-zero filter falls back to the full
+    //  list, the old ascending sort put the unrated (0) nodes FIRST and the
+    //  autoconnect picked one of them.
+    int rankOf(exitNodeModel.Node n) =>
+        n.speedScore == 0 ? 1 << 30 : n.speedScore;
     sameCountryNodes.sort((a, b) {
-      int speedCompare = a.speedScore.compareTo(b.speedScore);
+      int speedCompare = rankOf(a).compareTo(rankOf(b));
       if (speedCompare != 0) return speedCompare;
 
       double distA = calculateDistance(userPos.latitude, userPos.longitude, a.lat, a.long);
@@ -179,7 +224,6 @@ Future<Map<String, dynamic>> findNearestNode({
     });
 
     finalNode = sameCountryNodes.first;
-    print('User changed country after autoconnect is ${finalNode.name} SpeedScore is ${finalNode.speedScore} country ${finalNode.country}');
   } else {
     // AutoConnect disabled → just find absolutely nearest node
     exitNodeModel.Node nearestNode = filteredNodes.first;
@@ -214,9 +258,6 @@ Future<Map<String, dynamic>> findNearestNode({
     // Step 3: Randomly pick one
     final random = Random();
     finalNode = nearbyNodes[random.nextInt(nearbyNodes.length)];
-
-    print(
-        'AutoConnect OFF → randomly picked ${finalNode.name} (Country: ${finalNode.country}, Distance: ${minDistance.toStringAsFixed(2)} km)');
 
 
 
