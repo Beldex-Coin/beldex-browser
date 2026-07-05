@@ -55,7 +55,6 @@ class _ConnectVpnHomeState extends State<ConnectVpnHome>
   var selectedId;
 
   List<String> messages = [];
-  Timer? messageTimer;
 
   late Connectivity _connectivity;
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
@@ -73,20 +72,24 @@ Map<String,dynamic> nearest = {};
  var _isRestored = false;
 
 
-  void displayMessages(AppLocalizations appLoc) {
-    showMessage(appLoc.checkingConnection, 0);
-    showMessage(appLoc.belnetServiceStarted, 6);
-    showMessage(appLoc.connectingBelnetdVPN, 5);
-    showMessage(appLoc.prepareDaemonConnection, 7);
+  // Latency audit fix: connection phase messages are now driven by the REAL
+  // connection phases (see toggleBelnet) instead of fixed 0/6/5/7-second
+  // timers that had no relationship to what the daemon was doing.
+  void _setPhase(String message, LoadingtickValueProvider progressProvider,
+      double targetProgress) {
+    if (!mounted) return;
+    setState(() {
+      messages
+        ..clear()
+        ..add(message);
+    });
+    final delta = targetProgress - progressProvider.progressValue;
+    if (delta > 0) progressProvider.updateProgressValue(delta);
   }
 
-  void showMessage(String message, int delaySeconds) {
-    Timer(Duration(seconds: delaySeconds), () {
-      setState(() {
-        messages.clear();
-        messages.add(message);
-      });
-    });
+  void _resetProgress(LoadingtickValueProvider progressProvider) {
+    final current = progressProvider.progressValue;
+    if (current != 0) progressProvider.updateProgressValue(-current);
   }
 
   @override
@@ -202,28 +205,20 @@ try{
 
       var resp = await DataRepo().getExitnodeInfoListData();
       exitNodeDataList.addAll(resp);
-      print('${exitNodeDataList[0].node}');
 
       String jsonString = exitNodeDataListToJson(exitNodeDataList);
-      print('JSONSTRING ____ $jsonString');
       await prefs.setString('allExitnodeList', jsonString);
 
       setState(() {});
-      // exitNodeDataList.forEach((element) {
-      //   element.node.forEach((element) {
-      //     myExitData.add(element.name);
-      //   });
-      // });
       nearest = await findNearestNode(nodeLists: exitNodeDataList,basicProvider:basicProvider);
  await prefs.setString('selectedExitNode', '${nearest['name']}');
         await prefs.setString(
             'selectedCountryIcon', 'assets/images/flags/${nearest['country']}.png');
-        // print(
-        //     'second index for the data ${customIcon}  and the $customExitnode');
 
         exitNode = prefs.getString('selectedExitNode');
         exitIcon = prefs.getString('selectedCountryIcon');
-          print('USER BAB ONE NODE SELECTED ---> $exitNode -- $exitIcon');
+        // Keep the in-memory selection in sync (audit fix 3.4).
+        customExitnode = nearest['name'];
 
   if (basicProvider.autoConnect && BelnetLib.isConnected == false) {
       print('USER BAB ONE --> ${nearest}');
@@ -393,65 +388,143 @@ try{
   }
 
   bool isLoading = false;
-  int count = 1;
+
+  /// Re-entrancy guard for the connect flow. Replaces the old `count`
+  /// int, which left the Connect button permanently dead after a failed
+  /// prepare (it was only reset on one failure path).
+  bool _connecting = false;
+
+  /// Consecutive verified-connect failures; after 2 in a row the local
+  /// bootstrap file is discarded so a stale/corrupt bootstrap self-heals.
+  int _consecutiveConnectFailures = 0;
+
+  // Latency audit fix (sections 3.1/3.2/3.4): the old implementation
+  // declared "Connected" from a fixed 20-second Future.delayed — without
+  // checking the result of connectToBelnet, without consulting the daemon
+  // status, and while passing the possibly-stale `customExitnode` field
+  // instead of the node the user actually selected. On fast networks users
+  // always waited the full 20s; on slow/failed connects the browser opened
+  // with a fully black-holed tunnel ("connected but no internet").
+  //
+  // The flow is now: prepare -> connect (checked) -> waitForTunnelReady()
+  // (daemon status + end-to-end probe) -> only then Connected + navigate.
   Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
-      LoadingtickValueProvider loadingtickValueProvider,AppLocalizations appLoc) async {
-    const totalDuration = Duration(seconds: 20);
-    if (count == 1) {
-      try {
-        count++;
-        final prefs = await SharedPreferences.getInstance();
-        if (_isConnected) {
-          if (mounted) setState(() {});
-
-          if (BelnetLib.isConnected) {
-            var disConnectValue = await BelnetLib.disconnectFromBelnet();
-            vpnStatusProvider.updateValue('Disconnected');
-          } else {
-            setState(() {
-              isLoading = true;
-            });
-            String exitnodeName = prefs.getString('selectedExitNode') ?? '';
-            final result = await BelnetLib.prepareConnection();
-            if (!result) {
-              setState(() {
-                isLoading = false;
-                count = 1;
-              });
-            }
-            if (result) {
-              vpnStatusProvider.updateValue('Connecting...');
-              print('The Exitnode connecting to is ---> $customExitnode');
-              final con = await BelnetLib.connectToBelnet(
-                  exitNode: customExitnode, //exitnodeName, //customExitnode,
-                  upstreamDNS: "9.9.9.9");
-              displayMessages(appLoc);
-              // vpnStatusProvider.updateValue('Connecting...');
-              simulateDelayedProgress(loadingtickValueProvider);
-              Future.delayed(totalDuration, () {
-                if (mounted)
-                  setState(() {
-                    isLoading = false;
-                  });
-                vpnStatusProvider.updateValue('Connected');
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: ((context) => Browser())));
-              });
-              print("connection data value for display ${myExitData[1]}");
-            }
-
-            setState(() {});
-          }
-        } else {
-          if (BelnetLib.isConnected) {
-            BelnetLib.disconnectFromBelnet();
-          }
+      LoadingtickValueProvider loadingtickValueProvider,
+      AppLocalizations appLoc) async {
+    if (_connecting) return;
+    _connecting = true;
+    try {
+      if (!_isConnected) {
+        // Device itself is offline: make sure the tunnel is down.
+        if (BelnetLib.isConnected) {
+          await BelnetLib.disconnectFromBelnet();
         }
-      } catch (e) {
-        print('Exception while checking $e');
+        return;
       }
+
+      if (BelnetLib.isConnected) {
+        await BelnetLib.disconnectFromBelnet();
+        vpnStatusProvider.updateValue('Disconnected');
+        if (mounted) setState(() {});
+        return;
+      }
+
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+      _resetProgress(loadingtickValueProvider);
+
+      // Audit fix 3.4: always connect to the node that was actually
+      // selected (prefs are the source of truth written by every selection
+      // path), not the `customExitnode` field that was only refreshed by an
+      // un-awaited async call from build().
+      final prefs = await SharedPreferences.getInstance();
+      final exitnodeName = prefs.getString('selectedExitNode') ?? '';
+      final nodeToUse =
+          exitnodeName.isNotEmpty ? exitnodeName : customExitnode;
+      customExitnode = nodeToUse;
+      debugPrint('Connecting to exit node: $nodeToUse');
+
+      _setPhase(appLoc.checkingConnection, loadingtickValueProvider, 0.10);
+
+      bool prepared;
+      try {
+        prepared = await BelnetLib.prepareConnection();
+      } on BootstrapException catch (e) {
+        debugPrint('Bootstrap failed: $e');
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,
+            'Could not download the Belnet bootstrap file. Please check your connection and try again.');
+        return;
+      }
+      if (!prepared) {
+        // VPN permission denied or preparation failed.
+        _failConnect(vpnStatusProvider, loadingtickValueProvider, null);
+        return;
+      }
+
+      vpnStatusProvider.updateValue('Connecting...');
+      _setPhase(appLoc.belnetServiceStarted, loadingtickValueProvider, 0.25);
+
+      final started = await BelnetLib.connectToBelnet(
+          exitNode: nodeToUse, upstreamDNS: "9.9.9.9");
+      if (!started) {
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,
+            'The Belnet service could not be started. Please try again.');
+        return;
+      }
+
+      _setPhase(appLoc.connectingBelnetdVPN, loadingtickValueProvider, 0.50);
+
+      final ready = await BelnetLib.waitForTunnelReady(
+          timeout: const Duration(seconds: 40));
+
+      if (!ready) {
+        _consecutiveConnectFailures++;
+        await BelnetLib.disconnectFromBelnet();
+        if (_consecutiveConnectFailures >= 2) {
+          // Self-heal a stale/corrupt bootstrap (audit fix 2).
+          await BelnetLib.resetBootstrap();
+          _consecutiveConnectFailures = 0;
+        }
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,
+            'Could not verify the connection through this exit node. Please try again or choose another node.');
+        return;
+      }
+
+      _consecutiveConnectFailures = 0;
+      _setPhase(appLoc.prepareDaemonConnection, loadingtickValueProvider, 1.0);
+      vpnStatusProvider.updateValue('Connected');
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => Browser())));
+      }
+    } catch (e) {
+      debugPrint('Exception while connecting: $e');
+      _failConnect(vpnStatusProvider, loadingtickValueProvider, null);
+    } finally {
+      _connecting = false;
     }
-    // print('connected exitnode is ---> $exitnodeName');
+  }
+
+  void _failConnect(VpnStatusProvider vpnStatusProvider,
+      LoadingtickValueProvider loadingtickValueProvider, String? message) {
+    vpnStatusProvider.updateValue('Disconnected');
+    _resetProgress(loadingtickValueProvider);
+    if (!mounted) return;
+    setState(() {
+      isLoading = false;
+      messages.clear();
+    });
+    if (message != null) {
+      // TODO(l10n): move these connection-failure messages into the arb files.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   // Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
@@ -491,31 +564,16 @@ try{
   //   }
   //   // print('connected exitnode is ---> $exitnodeName');
   // }
-  late Timer timers;
-  void simulateDelayedProgress(
-      LoadingtickValueProvider loadingtickValueProvider) {
-    const totalDuration = Duration(seconds: 20);
-    const updateInterval = const Duration(milliseconds: 100);
-
-    int totalTicks =
-        totalDuration.inMilliseconds ~/ updateInterval.inMilliseconds;
-
-    timers = Timer.periodic(updateInterval, (timer) {
-      if (loadingtickValueProvider.progressValue < 1.0) {
-        setState(() {
-          loadingtickValueProvider.updateProgressValue(1.0 / totalTicks);
-        });
-      } else {
-        timer.cancel();
-      }
-    });
-  }
+  // simulateDelayedProgress (a 100ms Timer.periodic that rebuilt this widget
+  // ~200 times to animate a fake 20-second progress bar) has been removed;
+  // progress is now updated at real connection phase boundaries. The old
+  // `late Timer timers` field also crashed dispose() with a
+  // LateInitializationError when the user never tapped Connect.
 
   @override
   void dispose() {
     animationController.dispose();
     _connectivitySubscription.cancel();
-    timers.cancel();
     // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -540,13 +598,13 @@ restore() async {
 
 
 
-  updateExitNodeValue() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // var timer = Timer.periodic(Duration(milliseconds: 100), (timer){
-    setState(() {});
-    customExitnode = prefs.getString('selectedExitNode') ?? '';
-    //});
-  }
+  // updateExitNodeValue() has been removed: it was an un-awaited async
+  // SharedPreferences read + setState invoked from build() on EVERY rebuild
+  // (a rebuild feedback loop), and it was the only thing keeping
+  // `customExitnode` in sync — a race that could make the app connect to
+  // the hard-coded default node instead of the selected one (audit 3.4).
+  // `customExitnode` is now updated directly at every selection site and
+  // toggleBelnet reads the selection from SharedPreferences itself.
 
   Future<bool?> checkForCloseApp() async {
     setState(() {
@@ -570,10 +628,6 @@ restore() async {
     final mHeight = MediaQuery.of(context).size.height;
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
-    if (BelnetLib.isConnected) {
-      print('is connected true ${BelnetLib.isConnected}');
-    }
-    updateExitNodeValue();
     return !_isConnected
         ? NoInternetConnection()
         : WillPopScope(
@@ -1484,6 +1538,8 @@ restore() async {
             //valueS = vnode[i].name;
 
             exitNode = vnode[i].name;
+            // Keep the in-memory selection in sync (audit fix 3.4).
+            customExitnode = vnode[i].name;
             exitIcon =
                 'assets/images/flags/${vnode[i].country}.png'; //vnode[i].icon;
           });
