@@ -293,7 +293,7 @@ Future changeNode(VpnStatusProvider vpnStatusProvider, LoadingtickValueProvider 
            debugPrint('Exit node remap result: $status');
          vpnStatusProvider.updateCanClose(true);
          final ready = await BelnetLib.waitForTunnelReady(
-             timeout: const Duration(seconds: 30));
+             timeout: const Duration(seconds: 45));
          vpnStatusProvider.updateChangeNodevalue(false);
          vpnStatusProvider.updateCanClose(false);
          if (ready) {

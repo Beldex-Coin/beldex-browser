@@ -475,8 +475,12 @@ try{
 
       _setPhase(appLoc.connectingBelnetdVPN, loadingtickValueProvider, 0.50);
 
+      // 90s cap: a FIRST connect on a fresh install has to bootstrap and
+      // build paths from an empty network DB, which can take well over 40s.
+      // Verified connects on warm installs typically finish in a few
+      // seconds regardless of this ceiling.
       final ready = await BelnetLib.waitForTunnelReady(
-          timeout: const Duration(seconds: 40));
+          timeout: const Duration(seconds: 90));
 
       if (!ready) {
         _consecutiveConnectFailures++;

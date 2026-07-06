@@ -249,29 +249,42 @@ class BelnetLib {
 
   /// Waits until the tunnel is genuinely usable, or [timeout] elapses.
   ///
-  /// Phase 1 (best effort): poll the daemon status every 500ms until it
-  /// reports the exit as mapped.
-  /// Phase 2 (authoritative): repeat an end-to-end HTTP probe through the
-  /// tunnel until it succeeds.
+  /// The end-to-end HTTP probe is the authoritative signal and runs on
+  /// every iteration. The daemon status (isExitReady) is consulted purely
+  /// as a diagnostic: an earlier revision gated the probe behind the
+  /// status check, so any mismatch between the parser and belnet's actual
+  /// DumpStatus schema consumed the whole timeout and reported failure
+  /// even though the tunnel was up.
   ///
   /// This replaces the previous fixed 20-second delay in the UI, which
   /// declared "Connected" without any verification and produced the
   /// "connected but no internet" failure mode.
   static Future<bool> waitForTunnelReady(
-      {Duration timeout = const Duration(seconds: 40), Uri? probeUrl}) async {
+      {Duration timeout = const Duration(seconds: 60), Uri? probeUrl}) async {
     final deadline = DateTime.now().add(timeout);
 
-    while (DateTime.now().isBefore(deadline)) {
-      try {
-        if (await isExitReady) break;
-      } catch (_) {}
-      await Future.delayed(const Duration(milliseconds: 500));
-    }
+    // Short grace period so the service can bring the interface up before
+    // the first probe burns its connection timeout.
+    await Future.delayed(const Duration(seconds: 2));
 
+    var lastStatusReady = false;
     while (DateTime.now().isBefore(deadline)) {
       if (await probeConnectivity(probeUrl)) return true;
+
+      try {
+        lastStatusReady = await isExitReady;
+      } catch (_) {}
       await Future.delayed(const Duration(seconds: 1));
     }
+
+    // Aid postmortems: on failure, log what the daemon thought its state
+    // was. (A true status with failing probes points at DNS/exit
+    // forwarding; false suggests path building never completed.)
+    try {
+      // ignore: avoid_print
+      print('waitForTunnelReady timed out; daemon exitReady=$lastStatusReady '
+          'status=${await status}');
+    } catch (_) {}
     return false;
   }
 
