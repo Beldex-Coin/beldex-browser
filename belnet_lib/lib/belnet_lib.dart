@@ -20,9 +20,13 @@ class BelnetLib {
   static const String _bootstrapUrl =
       'https://belnet-exitnode.s3.ap-south-1.amazonaws.com/bootstrap-files/bootstrap.signed';
 
-  /// A valid bootstrap file is expected to be well above this size; a smaller
-  /// file is almost certainly a truncated/failed download.
-  static const int _minBootstrapBytes = 1024;
+  /// Minimum plausible size of a valid bootstrap file. A belnet
+  /// bootstrap.signed is a bencoded signed RouterContact and is typically
+  /// only a few hundred bytes, so this guard must stay small: it exists to
+  /// catch empty/truncated downloads, not to enforce a "real" size.
+  /// (An earlier 1 KB threshold rejected VALID bootstrap files and broke
+  /// connecting entirely.)
+  static const int _minBootstrapBytes = 64;
 
   /// Re-download the bootstrap file in the background once it is older than
   /// this, so the relay list does not go stale.
@@ -74,10 +78,19 @@ class BelnetLib {
         }
         await response
             .pipe(tmp.openWrite())
-            .timeout(const Duration(seconds: 30));
+            .timeout(const Duration(seconds: 60));
         if (!tmp.existsSync() || tmp.lengthSync() < _minBootstrapBytes) {
           throw BootstrapException(
               'downloaded file too small (${tmp.existsSync() ? tmp.lengthSync() : 0} bytes)');
+        }
+        // Guard against a captive portal / proxy returning an HTML or XML
+        // page with HTTP 200: a bencoded bootstrap never starts with '<'.
+        final raf = tmp.openSync();
+        final firstByte = raf.readSync(1);
+        raf.closeSync();
+        if (firstByte.isNotEmpty && firstByte[0] == 0x3C /* '<' */) {
+          throw BootstrapException(
+              'downloaded file looks like an HTML/XML page, not a bootstrap');
         }
         tmp.renameSync(target.path);
         return;
