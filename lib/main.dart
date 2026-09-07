@@ -24,6 +24,7 @@ import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
 //import 'package:beldex_browser/src/translation_provider.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
+import 'package:beldex_browser/src/tunnel_health_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -232,6 +233,7 @@ NetworkReinitializer.start();
          ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
         
 ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
+ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
       ],
       child:
       // MaterialApp(
