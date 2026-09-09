@@ -9,6 +9,7 @@ import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -292,115 +293,167 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
           ]),
         ),
       ),
-    //   Padding(
-    //     padding: const EdgeInsets.symmetric(vertical: 10.0),
-    //     child: SizedBox(
-    //       //height: constraints.maxHeight/7.5,
-    //       //color: Colors.yellow,
-    //       child:
-    //           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-    //         Expanded(
-    //           child: Column(
-    //             textBaseline: TextBaseline.alphabetic,
-    //             crossAxisAlignment: CrossAxisAlignment.baseline,
-    //             children: [
-    //               TextWidget(text:"Change Langauge",
-    //                   style: theme.textTheme.bodyLarge!
-    //                       .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
-    //               TextWidget(
-    //                   text: loc.hello, //'Change the app language',
-    //                   overflow: TextOverflow.ellipsis,
-    //                   maxLines: 3,
-    //                   style: theme.textTheme.bodySmall!
-    //                       .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
-    //             ],
-    //           ),
-    //         ),
-    //         PopupMenuTheme(
-    //           data: PopupMenuThemeData(
-    //             shape: RoundedRectangleBorder(
-    //   borderRadius: BorderRadius.circular(4),
-    //   side: BorderSide(
-    //     color: themeProvider.darkTheme
-    //         ? const Color(0xff42425F)
-    //         : const Color(0xffF3F3F3),
-    //   ),
-    // ),
-    //           ),
-    //           child: PopupMenuButton<String>(
-    //             offset: Offset(-8, 49),
-    //             color: themeProvider.darkTheme
-    //                 ? const Color(0xff292937)
-    //                 : const Color(0xffF3F3F3),
-    //             surfaceTintColor: themeProvider.darkTheme
-    //                 ? const Color(0xff292937)
-    //                 : const Color(0xffF3F3F3),
-    //             icon: Container(
-    //               width: 100,
-    //               height: 40,
-    //               decoration: BoxDecoration(
-    //                   color: themeProvider.darkTheme
-    //                       ? const Color(0xff363645)
-    //                       : const Color(0xffFFFFFF),
-    //                   border: Border.all(
-    //                       color: themeProvider.darkTheme
-    //                           ? const Color(0xff42425F)
-    //                           : const Color(0xff3EC745)),
-    //                   borderRadius: BorderRadius.circular(3)),
-    //               padding:const EdgeInsets.symmetric(horizontal: 5),
-    //               child: Row(
-    //                 mainAxisAlignment: MainAxisAlignment.center,
-    //                 children: [
-    //                   Expanded(
-    //                       child: TextWidget(
-    //                    text:localeProvider.selectedLanguage,
-    //                     overflow: TextOverflow.ellipsis,
-    //                     maxLines: 1,
-    //                     style: TextStyle(
-    //                         fontSize: 13,
-    //                         color: themeProvider.darkTheme
-    //                             ? Colors.white
-    //                             : Color(0xff3EC745)),
-    //                   )),
-    //                   SizedBox(
-    //                     width: 25,
-    //                     child: Icon(Icons.arrow_drop_down,
-    //                         color: themeProvider.darkTheme
-    //                             ? const Color(0xff6D6D81)
-    //                             : const Color(0xff3EC745)),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //             onSelected: (String selected) {
-    //               /// This automatically:
-    //   /// - Saves locale
-    //   /// - Disables follow-system-locale mode
-    //   /// - Updates selectedLanguage
-    //   /// - Triggers UI update
-    //   localeProvider.setLocale(localeProvider.languages[selected]!);
-    //               // localeProvider.setLocale(localeProvider.languages[selected]!);
-    //               // localeProvider.setSelectedLanguage();
-    //               // // setState(() {
-    //               // //   // settings.searchEngine = value;
-    //               // //   // browserModel.updateSettings(settings);
-    //               // // });
-                 
-    //             },
-    //             itemBuilder: ((context) {
-    //               return localeProvider.languages.keys.map((String language) {
-    //                 return PopupMenuItem<String>(
-    //                     enabled: true,
-    //                     value: language,
-    //                     height: 30,
-    //                     child: Text(language,style: TextStyle(fontWeight: FontWeight.w300),));
-    //               }).toList();
-    //             }),
-    //           ),
-    //         )
-    //       ]),
-    //     ),
-    //   ),
+    Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: SizedBox(
+          //height: constraints.maxHeight/7.5,
+          //color: Colors.yellow,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Expanded(
+              child: Column(
+                textBaseline: TextBaseline.alphabetic,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                children: [
+                  TextWidget(text:loc.searchBarPosition,
+                      style: theme.textTheme.bodyLarge!
+                          .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600),maxLines: 2,overflow: TextOverflow.ellipsis,),
+                  TextWidget(
+                      text: loc.choosethePosition, //'Change the app language',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3,
+                      style: theme.textTheme.bodySmall!
+                          .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D)),)
+                ],
+              ),
+            ),
+            PopupMenuTheme(
+              data: PopupMenuThemeData(
+                shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(4),
+      side: BorderSide(
+        color: themeProvider.darkTheme
+            ? const Color(0xff42425F)
+            : const Color(0xffF3F3F3),
+      ),
+    ),
+              ),
+              child: PopupMenuButton<AppBarPosition>(
+                offset: Offset(-8, 49),
+                menuPadding: EdgeInsets.zero,
+                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9): Color(0xffEBEBEB).withOpacity(0.1),
+  elevation: 0,
+  shadowColor: Colors.transparent,
+  surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :Color(0xffEBEBEB).withOpacity(0.1),
+       // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+        constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
+                 onCanceled: () {
+                  setState(() {
+                    isSearchbarDropdownOpened = false;
+                  });
+                  print('OnCanceled is calling');
+                 },
+                 onOpened: (){
+                  setState(() {
+                    
+                  });
+                  isSearchbarDropdownOpened = true;
+                   print('Onopened is calling');
+                 },
+        shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+    side: BorderSide(
+      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+      width: 1,
+    ),
+  ),
+                icon: Container(
+                  width: 100,
+                  height: 40,
+                  decoration: BoxDecoration(
+                       color: themeProvider.darkTheme
+                          ? const Color(0xff222222)
+                          : const Color(0xffFFFFFF),
+                      border: Border.all(
+                          color: themeProvider.darkTheme
+                              ? const Color(0xff333333)
+                              : const Color(0xffD4D4D4)),),
+                  padding:const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: TextWidget(
+                       text:appBarProvider.selectedPosition.name == 'top' ? loc.top : loc.bottom,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                       style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Inter',
+                            color: themeProvider.darkTheme
+                                ? Color(0xffEBEBEB)
+                                : Color(0xff0B0B0B)),
+                      )),
+                      SizedBox(
+                        width: 25,
+                        child: Icon(isSearchbarDropdownOpened ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                            color: 
+                                 const Color(0xff8D8D8D)
+                                
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+                onSelected: (AppBarPosition selected) {
+                        appBarProvider.changePosition(selected);
+                        browserModel.showTabScroller = false;
+                        setState(() {
+                          isSearchbarDropdownOpened = false;
+                        });
+                
+                },
+                itemBuilder: (context) {
+ return AppBarPosition.values.map((position) {
+        return PopupMenuItem<AppBarPosition>(
+          value: position,
+          height: 30,
+                        padding: EdgeInsets.zero,
+                        child: GlassSettingPanel(
+                          color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.1),
+                          child: Container(
+                          height: 30,
+                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(position.name == 'top' ? loc.top : loc.bottom ,style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w300),)),
+                            ],
+                          )))
+
+
+
+
+          // child: Padding(
+          //   padding: const EdgeInsets.all(3.0),
+          //   child: Center(
+          //     child: Text(
+          //       position.name,
+          //       style: TextStyle(
+          //         fontWeight:
+          //             position == appBarProvider.selectedPosition
+          //                 ? FontWeight.w600
+          //                 : FontWeight.w300,
+          //         fontSize: 12,
+          //         color:
+          //             position == appBarProvider.selectedPosition
+          //                 ? Colors.green
+          //                 : themeProvider.darkTheme
+          //                     ? Colors.white
+          //                     : Colors.black,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        );
+      }).toList(); //}).toList();
+},
+              ),
+            )
+          ]),
+        ),
+      ),
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SizedBox(
