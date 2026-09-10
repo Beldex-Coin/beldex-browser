@@ -187,6 +187,104 @@
 
 
 
+
+
+  "searchusing": "Search using",
+  "addTabToNewGroup": "Add Tab to new group",
+  "invitePeople": "Invite people",
+  "uploadFromGallery": "Upload from gallery",
+  "noQRCodeFound": "No QR code found in image",
+  "searchBarPosition": "Search bar position",
+  "choosethePosition": "Choose the position of the search bar",
+  "iPAddress": "IP Address",
+   "vpnIP": "VPN IP",
+   "myIP": "My IP",
+   "marketUpdate": "Market update",
+   "searchYourTabs": "Search your tabs",
+   "newTabGroup": "New tab group",
+   "selectTab": "Select tab",
+   "selectTabs": "Select Tabs",
+   "closeAllTabs": "Close all tabs",
+   "deleteTabGroup": "Delete tab group",
+   "rename": "Rename",
+   "renameGroup": "Rename Group",
+   "ungroupTab": "Ungroup tab",
+   "deleteGroup": "Delete group",
+   "addToTabGroup": "Add to Tab group",
+   "editGroupName": "Edit group name",
+   "editGroupColor": "Edit group color",
+   "closeTab": "Close tab",
+   "doYouWantToUngroup": "Do you really want to ungroup this tab group?",
+   "ungroupTabGroup": "Ungroup tab group",
+   "ungroup": "Ungroup",
+   "deleteGroup": "Delete Group",
+   "deletetabGroup": "Delete tab group",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Add To",
+   "tabs": "Tabs",
+   "done": "Done",
+   "create": "Create",
+   "groupColor": "Group color",
+   "groupName": "Group name",
+   "newTabGroup": "New Tab group",
+   "addtoNewTabGroup": "Add to New tab group",
+   "tabGroups": "Tab groups",
+   "tabGroup": "Tab group",
+   "tabsSelected": "Tabs selected",
+   "privateResearch": "e.g. Private Research",
+   "deselectAll": "Deselect All",
+   "selected": "Selected",
+
+
+   "close": "Close",
+   "top": "Top",
+   "bottom": "Bottom",
+
+
+
+  "closeAllTabsConfirmation": "This action will permanently close all {tabCount} tabs inside “{tabGroupName}”. This cannot be undone.",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Changing Node",
+"freeenameWebDomain" : "FreeName Web3 domain",
+"enableFreeNameWeb" : "Enable FreeName Web3 domain support",
+"couldnotDownloadBootstrap" : "Could not download the Belnet bootstrap file. Please check your connection and try again",
+"couldNotEstablishConnection" : "Could not establish Belnet connection. Please try again",
+"theBelnetServiceNotStarted": "The Belnet service could not be started. Please try again",
+"exitNodeUnreachable" : "Exit node unreachable, reconnecting",
+
+"tab" : "Tab",
+
+
+"ungroupTabs" : "Ungroup tabs",
+"closeGroup": "Close group",
+"ungroupSelectedTabs": "Do you really want to ungroup selected tabs from ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Confirmation message when ungrouping selected tabs from a tab group",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.",
 "atBeldex": " \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.",
 "titlebns": "\nBNS",

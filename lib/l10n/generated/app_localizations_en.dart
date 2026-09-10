@@ -531,6 +531,187 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchEngineUpdated => 'Search engine updated successfully!';
 
   @override
+  String get searchusing => 'Search using';
+
+  @override
+  String get addTabToNewGroup => 'Add Tab to new group';
+
+  @override
+  String get invitePeople => 'Invite people';
+
+  @override
+  String get uploadFromGallery => 'Upload from gallery';
+
+  @override
+  String get noQRCodeFound => 'No QR code found in image';
+
+  @override
+  String get searchBarPosition => 'Search bar position';
+
+  @override
+  String get choosethePosition => 'Choose the position of the search bar';
+
+  @override
+  String get iPAddress => 'IP Address';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'My IP';
+
+  @override
+  String get marketUpdate => 'Market update';
+
+  @override
+  String get searchYourTabs => 'Search your tabs';
+
+  @override
+  String get newTabGroup => 'New Tab group';
+
+  @override
+  String get selectTab => 'Select tab';
+
+  @override
+  String get selectTabs => 'Select Tabs';
+
+  @override
+  String get deleteTabGroup => 'Delete tab group';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get renameGroup => 'Rename Group';
+
+  @override
+  String get ungroupTab => 'Ungroup tab';
+
+  @override
+  String get deleteGroup => 'Delete Group';
+
+  @override
+  String get addToTabGroup => 'Add to Tab group';
+
+  @override
+  String get editGroupName => 'Edit group name';
+
+  @override
+  String get editGroupColor => 'Edit group color';
+
+  @override
+  String get closeTab => 'Close tab';
+
+  @override
+  String get doYouWantToUngroup => 'Do you really want to ungroup this tab group?';
+
+  @override
+  String get ungroupTabGroup => 'Ungroup tab group';
+
+  @override
+  String get ungroup => 'Ungroup';
+
+  @override
+  String get deletetabGroup => 'Delete tab group';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Add To';
+
+  @override
+  String get tabs => 'Tabs';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get groupColor => 'Group color';
+
+  @override
+  String get groupName => 'Group name';
+
+  @override
+  String get addtoNewTabGroup => 'Add to New tab group';
+
+  @override
+  String get tabGroups => 'Tab groups';
+
+  @override
+  String get tabGroup => 'Tab group';
+
+  @override
+  String get tabsSelected => 'Tabs selected';
+
+  @override
+  String get privateResearch => 'e.g. Private Research';
+
+  @override
+  String get deselectAll => 'Deselect All';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get top => 'Top';
+
+  @override
+  String get bottom => 'Bottom';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'This action will permanently close all $tabCount tabs inside “$tabGroupName”. This cannot be undone.';
+  }
+
+  @override
+  String get changingNode => 'Changing Node';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domain';
+
+  @override
+  String get enableFreeNameWeb => 'Enable FreeName Web3 domain support';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Could not download the Belnet bootstrap file. Please check your connection and try again';
+
+  @override
+  String get couldNotEstablishConnection => 'Could not establish Belnet connection. Please try again';
+
+  @override
+  String get theBelnetServiceNotStarted => 'The Belnet service could not be started. Please try again';
+
+  @override
+  String get exitNodeUnreachable => 'Exit node unreachable, reconnecting';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Ungroup tabs';
+
+  @override
+  String get closeGroup => 'Close group';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Do you really want to ungroup selected tabs from \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.';
 
   @override
