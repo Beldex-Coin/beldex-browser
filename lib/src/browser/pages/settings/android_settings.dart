@@ -214,6 +214,78 @@ String getPercentage(double value) {
         ],
       ),
       Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: SizedBox(
+          //height: constraints.maxHeight/8.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    TextWidget(text:loc.freeenameWebDomain, //"Auto Connect",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
+                        // TextStyle(
+                        //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
+                        //     fontWeight: FontWeight.w600,
+                        //     color: themeProvider.darkTheme
+                        //         ? Colors.white
+                        //         : Colors.black),
+                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: TextWidget(
+                          text:loc.enableFreeNameWeb, //'Enable Free name web3 support', //"Automatically connect when the app launches",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
+                          // TextStyle(
+                          //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
+                          //   fontWeight: FontWeight
+                          //       .w400, //color: themeProvider.darkTheme ? Colors.white : Color(0xff3D3D44AC)
+                          // )
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+             const SizedBox(
+                width: 30,
+              ),
+              FlutterSwitch(
+                 // disabled: browserModel.webViewTabs.isEmpty,
+                  inactiveColor: themeProvider.darkTheme
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
+                  inactiveToggleColor: themeProvider.darkTheme
+                      ? const Color(0xff8D8D8D)
+                      : const Color(0xffC5C5C5),
+                  activeColor: themeProvider.darkTheme
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
+                  width: widget.widthInDp, //width / 8.0, //50,
+                  height: widget.heightInDp, //width / 14.8, //29,
+                  toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
+                  padding: 2.0,
+                  activeToggleColor: Color(0xff00BD40),
+                  value: vpnStatusProvider.isEnabledFreeName, //currentWebViewModel.settings?.supportZoom ?? true,
+                  onToggle: (value) async {
+                    vpnStatusProvider.updateIsEnableFreeName(value);
+                      setState(() {
+                       print('AUTO CONNECT VALUE --------> ${basicProvider.autoConnect}');
+                      });
+                  }),
+            ],
+          ),
+        ),
+      ),
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SizedBox(
           child: Row(

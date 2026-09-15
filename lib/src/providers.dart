@@ -233,6 +233,54 @@ void setInternetStatus(bool value){
  notifyListeners();
 }
 
+
+
+  // Freename support : by default it will be disabled
+
+   bool _isEnabledFreeName = false;
+
+   bool get isEnabledFreeName => _isEnabledFreeName;
+
+   void updateIsEnableFreeName(bool enable){
+    _isEnabledFreeName = enable;
+    notifyListeners();
+    saveFreenameStatusToPrefs();
+   }
+
+
+Future<void> saveFreenameStatusToPrefs()async{
+  SharedPreferences prefs =  await SharedPreferences.getInstance();
+    await prefs.setBool('freename', _isEnabledFreeName);
+
+}
+
+
+Future<void> loadFreenameStatusPrefs()async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+   _isEnabledFreeName = prefs.getBool('freename') ?? false;
+ 
+  notifyListeners();
+}
+
+
+
+bool _isSEDropdownOpened = false;
+
+bool get isSEDropdownOpened => _isSEDropdownOpened;
+
+void updateSEDrowpdownState(bool value){
+  _isSEDropdownOpened = value;
+}
+bool _isSearchbarDropdownOpened = false;
+
+bool get isSearchbarDropdownOpened => _isSearchbarDropdownOpened;
+
+void updateSearchbarDrowpdownState(bool value){
+  _isSearchbarDropdownOpened = value;
+}
+
+
   }
 
 
