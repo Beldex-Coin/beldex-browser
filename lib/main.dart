@@ -20,6 +20,8 @@ import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_
 import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
 import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
 import 'package:beldex_browser/src/browser/providers/ip_provider.dart';
+import 'package:beldex_browser/src/browser/providers/node_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
@@ -232,9 +234,24 @@ NetworkReinitializer.start();
          //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
          //ChangeNotifierProvider(create: (_)=> TextToSpeechProvider('')),
          ChangeNotifierProvider(create: (_)=> ReaderProvider('')),
-         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
-        
+         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider()),
          ChangeNotifierProvider<IpProvider>(create: (_)=> IpProvider()),
+         //ChangeNotifierProvider<NodeProvider>(create: (_)=> NodeProvider()..getNodes()),
+         ChangeNotifierProxyProvider<BrowserModel, GroupProvider>(
+
+  create: (_) => GroupProvider(),
+
+  update: (_, browserModel, groupProvider) {
+
+    groupProvider ??= GroupProvider();
+
+    groupProvider.browserProvider =
+        browserModel;
+
+    return groupProvider;
+  },
+),
+
 ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
 ChangeNotifierProvider(create: (_)=> AppBarPositionProvider()..loadPreference()),
 ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
