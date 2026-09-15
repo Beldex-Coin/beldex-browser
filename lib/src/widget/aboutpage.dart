@@ -1,6 +1,8 @@
 //import 'package:clipboard/clipboard.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
+import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ import 'package:provider/provider.dart';
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
  Color getColor(DarkThemeProvider themeProvider){
-   return themeProvider.darkTheme ? const Color(0xffEDEDED) : const Color(0xff24242F);
+   return themeProvider.darkTheme ? const Color(0xffEBEBEB) : const Color(0xff0B0B0B);
    
  }
   @override
@@ -25,272 +27,302 @@ class AboutPage extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
      const double pixelFontSize = 12;
     final double fontSizeInDp = (pixelFontSize / screenSize.width) * screenSize.width;
-    return Container(
-        child: Scaffold(
-      appBar: normalAppBar(context, loc.about, themeProvider),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Container(
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: themeProvider.darkTheme
-                    ? const Color(0xff282836)
-                    : const Color(0xffF3F3F3),
-                borderRadius: BorderRadius.circular(10)),
+    return Stack(
+      children: [
+         Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+                appBar: normalAppBar(context, loc.about, themeProvider,()=>  Navigator.pop(context)),
+                body: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: GlassSettingPanel(
+            color: themeProvider.darkTheme ? Color(0xff1A1A1A).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.5),
             child: Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 8,
-              ),
-              child: RawScrollbar(
-                thumbColor: const Color(0xff3EC745),
-                // themeProvider.darkTheme
-                //     ?const Color(0xff4D4D64)
-                //     :const Color(0xff3EC745), //Color(0xffC7C7C7),
-                //controller: scrollController,
-                thumbVisibility: true,
-                trackVisibility: true,
-                thickness: 5,
-                radius: Radius.circular(10),
-                trackColor:themeProvider.darkTheme
-                      ?const Color(0xff111117)
-                      :const Color(0xffE3E3E3),
-                child: Container(
-                  color: Colors.transparent,
-                  // themeProvider.darkTheme
-                  //     ?const Color(0xff111117)
-                  //     :const Color(0xffE3E3E3),
-                 // padding: EdgeInsets.only(right: 5.0),
-                  child: SingleChildScrollView(
-                      child: Container(
-                    decoration: BoxDecoration(
-                        color: themeProvider.darkTheme
-                            ?const Color(0xff282836)
-                            :const Color(0xffF3F3F3)),
-                    padding: EdgeInsets.only(
-                        left: mHeight * 0.03 / 3, right: mHeight * 0.06 / 3),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextWidget(
-                         text: loc.beldexIsAnEcosystem, //"""Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.""",
-                          style: TextStyle(
-                              fontSize: fontSizeInDp, 
-                              color: getColor(themeProvider),//Color(0xff56566F)
-                              height: 1.5
-                              ),
-                          textAlign: TextAlign.justify,
-                        ),
-                        TextWidget(
-                         text:loc.atBeldex, //""" \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.""",
-                          style: TextStyle(
-                              fontSize: fontSizeInDp, 
-                              color: getColor(themeProvider),
-                              height: 1.5
-                              ),
-                          textAlign: TextAlign.justify,
-                        ),
-                        TextWidget(
-                          text:loc.titlebns, //"\nBNS",
-                          style: TextStyle(
-                              fontSize:fontSizeInDp, //mHeight * 0.060 / 3,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w800,
-                              color: themeProvider.darkTheme
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        TextWidget(
-                           text:loc.theBeldexBrowserSupports, //"""The Beldex browser supports BNS domains. BNS domains are inherently hosted on BelNet. They can only be accessed by connecting to BelNet. However, since the Beldex Browser has BelNet in-built, users can freely access BNS domains.""",
-                            style: TextStyle(
-                                
-                               fontSize:fontSizeInDp, 
-                                color: getColor(themeProvider),
-                                height: 1.5,
-                                ),
-                            textAlign: TextAlign.justify),
-                        TextWidget(
-                         text: loc.titleMNApp, //"\nMNApps",
-                          style: TextStyle(
-                              fontSize:fontSizeInDp,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w800,
-                              color: themeProvider.darkTheme
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        Text(loc.asTheBrowser,
-                            //"""As the browser itself supports BelNet as an added confidentiality feature, users can easily access MNApps hosting on the .bdx domain address.""",
-                            style: TextStyle(
-                                fontSize:fontSizeInDp, 
-                                color: getColor(themeProvider),
-                                height: 1.5
-                                ),
-                            textAlign: TextAlign.justify),
-                        Text(loc.titleCrossplatformAccess,
-                         // "\nCross Platform Access",
-                          style: TextStyle(
-                              fontSize:fontSizeInDp,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w800,
-                              color: themeProvider.darkTheme
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        TextWidget(
-                          text: loc.theBeldexBrowserIsCrossplatform,// """The Beldex browser is cross-platform as it is being developed for both mobile and desktop devices.""",
-                            style: TextStyle(
-                                fontSize:fontSizeInDp,
-                                color: getColor(themeProvider),
-                                fontWeight: FontWeight.w400,
-                                height: 1.5
-                                ),
-                            textAlign: TextAlign.justify),
-                        TextWidget(
-                         text:localeProvider.selectedLanguage == 'العربية' ? '\n${loc.titleKeyFeature}\n' : loc.titleKeyFeature, //"\nKey Features",
-                          style: TextStyle(
-                              fontSize:fontSizeInDp * 1.2,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w800,
-                              color: themeProvider.darkTheme
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                        TextWidget(
-                           text:localeProvider.selectedLanguage == 'العربية' ? '${loc.followingAreTheFeatures}\n' :loc.followingAreTheFeatures, //"""\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n""",
-                            style: TextStyle(
-                                fontSize:fontSizeInDp,
-                                color: getColor(themeProvider),
-                                height: 1.5
-                                ),
-                            textAlign: TextAlign.justify),
-                        BulletItem(
-                          text:loc.blockJavascript,
-                             // """Blocks Javascript: The Beldex browser prioritizes user security by blocking Javascript, thereby reducing the risk of malicious scripts that could compromise user confidentiality and security. This ensures a safe browsing experience and protects users from threats that involve javascript vulnerabilities.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text:loc.blockcookies,
-                             // """Blocks Cookies: Cookies collect a user’s personal information that help determine their behavioural and usage patterns. This in-turn helps the website to show relevant ads, manage active sessions, and provide big data analytics.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text:loc.ipAddressMasked,
-                              //"""IP Address is Masked: The browser’s in-built dVPN, the BelNet, masks the client IP address from the websites they visit. This provides confidentiality and anonymity to the user and prevents websites from identifying and tracking the user based on their IP address.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text:loc.locationObfuscated,
-                             // """Location is Obfuscated: To further enhance confidentiality, the browser obfuscates the user's location, making it challenging for websites and third parties to determine the actual geographical location of the user. This ensures that users can browse without revealing sensitive information about their whereabouts.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text: loc.noMetadataCallected,
-                            //  """No Metadata is Collected: The browser abstains from collecting metadata, ensuring that no additional information about the user's browsing habits or preferences is stored. This minimizes the risk of data leakage and unauthorized access to user information.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text: loc.inbuiltdVPN,
-                             // """In-built dVPN Service: The inclusion of an in-built decentralized VPN (dVPN) service like BelNet encrypts the user’s internet traffic and ensures a secure and confidential connection for users.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text:loc.unrestrictedAccess,
-                             // """Unrestricted Access: The Beldex browser promotes unrestricted access to information on the Internet, thus aiding free speech and resistance to censorship. Users can easily access geo-restricted content.""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        BulletItem(
-                          text: loc.censorshipResistance,
-                              //"""Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.\n""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        BulletItem(
-                          text: loc.aboutAdblocker,
-                              //"""Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        BulletItem(
-                          text: localeProvider.selectedLanguage == 'العربية' ? 'Beldex AI:${loc.aboutBeldexAI}': loc.aboutBeldexAI,
-                              //"""Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you're searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n""",
-                          mHeight: mHeight,
-                          fontSizeInDp: fontSizeInDp,
-                        ),
-                        TextWidget(
-                           text:loc.thusbeldexbrowserOffers,  //"""\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.""",
-                            style: TextStyle(
-                                fontSize:fontSizeInDp,
-                                height: 1.5,
-                                color: themeProvider.darkTheme
-                                    ?const Color(0xffEDEDED) //Color(0xffA1A1C1)
-                                    : const Color(0xff24242F) //Color(0xff56566F)
-                                ),
-                            textAlign: TextAlign.justify),
-                        Center(
-                          child: TextWidget(
-                           text:loc.credits, //"\nCredits: Beldex & BelNet.\n",
-                            style: TextStyle(
-                                fontSize:fontSizeInDp,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w800,
-                                color: themeProvider.darkTheme
-                                    ? const Color(0xff6D6D81)
-                                    :const Color(0xffC5C5C5)),
-                          ),
-                        ),
-                      ],
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color:Colors.transparent,
+                    border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                    //  themeProvider.darkTheme
+                    //     ? const Color(0xff282836)
+                    //     : const Color(0xffF3F3F3),
+                    // borderRadius: BorderRadius.circular(10)
                     ),
-                  )),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8,
+                  ),
+                  child: RawScrollbar(
+                    thumbColor:themeProvider.darkTheme ? Color(0xff555555) : const Color(0xffACACAC),
+                    // themeProvider.darkTheme
+                    //     ?const Color(0xff4D4D64)
+                    //     :const Color(0xff3EC745), //Color(0xffC7C7C7),
+                    //controller: scrollController,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    thickness: 5,
+                    radius: Radius.circular(10),
+                    trackColor:themeProvider.darkTheme
+                          ?const Color(0xff222222)
+                          :const Color(0xffEBEBEB),
+                    child: Container(
+                      color: Colors.transparent,
+                      // themeProvider.darkTheme
+                      //     ?const Color(0xff111117)
+                      //     :const Color(0xffE3E3E3),
+                     // padding: EdgeInsets.only(right: 5.0),
+                      child: SingleChildScrollView(
+                          child: Container(
+                        decoration: BoxDecoration(
+                            //color: 
+                            // themeProvider.darkTheme
+                            //     ?const Color(0xff282836)
+                            //     :const Color(0xffF3F3F3)
+                            ),
+                        padding: EdgeInsets.only(
+                            left: mHeight * 0.03 / 3, right: mHeight * 0.06 / 3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                             text: loc.beldexIsAnEcosystem, //"""Beldex is an ecosystem of decentralized and confidential preserving applications. The Beldex Browser app is one among this ecosystem which also consists of apps such as BChat, BelNet, and the Beldex protocol. The Beldex Browser is your gateway to a seamless and confidential online experience, where your data remains yours alone. Built on a robust blockchain infrastructure, Beldex browser ensures confidentiality and anonymity to its users.""",
+                              style: TextStyle(
+                                  fontSize: fontSizeInDp, 
+                                  color: getColor(themeProvider),//Color(0xff56566F)
+                                  height: 1.5,
+                                  fontFamily: 'Inter'
+                                  ),
+                              textAlign: TextAlign.justify,
+                            ),
+                            TextWidget(
+                             text:loc.atBeldex, //""" \n At Beldex, we believe in empowering individuals with the fundamental right to control their digital footprint. The Beldex Browser is designed to provide a secure and confidential online environment for users to communicate and interact with the digital world.""",
+                              style: TextStyle(
+                                  fontSize: fontSizeInDp, 
+                                  color: getColor(themeProvider),
+                                  height: 1.5,
+                                  fontFamily: 'Inter'
+                                  ),
+                              textAlign: TextAlign.justify,
+                            ),
+                            TextWidget(
+                              text:loc.titlebns, //"\nBNS",
+                              style: TextStyle(
+                                  fontSize:fontSizeInDp, //mHeight * 0.060 / 3,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w800,
+                                  color: themeProvider.darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            TextWidget(
+                               text:loc.theBeldexBrowserSupports, //"""The Beldex browser supports BNS domains. BNS domains are inherently hosted on BelNet. They can only be accessed by connecting to BelNet. However, since the Beldex Browser has BelNet in-built, users can freely access BNS domains.""",
+                                style: TextStyle(
+                                    
+                                   fontSize:fontSizeInDp, 
+                                    color: getColor(themeProvider),
+                                    height: 1.5,
+                                    fontFamily: 'Inter'
+                                    ),
+                                textAlign: TextAlign.justify),
+                            TextWidget(
+                             text: loc.titleMNApp, //"\nMNApps",
+                              style: TextStyle(
+                                  fontSize:fontSizeInDp,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w800,
+                                  color: themeProvider.darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            Text(loc.asTheBrowser,
+                                //"""As the browser itself supports BelNet as an added confidentiality feature, users can easily access MNApps hosting on the .bdx domain address.""",
+                                style: TextStyle(
+                                    fontSize:fontSizeInDp, 
+                                    color: getColor(themeProvider),
+                                    height: 1.5,
+                                    fontFamily: 'Inter'
+                                    ),
+                                textAlign: TextAlign.justify),
+                            Text(loc.titleCrossplatformAccess,
+                             // "\nCross Platform Access",
+                              style: TextStyle(
+                                  fontSize:fontSizeInDp,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w800,
+                                  color: themeProvider.darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            TextWidget(
+                              text: loc.theBeldexBrowserIsCrossplatform,// """The Beldex browser is cross-platform as it is being developed for both mobile and desktop devices.""",
+                                style: TextStyle(
+                                    fontSize:fontSizeInDp,
+                                    color: getColor(themeProvider),
+                                    fontWeight: FontWeight.w400,
+                                    height: 1.5,
+                                    fontFamily: 'Inter'
+                                    ),
+                                textAlign: TextAlign.justify),
+                            TextWidget(
+                             text:localeProvider.selectedLanguage == 'العربية' ? '\n${loc.titleKeyFeature}\n' : loc.titleKeyFeature, //"\nKey Features",
+                              style: TextStyle(
+                                  fontSize:fontSizeInDp * 1.2,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w800,
+                                  color: themeProvider.darkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                            ),
+                            TextWidget(
+                               text:localeProvider.selectedLanguage == 'العربية' ? '${loc.followingAreTheFeatures}\n' :loc.followingAreTheFeatures, //"""\nFollowing are the features available on the Beta version of the Beldex browser application. More features will be added to the alpha version.\n""",
+                                style: TextStyle(
+                                    fontSize:fontSizeInDp,
+                                    color: getColor(themeProvider),
+                                    height: 1.5,
+                                    fontFamily: 'Inter'
+                                    ),
+                                textAlign: TextAlign.justify),
+                            BulletItem(
+                              text:loc.blockJavascript,
+                                 // """Blocks Javascript: The Beldex browser prioritizes user security by blocking Javascript, thereby reducing the risk of malicious scripts that could compromise user confidentiality and security. This ensures a safe browsing experience and protects users from threats that involve javascript vulnerabilities.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text:loc.blockcookies,
+                                 // """Blocks Cookies: Cookies collect a user’s personal information that help determine their behavioural and usage patterns. This in-turn helps the website to show relevant ads, manage active sessions, and provide big data analytics.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text:loc.ipAddressMasked,
+                                  //"""IP Address is Masked: The browser’s in-built dVPN, the BelNet, masks the client IP address from the websites they visit. This provides confidentiality and anonymity to the user and prevents websites from identifying and tracking the user based on their IP address.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text:loc.locationObfuscated,
+                                 // """Location is Obfuscated: To further enhance confidentiality, the browser obfuscates the user's location, making it challenging for websites and third parties to determine the actual geographical location of the user. This ensures that users can browse without revealing sensitive information about their whereabouts.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text: loc.noMetadataCallected,
+                                //  """No Metadata is Collected: The browser abstains from collecting metadata, ensuring that no additional information about the user's browsing habits or preferences is stored. This minimizes the risk of data leakage and unauthorized access to user information.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text: loc.inbuiltdVPN,
+                                 // """In-built dVPN Service: The inclusion of an in-built decentralized VPN (dVPN) service like BelNet encrypts the user’s internet traffic and ensures a secure and confidential connection for users.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text:loc.unrestrictedAccess,
+                                 // """Unrestricted Access: The Beldex browser promotes unrestricted access to information on the Internet, thus aiding free speech and resistance to censorship. Users can easily access geo-restricted content.""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            BulletItem(
+                              text: loc.censorshipResistance,
+                                  //"""Censorship-resistance: By employing the Beldex blockchain and a network of decentralized nodes, Beldex browser promotes resistance to censorship. The outage of no single server can restrict access to the service.\n""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            BulletItem(
+                              text: loc.aboutAdblocker,
+                                  //"""Ad-blocker: Block intrusive ads, trackers, and pop-ups for a cleaner, distraction-free browsing experience. Enjoy faster page loads and reduced data usage while maintaining complete control over your online interactions.\n""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            BulletItem(
+                              text: localeProvider.selectedLanguage == 'العربية' ? 'Beldex AI:${loc.aboutBeldexAI}': loc.aboutBeldexAI,
+                                  //"""Beldex AI: Get instant answers to your queries with BeldexAI, an intelligent assistant that responds to your questions and queries based on website content. Whether you're searching for specific information or need quick insights, BeldexAI enhances your browsing experience with contextual and tailored responses.\n""",
+                              mHeight: mHeight,
+                              fontSizeInDp: fontSizeInDp,
+                            ),
+                            TextWidget(
+                               text:loc.thusbeldexbrowserOffers,  //"""\nThus, the Beldex Browser offers a simple and secure haven for users seeking confidentiality in an increasingly interconnected world. Join us on the journey towards a more confidential and secure digital future. Experience the freedom to surf, communicate, and explore the internet without compromising your confidentiality. Beldex Network – Where Confidentiality Meets Innovation.""",
+                                style: TextStyle(
+                                    fontSize:fontSizeInDp,
+                                    height: 1.5,
+                                    fontFamily: "Inter",
+                                    color: themeProvider.darkTheme
+                                        ?const Color(0xffEDEDED) //Color(0xffA1A1C1)
+                                        : const Color(0xff24242F) //Color(0xff56566F)
+                                    ),
+                                textAlign: TextAlign.justify),
+                            Center(
+                              child: TextWidget(
+                               text:loc.credits, //"\nCredits: Beldex & BelNet.\n",
+                                style: TextStyle(
+                                    fontSize:fontSizeInDp,
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.w800,
+                                    color: themeProvider.darkTheme
+                                        ? const Color(0xff949494)
+                                        :const Color(0xffC5C5C5)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                    ),
+                  ),
+                )),
+          ),
                 ),
               ),
-            )),
-      ),
-    ));
-  }
-   AppBar normalAppBar(
-      BuildContext context, String title, DarkThemeProvider themeProvider) {
-    return AppBar(
-      backgroundColor:
-          themeProvider.darkTheme ? const Color(0xff171720) : const Color(0xffFFFFFF),
-      centerTitle: true,
-      leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: SvgPicture.asset(
-            'assets/images/back.svg',
-            color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
-            height: 30,
-          )),
-      title: TextWidget(text:title, style: Theme.of(context).textTheme.bodyLarge),
+        ),
+      ],
     );
   }
+  //  AppBar normalAppBar(
+  //     BuildContext context, String title, DarkThemeProvider themeProvider) {
+  //   return AppBar(
+  //     backgroundColor:
+  //         themeProvider.darkTheme ? const Color(0xff171720) : const Color(0xffFFFFFF),
+  //     centerTitle: true,
+  //     leading: IconButton(
+  //         onPressed: () => Navigator.pop(context),
+  //         icon: SvgPicture.asset(
+  //           'assets/images/back.svg',
+  //           color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
+  //           height: 30,
+  //         )),
+  //     title: TextWidget(text:title, style: Theme.of(context).textTheme.bodyLarge),
+  //   );
+  // }
 }
 
 
@@ -327,8 +359,9 @@ class BulletItem extends StatelessWidget {
                 style: TextStyle(
                     fontSize:fontSizeInDp, 
                     color: themeProvider.darkTheme
-                        ? const Color(0xffEDEDED) //Color(0xffA1A1C1)
-                        :const Color(0xff24242F) //Color(0xff56566F)
+                        ? const Color(0xffEBEBEB) //Color(0xffA1A1C1)
+                        :const Color(0xff0B0B0B),
+                        fontFamily: 'Inter' //Color(0xff56566F)
                     ),
                 textAlign: TextAlign.justify),
           ),
