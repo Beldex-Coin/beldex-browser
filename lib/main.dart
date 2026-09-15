@@ -19,6 +19,7 @@ import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.da
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
 import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
+import 'package:beldex_browser/src/browser/providers/ip_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
@@ -233,6 +234,7 @@ NetworkReinitializer.start();
          ChangeNotifierProvider(create: (_)=> ReaderProvider('')),
          ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
         
+         ChangeNotifierProvider<IpProvider>(create: (_)=> IpProvider()),
 ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
 ChangeNotifierProvider(create: (_)=> AppBarPositionProvider()..loadPreference()),
 ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
