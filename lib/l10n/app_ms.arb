@@ -185,6 +185,104 @@
   "searchEngineUpdated": "Enjin carian berjaya dikemas kini!",
 
 
+
+
+
+  "searchusing": "Cari menggunakan",
+  "addTabToNewGroup": "Tambah Tab ke kumpulan baharu",
+  "invitePeople": "Jemput orang",
+  "uploadFromGallery": "Muat naik dari galeri",
+  "noQRCodeFound": "Tiada kod QR ditemui dalam imej",
+  "searchBarPosition": "Kedudukan bar carian",
+  "choosethePosition": "Pilih kedudukan bar carian",
+  "iPAddress": "Alamat IP",
+   "vpnIP": "IP VPN",
+   "myIP": "IP Saya",
+   "marketUpdate": "Kemas kini pasaran",
+   "searchYourTabs": "Cari tab anda",
+   "newTabGroup": "Kumpulan tab baharu",
+   "selectTab": "Pilih tab",
+   "selectTabs": "Pilih tab",
+   "closeAllTabs": "Tutup semua tab",
+   "deleteTabGroup": "Padam kumpulan tab",
+   "rename": "Namakan semula",
+   "renameGroup": "Namakan Semula Kumpulan",
+   "ungroupTab": "Nyahkumpulan tab",
+   "deleteGroup": "Padam kumpulan",
+   "addToTabGroup": "Tambah ke kumpulan Tab",
+   "editGroupName": "Edit nama kumpulan",
+   "editGroupColor": "Edit warna kumpulan",
+   "closeTab": "Tutup tab",
+   "doYouWantToUngroup": "Adakah anda benar-benar mahu menyahkumpulan kumpulan tab ini?",
+   "ungroupTabGroup": "Nyahkumpulan kumpulan tab",
+   "ungroup": "Nyahkumpulan",
+   "deleteGroup": "Padam Kumpulan",
+   "deletetabGroup": "Padam Kumpulan Tab",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Tambah Ke",
+   "tabs": "Tab",
+   "done": "Selesai",
+   "create": "Cipta",
+   "groupColor": "Warna kumpulan",
+   "groupName": "Nama kumpulan",
+   "newTabGroup": "Kumpulan Tab Baharu",
+   "addtoNewTabGroup": "Tambah ke kumpulan tab baharu",
+   "tabGroups": "Kumpulan tab",
+   "tabGroup": "Kumpulan Tab",
+   "tabsSelected": "Tab yang dipilih",
+   "privateResearch": "cth. Penyelidikan Peribadi",
+   "deselectAll": "Nyahpilih semua",
+   "selected": "Dipilih",
+
+
+   "close": "Tutup",
+   "top": "atas",
+   "bottom": "bawah",
+
+
+
+  "closeAllTabsConfirmation": "Tindakan ini akan menutup semua {tabCount} tab di dalam “{tabGroupName}” secara kekal. Tindakan ini tidak boleh dibuat asal", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Menukar Nod..",
+"freeenameWebDomain" : "Domain Freename Web3",
+"enableFreeNameWeb" : "Dayakan sokongan domain FreeName Web3",
+"couldnotDownloadBootstrap" : "Tidak dapat memuat turun fail bootstrap Belnet. Sila semak sambungan anda dan cuba lagi",
+"couldNotEstablishConnection" : "Tidak dapat mewujudkan sambungan Belnet. Sila cuba lagi",
+"theBelnetServiceNotStarted": "Perkhidmatan Belnet tidak dapat dimulakan. Sila cuba lagi",
+"exitNodeUnreachable" : "Nod keluar tidak dapat dicapai, menyambung semula",
+
+
+"tab": "Tab",
+"ungroupTabs": "Nyahkumpulkan tab",
+"closeGroup": "Tutup kumpulan",
+"ungroupSelectedTabs": "Adakah anda pasti mahu menyahkumpulkan tab yang dipilih daripada ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Mesej pengesahan apabila menyahkumpulkan tab yang dipilih daripada kumpulan tab",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex ialah sebuah ekosistem aplikasi terdesentralisasi yang memelihara kerahsiaan. Aplikasi Pelayar Beldex ialah sebahagian daripada ekosistem ini yang turut merangkumi aplikasi seperti BChat, BelNet dan protokol Beldex. Pelayar Beldex ialah pintu masuk anda kepada pengalaman dalam talian yang lancar dan sulit, di mana data anda kekal milik anda sepenuhnya. Dibina di atas infrastruktur blockchain yang kukuh, Pelayar Beldex memastikan kerahsiaan dan anonimitas kepada penggunanya.",
 "atBeldex": " \n Di Beldex, kami percaya dalam memperkasa individu dengan hak asas untuk mengawal jejak digital mereka. Pelayar Beldex direka untuk menyediakan persekitaran dalam talian yang selamat dan sulit bagi pengguna untuk berkomunikasi dan berinteraksi dengan dunia digital.",
 "titlebns": "\nBNS",
