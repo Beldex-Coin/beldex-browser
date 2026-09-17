@@ -187,6 +187,104 @@
 
 
 
+
+
+  "searchusing": "Otsi kasutades",
+  "addTabToNewGroup": "Lisa vahekaart uude rühma",
+  "invitePeople": "Kutsu inimesi",
+  "uploadFromGallery": "Laadi galeriist üles",
+  "noQRCodeFound": "pildilt ei leitud QR-koodi",
+  "searchBarPosition": "Otsinguriba asukoht",
+  "choosethePosition": "Vali otsinguriba asukoht",
+  "iPAddress": "IP-aadress",
+   "vpnIP": "VPN-i IP",
+   "myIP": "Minu IP",
+   "marketUpdate": "Turu värskendus",
+   "searchYourTabs": "Otsi oma vahekaartidelt",
+   "newTabGroup": "Uus vahekaartide rühm",
+   "selectTab": "Vali vahekaardi",
+   "selectTabs": "Vali vahekaardid",
+   "closeAllTabs": "Sulge kõik vahekaardid",
+   "deleteTabGroup": "Kustuta vahekaartide rühm",
+   "rename": "Nimeta ümber",
+   "renameGroup": "Nimeta rühm ümber",
+   "ungroupTab": "Eemalda vahekaart rühmast",
+   "deleteGroup": "Kustuta rühm",
+   "addToTabGroup": "Lisa vahekaartide rühma",
+   "editGroupName": "Muuda rühma nime",
+   "editGroupColor": "Muuda rühma värvi",
+   "closeTab": "Sulge vahekaardi",
+   "doYouWantToUngroup": "Kas soovid kindlasti selle vahekaartide rühma lahti rühmitada?",
+   "ungroupTabGroup": "Rühmituse eemaldamine",
+   "ungroup": "Eemalda rühmitus",
+   "deleteGroup": "Kustuta rühm",
+   "deletetabGroup": "Kustuta vahekaartide rühm",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Lisa",
+   "tabs": "Vahekaardid",
+   "done": "Valmis",
+   "create": "Loo",
+   "groupColor": "Rühma värv",
+   "groupName": "Rühma nimi",
+   "newTabGroup": "Uus vahekaartide rühm",
+   "addtoNewTabGroup": "Lisa uude vahekaartide rühma",
+   "tabGroups": "Vahekaartide rühmad",
+   "tabGroup": "Vahekaartide rühm",
+   "tabsSelected": "Valitud vahekaardid",
+   "privateResearch": "nt Privaatne uurimistöö",
+   "deselectAll": "Tühista kõigi valik",
+   "selected": "Valitud",
+
+
+   "close": "Sulge",
+   "top": "üleval",
+   "bottom": "all",
+
+
+
+  "closeAllTabsConfirmation":"See toiming sulgeb jäädavalt kõik {tabCount} vahekaarti, mis asuvad jaotises „{tabGroupName}”. Seda toimingut ei saa tagasi võtta",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Sõlme muutmine..",
+"freeenameWebDomain" : "FreeName Web3 domeen",
+"enableFreeNameWeb" : "Luba FreeName Web3 domeeni tugi",
+"couldnotDownloadBootstrap" : "Belneti alglaadimisfaili ei õnnestunud alla laadida. Kontrollige oma ühendust ja proovige uuesti",
+"couldNotEstablishConnection" : "Belneti ühendust ei õnnestunud luua. Proovige uuesti",
+"theBelnetServiceNotStarted": "Belneti teenust ei õnnestunud käivitada. Proovige uuesti",
+"exitNodeUnreachable" : "Väljumissõlm pole kättesaadav, ühendatakse uuesti",
+
+
+
+"tab": "Vahekaart",
+"ungroupTabs": "Tühista vahekaartide rühmitamine",
+"closeGroup": "Sulge rühm",
+"ungroupSelectedTabs": "Kas soovite kindlasti valitud vahekaartide rühmitamise rühmast ${tabGroupName} tühistada?",
+"@ungroupSelectedTabs": {
+  "description": "Kinnitusteade valitud vahekaartide rühmitamise tühistamisel vahekaartide rühmast",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex on detsentraliseeritud ja privaatsust säilitavate rakenduste ökosüsteem. Beldexi brauseri rakendus on üks osa sellest ökosüsteemist, kuhu kuuluvad ka sellised rakendused nagu BChat, BelNet ja Beldexi protokoll.Beldexi brauser on teie värav sujuvasse ja privaatsesse veebikogemusse, kus teie andmed jäävad ainult teile. Tuginedes tugevale plokiahela infrastruktuurile, tagab Beldexi brauser oma kasutajatele privaatsuse ja anonüümsuse.",
 "atBeldex": " \n Beldexis usume, et inimestel peab olema põhiõigus kontrollida oma digitaalset jalajälge. Beldexi brauser on loodud pakkuma turvalist ja konfidentsiaalset veebikeskkonda, kus kasutajad saavad suhelda ja tegutseda digitaalses maailmas.",
 "titlebns": "\nBNS",

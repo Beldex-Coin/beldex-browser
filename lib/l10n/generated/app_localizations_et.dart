@@ -531,6 +531,187 @@ class AppLocalizationsEt extends AppLocalizations {
   String get searchEngineUpdated => 'Otsingumootorit uuendati edukalt!';
 
   @override
+  String get searchusing => 'Otsi kasutades';
+
+  @override
+  String get addTabToNewGroup => 'Lisa vahekaart uude rühma';
+
+  @override
+  String get invitePeople => 'Kutsu inimesi';
+
+  @override
+  String get uploadFromGallery => 'Laadi galeriist üles';
+
+  @override
+  String get noQRCodeFound => 'pildilt ei leitud QR-koodi';
+
+  @override
+  String get searchBarPosition => 'Otsinguriba asukoht';
+
+  @override
+  String get choosethePosition => 'Vali otsinguriba asukoht';
+
+  @override
+  String get iPAddress => 'IP-aadress';
+
+  @override
+  String get vpnIP => 'VPN-i IP';
+
+  @override
+  String get myIP => 'Minu IP';
+
+  @override
+  String get marketUpdate => 'Turu värskendus';
+
+  @override
+  String get searchYourTabs => 'Otsi oma vahekaartidelt';
+
+  @override
+  String get newTabGroup => 'Uus vahekaartide rühm';
+
+  @override
+  String get selectTab => 'Vali vahekaardi';
+
+  @override
+  String get selectTabs => 'Vali vahekaardid';
+
+  @override
+  String get deleteTabGroup => 'Kustuta vahekaartide rühm';
+
+  @override
+  String get rename => 'Nimeta ümber';
+
+  @override
+  String get renameGroup => 'Nimeta rühm ümber';
+
+  @override
+  String get ungroupTab => 'Eemalda vahekaart rühmast';
+
+  @override
+  String get deleteGroup => 'Kustuta rühm';
+
+  @override
+  String get addToTabGroup => 'Lisa vahekaartide rühma';
+
+  @override
+  String get editGroupName => 'Muuda rühma nime';
+
+  @override
+  String get editGroupColor => 'Muuda rühma värvi';
+
+  @override
+  String get closeTab => 'Sulge vahekaardi';
+
+  @override
+  String get doYouWantToUngroup => 'Kas soovid kindlasti selle vahekaartide rühma lahti rühmitada?';
+
+  @override
+  String get ungroupTabGroup => 'Rühmituse eemaldamine';
+
+  @override
+  String get ungroup => 'Eemalda rühmitus';
+
+  @override
+  String get deletetabGroup => 'Kustuta vahekaartide rühm';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Lisa';
+
+  @override
+  String get tabs => 'Vahekaardid';
+
+  @override
+  String get done => 'Valmis';
+
+  @override
+  String get create => 'Loo';
+
+  @override
+  String get groupColor => 'Rühma värv';
+
+  @override
+  String get groupName => 'Rühma nimi';
+
+  @override
+  String get addtoNewTabGroup => 'Lisa uude vahekaartide rühma';
+
+  @override
+  String get tabGroups => 'Vahekaartide rühmad';
+
+  @override
+  String get tabGroup => 'Vahekaartide rühm';
+
+  @override
+  String get tabsSelected => 'Valitud vahekaardid';
+
+  @override
+  String get privateResearch => 'nt Privaatne uurimistöö';
+
+  @override
+  String get deselectAll => 'Tühista kõigi valik';
+
+  @override
+  String get selected => 'Valitud';
+
+  @override
+  String get close => 'Sulge';
+
+  @override
+  String get top => 'üleval';
+
+  @override
+  String get bottom => 'all';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'See toiming sulgeb jäädavalt kõik $tabCount vahekaarti, mis asuvad jaotises „$tabGroupName”. Seda toimingut ei saa tagasi võtta';
+  }
+
+  @override
+  String get changingNode => 'Sõlme muutmine..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domeen';
+
+  @override
+  String get enableFreeNameWeb => 'Luba FreeName Web3 domeeni tugi';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Belneti alglaadimisfaili ei õnnestunud alla laadida. Kontrollige oma ühendust ja proovige uuesti';
+
+  @override
+  String get couldNotEstablishConnection => 'Belneti ühendust ei õnnestunud luua. Proovige uuesti';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belneti teenust ei õnnestunud käivitada. Proovige uuesti';
+
+  @override
+  String get exitNodeUnreachable => 'Väljumissõlm pole kättesaadav, ühendatakse uuesti';
+
+  @override
+  String get tab => 'Vahekaart';
+
+  @override
+  String get ungroupTabs => 'Tühista vahekaartide rühmitamine';
+
+  @override
+  String get closeGroup => 'Sulge rühm';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Kas soovite kindlasti valitud vahekaartide rühmitamise rühmast \$$tabGroupName tühistada?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex on detsentraliseeritud ja privaatsust säilitavate rakenduste ökosüsteem. Beldexi brauseri rakendus on üks osa sellest ökosüsteemist, kuhu kuuluvad ka sellised rakendused nagu BChat, BelNet ja Beldexi protokoll.Beldexi brauser on teie värav sujuvasse ja privaatsesse veebikogemusse, kus teie andmed jäävad ainult teile. Tuginedes tugevale plokiahela infrastruktuurile, tagab Beldexi brauser oma kasutajatele privaatsuse ja anonüümsuse.';
 
   @override
