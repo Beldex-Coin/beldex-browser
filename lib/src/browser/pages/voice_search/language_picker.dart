@@ -1,4 +1,5 @@
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,25 @@ String getLocalizedMessage(String localeId, String key) {
 }
 
 
+String toSpeechLocale(String locale) {
+  print('THE LOCALE FROM SELECTED ONE $locale');
+  switch (normalizeLocale(locale)) {
+    case "zh-HK":
+      return 'en-US';
+    case 'zh':
+    case 'zh-CN':
+      return 'cmn-CN';
 
+    case 'zh-TW':
+      return 'cmn-TW';
+
+    case 'pt-PT':
+      return 'en-US';
+
+    default:
+      return normalizeLocale(locale);
+  }
+}
 
 
 
@@ -194,166 +213,186 @@ String? _selectedLocaleId = 'en-US';
   builder: (context, scrollController) {
     return LayoutBuilder(
       builder: (context,constraint) {
-        return Container(   //  wrap in Container
-         decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.vertical(top: Radius.circular(20)),
-                                    border: Border(top: BorderSide(color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),width: 0.5)),
-                                color: themeProvider.darkTheme ? Color(0xff171720) : Color(0xffFFFFFF)
-                                ),
-          child: Column(
-            children: [
-             // SizedBox(height: 10),
-              // Container(
-              //   height: 4,
-              //   width: 40,
-              //   decoration: BoxDecoration(
-              //     color: Colors.grey[400],
-              //     borderRadius: BorderRadius.circular(2),
-              //   ),
-              // ),
-              // SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: ()=> Navigator.pop(context),
-                      child: SvgPicture.asset('assets/images/back.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
-                    // Icon(Icons.arrow_back),
-                    SizedBox(width: 15,),
-                    Text(loc.chooseLanguage,
-                     // "Choose Language",
-                      style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                     color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
-                     ),
-             Expanded(
-  child: ListView.builder(
-    controller: scrollController,
-    itemCount: languageIdList.length,
-    itemBuilder: (c, i) {
-      final name = languageIdList.keys.elementAt(i);
-      final localeId = languageIdList.values.elementAt(i);
-    print('THE CURRENT SELECTED LOCALE ${speech.currentLocale}');
-      return InkWell(
-        onTap: () {
-          setState(() {});
-          speech.setCurrentLocale(normalizeLocale(localeId));
-          Navigator.pop(context, speech.currentLocale);
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: speech.currentLocale == normalizeLocale(localeId) &&
-                    !themeProvider.darkTheme
-                ? const Color(0xffF3F3F3)
-                : Colors.transparent,
-            border: Border.all(
-              color: speech.currentLocale == normalizeLocale(localeId) &&
-                      themeProvider.darkTheme
-                  ? const Color(0xff39394B)
-                  : Colors.transparent,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(fontFamily: 'Poppins'),
-                    ),
-                    Text(getLocalizedVoiceSearchLanguageName(context,name),style: TextStyle(fontSize:10,color: themeProvider.darkTheme ? Color(0xffB9B9BE) : Color(0xff78787D)),)
-                  ],
-                ),
-              ),
-              Visibility(
-                visible: speech.currentLocale == normalizeLocale(localeId),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: SvgPicture.asset('assets/images/tick.svg',height: 20,),
-                ),
-              ),
-            ],
-          ),
+        return Stack(
+          children: [
+            Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
         ),
-      );
-    },
-  ),
-)
-              // Expanded(
-              //   child: ListView.builder(
-              //     controller: scrollController,
-              //     itemCount: widget.langs.length,
-              //     itemBuilder: (c, i) {
-              //       final lang = widget.langs[i];
-              //       print('LANGUAGE ${speech.currentLocale} ------ ${lang.localeId}');
-              //       return 
-                    
-              //       InkWell(
-              //         onTap: (){
-              //           setState(() {
-              //             //_selectedLocaleId = lang.localeId;
-                          
-              //           });
+      ),
+      
+            Container(   //  wrap in Container
+             decoration: BoxDecoration(
+                                    // borderRadius:
+                                    //     BorderRadius.vertical(top: Radius.circular(20)),
+                                       // border: Border(top: BorderSide(color:themeProvider.darkTheme ? Color(0xff42425F): Color(0xffDADADA),width: 0.5)),
+                                    color:themeProvider.darkTheme ? Color(0xff111111).withOpacity(0.8) : Color(0xffFFFFFF).withOpacity(0.4) //themeProvider.darkTheme ? Color(0xff171720) : Color(0xffFFFFFF)
+                                    ),
+              child: Column(
+                children: [
+                 // SizedBox(height: 10),
+                  // Container(
+                  //   height: 4,
+                  //   width: 40,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey[400],
+                  //     borderRadius: BorderRadius.circular(2),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: ()=> Navigator.pop(context),
+                          child: SvgPicture.asset('assets/images/back.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                        // Icon(Icons.arrow_back),
+                        SizedBox(width: 15,),
+                        Text(loc.chooseLanguage,
+                         // "Choose Language",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,fontFamily: 'Inter'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Divider(
+                  //        color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+                  //        ),
+                 Expanded(
+              child: GlassSettingPanel(
+                color:themeProvider.darkTheme ? Color(0xff111111).withOpacity(0.3) : Color(0xffFFFFFF).withOpacity(0.3),
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: languageIdList.length,
+                  itemBuilder: (c, i) {
+                    final name = languageIdList.keys.elementAt(i);
+                    final localeId = languageIdList.values.elementAt(i);
+                  print('THE CURRENT SELECTED LOCALE ${speech.currentLocale} ${normalizeLocale(localeId)} ');
+                    return InkWell(
+                            onTap: () {
+                setState(() {});
+                speech.setCurrentLocale(toSpeechLocale(localeId));
+                Navigator.pop(context, speech.currentLocale);
+                            },
+                            child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                 // borderRadius: BorderRadius.circular(10),
+                  color: speech.currentLocale == toSpeechLocale(localeId) 
+                     ? themeProvider.darkTheme ? Colors.transparent : Color(0xffEBEBEB)
+                  // &&
+                  //         !themeProvider.darkTheme
+                  //     ? const Color(0xff444444)
+                      : Colors.transparent,
+                  border: Border.all(
+                    color: speech.currentLocale == toSpeechLocale(localeId) 
+                        ? //&&
+                            themeProvider.darkTheme
+                        ? const Color(0xff444444) : Color(0xffD4D4D4)
+                        : Colors.transparent,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(fontFamily: 'Inter',fontSize: 14),
+                          ),
+                          Text(getLocalizedVoiceSearchLanguageName(context,name),style: TextStyle(fontSize:10,fontFamily: 'Roboto', color: themeProvider.darkTheme ? Color(0xffB9B9BE) : Color(0xff78787D)),)
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: speech.currentLocale == toSpeechLocale(localeId),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: SvgPicture.asset('assets/images/tick.svg',height: 20,),
+                      ),
+                    ),
+                  ],
+                ),
+                            ),
+                    );
+                  },
+                ),
+              ),
+            )
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     controller: scrollController,
+                  //     itemCount: widget.langs.length,
+                  //     itemBuilder: (c, i) {
+                  //       final lang = widget.langs[i];
+                  //       print('LANGUAGE ${speech.currentLocale} ------ ${lang.localeId}');
+                  //       return 
                         
-              //           speech.setCurrentLocale(normalizeLocale(lang.localeId));
-              //            Navigator.pop(context, speech.currentLocale); 
-              //         },
-              //         child: Container(
-              //           margin: EdgeInsets.symmetric( horizontal: 8),
-              //           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
-              //           color: speech.currentLocale == normalizeLocale(lang.localeId) && !themeProvider.darkTheme ? Color(0xffF3F3F3) : Colors.transparent,
-              //           border: Border.all(color:speech.currentLocale == normalizeLocale(lang.localeId) && themeProvider.darkTheme ? Color(0xff39394B) : Colors.transparent )
-              //           ),
-              //           child: Row(
-              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //            children:[
-              //                 Padding(
-              //                   padding: const EdgeInsets.all(15.0),
-              //                   child: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',)),
-              //                 ),
-              //              Visibility(
-              //               visible: speech.currentLocale == normalizeLocale(lang.localeId),
-              //                child: Padding(
-              //                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              //                  child: SvgPicture.asset('assets/images/tick.svg'),
-              //                ),
-              //              ),
-              //             // Checkbox(
-              //             //   value: _selectedLocaleId == lang.localeId, onChanged: (checked){
-              //             //    setState(() {
-              //             //         _selectedLocaleId =
-              //             //             checked == true ? lang.localeId : null;
-              //             //       });
-              //             //       Navigator.pop(context, _selectedLocaleId); // return selection
-              //             // })
-              //            ]
-              //           ),
-              //         ),
-              //       );
-              //       // ListTile(
-              //       //   title: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',),),
-              //       //   //subtitle: Text(lang.localeId,style: TextStyle(color: Colors.black),),
-              //       //   onTap: () {
-              //       //     Navigator.pop(context, lang.localeId);
-              //       //   },
-              //       // );
-              //     },
-              //   ),
-              // ),
-            ],
-          ),
+                  //       InkWell(
+                  //         onTap: (){
+                  //           setState(() {
+                  //             //_selectedLocaleId = lang.localeId;
+                              
+                  //           });
+                            
+                  //           speech.setCurrentLocale(normalizeLocale(lang.localeId));
+                  //            Navigator.pop(context, speech.currentLocale); 
+                  //         },
+                  //         child: Container(
+                  //           margin: EdgeInsets.symmetric( horizontal: 8),
+                  //           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
+                  //           color: speech.currentLocale == normalizeLocale(lang.localeId) && !themeProvider.darkTheme ? Color(0xffF3F3F3) : Colors.transparent,
+                  //           border: Border.all(color:speech.currentLocale == normalizeLocale(lang.localeId) && themeProvider.darkTheme ? Color(0xff39394B) : Colors.transparent )
+                  //           ),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //            children:[
+                  //                 Padding(
+                  //                   padding: const EdgeInsets.all(15.0),
+                  //                   child: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',)),
+                  //                 ),
+                  //              Visibility(
+                  //               visible: speech.currentLocale == normalizeLocale(lang.localeId),
+                  //                child: Padding(
+                  //                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  //                  child: SvgPicture.asset('assets/images/tick.svg'),
+                  //                ),
+                  //              ),
+                  //             // Checkbox(
+                  //             //   value: _selectedLocaleId == lang.localeId, onChanged: (checked){
+                  //             //    setState(() {
+                  //             //         _selectedLocaleId =
+                  //             //             checked == true ? lang.localeId : null;
+                  //             //       });
+                  //             //       Navigator.pop(context, _selectedLocaleId); // return selection
+                  //             // })
+                  //            ]
+                  //           ),
+                  //         ),
+                  //       );
+                  //       // ListTile(
+                  //       //   title: Text(lang.name,style: TextStyle(fontFamily: 'Poppins',),),
+                  //       //   //subtitle: Text(lang.localeId,style: TextStyle(color: Colors.black),),
+                  //       //   onTap: () {
+                  //       //     Navigator.pop(context, lang.localeId);
+                  //       //   },
+                  //       // );
+                  //     },
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+          ],
         );
       }
     );
