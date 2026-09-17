@@ -186,6 +186,99 @@
   "searchEngineUpdated": "सर्च इंजन सफलतापूर्वक अपडेट किया गया!",
 
 
+
+  "searchusing": "इसके द्वारा खोजें",
+  "addTabToNewGroup": "नए समूह में टैब जोड़ें",
+  "invitePeople": "लोगों को आमंत्रित करें",
+  "uploadFromGallery": "गैलरी से अपलोड करें",
+  "noQRCodeFound": "छवि में कोई QR कोड नहीं मिला",
+  "searchBarPosition": "सर्च बार की स्थिति",
+  "choosethePosition": "सर्च बार की स्थिति चुनें।",
+  "iPAddress": " IP पता",
+   "vpnIP": "VPN IP",
+   "myIP": "मेरा IP",
+   "marketUpdate": "मार्केट अपडेट",
+   "searchYourTabs": "अपने टैब खोजें",
+   "newTabGroup": "नया टैब समूह",
+   "selectTab": "टैब चुनें",
+   "selectTabs": "टैब चुनें",
+   "closeAllTabs": "सभी टैब बंद करें",
+   "deleteTabGroup": "टैब समूह हटाएँ",
+   "rename": "नाम बदलें",
+   "renameGroup": "समूह का नाम बदलें",
+   "ungroupTab": "टैब को समूह से अलग करें",
+   "deleteGroup": "समूह हटाएँ",
+   "addToTabGroup": "टैब समूह में जोड़ें",
+   "editGroupName": "समूह का नाम संपादित करें",
+   "editGroupColor": "समूह का रंग संपादित करें",
+   "closeTab": "टैब बंद करें",
+   "doYouWantToUngroup": "क्या आप वाकई इस टैब समूह को अलग करना चाहते हैं?",
+   "ungroupTabGroup": "टैब समूह को अलग करें",
+   "ungroup": "अलग करें",
+   "deleteGroup": "समूह हटाएँ",
+   "deletetabGroup": "टैब समूह हटाएँ",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "इसमें जोड़ें",
+   "tabs": "टैब",
+   "done": "हो गया",
+   "create": "बनाएँ",
+   "groupColor": "समूह का रंग",
+   "groupName": "समूह का नाम",
+   "newTabGroup": "नया टैब समूह",
+   "addtoNewTabGroup": "नए टैब समूह में जोड़ें",
+   "tabGroups": "टैब समूह",
+   "tabGroup": "टैब समूह",
+   "tabsSelected": "चयनित टैब",
+   "privateResearch": "जैसे: निजी शोध",
+   "deselectAll": "सभी का चयन रद्द करें",
+   "selected": "चयनित",
+
+
+   "close": "बंद करें",
+   "top": "ऊपर",
+   "bottom": "नीचे",
+
+
+
+"closeAllTabsConfirmation": "यह कार्रवाई “{tabGroupName}” के अंदर मौजूद सभी {tabCount} टैब को स्थायी रूप से बंद कर देगी। इसे पूर्ववत नहीं किया जा सकता।",
+"@closeAllTabsConfirmation": {
+  "description": "टैब समूह के सभी टैब बंद करते समय दिखाया जाने वाला पुष्टि संदेश",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "नोड बदलना..",
+"freeenameWebDomain" : "Freename Web3 डोमेन",
+"enableFreeNameWeb" : "FreeName Web3 डोमेन सपोर्ट चालू करें",
+"couldnotDownloadBootstrap" : "Belnet बूटस्ट्रैप फ़ाइल डाउनलोड नहीं हो सकी। कृपया अपना कनेक्शन चेक करें और फिर से कोशिश करें।",
+"couldNotEstablishConnection" : "Belnet कनेक्शन नहीं बन सका। कृपया फिर से कोशिश करें।",
+"theBelnetServiceNotStarted": "Belnet सर्विस शुरू नहीं हो सकी। कृपया फिर से कोशिश करें।",
+"exitNodeUnreachable" : "Exit node पहुंच से बाहर है, फिर से कनेक्ट हो रहा है",
+
+"tab": "टैब",
+"ungroupTabs": "टैब का समूह हटाएं",
+"closeGroup": "समूह बंद करें",
+"ungroupSelectedTabs": "क्या आप वाकई ${tabGroupName} से चयनित टैब का समूह हटाना चाहते हैं?",
+"@ungroupSelectedTabs": {
+  "description": "टैब समूह से चयनित टैब का समूह हटाते समय दिखाया जाने वाला पुष्टिकरण संदेश",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex विकेंद्रीकृत और गोपनीयता-संरक्षण करने वाले अनुप्रयोगों का एक इकोसिस्टम है। Beldex ब्राउज़र ऐप इस इकोसिस्टम का एक हिस्सा है, जिसमें BChat, BelNet और Beldex प्रोटोकॉल जैसे ऐप्स भी शामिल हैं। Beldex ब्राउज़र आपको एक सहज और गोपनीय ऑनलाइन अनुभव प्रदान करता है, जहाँ आपका डेटा केवल आपका ही रहता है। मज़बूत ब्लॉकचेन अवसंरचना पर बना Beldex ब्राउज़र अपने उपयोगकर्ताओं को गोपनीयता और अनामिता सुनिश्चित करता है।.",
 "atBeldex": " \n Beldex में, हम व्यक्तियों को उनकी डिजिटल पहचान पर नियंत्रण का मौलिक अधिकार देने में विश्वास करते हैं। Beldex ब्राउज़र को उपयोगकर्ताओं के लिए एक सुरक्षित और गोपनीय ऑनलाइन वातावरण प्रदान करने के लिए डिज़ाइन किया गया है ताकि वे डिजिटल दुनिया से संवाद और संपर्क कर सकें।.",
 "titlebns": "\nBNS",

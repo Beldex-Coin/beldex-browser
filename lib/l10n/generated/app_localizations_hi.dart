@@ -531,6 +531,187 @@ class AppLocalizationsHi extends AppLocalizations {
   String get searchEngineUpdated => 'सर्च इंजन सफलतापूर्वक अपडेट किया गया!';
 
   @override
+  String get searchusing => 'इसके द्वारा खोजें';
+
+  @override
+  String get addTabToNewGroup => 'नए समूह में टैब जोड़ें';
+
+  @override
+  String get invitePeople => 'लोगों को आमंत्रित करें';
+
+  @override
+  String get uploadFromGallery => 'गैलरी से अपलोड करें';
+
+  @override
+  String get noQRCodeFound => 'छवि में कोई QR कोड नहीं मिला';
+
+  @override
+  String get searchBarPosition => 'सर्च बार की स्थिति';
+
+  @override
+  String get choosethePosition => 'सर्च बार की स्थिति चुनें।';
+
+  @override
+  String get iPAddress => ' IP पता';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'मेरा IP';
+
+  @override
+  String get marketUpdate => 'मार्केट अपडेट';
+
+  @override
+  String get searchYourTabs => 'अपने टैब खोजें';
+
+  @override
+  String get newTabGroup => 'नया टैब समूह';
+
+  @override
+  String get selectTab => 'टैब चुनें';
+
+  @override
+  String get selectTabs => 'टैब चुनें';
+
+  @override
+  String get deleteTabGroup => 'टैब समूह हटाएँ';
+
+  @override
+  String get rename => 'नाम बदलें';
+
+  @override
+  String get renameGroup => 'समूह का नाम बदलें';
+
+  @override
+  String get ungroupTab => 'टैब को समूह से अलग करें';
+
+  @override
+  String get deleteGroup => 'समूह हटाएँ';
+
+  @override
+  String get addToTabGroup => 'टैब समूह में जोड़ें';
+
+  @override
+  String get editGroupName => 'समूह का नाम संपादित करें';
+
+  @override
+  String get editGroupColor => 'समूह का रंग संपादित करें';
+
+  @override
+  String get closeTab => 'टैब बंद करें';
+
+  @override
+  String get doYouWantToUngroup => 'क्या आप वाकई इस टैब समूह को अलग करना चाहते हैं?';
+
+  @override
+  String get ungroupTabGroup => 'टैब समूह को अलग करें';
+
+  @override
+  String get ungroup => 'अलग करें';
+
+  @override
+  String get deletetabGroup => 'टैब समूह हटाएँ';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'इसमें जोड़ें';
+
+  @override
+  String get tabs => 'टैब';
+
+  @override
+  String get done => 'हो गया';
+
+  @override
+  String get create => 'बनाएँ';
+
+  @override
+  String get groupColor => 'समूह का रंग';
+
+  @override
+  String get groupName => 'समूह का नाम';
+
+  @override
+  String get addtoNewTabGroup => 'नए टैब समूह में जोड़ें';
+
+  @override
+  String get tabGroups => 'टैब समूह';
+
+  @override
+  String get tabGroup => 'टैब समूह';
+
+  @override
+  String get tabsSelected => 'चयनित टैब';
+
+  @override
+  String get privateResearch => 'जैसे: निजी शोध';
+
+  @override
+  String get deselectAll => 'सभी का चयन रद्द करें';
+
+  @override
+  String get selected => 'चयनित';
+
+  @override
+  String get close => 'बंद करें';
+
+  @override
+  String get top => 'ऊपर';
+
+  @override
+  String get bottom => 'नीचे';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'यह कार्रवाई “$tabGroupName” के अंदर मौजूद सभी $tabCount टैब को स्थायी रूप से बंद कर देगी। इसे पूर्ववत नहीं किया जा सकता।';
+  }
+
+  @override
+  String get changingNode => 'नोड बदलना..';
+
+  @override
+  String get freeenameWebDomain => 'Freename Web3 डोमेन';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3 डोमेन सपोर्ट चालू करें';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Belnet बूटस्ट्रैप फ़ाइल डाउनलोड नहीं हो सकी। कृपया अपना कनेक्शन चेक करें और फिर से कोशिश करें।';
+
+  @override
+  String get couldNotEstablishConnection => 'Belnet कनेक्शन नहीं बन सका। कृपया फिर से कोशिश करें।';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet सर्विस शुरू नहीं हो सकी। कृपया फिर से कोशिश करें।';
+
+  @override
+  String get exitNodeUnreachable => 'Exit node पहुंच से बाहर है, फिर से कनेक्ट हो रहा है';
+
+  @override
+  String get tab => 'टैब';
+
+  @override
+  String get ungroupTabs => 'टैब का समूह हटाएं';
+
+  @override
+  String get closeGroup => 'समूह बंद करें';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'क्या आप वाकई \$$tabGroupName से चयनित टैब का समूह हटाना चाहते हैं?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex विकेंद्रीकृत और गोपनीयता-संरक्षण करने वाले अनुप्रयोगों का एक इकोसिस्टम है। Beldex ब्राउज़र ऐप इस इकोसिस्टम का एक हिस्सा है, जिसमें BChat, BelNet और Beldex प्रोटोकॉल जैसे ऐप्स भी शामिल हैं। Beldex ब्राउज़र आपको एक सहज और गोपनीय ऑनलाइन अनुभव प्रदान करता है, जहाँ आपका डेटा केवल आपका ही रहता है। मज़बूत ब्लॉकचेन अवसंरचना पर बना Beldex ब्राउज़र अपने उपयोगकर्ताओं को गोपनीयता और अनामिता सुनिश्चित करता है।.';
 
   @override
