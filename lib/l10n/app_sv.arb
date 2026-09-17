@@ -185,6 +185,102 @@
 
 
 
+
+  "searchusing": "Sök med hjälp av",
+  "addTabToNewGroup": "Lägg till flik i ny grupp",
+  "invitePeople": "Bjud in personer",
+  "uploadFromGallery": "Ladda upp från galler",
+  "noQRCodeFound": "Ingen QR-kod hittades i bilden",
+  "searchBarPosition": "Sökfältets position",
+  "choosethePosition": "Välj sökfältets position",
+  "iPAddress": "IP-adress",
+   "vpnIP": "VPN-IP",
+   "myIP": "Min IP",
+   "marketUpdate": "Marknadsuppdatering",
+   "searchYourTabs": "Sök bland dina flikar",
+   "newTabGroup": "Ny flikgrupp",
+   "selectTab": "Select tab",
+   "selectTabs": "Välj flikar",
+   "closeAllTabs": "Stäng alla flikar",
+   "deleteTabGroup": "Ta bort flikgrupp",
+   "rename": "Byt namn",
+   "renameGroup": "Byt namn på grupp",
+   "ungroupTab": "Ta bort flik från grupp",
+   "deleteGroup": "Ta bort grupp",
+   "addToTabGroup": "Lägg till i flikgrupp",
+   "editGroupName": "Redigera gruppnamn",
+   "editGroupColor": "Redigera gruppfärg",
+   "closeTab": "Stäng flik",
+   "doYouWantToUngroup": "Vill du verkligen dela upp den här flikgruppen?",
+   "ungroupTabGroup": "Dela upp flikgrupp",
+   "ungroup": "Dela upp",
+   "deleteGroup": "Ta bort grupp",
+   "deletetabGroup": "Ta bort flikgrupp",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Lägg till i",
+   "tabs": "Flikar",
+   "done": "Klar",
+   "create": "Skapa",
+   "groupColor": "Gruppfärg",
+   "groupName": "Gruppnamn",
+   "newTabGroup": "Ny flikgrupp",
+   "addtoNewTabGroup": "Lägg till i ny flikgrupp",
+   "tabGroups": "Flikgrupper",
+   "tabGroup": "Flikgrupp",
+   "tabsSelected": "Valda flikar",
+   "privateResearch": "t.ex. Privat forskning",
+   "deselectAll": "Avmarkera alla",
+   "selected": "Vald",
+
+
+   "close": "Stäng",
+   "top": "överst",
+   "bottom": "nederst",
+
+
+
+  "closeAllTabsConfirmation":"Den här åtgärden kommer att stänga alla {tabCount} flikar i ”{tabGroupName}” permanent. Det går inte att ångra", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Changing Node..",
+"freeenameWebDomain" : "FreeName Web3-domän",
+"enableFreeNameWeb" : "Aktivera stöd för FreeName Web3-domän",
+"couldnotDownloadBootstrap" : "Det gick inte att ladda ner Belnet-startfilen. Kontrollera din anslutning och försök igen",
+"couldNotEstablishConnection" : "Det gick inte att upprätta en Belnet-anslutning. Försök igen",
+"theBelnetServiceNotStarted": "Belnet-tjänsten kunde inte startas. Försök igen",
+"exitNodeUnreachable" : "Utgångsnoden kan inte nås, ansluter igen",
+
+
+
+"tab": "Flik",
+"ungroupTabs": "Ta bort flikar från gruppen",
+"closeGroup": "Stäng grupp",
+"ungroupSelectedTabs": "Vill du verkligen ta bort de valda flikarna från ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Bekräftelsemeddelande när valda flikar tas bort från en flikgrupp",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex är ett ekosystem av decentraliserade och konfidentialitetsbevarande applikationer. Beldex Browser-appen är en del av detta ekosystem, som även består av appar som BChat, BelNet och Beldex-protokollet. Beldex Browser är din ingång till en sömlös och konfidentiell onlineupplevelse, där dina data förblir dina egna. Byggd på en robust blockkedjeinfrastruktur säkerställer Beldex Browser konfidentialitet och anonymitet för sina användare.",
 "atBeldex": " \n På Beldex tror vi på att stärka individers grundläggande rätt att kontrollera sitt digitala fotavtryck. Beldex Browser är utformad för att erbjuda en säker och konfidentiell online­miljö där användare kan kommunicera och interagera med den digitala världen.",
 "titlebns": "\nBNS",
