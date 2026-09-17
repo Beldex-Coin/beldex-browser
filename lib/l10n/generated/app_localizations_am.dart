@@ -363,7 +363,7 @@ class AppLocalizationsAm extends AppLocalizations {
   String get closeTabs => 'ታቦችን ዝጋ';
 
   @override
-  String get closeAllTabs => 'ሁሉንም ታቦች ዝጋ';
+  String get closeAllTabs => 'ሁሉንም ትሮች ይዝጉ';
 
   @override
   String get copy => 'ቅዳ';
@@ -529,6 +529,187 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'የፍለጋ ሞተር በተሳካ ሁኔታ ተዘምኗል!';
+
+  @override
+  String get searchusing => 'በመጠቀም ይፈልጉ';
+
+  @override
+  String get addTabToNewGroup => 'ትርን ወደ አዲስ ቡድን ያክሉ';
+
+  @override
+  String get invitePeople => 'ሰዎችን ይጋብዙ';
+
+  @override
+  String get uploadFromGallery => 'ከጋለሪ ይስቀሉ።';
+
+  @override
+  String get noQRCodeFound => 'በምስሉ ውስጥ QR ኮድ አልተገኘም።';
+
+  @override
+  String get searchBarPosition => 'የፍለጋ አሞሌ ቦታ፦';
+
+  @override
+  String get choosethePosition => 'የፍለጋ አሞሌውን ቦታ ይምረጡ።';
+
+  @override
+  String get iPAddress => 'IP አድራሻ፣';
+
+  @override
+  String get vpnIP => 'VPN IP፣';
+
+  @override
+  String get myIP => 'የእኔ IP፣';
+
+  @override
+  String get marketUpdate => 'የገበያ ማሻሻያ';
+
+  @override
+  String get searchYourTabs => 'ትሮችዎን ይፈልጉ';
+
+  @override
+  String get newTabGroup => 'አዲስ የትር ቡድን';
+
+  @override
+  String get selectTab => 'ትርን ይምረጡ';
+
+  @override
+  String get selectTabs => 'ትሮችን ይምረጡ';
+
+  @override
+  String get deleteTabGroup => 'የትር ቡድንን ይሰርዙ';
+
+  @override
+  String get rename => 'እንደገና ሰይም';
+
+  @override
+  String get renameGroup => 'የቡድኑን ስም ቀይር';
+
+  @override
+  String get ungroupTab => 'ትሩን ከቡድኑ ነጠል';
+
+  @override
+  String get deleteGroup => 'ቡድንን ሰርዝ';
+
+  @override
+  String get addToTabGroup => 'ወደ ትር ቡድን አክል';
+
+  @override
+  String get editGroupName => 'የቡድኑን ስም አርትዕ';
+
+  @override
+  String get editGroupColor => 'የቡድኑን ቀለም አርትዕ';
+
+  @override
+  String get closeTab => 'ትርን ዝጋ';
+
+  @override
+  String get doYouWantToUngroup => 'ቡድን ከቡድኑ ለመለየት በእርግጥ ይፈልጋሉ?';
+
+  @override
+  String get ungroupTabGroup => 'የትር ቡድንን ነጠል';
+
+  @override
+  String get ungroup => 'ነጠል';
+
+  @override
+  String get deletetabGroup => 'የትር ቡድንን ሰርዝ';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'ወደ ያክሉ';
+
+  @override
+  String get tabs => 'ትሮች';
+
+  @override
+  String get done => 'ተከናውኗል';
+
+  @override
+  String get create => 'ፍጠር';
+
+  @override
+  String get groupColor => 'የቡድን ቀለም';
+
+  @override
+  String get groupName => 'የቡድን ስም';
+
+  @override
+  String get addtoNewTabGroup => 'ወደ አዲስ የትር ቡድን አክል';
+
+  @override
+  String get tabGroups => 'የትር ቡድኖች';
+
+  @override
+  String get tabGroup => 'የትር ቡድን';
+
+  @override
+  String get tabsSelected => 'የተመረጡ ትሮች';
+
+  @override
+  String get privateResearch => 'ለምሳሌ፦ የግል ምርምር';
+
+  @override
+  String get deselectAll => 'ሁሉንም ምርጫ ይሰርዙ';
+
+  @override
+  String get selected => 'ተመርጧል';
+
+  @override
+  String get close => 'ዝጋ';
+
+  @override
+  String get top => 'ላይ';
+
+  @override
+  String get bottom => 'ታች';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'ይህ እርምጃ በ“$tabGroupName” ውስጥ ያሉትን ሁሉንም $tabCount ትሮች በቋሚነት ይዘጋል። ይህ ሊቀለበስ አይችልም።';
+  }
+
+  @override
+  String get changingNode => 'ኖድ በመቀየር ላይ..';
+
+  @override
+  String get freeenameWebDomain => 'የፍሪናም ዌብ3 ጎራ';
+
+  @override
+  String get enableFreeNameWeb => 'የፍሪናም ዌብ3 ጎራ ድጋፍን አንቃ';
+
+  @override
+  String get couldnotDownloadBootstrap => 'የቤልኔት ቡትስትራፕ ፋይል ማውረድ አልተቻለም። እባክዎ ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።';
+
+  @override
+  String get couldNotEstablishConnection => 'የቤልኔት ግንኙነትን መመስረት አልተቻለም። እባክዎ እንደገና ይሞክሩ።';
+
+  @override
+  String get theBelnetServiceNotStarted => 'የቤልኔት አገልግሎት ሊጀመር አልቻለም። እባክዎ እንደገና ይሞክሩ።';
+
+  @override
+  String get exitNodeUnreachable => 'የውጪ ኖድ ሊደረስበት አይችልም፣ እንደገና እየተገናኘ ነው';
+
+  @override
+  String get tab => 'ትር';
+
+  @override
+  String get ungroupTabs => 'ትሮችን ከቡድን አስወግድ';
+
+  @override
+  String get closeGroup => 'ቡድኑን ዝጋ';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'የተመረጡትን ትሮች ከ\$$tabGroupName ማስወገድ እርግጠኛ ነዎት?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex የዲሴንትራላይዝድ እና ግላዊነትን የሚጠብቁ መተግበሪያዎችን ያካተተ ኢኮሲስተም ነው። የBeldex ብራውዘር መተግበሪያ ይህ ኢኮሲስተም ከሚያካትታቸው BChat፣ BelNet እና የBeldex ፕሮቶኮል ጋር አንዱ ነው። የBeldex ብራውዘር ያለ መቋረጥና ግላዊ የመስመር ላይ ልምድ ወደሚያቀርብልዎ መግቢያ ነው፤ የእርስዎ ውሂብ የእርስዎ ብቻ ይቆያል። በጠንካራ የብሎክቼን መሠረት ላይ ተገንብቶ፣ የBeldex ብራውዘር ለተጠቃሚዎቹ ግላዊነትና ስውርነትን ያረጋግጣል።.';
