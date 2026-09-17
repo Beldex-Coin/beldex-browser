@@ -13,7 +13,9 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/searchengine_icon_placeholder.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
@@ -36,6 +38,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 bool isSearchScreenActive(BuildContext context) {
   return ModalRoute.of(context)?.settings.arguments is SearchScreen;
@@ -110,7 +113,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
 bool isClicked = false;
 
-
+final MobileScannerController scannerController =
+    MobileScannerController();
 
    final Dio _dio = Dio();
   //List<SearchFieldListItem<String>> _suggestions = [];
@@ -238,9 +242,11 @@ bool isClicked = false;
   }
 
   setDuration(BuildContext context) {
-    var browserModel = Provider.of<BrowserModel>(context, listen: false);
+    //var browserModel = Provider.of<BrowserModel>(context, listen: false);
+    final groupProvider = Provider.of<GroupProvider>(context,listen: false);
     setState(() {
-      if (browserModel.webViewTabs.isEmpty) {
+      if (groupProvider.totalOpenTabsCount == 0 //browserModel.webViewTabs.isEmpty
+      ) {
         duration = 400;
         print('duration ---------> $duration');
       } else {
@@ -597,1110 +603,1159 @@ final scannedValue = await showDialog<String>(
     // final selecteditemsProvider = Provider.of<SelectedItemsProvider>(context, listen: false);
      final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
      final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(90),
-          child: Container(
-            height: 45,
-            width: double.infinity,
-            margin:
-                const EdgeInsets.only(top: 40, left: 10, right: 10, bottom: 8),
-            decoration: BoxDecoration(
-                color: themeProvider.darkTheme
-                    ? const Color(0xff282836)
-                    : const Color(0xffF3F3F3),
-                borderRadius: BorderRadius.circular(8)),
-            child: 
-            Row(
-              children: [
-
-                // SearchSettingsPopupList(
-                //   browserModel: browserModel,
-                //   browserSettings: settings,
-                // ),
-                  Container(
-        height: 33,
-        width: 33,
-        margin: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color:
-                themeProvider.darkTheme ? Color(0xff39394B) : Color(0xffffffff),
-            borderRadius: BorderRadius.circular(5)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            (browserModel.value.startsWith('http://') || browserModel.value.startsWith('https://')) ?
-            CachedNetworkImage(
-                            imageUrl: browserModel.value,
-                            width: 20,
-                            height: 20,
-                            errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:settings.searchEngine.name,size: 20,),
-                          )
-             :
-            SvgPicture.asset(
-              browserModel.value,
-              color: browserModel.value == 'assets/images/Reddit 1.svg' ||
-                      browserModel.value == 'assets/images/Wikipedia 1.svg' ||
-                      browserModel.value == 'assets/images/twitter 1.svg'
-                  ? themeProvider.darkTheme
-                      ? Colors.white
-                      : Colors.black
-                  : null,
-            ),
-            Icon(
-              Icons.keyboard_arrow_down,
-              size: 2,
-              color: Colors.transparent,
-            )
-          ],
+    return Stack(
+      children: [
+         Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
         ),
       ),
-                Expanded(
-                  flex: 4,
-                  child: TextField(
-                    onSubmitted: (value)async {
-
-String trimmedValue = value.trim();
-if (trimmedValue.isEmpty) return;
-
-//widget.webViewModel.setResolveData(trimmedValue);
-
-
-// ✅ REMOVE http/https for detection + resolver
-// String normalizedInput = trimmedValue
-//     .replaceFirst(RegExp(r'^https?:\/\/'), '')
-//     .trim();
-
-
-String normalizedInput;
-
-try {
-  final uri = Uri.parse(
-    trimmedValue.startsWith("http")
-        ? trimmedValue
-        : "http://$trimmedValue",
-  );
-  normalizedInput = uri.host;
-} catch (_) {
-  normalizedInput = trimmedValue
-      .replaceFirst(RegExp(r'^https?:\/\/'), '')
-      .split("/")
-      .first;
-}
-
-
-
-String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
-
-bool isFullResolverUrl = input.contains("/resolver/fns/");
-
-
-// NEW: plain text check
-bool isPlainText = !input.contains(".");
-
-
-bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
-    // input.contains(".com") ||
-    // input.contains(".in") ||
-    // input.contains(".org") ||
-    // input.contains(".net") ||
-    // input.contains(".io");
-
-
-// bool isPotentialWeb3Domain =
-//     !input.startsWith("http") &&
-//     !input.contains(" ") &&
-//     input.split(".").length >= 2;
-
-bool isPotentialWeb3Domain =
-    input.contains(".") &&
-    !input.startsWith("http") &&
-    !input.contains(" ") &&
-    !isWeb2Domain;
-  
-  print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
-
-if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
-  try {
-    final apiUrl = isFullResolverUrl
-        ? trimmedValue
-        : "https://apis.freename.io/api/v1/resolver/FNS/$input";
-
-    final res = await Dio().get(apiUrl);
-
-    final records = res.data?["data"]?["records"];
-
-    if (records != null && records.isNotEmpty) {
-
-      String resolvedValue;
-      String resolvedType;
-
-      final aRecord = records.firstWhere(
-        (r) => r["type"]?.toString().trim().toUpperCase() == "A",
-        orElse: () => null,
-      );
-
-      if (aRecord != null) {
-        resolvedValue = aRecord["value"];
-        resolvedType = "A";
-      } else {
-        final first = records.first;
-        resolvedValue = first["value"];
-        resolvedType = first["type"]?.toString() ?? "UNKNOWN";
-      }
-
-      final domainName =
-          res.data?["data"]?["asciiName"] ?? trimmedValue;
-
-      //  CLEAR + STORE immediately
-      //widget.webViewModel.clearResolvedData();
-
-      // widget.webViewModel.setActiveDomain(domainName);
-
-      
-
-      String finalUrl = resolvedValue.startsWith("http")
-          ? resolvedValue
-          : "http://$resolvedValue";
-
-      if (widget.webViewController != null) {
-        widget.webViewController!.loadUrl(
-          urlRequest: URLRequest(
-            url: WebUri(finalUrl),
-          ),
-        );
-      } else {
-        addNewTab(url: WebUri(finalUrl));
-        widget.webViewModel.url = WebUri(finalUrl);
-      }
-    browserModel.setIsWeb3Domain(true);
-   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
-
-Future.delayed(Duration(milliseconds: 450),()async{
-  print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
-  final value = await widget.webViewModel.webViewController?.getUrl();
-  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
-  type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
-  );
-});
-
-
-
-
-
-
-      Navigator.pop(context, WebUri(finalUrl));
-      return;
-    }
-  } catch (e) {
-    print("Resolver failed: $e");
-   // return;
-  }
-}
-
-
- // NORMAL FLOW (unchanged)
-  // ----------------------------
-  var url = WebUri(formatUrl(trimmedValue));
-
-  if (!url.scheme.startsWith("http") &&
-      !Util.isLocalizedContent(url)) {
-    url = WebUri(
-      widget.settings.searchEngine.searchUrl + trimmedValue,
-    );
-  }
-
-   browserModel.setIsWeb3Domain(false);
-   print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
-
-  if (widget.webViewController != null) {
-    widget.webViewController!.loadUrl(
-      urlRequest: URLRequest(
-        url: url,
-        headers: {
-          "Accept-Language":
-              appLocaleProvider.fullLocaleId,
-        },
-      ),
-    );
-  } else {
-    if (mounted) setState(() {});
-    addNewTab(url: url);
-    widget.webViewModel.url = url;
-  }
-
-  vpnStatusProvider.updateCanShowHomeScreen(false);
-  ttsProvider.updateTTSDisplayStatus(false);
-
-  Future.delayed(Duration(milliseconds: duration), () {
-    Navigator.pop(context, url);
-  });
-
-
-
-
-          //             String trimmedValue = value.trim();
-          //            if(trimmedValue.isNotEmpty){
-          //              var url = WebUri(formatUrl(value.trim()));
-          //             if (!url.scheme.startsWith("http") &&
-          //                 !Util.isLocalizedContent(url)) {
-          //               url = WebUri(
-          //                   widget.settings.searchEngine.searchUrl + value);
-          //             }
-          //             //Navigator.pop(context, url);
-          //             // browserModel.updateIsNewTab(false);
-          //             if (widget.webViewController != null) {
-          //               widget.webViewController!
-          //                   .loadUrl(urlRequest: URLRequest(url: url,
-          //                   headers: {
-          //   "Accept-Language": appLocaleProvider.fullLocaleId,
-          // }
-          //                   ));
-          //             } else {
-          //               if (mounted) setState(() {});
-          //               print('comes inside new tab');
-          //               //  browserModel.updateIsNewTab(false);
-          //               addNewTab(url: url);
-          //               widget.webViewModel.url = url;
-
-          //               // widget.webViewController!.getTitle();
-          //             }
-          //             vpnStatusProvider.updateCanShowHomeScreen(false);
-          //             ttsProvider.updateTTSDisplayStatus(false);
-          //             Future.delayed(Duration(milliseconds: duration), () {
-          //               Navigator.pop(context, url);
-          //             });
-          //            }
-
-                      
-                    },
-                    keyboardType: TextInputType.url,
-                    focusNode: _focusNode,
-                    autofocus: true,
-                    controller: _searchController,
-                    textInputAction: TextInputAction.go,
-                    magnifierConfiguration: TextMagnifierConfiguration.disabled,
-                    contextMenuBuilder: (context, editableTextState) {
-                      //final List<ContextMenuButtonItem>
-                      buttonItems = editableTextState.contextMenuButtonItems;
-
-                      editableState = editableTextState;
-
-                      buttonItems.clear(); // Clear all default options
-                      if (_searchController.text.isEmpty) {
-                        buttonItems.add(ContextMenuButtonItem(
-                            label:loc.paste,// 'Paste',
-                            onPressed: () {
-                              Clipboard.getData('text/plain').then((value) {
-                                if (value != null && value.text != null) {
-                                  final text = _searchController.text;
-                                  //final selection = _searchController.selection;
-                                  final selection = editableTextState
-                                      .textEditingValue.selection;
-                                  final newText = text.replaceRange(
-                                    selection.start,
-                                    selection.end,
-                                    value.text!,
-                                  );
-                                  print(
-                                      'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                  _searchController.text = newText;
-                                  if(_searchController.text.trim().isEmpty){
-                                    print("The User Message Contains Url 1");
-                                  canShowSearchAI= '';
-                                    }else if(containsUrl(_searchController.text)){
-                                      canShowSearchAI = '';
-                                      _filterSuggestions(_searchController.text);
-                                    }
-                                    else{
-                                      canShowSearchAI= _searchController.text;
-                                      _filterSuggestions(_searchController.text);
-                                    }
-                         // print('BELDEX AI ---------> $canShowSearchAI');
-        
-                                  //canShowSearchAI = _searchController.text;
-                                  final newSelection = TextSelection.collapsed(
-                                    offset:
-                                        selection.start + value.text!.length,
-                                  );
-                                  _searchController.selection = newSelection;
-                                  editableTextState.hideToolbar(false);
-                                }
-                              });
-                            }));
-                      } else {
-                        buttonItems.clear();
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.cut,// 'Cut',
-                          onPressed: () {
-                            editableTextState
-                                .cutSelection(SelectionChangedCause.tap);
-                            final TextEditingController controller =
-                                editableTextState.widget.controller;
-                            final TextEditingValue value = controller.value;
-                            final TextSelection selection = value.selection;
-                            if (!selection.isCollapsed) {
-                              final String cutText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(ClipboardData(text: cutText));
-
-                              final String newText = value.text.replaceRange(
-                                  selection.start, selection.end, '');
-                              controller.value = TextEditingValue(
-                                  text: newText,
-                                  selection: TextSelection.collapsed(
-                                      offset: selection.start));
-
-                              final String findOnPageText =
-                                  _searchController.text;
-                              final String newFindOnPageText =
-                                  findOnPageText.replaceRange(
-                                      selection.start, selection.end, '');
-
-                              print(
-                                  'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
-                              _searchController.text =
-                                  findOnPageText; //newFindOnPageText;
-                            }
-                            //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                            //   editableTextState.cutSelection(SelectionChangedCause.tap);
-                            //   _searchController.clear();
-                            //   //editableTextState.hideToolbar(false);
-                          },
-                        ));
-                         buttonItems.add(
-  ContextMenuButtonItem(
-    label:loc.copy,// 'Copy',
-    onPressed: () {
-      final TextEditingValue value = editableTextState.textEditingValue;
-      final TextSelection selection = value.selection;
-
-      if (!selection.isCollapsed) {
-        final String selectedText = selection.textInside(value.text);
-
-        // Copy to clipboard
-        Clipboard.setData(ClipboardData(text: selectedText));
-        print("Copied value --> $selectedText");
-
-        // Clear the selection (move cursor to the end of selection)
-        editableTextState.userUpdateTextEditingValue(
-          value.copyWith(
-            selection: TextSelection.collapsed(offset: selection.end),
-          ),
-          SelectionChangedCause.toolbar,
-        );
-      }
-
-      editableTextState.hideToolbar(false);
-    },
-  ),
-);
-
-                        // buttonItems.add(ContextMenuButtonItem(
-                        //   label: 'Copy',
-                        //   onPressed: () {
-                        //     final TextEditingValue value =
-                        //         editableTextState.textEditingValue;
-                        //     final TextSelection selection = value.selection;
-
-                        //     if (!selection.isCollapsed) {
-                        //       final String selectedText =
-                        //           selection.textInside(value.text);
-                        //       Clipboard.setData(
-                        //           ClipboardData(text: selectedText));
-                        //       print("Copied value --> $selectedText");
-                        //     }
-                        //     editableTextState.hideToolbar(false);
-                        //   },
-                        // ));
-                        if (!isAllTextSelected(
-                            editableTextState.textEditingValue.selection,
-                            editableTextState.textEditingValue.text)) {
-                          buttonItems.add(ContextMenuButtonItem(
-                            label:loc.selectAll,// 'Select All',
-                            onPressed: () {
-                              // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                              editableTextState
-                                  .selectAll(SelectionChangedCause.tap);
-                              //editableTextState.hideToolbar(false);
-                            },
-                          ));
-                        }
-                        // Add a custom "Paste" button
-                        buttonItems.add(ContextMenuButtonItem(
-                          label: loc.paste,// 'Paste',
-                          onPressed: () {
-                            Clipboard.getData('text/plain').then((value) {
-                              if (value != null && value.text != null) {
-                                final text = _searchController.text;
-                                // final selection = _searchController.selection;
-                                final selection = editableTextState
-                                    .textEditingValue.selection;
-                                final newText = text.replaceRange(
-                                  selection.start,
-                                  selection.end,
-                                  value.text!,
-                                );
-                                print(
-                                    'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                _searchController.text = newText;
-
-                                 if(_searchController.text.trim().isEmpty){
-                                    print("The User Message Contains Url 1");
-                                  canShowSearchAI= '';
-                                    }else if(containsUrl(_searchController.text)){
-                                      canShowSearchAI = '';
-                                      _filterSuggestions(_searchController.text);
-                                    }else{
-                                      canShowSearchAI= _searchController.text;
-                                      _filterSuggestions(_searchController.text);
-                                    }
-
-
-                                final newSelection = TextSelection.collapsed(
-                                  offset: selection.start + value.text!.length,
-                                );
-                                _searchController.selection = newSelection;
-                                editableTextState.hideToolbar(false);
-                              }
-                            });
-                          },
-                        ));
-                      }
-                      return  AdaptiveTextSelectionToolbar.buttonItems(
-                        anchors: editableTextState.contextMenuAnchors,
-                        buttonItems: buttonItems,
-                      );
-                    },
-                    onChanged: (value) {
-                      _filterSuggestions(value);
-                       setState(() {
-                        if(containsUrl(_searchController.text) || _searchController.text.trim().isEmpty){
-                          canShowSearchAI= '';
-                          filteredSuggestions = [];
-                          print("The User Message Contains url 22 ${filteredSuggestions.length}");
-
-                        }else
-                          canShowSearchAI= _searchController.text;
-                         // print('BELDEX AI ---------> $canShowSearchAI');
-                        });
-                      if (value.isEmpty) {
-                        editableState.hideToolbar(true);
-                       
-                      }
-                    },
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            top: 5.0, right: 10.0, bottom: 10.0),
-                        border: InputBorder.none,
-                        hintText:loc.searchOrEnterAddress,
-                        hintStyle: TextStyle(
-                            color: const Color(0xff6D6D81),
-                            fontSize:isLengthyLanguageInList(appLocaleProvider.selectedLanguage) ? 9 : 14.0,
-                            fontWeight: FontWeight.normal),
-                            ),
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-                Visibility(
-                              visible: _searchController.text.trim().isEmpty, 
-                              child: Container(
-                                margin: EdgeInsets.only(right: 8),
-                                //color: Colors.green,
-                                width: 55,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  // crossAxisAlignment: CrossAxisAlignment.baseline,
-                                  // textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: _openQRScanner,
-                                      
-                                      child: SvgPicture.asset('assets/images/ai-icons/qr_reader.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
-                                      SizedBox(width: 9,),
-                                    GestureDetector(
-                                      onTap:_openVoiceDialog,
-                                      // (){
-                                      //   print('SpeechToText clciked');
-                                      //   print('SpeechTo Text calling value ${_speechToText.isNotListening} ${_speechToText.isListening}');
-                                      //   _speechToText.isNotListening ? _startListening() : _stopListening();
-                                      //   },
-                                      child: SvgPicture.asset('assets/images/ai-icons/Microphone 1.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
-                                  ],
-                                ),
-                              ),
-                            ),
-                _searchController.text.isNotEmpty 
-                    ? Container(
-                        width: 40,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.close_outlined,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              if (_searchController.text.isNotEmpty) {
-                                editableState.hideToolbar(true);
-                              }
-                              filteredSuggestions = [];
-                              _searchController.text = '';
-                              buttonItems.clear();
-                              canShowSearchAI = '';
-                            });
-                          },
-                        ))
-                    : SizedBox()
-              ],
-            ),
-          ),),
-      body: Column(
-        children: [
-         // if( (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) && filteredSuggestions.isEmpty)...[
-
-          (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) || filteredSuggestions.isNotEmpty
-              ? Container()
-              : 
-              Container(
-                  height: 55,
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: true,
+            appBar: PreferredSize(
+                preferredSize: Size.fromHeight(90),
+                child: Container(
+                  height: 45,
                   width: double.infinity,
-                  margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  margin:
+                      const EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 8),
                   decoration: BoxDecoration(
-                    border: Border.all(color: themeProvider.darkTheme ? Color(0xff282836): Color(0xffDADADA)),
-                      // color: themeProvider.darkTheme
-                      //     ? const Color(0xff282836)
-                      //     : const Color(0xffF3F3F3),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        height: 40,
-                        width: 40,
-                        child: favIcon == [] || favIcon.length == 0
-                            ? Container()
-                            : Image.network(
-                                '${favIcon[0].url.toString()}',
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.web);
-                                },
-                              ),
+                      color: themeProvider.darkTheme
+                          ? const Color(0xff111111)
+                          : const Color(0xffFFFFFF),
+                      border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                     // borderRadius: BorderRadius.circular(8)
                       ),
+                  child: 
+                  Row(
+                    children: [
+          
+                      // SearchSettingsPopupList(
+                      //   browserModel: browserModel,
+                      //   browserSettings: settings,
+                      // ),
+                        Container(
+              height: 33,
+              width: 33,
+              margin: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color:
+                      themeProvider.darkTheme ? Color(0xff1A1A1A) : Color(0xffEBEBEB),
+                      border: Border.all(color: themeProvider.darkTheme ? Color(0xff333333) : Color(0xffD4D4D4))
+                 // borderRadius: BorderRadius.circular(5)
+                  ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  (browserModel.value.startsWith('http://') || browserModel.value.startsWith('https://')) ?
+                  CachedNetworkImage(
+                                  imageUrl: browserModel.value,
+                                  width: 20,
+                                  height: 20,
+                                  errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:settings.searchEngine.name,size: 20,),
+                                )
+                   :
+                  SvgPicture.asset(
+                    browserModel.value,
+                    color: browserModel.value == 'assets/images/Reddit 1.svg' ||
+                            browserModel.value == 'assets/images/Wikipedia 1.svg' ||
+                            browserModel.value == 'assets/images/twitter 1.svg'
+                        ? themeProvider.darkTheme
+                            ? Colors.white
+                            : Colors.black
+                        : null,
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 2,
+                    color: Colors.transparent,
+                  )
+                ],
+              ),
+            ),
                       Expanded(
-                          flex: 5,
-                          child: GestureDetector(
-                            onTap: isClicked ? null :()async {
-                              
-
- setState(() {
-                                isClicked = true;
+                        flex: 4,
+                        child: TextField(
+                          onSubmitted: (value)async {
+          
+          String trimmedValue = value.trim();
+          if (trimmedValue.isEmpty) return;
+          browserModel.updateUserInput(trimmedValue);
+          browserModel.showTabScroller = false;
+          //widget.webViewModel.setResolveData(trimmedValue);
+          
+          
+          //  REMOVE http/https for detection + resolver
+          // String normalizedInput = trimmedValue
+          //     .replaceFirst(RegExp(r'^https?:\/\/'), '')
+          //     .trim();
+          
+              if(vpnStatusProvider.isEnabledFreeName){
+          String normalizedInput;
+          
+          try {
+            final uri = Uri.parse(
+          trimmedValue.startsWith("http")
+              ? trimmedValue
+              : "http://$trimmedValue",
+            );
+            normalizedInput = uri.host;
+          } catch (_) {
+            normalizedInput = trimmedValue
+            .replaceFirst(RegExp(r'^https?:\/\/'), '')
+            .split("/")
+            .first;
+          }
+          
+          
+          
+          String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
+          
+          bool isFullResolverUrl = input.contains("/resolver/fns/");
+          
+          
+          // NEW: plain text check
+          bool isPlainText = !input.contains(".");
+          
+          
+          bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
+          // input.contains(".com") ||
+          // input.contains(".in") ||
+          // input.contains(".org") ||
+          // input.contains(".net") ||
+          // input.contains(".io");
+          
+          
+          // bool isPotentialWeb3Domain =
+          //     !input.startsWith("http") &&
+          //     !input.contains(" ") &&
+          //     input.split(".").length >= 2;
+          
+          bool isPotentialWeb3Domain =
+          input.contains(".") &&
+          !input.startsWith("http") &&
+          !input.contains(" ") &&
+          !isWeb2Domain;
+            
+            print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
+          
+          if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
+            try {
+          final apiUrl = isFullResolverUrl
+              ? trimmedValue
+              : "https://apis.freename.io/api/v1/resolver/FNS/$input";
+          
+          final res = await Dio().get(apiUrl);
+          
+          final records = res.data?["data"]?["records"];
+          
+          if (records != null && records.isNotEmpty) {
+          
+            String resolvedValue;
+            String resolvedType;
+          
+            final aRecord = records.firstWhere(
+              (r) => r["type"]?.toString().trim().toUpperCase() == "A",
+              orElse: () => null,
+            );
+          
+            if (aRecord != null) {
+              resolvedValue = aRecord["value"];
+              resolvedType = "A";
+            } else {
+              final first = records.first;
+              resolvedValue = first["value"];
+              resolvedType = first["type"]?.toString() ?? "UNKNOWN";
+            }
+          
+            final domainName =
+                res.data?["data"]?["asciiName"] ?? trimmedValue;
+          
+            //  CLEAR + STORE immediately
+            //widget.webViewModel.clearResolvedData();
+          
+            // widget.webViewModel.setActiveDomain(domainName);
+          
+            
+          
+            String finalUrl = resolvedValue.startsWith("http")
+                ? resolvedValue
+                : "http://$resolvedValue";
+            
+          
+                                  await loadUrlOrCreateTab(WebUri(finalUrl),appLocaleProvider);
+          
+            // if (widget.webViewController != null) {
+            //   widget.webViewController!.loadUrl(
+            //     urlRequest: URLRequest(
+            //       url: WebUri(finalUrl),
+            //     ),
+            //   );
+            // } else {
+            //   addNewTab(url: WebUri(finalUrl));
+            //   widget.webViewModel.url = WebUri(finalUrl);
+            // }
+          browserModel.setIsWeb3Domain(true);
+             print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
+          
+          Future.delayed(Duration(milliseconds: 450),()async{
+            print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
+            final value = await widget.webViewModel.webViewController?.getUrl();
+            browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
+            type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
+            );
+          });
+          
+          
+          
+          
+          
+          
+            Navigator.pop(context, WebUri(finalUrl));
+            return;
+          }
+            } catch (e) {
+          print("Resolver failed: $e");
+             // return;
+            }
+          }
+          
+          
+           // NORMAL FLOW (unchanged)
+            // ----------------------------
+            var url = WebUri(formatUrl(trimmedValue));
+          
+            if (!url.scheme.startsWith("http") &&
+            !Util.isLocalizedContent(url)) {
+          url = WebUri(
+            widget.settings.searchEngine.searchUrl + trimmedValue,
+          );
+            }
+          
+             browserModel.setIsWeb3Domain(false);
+             print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
+          
+            if (widget.webViewController != null) {
+          widget.webViewController!.loadUrl(
+            urlRequest: URLRequest(
+              url: url,
+              headers: {
+                "Accept-Language":
+                    appLocaleProvider.fullLocaleId,
+              },
+            ),
+          );
+            } else {
+          if (mounted) setState(() {});
+          addNewTab(url: url);
+          widget.webViewModel.url = url;
+            }
+          
+            vpnStatusProvider.updateCanShowHomeScreen(false);
+            ttsProvider.updateTTSDisplayStatus(false);
+          
+            Future.delayed(Duration(milliseconds: duration), () {
+          Navigator.pop(context, url);
+            });
+          
+              }else{  
+          
+          
+                           // String trimmedValue = value.trim();
+                           if(trimmedValue.isNotEmpty){
+                             var url = WebUri(formatUrl(value.trim()));
+                            if (!url.scheme.startsWith("http") &&
+                                !Util.isLocalizedContent(url)) {
+                              url = WebUri(
+                                  widget.settings.searchEngine.searchUrl + value);
+                            }
+                            //Navigator.pop(context, url);
+                            // browserModel.updateIsNewTab(false);
+              
+                              await loadUrlOrCreateTab(url,appLocaleProvider);
+          
+                //             if (widget.webViewController != null) {
+                //               widget.webViewController!
+                //                   .loadUrl(urlRequest: URLRequest(url: url,
+                //                   headers: {
+                //   "Accept-Language": appLocaleProvider.fullLocaleId,
+                // }
+                //                   ));
+                //             } else {
+                //               if (mounted) setState(() {});
+                //               print('comes inside new tab');
+                //               //  browserModel.updateIsNewTab(false);
+                //               addNewTab(url: url);
+                //               widget.webViewModel.url = url;
+          
+                //               // widget.webViewController!.getTitle();
+                //             }
+                            vpnStatusProvider.updateCanShowHomeScreen(false);
+                            ttsProvider.updateTTSDisplayStatus(false);
+                            Future.delayed(Duration(milliseconds: duration), () {
+                              Navigator.pop(context, url);
+                            });
+                           }
+              }
+                            
+                          },
+                          keyboardType: TextInputType.url,
+                          focusNode: _focusNode,
+                          autofocus: true,
+                          controller: _searchController,
+                          textInputAction: TextInputAction.go,
+                          magnifierConfiguration: TextMagnifierConfiguration.disabled,
+                          contextMenuBuilder: (context, editableTextState) {
+                            //final List<ContextMenuButtonItem>
+                            buttonItems = editableTextState.contextMenuButtonItems;
+          
+                            editableState = editableTextState;
+          
+                            buttonItems.clear(); // Clear all default options
+                            if (_searchController.text.isEmpty) {
+                              buttonItems.add(ContextMenuButtonItem(
+                                  label:loc.paste,// 'Paste',
+                                  onPressed: () {
+                                    Clipboard.getData('text/plain').then((value) {
+                                      if (value != null && value.text != null) {
+                                        final text = _searchController.text;
+                                        //final selection = _searchController.selection;
+                                        final selection = editableTextState
+                                            .textEditingValue.selection;
+                                        final newText = text.replaceRange(
+                                          selection.start,
+                                          selection.end,
+                                          value.text!,
+                                        );
+                                        print(
+                                            'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                        _searchController.text = newText;
+                                        if(_searchController.text.trim().isEmpty){
+                                          print("The User Message Contains Url 1");
+                                        canShowSearchAI= '';
+                                          }else if(containsUrl(_searchController.text)){
+                                            canShowSearchAI = '';
+                                            _filterSuggestions(_searchController.text);
+                                          }
+                                          else{
+                                            canShowSearchAI= _searchController.text;
+                                            _filterSuggestions(_searchController.text);
+                                          }
+                               // print('BELDEX AI ---------> $canShowSearchAI');
+              
+                                        //canShowSearchAI = _searchController.text;
+                                        final newSelection = TextSelection.collapsed(
+                                          offset:
+                                              selection.start + value.text!.length,
+                                        );
+                                        _searchController.selection = newSelection;
+                                        editableTextState.hideToolbar(false);
+                                      }
+                                    });
+                                  }));
+                            } else {
+                              buttonItems.clear();
+                              buttonItems.add(ContextMenuButtonItem(
+                                label:loc.cut,// 'Cut',
+                                onPressed: () {
+                                  editableTextState
+                                      .cutSelection(SelectionChangedCause.tap);
+                                  final TextEditingController controller =
+                                      editableTextState.widget.controller;
+                                  final TextEditingValue value = controller.value;
+                                  final TextSelection selection = value.selection;
+                                  if (!selection.isCollapsed) {
+                                    final String cutText =
+                                        selection.textInside(value.text);
+                                    Clipboard.setData(ClipboardData(text: cutText));
+          
+                                    final String newText = value.text.replaceRange(
+                                        selection.start, selection.end, '');
+                                    controller.value = TextEditingValue(
+                                        text: newText,
+                                        selection: TextSelection.collapsed(
+                                            offset: selection.start));
+          
+                                    final String findOnPageText =
+                                        _searchController.text;
+                                    final String newFindOnPageText =
+                                        findOnPageText.replaceRange(
+                                            selection.start, selection.end, '');
+          
+                                    print(
+                                        'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                                    _searchController.text =
+                                        findOnPageText; //newFindOnPageText;
+                                  }
+                                  //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                  //   editableTextState.cutSelection(SelectionChangedCause.tap);
+                                  //   _searchController.clear();
+                                  //   //editableTextState.hideToolbar(false);
+                                },
+                              ));
+                               buttonItems.add(
+            ContextMenuButtonItem(
+          label:loc.copy,// 'Copy',
+          onPressed: () {
+            final TextEditingValue value = editableTextState.textEditingValue;
+            final TextSelection selection = value.selection;
+          
+            if (!selection.isCollapsed) {
+              final String selectedText = selection.textInside(value.text);
+          
+              // Copy to clipboard
+              Clipboard.setData(ClipboardData(text: selectedText));
+              print("Copied value --> $selectedText");
+          
+              // Clear the selection (move cursor to the end of selection)
+              editableTextState.userUpdateTextEditingValue(
+                value.copyWith(
+                  selection: TextSelection.collapsed(offset: selection.end),
+                ),
+                SelectionChangedCause.toolbar,
+              );
+            }
+          
+            editableTextState.hideToolbar(false);
+          },
+            ),
+          );
+          
+                              // buttonItems.add(ContextMenuButtonItem(
+                              //   label: 'Copy',
+                              //   onPressed: () {
+                              //     final TextEditingValue value =
+                              //         editableTextState.textEditingValue;
+                              //     final TextSelection selection = value.selection;
+          
+                              //     if (!selection.isCollapsed) {
+                              //       final String selectedText =
+                              //           selection.textInside(value.text);
+                              //       Clipboard.setData(
+                              //           ClipboardData(text: selectedText));
+                              //       print("Copied value --> $selectedText");
+                              //     }
+                              //     editableTextState.hideToolbar(false);
+                              //   },
+                              // ));
+                              if (!isAllTextSelected(
+                                  editableTextState.textEditingValue.selection,
+                                  editableTextState.textEditingValue.text)) {
+                                buttonItems.add(ContextMenuButtonItem(
+                                  label:loc.selectAll,// 'Select All',
+                                  onPressed: () {
+                                    // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                    editableTextState
+                                        .selectAll(SelectionChangedCause.tap);
+                                    //editableTextState.hideToolbar(false);
+                                  },
+                                ));
+                              }
+                              // Add a custom "Paste" button
+                              buttonItems.add(ContextMenuButtonItem(
+                                label: loc.paste,// 'Paste',
+                                onPressed: () {
+                                  Clipboard.getData('text/plain').then((value) {
+                                    if (value != null && value.text != null) {
+                                      final text = _searchController.text;
+                                      // final selection = _searchController.selection;
+                                      final selection = editableTextState
+                                          .textEditingValue.selection;
+                                      final newText = text.replaceRange(
+                                        selection.start,
+                                        selection.end,
+                                        value.text!,
+                                      );
+                                      print(
+                                          'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                      _searchController.text = newText;
+          
+                                       if(_searchController.text.trim().isEmpty){
+                                          print("The User Message Contains Url 1");
+                                        canShowSearchAI= '';
+                                          }else if(containsUrl(_searchController.text)){
+                                            canShowSearchAI = '';
+                                            _filterSuggestions(_searchController.text);
+                                          }else{
+                                            canShowSearchAI= _searchController.text;
+                                            _filterSuggestions(_searchController.text);
+                                          }
+          
+          
+                                      final newSelection = TextSelection.collapsed(
+                                        offset: selection.start + value.text!.length,
+                                      );
+                                      _searchController.selection = newSelection;
+                                      editableTextState.hideToolbar(false);
+                                    }
+                                  });
+                                },
+                              ));
+                            }
+                            return  AdaptiveTextSelectionToolbar.buttonItems(
+                              anchors: editableTextState.contextMenuAnchors,
+                              buttonItems: buttonItems,
+                            );
+                          },
+                          onChanged: (value) {
+                            _filterSuggestions(value);
+                             setState(() {
+                              if(containsUrl(_searchController.text) || _searchController.text.trim().isEmpty){
+                                canShowSearchAI= '';
+                                filteredSuggestions = [];
+                                print("The User Message Contains url 22 ${filteredSuggestions.length}");
+          
+                              }else
+                                canShowSearchAI= _searchController.text;
+                               // print('BELDEX AI ---------> $canShowSearchAI');
                               });
-                              String trimmedValue = widget.controller.text; //value.trim();
-if (trimmedValue.isEmpty) return;
-
-//widget.webViewModel.setResolveData(trimmedValue);
-
-
-String normalizedInput;
-
-try {
-  final uri = Uri.parse(
-    trimmedValue.startsWith("http")
-        ? trimmedValue
-        : "http://$trimmedValue",
-  );
-  normalizedInput = uri.host;
-} catch (_) {
-  normalizedInput = trimmedValue
-      .replaceFirst(RegExp(r'^https?:\/\/'), '')
-      .split("/")
-      .first;
-}
-
-
-
-String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
-
-bool isFullResolverUrl = input.contains("/resolver/fns/");
-
-
-// NEW: plain text check
-bool isPlainText = !input.contains(".");
-
-
-bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
-
-bool isPotentialWeb3Domain =
-    input.contains(".") &&
-    !input.startsWith("http") &&
-    !input.contains(" ") &&
-    !isWeb2Domain;
-  
-  print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
-
-if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
-  try {
-    final apiUrl = isFullResolverUrl
-        ? trimmedValue
-        : "https://apis.freename.io/api/v1/resolver/FNS/$input";
-
-    final res = await Dio().get(apiUrl);
-
-    final records = res.data?["data"]?["records"];
-
-    if (records != null && records.isNotEmpty) {
-
-      String resolvedValue;
-      String resolvedType;
-
-      final aRecord = records.firstWhere(
-        (r) => r["type"]?.toString().trim().toUpperCase() == "A",
-        orElse: () => null,
-      );
-
-      if (aRecord != null) {
-        resolvedValue = aRecord["value"];
-        resolvedType = "A";
-      } else {
-        final first = records.first;
-        resolvedValue = first["value"];
-        resolvedType = first["type"]?.toString() ?? "UNKNOWN";
-      }
-
-      final domainName =
-          res.data?["data"]?["asciiName"] ?? trimmedValue;
-
-      // ✅ CLEAR + STORE immediately
-      //widget.webViewModel.clearResolvedData();
-
-      //widget.webViewModel.setActiveDomain(domainName);
-
-      
-
-      String finalUrl = resolvedValue.startsWith("http")
-          ? resolvedValue
-          : "http://$resolvedValue";
-
-      if (widget.webViewController != null) {
-        widget.webViewController!.loadUrl(
-          urlRequest: URLRequest(
-            url: WebUri(finalUrl),
-          ),
-        );
-      }
-      //  else {
-      //   addNewTab(url: WebUri(finalUrl));
-      //   widget.webViewModel.url = WebUri(finalUrl);
-      // }
-    browserModel.setIsWeb3Domain(true);
-   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
-
-//Future.delayed(Duration(milliseconds: 450),()async{
-  print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
-  final value = await widget.webViewModel.webViewController?.getUrl();
-  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
-  type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
-  );
-//});
-
-
-
-
-
-
-      Navigator.pop(context, WebUri(finalUrl));
-      return;
-    }
-  } catch (e) {
-    print("Resolver failed: $e");
-    // setState(() {
-    //                             isClicked = false;
-    //                           });
-   // return;
-  }
-}
-  // NORMAL FLOW (unchanged)
-  var url = WebUri(formatUrl(trimmedValue));
-
-  if (!url.scheme.startsWith("http") &&
-      !Util.isLocalizedContent(url)) {
-    url = WebUri(
-      widget.settings.searchEngine.searchUrl + trimmedValue,
-    );
-  }
-
-  //  RESET resolver state
-  // widget.webViewModel.displayUrl = null;
-  // widget.webViewModel.isResolvedDomain = false;
-   browserModel.setIsWeb3Domain(false);
-   print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
-
-  if (widget.webViewController != null) {
-    widget.webViewController!.loadUrl(
-      urlRequest: URLRequest(
-        url: url,
-        headers: {
-          "Accept-Language":
-              appLocaleProvider.fullLocaleId,
-        },
-      ),
-    );
-  } else {
-    if (mounted) setState(() {});
-    addNewTab(url: url);
-    widget.webViewModel.url = url;
-  }
-
-  vpnStatusProvider.updateCanShowHomeScreen(false);
-  ttsProvider.updateTTSDisplayStatus(false);
-
-  Future.delayed(Duration(milliseconds: duration), () {
-    Navigator.pop(context, url);
-  });
-
-
-
-          //                     if (widget.controller.text.isNotEmpty) {
-                                
-          //                       var url = WebUri(
-          //                           formatUrl(widget.controller.text.trim()));
-          //                       if (!url.scheme.startsWith("http") &&
-          //                           !Util.isLocalizedContent(url)) {
-          //                         url = WebUri(
-          //                             widget.settings.searchEngine.searchUrl +
-          //                                 widget.controller.text);
-          //                       }
-          //                       // browserModel.updateIsNewTab(false);
-          //                       if (widget.webViewController != null) {
-          //                         widget.webViewController!.loadUrl(
-          //                             urlRequest: URLRequest(url: url,
-          //                             headers: {
-          //   "Accept-Language": appLocaleProvider.fullLocaleId,
-          // },
-          //                             ));
-          //                         print(
-          //                             'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
-          //                       } else {
-          //                         if (mounted) setState(() {});
-          //                         print('comes inside new tab');
-          //                         //  browserModel.updateIsNewTab(false);
-          //                         addNewTab(url: url);
-          //                         widget.webViewModel.url = url;
-          //                         print('THE WEBVIEWMODEL 3 --> ${widget.webViewModel.url}');
-          //                         // widget.webViewController!.getTitle();
-          //                       }
-          //                        vpnStatusProvider.updateCanShowHomeScreen(false);
-          //                       Future.delayed(Duration(milliseconds: duration),
-          //                           () {
-          //                         Navigator.pop(context, url);
-          //                       });
-          //                     }
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                pageTitle.isNotEmpty
-                                    ? Container(
-                                        child: Text('${pageTitle.toString()}',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 16)),
-                                      )
-                                    : Container(),
-                                widget.controller.text.isNotEmpty
-                                    ? Container(
-                                        child: Text(
-                                          '${widget.controller.text}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              color: const Color(0xff00B134)),
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                          )),
-                      Expanded(
-                          flex: 3,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  child: IconButton(
-                                      onPressed: () {
-                                        _shareUrl('${widget.controller.text}',loc);
-                                        // Navigator.pop(context);
-                                      },
-                                      icon: SvgPicture.asset(
-                                        'assets/images/Shares.svg',
-                                        color: themeProvider.darkTheme
-                                            ? Colors.white
-                                            : Colors.black,
-                                      )),
+                            if (value.isEmpty) {
+                              editableState.hideToolbar(true);
+                             
+                            }
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(
+                                  top: 5.0, right: 10.0, bottom: 10.0),
+                              border: InputBorder.none,
+                              hintText:loc.searchOrEnterAddress,
+                              hintStyle: TextStyle(
+                                  color: themeProvider.darkTheme ? Color(0xff737373) : Color(0xff737373),
+                                  fontSize:isLengthyLanguageInList(appLocaleProvider.selectedLanguage) ? 9 : 14.0,
+                                  fontWeight: FontWeight.normal),
+                                  ),
+                          style: theme.textTheme.bodyMedium!.copyWith(fontFamily: 'Inter'),
+                        ),
+                      ),
+                      Visibility(
+                                    visible: _searchController.text.trim().isEmpty, 
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8),
+                                      //color: Colors.green,
+                                      width: 55,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        // crossAxisAlignment: CrossAxisAlignment.baseline,
+                                        // textBaseline: TextBaseline.alphabetic,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: _openQRScanner,
+                                            
+                                            child: SvgPicture.asset('assets/images/ai-icons/qr_reader.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                                            SizedBox(width: 9,),
+                                          GestureDetector(
+                                            onTap:_openVoiceDialog,
+                                            // (){
+                                            //   print('SpeechToText clciked');
+                                            //   print('SpeechTo Text calling value ${_speechToText.isNotListening} ${_speechToText.isListening}');
+                                            //   _speechToText.isNotListening ? _startListening() : _stopListening();
+                                            //   },
+                                            child: SvgPicture.asset('assets/images/ai-icons/Microphone 1.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black,)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                      _searchController.text.isNotEmpty 
+                          ? Container(
+                              width: 40,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.close_outlined,
+                                  size: 20,
                                 ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  child: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _searchController.text =
-                                              widget.controller.text;
-                                        });
-                                      },
-                                      icon: SvgPicture.asset(
-                                        'assets/images/edit.svg',
-                                        color: themeProvider.darkTheme
-                                            ? Colors.white
-                                            : Colors.black,
-                                      )),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  child: IconButton(
-                                      onPressed: () {
-                                        _copyToClipboard(
-                                            '${widget.controller.text}',loc);
-                                      },
-                                      icon: SvgPicture.asset(
-                                          'assets/images/copy.svg')),
-                                ),
-                              ),
-                            ],
-                          ))
+                                onPressed: () {
+                                  setState(() {
+                                    if (_searchController.text.isNotEmpty) {
+                                      editableState.hideToolbar(true);
+                                    }
+                                    filteredSuggestions = [];
+                                    _searchController.text = '';
+                                    buttonItems.clear();
+                                    canShowSearchAI = '';
+                                  });
+                                },
+                              ))
+                          : SizedBox()
                     ],
                   ),
-                ),
-         // ],
-
-if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty && basicProvider.autoSuggest ) ...[
-              const SizedBox(height: 4),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color:themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
-                ),
-                padding: EdgeInsets.only(bottom: 5),
-                margin: EdgeInsets.only(left:10,right:10,bottom: 10),
-                constraints: BoxConstraints(
-                  maxHeight: 200, // limit max height
-                ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filteredSuggestions.length,
-                  itemBuilder: (context, index) {
-                    final suggestion = filteredSuggestions[index];
-                
-                    final queryLower = _currentQuery.toLowerCase();
-                    final suggestionLower = suggestion.toLowerCase();
-                
-                    final matchIndex = suggestionLower.indexOf(queryLower);
-                
-                    InlineSpan textSpan;
-                    if (matchIndex != -1 && _currentQuery.isNotEmpty) {
-                      textSpan = TextSpan(
-                        children: [
-                          TextSpan(
-                            text: suggestion.substring(0, matchIndex),
-                            style: TextStyle(
-                              color: themeProvider.darkTheme ? Colors.white : Colors.black,
-                            ),
-                          ),
-                          TextSpan(
-                            text: suggestion.substring(matchIndex, matchIndex + _currentQuery.length),
-                            style:  TextStyle(
-                              color: themeProvider.darkTheme ? Colors.white : Colors.black, //Colors.blue, // highlight color
-                             // fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: suggestion.substring(matchIndex + _currentQuery.length),
-                            style: TextStyle(
-                              color: themeProvider.darkTheme ? Colors.white.withOpacity(0.5) : Color(0xff333333).withOpacity(0.5),
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      textSpan = TextSpan(
-                        text: suggestion,
-                        style: TextStyle(
-                          color: themeProvider.darkTheme ? Colors.white : Colors.black,
-                        ),
-                      );
-                    }
-                
-                    return GestureDetector(
-                      onTap: () async {
-                        // handle tap
-                String trimmedValue = suggestion.trim();
-                    if(trimmedValue.isNotEmpty){
-                      var url = WebUri(formatUrl(suggestion.trim()));
-                     if (!url.scheme.startsWith("http") &&
-                         !Util.isLocalizedContent(url)) {
-                       url = WebUri(
-                           widget.settings.searchEngine.searchUrl + suggestion);
-                     }
-                     //Navigator.pop(context, url);
-                     // browserModel.updateIsNewTab(false);
-                     if (widget.webViewController != null) {
-                       widget.webViewController!
-                           .loadUrl(urlRequest: URLRequest(url: url,
-                           headers: {
-            "Accept-Language": appLocaleProvider.fullLocaleId,
-          }
-                           ));
-                     } else {
-                       if (mounted) setState(() {});
-                       print('comes inside new tab');
-                       //  browserModel.updateIsNewTab(false);
-                       addNewTab(url: url);
-                       widget.webViewModel.url = url;
-                
-                       // widget.webViewController!.getTitle();
-                     }
-                     //filteredSuggestions = [];
-                     vpnStatusProvider.updateCanShowHomeScreen(false);
-                     Future.delayed(Duration(milliseconds: duration), () {
-                       Navigator.pop(context, url);
-                     });
-                    }
-                
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(13.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: themeProvider.darkTheme
-                 ? SvgPicture.asset('assets/images/ai-icons/Search_suggestion.svg')
-                 : SvgPicture.asset('assets/images/ai-icons/Search_suggestions_wht.svg'),
-                            ),
-                            Expanded(
-                              child: RichText(
-                                text: textSpan,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                setState(() {
-                                  _searchController.text = suggestion;
-                                  if(containsUrl(suggestion)){
-                                    canShowSearchAI = '';
-                                  }else{
-                                    canShowSearchAI= suggestion;
+                ),),
+            body: Column(
+              children: [
+               // if( (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) && filteredSuggestions.isEmpty)...[
+          
+                (widget.controller.text == '' || widget.controller.text.isEmpty || vpnStatusProvider.canShowHomeScreen) || filteredSuggestions.isNotEmpty
+                    ? Container()
+                    : 
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                      child: GlassPanel(
+                        child: Container(
+                            height: 55,
+                            width: double.infinity,
+                            //margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                            decoration: BoxDecoration(
+                              color: themeProvider.darkTheme ? Color(0xff444444).withOpacity(0.2) : Color(0xffFFFFFF),
+                              border: Border.all(color: themeProvider.darkTheme ? Color(0xff222222): Color(0xffD4D4D4)),
+                                // color: themeProvider.darkTheme
+                                //     ? const Color(0xff282836)
+                                //     : const Color(0xffF3F3F3),
+                               // borderRadius: BorderRadius.circular(8)
+                                ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(10),
+                                  height: 40,
+                                  width: 40,
+                                  child: favIcon == [] || favIcon.length == 0
+                                      ? Container()
+                                      : Image.network(
+                                          '${favIcon[0].url.toString()}',
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Icon(Icons.web);
+                                          },
+                                        ),
+                                ),
+                                Expanded(
+                                    flex: 5,
+                                    child: GestureDetector(
+                                      onTap: isClicked ? null :()async {
+                                        
+                                
+                                 setState(() {
+                                          isClicked = true;
+                                        });
+                                        String trimmedValue = widget.controller.text; //value.trim();
+                                if (trimmedValue.isEmpty) return;
+                                
+                                //widget.webViewModel.setResolveData(trimmedValue);
+                                
+                                
+                                String normalizedInput;
+                                
+                                try {
+                                  final uri = Uri.parse(
+                                trimmedValue.startsWith("http")
+                                    ? trimmedValue
+                                    : "http://$trimmedValue",
+                                  );
+                                  normalizedInput = uri.host;
+                                } catch (_) {
+                                  normalizedInput = trimmedValue
+                                  .replaceFirst(RegExp(r'^https?:\/\/'), '')
+                                  .split("/")
+                                  .first;
+                                }
+                                
+                                
+                                
+                                String input = normalizedInput.toLowerCase(); //trimmedValue.toLowerCase();
+                                
+                                bool isFullResolverUrl = input.contains("/resolver/fns/");
+                                
+                                
+                                // NEW: plain text check
+                                bool isPlainText = !input.contains(".");
+                                
+                                
+                                bool isWeb2Domain = Web2DomainList().isWeb2Domain(input);
+                                
+                                bool isPotentialWeb3Domain =
+                                input.contains(".") &&
+                                !input.startsWith("http") &&
+                                !input.contains(" ") &&
+                                !isWeb2Domain;
+                                  
+                                  print('RESOLVE is $isWeb2Domain ----- $isPlainText ----');
+                                
+                                if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
+                                  try {
+                                final apiUrl = isFullResolverUrl
+                                    ? trimmedValue
+                                    : "https://apis.freename.io/api/v1/resolver/FNS/$input";
+                                
+                                final res = await Dio().get(apiUrl);
+                                
+                                final records = res.data?["data"]?["records"];
+                                
+                                if (records != null && records.isNotEmpty) {
+                                
+                                  String resolvedValue;
+                                  String resolvedType;
+                                
+                                  final aRecord = records.firstWhere(
+                                    (r) => r["type"]?.toString().trim().toUpperCase() == "A",
+                                    orElse: () => null,
+                                  );
+                                
+                                  if (aRecord != null) {
+                                    resolvedValue = aRecord["value"];
+                                    resolvedType = "A";
+                                  } else {
+                                    final first = records.first;
+                                    resolvedValue = first["value"];
+                                    resolvedType = first["type"]?.toString() ?? "UNKNOWN";
                                   }
-                                });
-                              },
-                              child: SizedBox(
-                                child:  themeProvider.darkTheme
-                                  ? SvgPicture.asset('assets/images/ai-icons/arrow_suggestion.svg')
-                                  : SvgPicture.asset('assets/images/ai-icons/arrow_suggestions_wht.svg'),
-                              ),
-                            )
-                           
-                          ],
+                                
+                                  final domainName =
+                                      res.data?["data"]?["asciiName"] ?? trimmedValue;
+                                
+                                  //  CLEAR + STORE immediately
+                                  //widget.webViewModel.clearResolvedData();
+                                
+                                  //widget.webViewModel.setActiveDomain(domainName);
+                                
+                                  
+                                
+                                  String finalUrl = resolvedValue.startsWith("http")
+                                      ? resolvedValue
+                                      : "http://$resolvedValue";
+                                
+                                  if (widget.webViewController != null) {
+                                    widget.webViewController!.loadUrl(
+                                      urlRequest: URLRequest(
+                                        url: WebUri(finalUrl),
+                                      ),
+                                    );
+                                  }
+                                  //  else {
+                                  //   addNewTab(url: WebUri(finalUrl));
+                                  //   widget.webViewModel.url = WebUri(finalUrl);
+                                  // }
+                                browserModel.setIsWeb3Domain(true);
+                                   print('RESOLVE setiSWeb3 domain ${browserModel.isWeb3Domain}');
+                                
+                                //Future.delayed(Duration(milliseconds: 450),()async{
+                                  print('RESOLVE DOMAIN REDIRECT DATA IS ${widget.webViewModel.url.toString()}');
+                                  final value = await widget.webViewModel.webViewController?.getUrl();
+                                  browserModel.addDomain(domain: domainName, resolvedValue:finalUrl, //resolvedValue, 
+                                  type: resolvedType, redirectValue: value?.toString() ?? widget.webViewModel.url.toString() //.url.toString()
+                                  );
+                                //});
+                                
+                                
+                                
+                                
+                                
+                                
+                                  Navigator.pop(context, WebUri(finalUrl));
+                                  return;
+                                }
+                                  } catch (e) {
+                                print("Resolver failed: $e");
+                                // setState(() {
+                                //                             isClicked = false;
+                                //                           });
+                                   // return;
+                                  }
+                                }
+                                  // NORMAL FLOW (unchanged)
+                                  var url = WebUri(formatUrl(trimmedValue));
+                                
+                                  if (!url.scheme.startsWith("http") &&
+                                  !Util.isLocalizedContent(url)) {
+                                url = WebUri(
+                                  widget.settings.searchEngine.searchUrl + trimmedValue,
+                                );
+                                  }
+                                
+                                  //  RESET resolver state
+                                  // widget.webViewModel.displayUrl = null;
+                                  // widget.webViewModel.isResolvedDomain = false;
+                                   browserModel.setIsWeb3Domain(false);
+                                   print('RESOLVE setiSWeb3 domain 1 ${browserModel.isWeb3Domain}');
+                                
+                                  if (widget.webViewController != null) {
+                                widget.webViewController!.loadUrl(
+                                  urlRequest: URLRequest(
+                                    url: url,
+                                    headers: {
+                                      "Accept-Language":
+                        appLocaleProvider.fullLocaleId,
+                                    },
+                                  ),
+                                );
+                                  } else {
+                                if (mounted) setState(() {});
+                                addNewTab(url: url);
+                                widget.webViewModel.url = url;
+                                  }
+                                
+                                  vpnStatusProvider.updateCanShowHomeScreen(false);
+                                  ttsProvider.updateTTSDisplayStatus(false);
+                                
+                                  Future.delayed(Duration(milliseconds: duration), () {
+                                Navigator.pop(context, url);
+                                  });
+                                
+                                
+                                
+                                      //                     if (widget.controller.text.isNotEmpty) {
+                                          
+                                      //                       var url = WebUri(
+                                      //                           formatUrl(widget.controller.text.trim()));
+                                      //                       if (!url.scheme.startsWith("http") &&
+                                      //                           !Util.isLocalizedContent(url)) {
+                                      //                         url = WebUri(
+                                      //                             widget.settings.searchEngine.searchUrl +
+                                      //                                 widget.controller.text);
+                                      //                       }
+                                      //                       // browserModel.updateIsNewTab(false);
+                                      //                       if (widget.webViewController != null) {
+                                      //                         widget.webViewController!.loadUrl(
+                                      //                             urlRequest: URLRequest(url: url,
+                                      //                             headers: {
+                                      //   "Accept-Language": appLocaleProvider.fullLocaleId,
+                                      // },
+                                      //                             ));
+                                      //                         print(
+                                      //                             'THE WEBVIEWMODEL 4 --> ${widget.webViewModel.url}');
+                                      //                       } else {
+                                      //                         if (mounted) setState(() {});
+                                      //                         print('comes inside new tab');
+                                      //                         //  browserModel.updateIsNewTab(false);
+                                      //                         addNewTab(url: url);
+                                      //                         widget.webViewModel.url = url;
+                                      //                         print('THE WEBVIEWMODEL 3 --> ${widget.webViewModel.url}');
+                                      //                         // widget.webViewController!.getTitle();
+                                      //                       }
+                                      //                        vpnStatusProvider.updateCanShowHomeScreen(false);
+                                      //                       Future.delayed(Duration(milliseconds: duration),
+                                      //                           () {
+                                      //                         Navigator.pop(context, url);
+                                      //                       });
+                                      //                     }
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                                        textBaseline: TextBaseline.alphabetic,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          pageTitle.isNotEmpty
+                                              ? Container(
+                                                  child: Text('${pageTitle.toString()}',
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Inter',
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 16)),
+                                                )
+                                              : Container(),
+                                          widget.controller.text.isNotEmpty
+                                              ? Container(
+                                                  child: Text(
+                                                    '${widget.controller.text}',
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontFamily: 'Inter',
+                                                        color: const Color(0xff00B134)),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
+                                    )),
+                                Expanded(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  _shareUrl('${widget.controller.text}',loc);
+                                                  // Navigator.pop(context);
+                                                },
+                                                icon: SvgPicture.asset(
+                                                  'assets/images/Shares.svg',
+                                                  color: themeProvider.darkTheme
+                                                      ? Color(0xffACACAC)
+                                                      : Color(0xffACACAC),
+                                                )),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _searchController.text =
+                                                        widget.controller.text;
+                                                  });
+                                                },
+                                                icon: SvgPicture.asset(
+                                                  'assets/images/edit.svg',
+                                                  color: themeProvider.darkTheme
+                                                      ? Color(0xffACACAC)
+                                                      : Color(0xffACACAC),
+                                                )),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  _copyToClipboard(
+                                                      '${widget.controller.text}',loc);
+                                                },
+                                                icon: SvgPicture.asset(
+                                                    'assets/images/copy.svg')),
+                                          ),
+                                        ),
+                                      ],
+                                    ))
+                              ],
+                            ),
+                          ),
+                      ),
+                    ),
+               // ],
+          
+          if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty && basicProvider.autoSuggest ) ...[
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: EdgeInsets.only(left:10,right:10,bottom: 10),
+                      child: GlassPanel(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            
+                            color:themeProvider.darkTheme ? Color(0xff111111).withOpacity(0.5) : Color(0xffEBEBEB),
+                            border: Border.all(color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffD4D4D4))
+                          ),
+                          padding: EdgeInsets.only(bottom: 5),
+                          // margin: EdgeInsets.only(left:10,right:10,bottom: 10),
+                          constraints: BoxConstraints(
+                            maxHeight: 200, // limit max height
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: filteredSuggestions.length,
+                            itemBuilder: (context, index) {
+                              final suggestion = filteredSuggestions[index];
+                          
+                              final queryLower = _currentQuery.toLowerCase();
+                              final suggestionLower = suggestion.toLowerCase();
+                          
+                              final matchIndex = suggestionLower.indexOf(queryLower);
+                          
+                              InlineSpan textSpan;
+                              if (matchIndex != -1 && _currentQuery.isNotEmpty) {
+                                textSpan = TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: suggestion.substring(0, matchIndex),
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: themeProvider.darkTheme ? Colors.white : Colors.black,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: suggestion.substring(matchIndex, matchIndex + _currentQuery.length),
+                                      style:  TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: themeProvider.darkTheme ? Colors.white : Colors.black, //Colors.blue, // highlight color
+                                       // fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: suggestion.substring(matchIndex + _currentQuery.length),
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: themeProvider.darkTheme ? Colors.white.withOpacity(0.5) : Color(0xff333333).withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                textSpan = TextSpan(
+                                  text: suggestion,
+                                  style: TextStyle(
+                                    color: themeProvider.darkTheme ? Colors.white : Colors.black,
+                                  ),
+                                );
+                              }
+                          
+                              return GestureDetector(
+                                onTap: () async {
+                                  // handle tap
+                          String trimmedValue = suggestion.trim();
+                              if(trimmedValue.isNotEmpty){
+                                var url = WebUri(formatUrl(suggestion.trim()));
+                               if (!url.scheme.startsWith("http") &&
+                                   !Util.isLocalizedContent(url)) {
+                                 url = WebUri(
+                                     widget.settings.searchEngine.searchUrl + suggestion);
+                               }
+                               //Navigator.pop(context, url);
+                               // browserModel.updateIsNewTab(false);
+                               if (widget.webViewController != null) {
+                                 widget.webViewController!
+                                     .loadUrl(urlRequest: URLRequest(url: url,
+                                     headers: {
+                                        "Accept-Language": appLocaleProvider.fullLocaleId,
+                                      }
+                                     ));
+                               } else {
+                                 if (mounted) setState(() {});
+                                 print('comes inside new tab');
+                                 //  browserModel.updateIsNewTab(false);
+                                 addNewTab(url: url);
+                                 widget.webViewModel.url = url;
+                          
+                                 // widget.webViewController!.getTitle();
+                               }
+                               //filteredSuggestions = [];
+                               vpnStatusProvider.updateCanShowHomeScreen(false);
+                               Future.delayed(Duration(milliseconds: duration), () {
+                                 Navigator.pop(context, url);
+                               });
+                              }
+                          
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(13.0),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: themeProvider.darkTheme
+                           ? SvgPicture.asset('assets/images/ai-icons/Search_suggestion.svg')
+                           : SvgPicture.asset('assets/images/ai-icons/Search_suggestions_wht.svg'),
+                                      ),
+                                      Expanded(
+                                        child: RichText(
+                                          text: textSpan,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: (){
+                                          setState(() {
+                                            _searchController.text = suggestion;
+                                            if(containsUrl(suggestion)){
+                                              canShowSearchAI = '';
+                                            }else{
+                                              canShowSearchAI= suggestion;
+                                            }
+                                          });
+                                        },
+                                        child: SizedBox(
+                                          child:  themeProvider.darkTheme
+                                            ? SvgPicture.asset('assets/images/ai-icons/arrow_suggestion.svg')
+                                            : SvgPicture.asset('assets/images/ai-icons/arrow_suggestions_wht.svg'),
+                                        ),
+                                      )
+                                     
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-            ],
-
-
-
-
-              canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  GestureDetector(
-                onTap: ()async{
-                  Navigator.pop(context);
-                  bool showWelcomeMessage = true;
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('hasSubmitted', true);
-    bool? hasSubmitted = prefs.getBool('hasSubmitted');
-    setState(() {});
-      showWelcomeMessage = (hasSubmitted ?? false);
-      print("Show welcome page ---------->$hasSubmitted -------  $showWelcomeMessage");
-   
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-     builder: (context){
-
-     return BeldexAIScreen(isWelcomeShown:false ,searchWord:canShowSearchAI); //DraggableAISheet();
-          //return BeldexAiScreen();
-     });
-                },
-                child:
-                Container(
-  height: 60,
-  margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
-  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-  decoration: BoxDecoration(
-    color:  themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
-    // border: Border.all(
-    //   color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
-    // ),
-    borderRadius: BorderRadius.circular(8),
-  ),
-  child: Row(
-    children: [
-      SvgPicture.asset(
-        IconConstants.beldexAILogoSvg,
-        height: 20,
-        width: 25,
-      ),
-      SizedBox(width: 8), // Add spacing between the icon and text
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              canShowSearchAI,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+          
+          
+          
+          
+                    canShowSearchAI != '' || canShowSearchAI.isNotEmpty ?  GestureDetector(
+                      onTap: ()async{
+                        Navigator.pop(context);
+                        bool showWelcomeMessage = true;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setBool('hasSubmitted', true);
+          bool? hasSubmitted = prefs.getBool('hasSubmitted');
+          setState(() {});
+            showWelcomeMessage = (hasSubmitted ?? false);
+            print("Show welcome page ---------->$hasSubmitted -------  $showWelcomeMessage");
+             
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+           builder: (context){
+          
+           return BeldexAIScreen(isWelcomeShown:false ,searchWord:canShowSearchAI); //DraggableAISheet();
+                //return BeldexAiScreen();
+           });
+                      },
+                      child:
+                      Container(
+            height: 60,
+            margin: EdgeInsets.only(left: 10, right: 10, bottom: 8),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            decoration: BoxDecoration(
+          color:  themeProvider.darkTheme ? Color(0xff111111).withOpacity(0.9) : Color(0xffEBEBEB),
+          border: Border.all(color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffD4D4D4))
+          // border: Border.all(
+          //   color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+          // ),
+                 // borderRadius: BorderRadius.circular(8),
             ),
-            Text(loc.askBeldexAI,
-              //'Ask Beldex AI',
-              style: TextStyle(
-                color: Color(0xff00B134),
-                fontSize: 10,
+            child: Row(
+          children: [
+            SvgPicture.asset(
+              IconConstants.beldexAILogoSvg,
+              height: 20,
+              width: 25,
+            ),
+            SizedBox(width: 8), // Add spacing between the icon and text
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    canShowSearchAI,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontFamily: 'Inter'),
+                  ),
+                  Text(loc.askBeldexAI,
+                    //'Ask Beldex AI',
+                    style: TextStyle(
+                      color: Color(0xff00B134),
+                      fontSize: 10,
+                      fontFamily: 'Inter'
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 9.0),
+              child: SvgPicture.asset(
+                'assets/images/ai-icons/arrow.svg',
+                color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),
+                height: 10,
+                width: 20, // Adjust width to ensure flexibility
               ),
             ),
           ],
+            ),
+          ),
+          
+                    ):SizedBox(),
+              ],
+            ),
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 9.0),
-        child: SvgPicture.asset(
-          'assets/images/ai-icons/arrow.svg',
-          height: 10,
-          width: 20, // Adjust width to ensure flexibility
-        ),
-      ),
-    ],
-  ),
-),
-
-              ):SizedBox(),
-        ],
-      ),
+      ],
     );
   }
 
@@ -1721,6 +1776,53 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
     }
   }
 
+
+  Future<void> loadUrlOrCreateTab(WebUri url,LocaleProvider appLocaleProvider) async {
+
+  final webViewModel = widget.webViewModel;
+
+  // Controller already available
+  final controller = webViewModel.webViewController;
+
+  if (controller != null) {
+
+    print("Loading URL in existing controller");
+
+    await controller.loadUrl(
+      urlRequest: URLRequest(
+        url: url,
+        headers: {
+          "Accept-Language": appLocaleProvider.fullLocaleId,
+        },
+      ),
+    );
+
+    return;
+  }
+
+  // Check whether this WebViewModel is already
+  // associated with a browser tab.
+  final tabExists = widget.browserModel.webViewTabs.any(
+    (tab) => tab.webViewModel.uuid == webViewModel.uuid,
+  );
+
+  if (tabExists) {
+
+    print("Tab already exists but controller is not ready");
+
+    // Keep the URL in the existing WebViewModel.
+    webViewModel.url = url;
+
+    return;
+  }
+
+  // No tab exists -> create one.
+  print("No existing tab -> creating new tab");
+
+  addNewTab(url: url);
+}
+
+
   void addNewTab({WebUri? url}) {
     final browserModel = Provider.of<BrowserModel>(context, listen: false);
     final settings = browserModel.getSettings();
@@ -1734,7 +1836,7 @@ if (filteredSuggestions.isNotEmpty && _searchController.text.trim().isNotEmpty &
         print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
-      webViewModel: WebViewModel(url: url,settings: webViewModel.settings),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url,settings: webViewModel.settings),
     ));
   }
 
