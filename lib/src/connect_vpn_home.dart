@@ -18,6 +18,7 @@ import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 // import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/random_node_selection.dart';
+import 'package:beldex_browser/src/tunnel_health_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -30,6 +31,7 @@ import 'package:beldex_browser/src/model/exitnodeRepo.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -76,21 +78,43 @@ Map<String,dynamic> nearest = {};
  var _isRestored = false;
 
 
-  void displayMessages(AppLocalizations appLoc) {
-    showMessage(appLoc.checkingConnection, 0);
-    showMessage(appLoc.belnetServiceStarted, 6);
-    showMessage(appLoc.connectingBelnetdVPN, 5);
-    showMessage(appLoc.prepareDaemonConnection, 7);
+
+ // Latency audit fix: connection phase messages are now driven by the REAL
+  // connection phases (see toggleBelnet) instead of fixed 0/6/5/7-second
+  // timers that had no relationship to what the daemon was doing.
+  void _setPhase(String message, LoadingtickValueProvider progressProvider,
+      double targetProgress) {
+    if (!mounted) return;
+    setState(() {
+      messages
+        ..clear()
+        ..add(message);
+    });
+    final delta = targetProgress - progressProvider.progressValue;
+    if (delta > 0) progressProvider.updateProgressValue(delta);
   }
 
-  void showMessage(String message, int delaySeconds) {
-    Timer(Duration(seconds: delaySeconds), () {
-      setState(() {
-        messages.clear();
-        messages.add(message);
-      });
-    });
+  void _resetProgress(LoadingtickValueProvider progressProvider) {
+    final current = progressProvider.progressValue;
+    if (current != 0) progressProvider.updateProgressValue(-current);
   }
+
+
+  // void displayMessages(AppLocalizations appLoc) {
+  //   showMessage(appLoc.checkingConnection, 0);
+  //   showMessage(appLoc.belnetServiceStarted, 6);
+  //   showMessage(appLoc.connectingBelnetdVPN, 5);
+  //   showMessage(appLoc.prepareDaemonConnection, 7);
+  // }
+
+  // void showMessage(String message, int delaySeconds) {
+  //   Timer(Duration(seconds: delaySeconds), () {
+  //     setState(() {
+  //       messages.clear();
+  //       messages.add(message);
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
@@ -177,6 +201,7 @@ WidgetsBinding.instance.addPostFrameCallback((_) {
 
 
 
+bool _autoConnectStopped = false;
 
 
 
@@ -236,7 +261,7 @@ try{
       if(nearest.isNotEmpty){
               print('USER BAB TWO --> ${nearest}');
         if(isVpnPermit)
-          toggleBelnet(vpnProvider, loadingProvider,appLoc);
+          toggleBelnet(context ,vpnProvider, loadingProvider,appLoc);
                      // print('USER BAB Three --> ${nearest}');
 
        // toggleBelnet(vpnProvider, loadingProvider);
@@ -395,67 +420,380 @@ try{
     }
   }
 
-  bool isLoading = false;
-  int count = 1;
-  Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
-      LoadingtickValueProvider loadingtickValueProvider,AppLocalizations appLoc) async {
-    const totalDuration = Duration(seconds: 20);
-    if (count == 1) {
-      try {
-        count++;
-        final prefs = await SharedPreferences.getInstance();
-        if (_isConnected) {
-          if (mounted) setState(() {});
 
-          if (BelnetLib.isConnected) {
-            var disConnectValue = await BelnetLib.disconnectFromBelnet();
-            vpnStatusProvider.updateValue('Disconnected');
-          } else {
-            setState(() {
-              isLoading = true;
-            });
-            String exitnodeName = prefs.getString('selectedExitNode') ?? '';
-            final result = await BelnetLib.prepareConnection();
-            if (!result) {
-              setState(() {
-                isLoading = false;
-                count = 1;
-              });
-            }
-            if (result) {
-              vpnStatusProvider.updateValue('Connecting...');
-              print('The Exitnode connecting to is ---> $customExitnode');
-              final con = await BelnetLib.connectToBelnet(
-                  exitNode: customExitnode, //exitnodeName, //customExitnode,
-                  upstreamDNS: "9.9.9.9");
-              displayMessages(appLoc);
-              // vpnStatusProvider.updateValue('Connecting...');
-              simulateDelayedProgress(loadingtickValueProvider);
-              Future.delayed(totalDuration, () {
-                if (mounted)
-                  setState(() {
-                    isLoading = false;
-                  });
-                vpnStatusProvider.updateValue('Connected');
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: ((context) => Browser())));
-              });
-              print("connection data value for display ${myExitData[1]}");
-            }
+/// working code
 
-            setState(() {});
-          }
-        } else {
-          if (BelnetLib.isConnected) {
-            BelnetLib.disconnectFromBelnet();
-          }
+  // bool isLoading = false;
+  // int count = 1;
+  // Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
+  //     LoadingtickValueProvider loadingtickValueProvider,AppLocalizations appLoc) async {
+  //   const totalDuration = Duration(seconds: 20);
+  //   if (count == 1) {
+  //     try {
+  //       count++;
+  //       final prefs = await SharedPreferences.getInstance();
+  //       if (_isConnected) {
+  //         if (mounted) setState(() {});
+
+  //         if (BelnetLib.isConnected) {
+  //           var disConnectValue = await BelnetLib.disconnectFromBelnet();
+  //           vpnStatusProvider.updateValue('Disconnected');
+  //         } else {
+  //           setState(() {
+  //             isLoading = true;
+  //           });
+  //           String exitnodeName = prefs.getString('selectedExitNode') ?? '';
+  //           final result = await BelnetLib.prepareConnection();
+  //           if (!result) {
+  //             setState(() {
+  //               isLoading = false;
+  //               count = 1;
+  //             });
+  //           }
+  //           if (result) {
+  //             vpnStatusProvider.updateValue('Connecting...');
+  //             print('The Exitnode connecting to is ---> $customExitnode');
+  //             final con = await BelnetLib.connectToBelnet(
+  //                 exitNode: customExitnode, //exitnodeName, //customExitnode,
+  //                 upstreamDNS: "9.9.9.9");
+  //             displayMessages(appLoc);
+  //             // vpnStatusProvider.updateValue('Connecting...');
+  //             simulateDelayedProgress(loadingtickValueProvider);
+  //             Future.delayed(totalDuration, () {
+  //               if (mounted)
+  //                 setState(() {
+  //                   isLoading = false;
+  //                 });
+  //               vpnStatusProvider.updateValue('Connected');
+  //               Navigator.pushReplacement(context,
+  //                   MaterialPageRoute(builder: ((context) => MainScreen() //Browser()
+  //                   )));
+  //             });
+  //             print("connection data value for display ${myExitData[1]}");
+  //           }
+
+  //           setState(() {});
+  //         }
+  //       } else {
+  //         if (BelnetLib.isConnected) {
+  //           BelnetLib.disconnectFromBelnet();
+  //         }
+  //       }
+  //     } catch (e) {
+  //       print('Exception while checking $e');
+  //     }
+  //   }
+  //   // print('connected exitnode is ---> $exitnodeName');
+  // }
+
+
+
+bool isLoading = false;
+
+  /// Re-entrancy guard for the connect flow. Replaces the old `count`
+  /// int, which left the Connect button permanently dead after a failed
+  /// prepare (it was only reset on one failure path).
+  bool _connecting = false;
+
+  /// Consecutive verified-connect failures; after 2 in a row the local
+  /// bootstrap file is discarded so a stale/corrupt bootstrap self-heals.
+  int _consecutiveConnectFailures = 0;
+
+  // Latency audit fix (sections 3.1/3.2/3.4): the old implementation
+  // declared "Connected" from a fixed 20-second Future.delayed — without
+  // checking the result of connectToBelnet, without consulting the daemon
+  // status, and while passing the possibly-stale `customExitnode` field
+  // instead of the node the user actually selected. On fast networks users
+  // always waited the full 20s; on slow/failed connects the browser opened
+  // with a fully black-holed tunnel ("connected but no internet").
+  //
+  // The flow is now: prepare -> connect (checked) -> waitForTunnelReady()
+  // (daemon status + end-to-end probe) -> only then Connected + navigate.
+  Future toggleBelnet(BuildContext context, VpnStatusProvider vpnStatusProvider,
+      LoadingtickValueProvider loadingtickValueProvider,
+      AppLocalizations appLoc) async {
+    if (_connecting) return;
+    _connecting = true;
+    setState(() {
+      
+    });
+        _autoConnectStopped = false;
+    try {
+      if (!_isConnected) {
+        // Device itself is offline: make sure the tunnel is down.
+        if (BelnetLib.isConnected) {
+          await BelnetLib.disconnectFromBelnet();
         }
-      } catch (e) {
-        print('Exception while checking $e');
+        return;
       }
+
+      if (BelnetLib.isConnected) {
+        // Ported from belnet-app commit df16d27: stop end-to-end health
+        // monitoring and any in-flight status polling together with the
+        // tunnel.
+        _tunnelHealth()?.stop();
+        vpnStatusProvider.cancelPolling();
+        await BelnetLib.disconnectFromBelnet();
+        vpnStatusProvider.updateValue('Disconnected');
+        if (mounted) setState(() {});
+        return;
+      }
+
+      if (mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
+      _resetProgress(loadingtickValueProvider);
+
+      // Audit fix 3.4: always connect to the node that was actually
+      // selected (prefs are the source of truth written by every selection
+      // path), not the `customExitnode` field that was only refreshed by an
+      // un-awaited async call from build().
+      final prefs = await SharedPreferences.getInstance();
+      final exitnodeName = prefs.getString('selectedExitNode') ?? '';
+      final nodeToUse =
+          exitnodeName.isNotEmpty ? exitnodeName : customExitnode;
+      customExitnode = nodeToUse;
+      debugPrint('Connecting to exit node: $nodeToUse');
+
+      _setPhase(appLoc.checkingConnection, loadingtickValueProvider, 0.10);
+
+      bool prepared;
+      try {
+        prepared = await BelnetLib.prepareConnection();
+      } on BootstrapException catch (e) {
+        debugPrint('Bootstrap failed: $e');
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,
+           appLoc.couldnotDownloadBootstrap);
+        return;
+      }
+      if (!prepared) {
+        // VPN permission denied or preparation failed.
+        _failConnect(vpnStatusProvider, loadingtickValueProvider, null);
+        return;
+      }
+
+      vpnStatusProvider.updateValue('Connecting...');
+      _setPhase(appLoc.belnetServiceStarted, loadingtickValueProvider, 0.25);
+
+      final started = await BelnetLib.connectToBelnet(
+          exitNode: nodeToUse, upstreamDNS: "9.9.9.9");
+      if (!started) {
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,
+           appLoc.theBelnetServiceNotStarted);
+        return;
+      }
+
+      _setPhase(appLoc.connectingBelnetdVPN, loadingtickValueProvider, 0.50);
+
+      // Belnet-app df16d27 (audit F1) status polling, now DIAGNOSTIC ONLY.
+      //
+      // FIX for "disconnects after 30 s": the previous version hard-gated
+      // the connect on this poller. When the daemon's status JSON doesn't
+      // match the expected schema (this daemon build's DumpStatus differs
+      // from belnet-app's GetStatus shape), the poller can never report
+      // ready, so every connect timed out at 30 s and disconnected - even
+      // though the tunnel was actually up. That is the exact failure mode
+      // browser commit 6fc6d53 fixed before, so we restore its rule: the
+      // END-TO-END PROBE is the only authoritative gate. The poller now
+      // runs alongside purely for fast feedback and diagnostics; when it
+      // reports ready early (typically 4-8 s) we bump the progress bar,
+      // and when it can't parse readiness we only log the daemon state.
+      bool daemonReportedReady = false;
+      vpnStatusProvider.startStatusPolling(
+        getStatus: () async {
+          final s = await BelnetLib.getSpeedStatus;
+          return s;
+        },
+        onConnected: () {
+          daemonReportedReady = true;
+          print('Daemon reports exit ready (status polling)');
+          // Nice-to-have progress bump; never gates the flow.
+          _setPhase(appLoc.connectingBelnetdVPN, loadingtickValueProvider, 0.75);
+        },
+        onFailed: (reason) {
+          // NOT fatal - diagnostic only.
+          print('Daemon status polling inconclusive: $reason');
+        },
+        timeout: const Duration(seconds: 30),
+      );
+
+      // AUTHORITATIVE gate: real packets through the tunnel. 90 s cap: a
+      // FIRST connect on a fresh install has to bootstrap and build paths
+      // from an empty network DB, which can take well over 40 s. Verified
+      // connects on warm installs typically finish in a few seconds.
+      final ready = await BelnetLib.waitForTunnelReady(
+          timeout: const Duration(seconds: 60),
+           shouldCancel: () {
+    return !_isConnected; //|| _autoConnectStopped;
+  },
+          );
+      vpnStatusProvider.cancelPolling();
+      print(
+          'Connect result: probe=$ready, daemonReportedReady=$daemonReportedReady');
+
+      print(
+  'AFTER waitForTunnelReady: '
+  '_isConnected=$_isConnected '
+  '_autoConnectStopped=$_autoConnectStopped',
+);
+
+// Internet was disabled while auto-connect was running.
+// if (!_isConnected || _autoConnectStopped) {
+//   print('AUTO CONNECT STOPPED BECAUSE INTERNET WAS LOST');
+
+//   vpnStatusProvider.updateValue('Disconnected');
+
+//   if (mounted) {
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
+
+//   return;
+// }
+
+      if (!ready) {
+        _consecutiveConnectFailures++;
+        await BelnetLib.disconnectFromBelnet();
+        if (_consecutiveConnectFailures >= 2) {
+          // Self-heal a stale/corrupt bootstrap (audit fix 2).
+          await BelnetLib.resetBootstrap();
+          _consecutiveConnectFailures = 0;
+        }
+        // Exact belnet-app df16d27 failure message; shown only on a GENUINE
+        // failure (no packets through the tunnel within 90 s).
+        _failConnect(vpnStatusProvider, loadingtickValueProvider,appLoc.couldNotEstablishConnection);
+        return;
+      }
+
+      _consecutiveConnectFailures = 0;
+      _setPhase(appLoc.prepareDaemonConnection, loadingtickValueProvider, 1.0);
+      vpnStatusProvider.updateValue('Connected');
+
+      // Ported from belnet-app commit df16d27 (audit F2): start end-to-end
+      // health monitoring. If the tunnel silently blackholes mid-session
+      // (exit dies, handover breaks paths), try one remap of the current
+      // exit and otherwise disconnect with a clear message instead of
+      // leaving a green UI over a dead tunnel.
+      _tunnelHealth()?.start(onBroken: () {
+        _recoverBrokenTunnel(vpnStatusProvider,context);
+      });
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+
+  //        if (!_isConnected || _autoConnectStopped) {
+  //   print(
+  //     'NOT NAVIGATING - INTERNET WAS LOST DURING AUTO CONNECT',
+  //   );
+
+  //   return;
+  // }
+ 
+  if(_isConnected && ready)
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => MainScreen())));
+      }
+    } catch (e) {
+      debugPrint('Exception while connecting: $e');
+      _failConnect(vpnStatusProvider, loadingtickValueProvider, null);
+    } finally {
+      _connecting = false;
     }
-    // print('connected exitnode is ---> $exitnodeName');
   }
+
+  void _failConnect(VpnStatusProvider vpnStatusProvider,
+      LoadingtickValueProvider loadingtickValueProvider, String? message) {
+    vpnStatusProvider.updateValue('Disconnected');
+    _resetProgress(loadingtickValueProvider);
+    if (!mounted) return;
+    setState(() {
+      isLoading = false;
+      messages.clear();
+    });
+    if (message != null) {
+      // TODO(l10n): move these connection-failure messages into the arb files.
+      showMessage(message);
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text(message)));
+    }
+  }
+
+  /// Safe lookup of the [TunnelHealthProvider]: returns null when the widget
+  /// tree is gone (e.g. we already navigated away) instead of throwing.
+  TunnelHealthProvider? _tunnelHealth() {
+    if (!mounted) return null;
+    try {
+      return Provider.of<TunnelHealthProvider>(context, listen: false);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Ported from belnet-app commit df16d27 (audit F2): recovery for a tunnel
+  /// that reports connected but cannot reach the internet (health probe
+  /// failed twice). Strategy: re-map the current exit once and re-probe; if
+  /// that doesn't restore traffic, disconnect cleanly so the user sees the
+  /// true state instead of "Connected" with no internet.
+  bool _recoveryInProgress = false;
+
+  Future<void> _recoverBrokenTunnel(VpnStatusProvider vpnStatusProvider,BuildContext context) async {
+    final loc = AppLocalizations.of(context)!;
+    if (_recoveryInProgress) return;
+    _recoveryInProgress = true;
+    final health = _tunnelHealth();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final exitNode = prefs.getString('selectedExitNode') ?? customExitnode;
+      debugPrint('Exit node unreachable - attempting recovery via $exitNode');
+      showMessage('Exit node unreachable, reconnecting...');
+
+      // Attempt 1: remap the current exit and verify with the real
+      // end-to-end probe (browser adaptation: waitForTunnelReady instead of
+      // a single delayed probe).
+      await BelnetLib.unmapExitNode(exitNode);
+      final recovered = await BelnetLib.waitForTunnelReady(
+          timeout: const Duration(seconds: 30));
+      if (recovered) {
+        debugPrint('Recovery successful: exit remapped');
+        await health?.probeNow();
+        return;
+      }
+
+      // Recovery failed: disconnect so the UI reflects reality.
+      health?.stop();
+     // await BelnetLib.disconnectFromBelnet();
+     // vpnStatusProvider.updateValue('Disconnected');
+      if (mounted) setState(() {});
+     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> ConnectVpnHome()));
+      showMessage(loc.unprecidentedTrafficExitNodeError
+         // 'Connection to the exit node was lost. Please reconnect or choose another node.'
+          );
+      
+    } catch (e) {
+      debugPrint('Tunnel recovery failed: $e');
+    } finally {
+      _recoveryInProgress = false;
+    }
+  }
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
 
   // Future toggleBelnet(VpnStatusProvider vpnStatusProvider,
   //     LoadingtickValueProvider loadingtickValueProvider) async {
@@ -494,31 +832,31 @@ try{
   //   }
   //   // print('connected exitnode is ---> $exitnodeName');
   // }
-  late Timer timers;
-  void simulateDelayedProgress(
-      LoadingtickValueProvider loadingtickValueProvider) {
-    const totalDuration = Duration(seconds: 20);
-    const updateInterval = const Duration(milliseconds: 100);
+  //late Timer timers;
+  // void simulateDelayedProgress(
+  //     LoadingtickValueProvider loadingtickValueProvider) {
+  //   const totalDuration = Duration(seconds: 20);
+  //   const updateInterval = const Duration(milliseconds: 100);
 
-    int totalTicks =
-        totalDuration.inMilliseconds ~/ updateInterval.inMilliseconds;
+  //   int totalTicks =
+  //       totalDuration.inMilliseconds ~/ updateInterval.inMilliseconds;
 
-    timers = Timer.periodic(updateInterval, (timer) {
-      if (loadingtickValueProvider.progressValue < 1.0) {
-        setState(() {
-          loadingtickValueProvider.updateProgressValue(1.0 / totalTicks);
-        });
-      } else {
-        timer.cancel();
-      }
-    });
-  }
+  //   timers = Timer.periodic(updateInterval, (timer) {
+  //     if (loadingtickValueProvider.progressValue < 1.0) {
+  //       setState(() {
+  //         loadingtickValueProvider.updateProgressValue(1.0 / totalTicks);
+  //       });
+  //     } else {
+  //       timer.cancel();
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
     animationController.dispose();
     _connectivitySubscription.cancel();
-    timers.cancel();
+   // timers.cancel();
     // WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
