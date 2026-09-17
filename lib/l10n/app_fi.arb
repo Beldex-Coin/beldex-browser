@@ -186,6 +186,104 @@
   "searchEngineUpdated": "Hakukone päivitetty onnistuneesti!",
 
 
+
+"searchusing": "Hae käyttämällä",
+  "addTabToNewGroup": "Lisää välilehti uuteen ryhmään",
+  "invitePeople": "Kutsu ihmisiä",
+  "uploadFromGallery": "Lataa galleriasta",
+  "noQRCodeFound": "kuvasta ei löytynyt QR-koodia",
+  "searchBarPosition": "Hakupalkin sijainti",
+  "choosethePosition": "Valitse hakupalkin sijainti",
+  "iPAddress": "IP-osoite",
+   "vpnIP": "VPN-IP",
+   "myIP": "Oma IP",
+   "marketUpdate": "Markkinapäivitys",
+   "searchYourTabs": "Hae välilehtiäsi",
+   "newTabGroup": "Uusi välilehtiryhmä",
+   "selectTab": "Valitse välilehti",
+   "selectTabs": "Valitse välilehdet",
+   "closeAllTabs": "Sulje kaikki välilehdet",
+   "deleteTabGroup": "Poista välilehtiryhmä",
+   "rename": "Nimeä uudelleen",
+   "renameGroup": "Nimeä ryhmä uudelleen",
+   "ungroupTab": "Poista välilehti ryhmästä",
+   "deleteGroup": "Poista ryhmä",
+   "addToTabGroup": "Lisää välilehtiryhmään",
+   "editGroupName": "Muokkaa ryhmän nimeä",
+   "editGroupColor": "Muokkaa ryhmän väriä",
+   "closeTab": "Close tab",
+   "doYouWantToUngroup": "Do you really want to ungroup this tab group?",
+   "ungroupTabGroup": "Ungroup tab group",
+   "ungroup": "Ungroup",
+   "deleteGroup": "Delete Group",
+   "deletetabGroup": "Poista välilehtiryhmä",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Lisää",
+   "tabs": "Välilehdet",
+   "done": "Valmis",
+   "create": "Luo",
+   "groupColor": "Ryhmän väri",
+   "groupName": "Ryhmän nimi",
+   "newTabGroup": "Uusi välilehtiryhmä",
+   "addtoNewTabGroup": "Lisää uuteen välilehtiryhmään",
+   "tabGroups": "Välilehtiryhmät",
+   "tabGroup": "Välilehtiryhmä",
+   "tabsSelected": "Välilehtiä valittu",
+   "privateResearch": "esim. Yksityinen tutkimus",
+   "deselectAll": "Poista kaikkien valinta",
+   "selected": "Valittu",
+
+
+   "close": "Sulje",
+   "top": "ylhäällä",
+   "bottom": "alhaalla",
+
+
+
+  "closeAllTabsConfirmation":"Tämä toiminto sulkee pysyvästi kaikki {tabCount} välilehteä ryhmässä ”{tabGroupName}”. Tätä toimintoa ei voi kumota", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Solmun vaihtaminen..",
+"freeenameWebDomain" : "FreeName Web3-domein",
+"enableFreeNameWeb" : "FreeName Web3-domeinondersteuning inschakelen",
+"couldnotDownloadBootstrap" : "Het Belnet-bootstrapbestand kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw",
+"couldNotEstablishConnection" : "Er kon geen Belnet-verbinding tot stand worden gebracht. Probeer het opnieuw",
+"theBelnetServiceNotStarted": "De Belnet-service kon niet worden gestart. Probeer het opnieuw",
+"exitNodeUnreachable" : "Uitgangsknooppunt onbereikbaar, opnieuw verbinden",
+
+
+"tab": "Välilehti",
+"ungroupTabs": "Poista välilehtien ryhmittely",
+"closeGroup": "Sulje ryhmä",
+"ungroupSelectedTabs": "Haluatko varmasti poistaa valitut välilehdet ryhmästä ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Vahvistusviesti, joka näytetään, kun valitut välilehdet poistetaan välilehtiryhmästä",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
 "beldexIsAnEcosystem": "Beldex on hajautettujen ja luottamuksellisuutta säilyttävien sovellusten ekosysteemi. Beldex-selain on yksi tämän ekosysteemin sovelluksista, johon kuuluvat myös esimerkiksi BChat, BelNet ja Beldex-protokolla. Beldex-selain on porttisi saumattomaan ja luottamukselliseen verkkokokemukseen, jossa tietosi pysyvät vain sinun hallussasi. Vahvalle lohkoketjuinfrastruktuurille rakennettu Beldex-selain takaa käyttäjilleen luottamuksellisuuden ja anonymiteetin.",
 "atBeldex": " \n Beldexillä uskomme yksilöiden voimaannuttamiseen antamalla heille perustavanlaatuisen oikeuden hallita digitaalista jalanjälkeään. Beldex-selain on suunniteltu tarjoamaan turvallinen ja luottamuksellinen verkkoympäristö, jossa käyttäjät voivat viestiä ja olla vuorovaikutuksessa digitaalisen maailman kanssa.",
 "titlebns": "\nBNS",

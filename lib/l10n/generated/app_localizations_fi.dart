@@ -531,6 +531,187 @@ class AppLocalizationsFi extends AppLocalizations {
   String get searchEngineUpdated => 'Hakukone päivitetty onnistuneesti!';
 
   @override
+  String get searchusing => 'Hae käyttämällä';
+
+  @override
+  String get addTabToNewGroup => 'Lisää välilehti uuteen ryhmään';
+
+  @override
+  String get invitePeople => 'Kutsu ihmisiä';
+
+  @override
+  String get uploadFromGallery => 'Lataa galleriasta';
+
+  @override
+  String get noQRCodeFound => 'kuvasta ei löytynyt QR-koodia';
+
+  @override
+  String get searchBarPosition => 'Hakupalkin sijainti';
+
+  @override
+  String get choosethePosition => 'Valitse hakupalkin sijainti';
+
+  @override
+  String get iPAddress => 'IP-osoite';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'Oma IP';
+
+  @override
+  String get marketUpdate => 'Markkinapäivitys';
+
+  @override
+  String get searchYourTabs => 'Hae välilehtiäsi';
+
+  @override
+  String get newTabGroup => 'Uusi välilehtiryhmä';
+
+  @override
+  String get selectTab => 'Valitse välilehti';
+
+  @override
+  String get selectTabs => 'Valitse välilehdet';
+
+  @override
+  String get deleteTabGroup => 'Poista välilehtiryhmä';
+
+  @override
+  String get rename => 'Nimeä uudelleen';
+
+  @override
+  String get renameGroup => 'Nimeä ryhmä uudelleen';
+
+  @override
+  String get ungroupTab => 'Poista välilehti ryhmästä';
+
+  @override
+  String get deleteGroup => 'Delete Group';
+
+  @override
+  String get addToTabGroup => 'Lisää välilehtiryhmään';
+
+  @override
+  String get editGroupName => 'Muokkaa ryhmän nimeä';
+
+  @override
+  String get editGroupColor => 'Muokkaa ryhmän väriä';
+
+  @override
+  String get closeTab => 'Close tab';
+
+  @override
+  String get doYouWantToUngroup => 'Do you really want to ungroup this tab group?';
+
+  @override
+  String get ungroupTabGroup => 'Ungroup tab group';
+
+  @override
+  String get ungroup => 'Ungroup';
+
+  @override
+  String get deletetabGroup => 'Poista välilehtiryhmä';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Lisää';
+
+  @override
+  String get tabs => 'Välilehdet';
+
+  @override
+  String get done => 'Valmis';
+
+  @override
+  String get create => 'Luo';
+
+  @override
+  String get groupColor => 'Ryhmän väri';
+
+  @override
+  String get groupName => 'Ryhmän nimi';
+
+  @override
+  String get addtoNewTabGroup => 'Lisää uuteen välilehtiryhmään';
+
+  @override
+  String get tabGroups => 'Välilehtiryhmät';
+
+  @override
+  String get tabGroup => 'Välilehtiryhmä';
+
+  @override
+  String get tabsSelected => 'Välilehtiä valittu';
+
+  @override
+  String get privateResearch => 'esim. Yksityinen tutkimus';
+
+  @override
+  String get deselectAll => 'Poista kaikkien valinta';
+
+  @override
+  String get selected => 'Valittu';
+
+  @override
+  String get close => 'Sulje';
+
+  @override
+  String get top => 'ylhäällä';
+
+  @override
+  String get bottom => 'alhaalla';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Tämä toiminto sulkee pysyvästi kaikki $tabCount välilehteä ryhmässä ”$tabGroupName”. Tätä toimintoa ei voi kumota';
+  }
+
+  @override
+  String get changingNode => 'Solmun vaihtaminen..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3-domein';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3-domeinondersteuning inschakelen';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Het Belnet-bootstrapbestand kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw';
+
+  @override
+  String get couldNotEstablishConnection => 'Er kon geen Belnet-verbinding tot stand worden gebracht. Probeer het opnieuw';
+
+  @override
+  String get theBelnetServiceNotStarted => 'De Belnet-service kon niet worden gestart. Probeer het opnieuw';
+
+  @override
+  String get exitNodeUnreachable => 'Uitgangsknooppunt onbereikbaar, opnieuw verbinden';
+
+  @override
+  String get tab => 'Välilehti';
+
+  @override
+  String get ungroupTabs => 'Poista välilehtien ryhmittely';
+
+  @override
+  String get closeGroup => 'Sulje ryhmä';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Haluatko varmasti poistaa valitut välilehdet ryhmästä \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex on hajautettujen ja luottamuksellisuutta säilyttävien sovellusten ekosysteemi. Beldex-selain on yksi tämän ekosysteemin sovelluksista, johon kuuluvat myös esimerkiksi BChat, BelNet ja Beldex-protokolla. Beldex-selain on porttisi saumattomaan ja luottamukselliseen verkkokokemukseen, jossa tietosi pysyvät vain sinun hallussasi. Vahvalle lohkoketjuinfrastruktuurille rakennettu Beldex-selain takaa käyttäjilleen luottamuksellisuuden ja anonymiteetin.';
 
   @override
