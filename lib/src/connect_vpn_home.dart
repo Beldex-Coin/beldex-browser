@@ -119,19 +119,17 @@ Map<String,dynamic> nearest = {};
   @override
   void initState() {
      super.initState();
-    _connectivity = Connectivity();
-    _connectivitySubscription = _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((event) {
-      if (event.contains(ConnectivityResult.none)) {
-        setState(() {
-          _isConnected = false;
-        });
-      } else {
-        setState(() {
-          _isConnected = true;
-        });
-      }
-    });
+     _connectivity = Connectivity();
+
+  // Check connectivity immediately when the screen launches
+  _checkInitialConnectivity();
+
+  // Listen for future connectivity changes
+  _connectivitySubscription =
+      _connectivity.onConnectivityChanged.listen((event) {
+    _updateConnectivity(event);
+  });
+
     animationController = AnimationController(vsync: this);
     animationController.addListener(() {
       if (animationController.value == 1) {
@@ -142,7 +140,7 @@ Map<String,dynamic> nearest = {};
     });
 
     final basicProvider = Provider.of<BasicProvider>(context, listen: false);
-    checkInternetConnection();
+   // checkInternetConnection();
     //getExitNodeData();
 
 getNodeInitialSelection(basicProvider,context);
@@ -200,10 +198,51 @@ WidgetsBinding.instance.addPostFrameCallback((_) {
 
 
 
+int flag = 0;
+
+Future<void> _checkInitialConnectivity() async {
+  final result = await _connectivity.checkConnectivity();
+
+  if (!mounted) return;
+
+  _updateConnectivity(result);
+}
 
 bool _autoConnectStopped = false;
 
+void _updateConnectivity(List<ConnectivityResult> result)async {
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+    final loadingtickValueProvider = Provider.of<LoadingtickValueProvider>(context,listen: false);
+  final isConnected =
+      result.contains(ConnectivityResult.wifi) ||
+      result.contains(ConnectivityResult.mobile);
 
+  if (_isConnected != isConnected) {
+    setState(() {
+      _isConnected = isConnected;
+    });
+  }
+  if(!_isConnected && flag == 0){
+    setState(() {
+      flag++;
+     _autoConnectStopped = true;
+    });
+
+ _tunnelHealth()?.stop();
+        vpnStatusProvider.cancelPolling();
+        await BelnetLib.disconnectFromBelnet();
+        vpnStatusProvider.updateValue('Disconnected');
+        _resetProgress(loadingtickValueProvider);
+ // if (BelnetLib.isConnected) {
+ //SystemNavigator.pop();
+         // await BelnetLib.disconnectFromBelnet();
+     //   }
+  }else{
+    setState(() {
+      flag = 0;
+    });
+  }
+}
 
 
 
