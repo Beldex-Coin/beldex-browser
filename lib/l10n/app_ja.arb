@@ -188,6 +188,106 @@
 
 
 
+
+ "searchusing": "検索方法",
+  "addTabToNewGroup": "新しいグループにタブを追加",
+  "invitePeople": "ユーザーを招待",
+  "uploadFromGallery": "ギャラリーからアップロード",
+  "noQRCodeFound": "画像にQRコードが見つかりません",
+  "searchBarPosition": "検索バーの位置",
+  "choosethePosition": "検索バーの位置を選択します。",
+  "iPAddress": "IPアドレス",
+   "vpnIP": "VPN IP",
+   "myIP": "マイIP",
+   "marketUpdate": "マーケットアップデート",
+   "searchYourTabs": "タブを検索",
+   "newTabGroup": "新しいタブグループ",
+   "selectTab": "タブを選択",
+   "selectTabs": "タブを選択",
+   "closeAllTabs": "すべてのタブを閉じる",
+   "deleteTabGroup": "タブグループを削除",
+   "rename": "名前を変更",
+   "renameGroup": "グループ名を変更",
+   "ungroupTab": "タブのグループ化を解除",
+   "deleteGroup": "グループを削除",
+   "addToTabGroup": "タブグループに追加",
+   "editGroupName": "グループ名を編集",
+   "editGroupColor": "グループの色を編集",
+   "closeTab": "タブを閉じる",
+   "doYouWantToUngroup": "このタブグループのグループを解除しますか？",
+   "ungroupTabGroup": "タブグループのグループ解除",
+   "ungroup": "グループ解除",
+   "deleteGroup": "グループの削除",
+   "deletetabGroup": "タブグループの削除",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "追加先",
+   "tabs": "タブ",
+   "done": "完了",
+   "create": "作成",
+   "groupColor": "グループの色",
+   "groupName": "グループ名",
+   "newTabGroup": "新しいタブグループ",
+   "addtoNewTabGroup": "新しいタブグループに追加",
+   "tabGroups": "タブグループ一覧",
+   "tabGroup": "タブグループ",
+   "tabsSelected": "選択済みのタブ",
+   "privateResearch": "例：プライベートリサーチ",
+   "deselectAll": "すべて選択解除",
+
+   "selected":"選択済み", 
+
+
+   "close": "閉じる",
+
+   "top": "上",
+"bottom": "下",
+
+
+
+ "closeAllTabsConfirmation": "この操作を行うと、「{tabGroupName}」内の{tabCount}個のタブがすべて完全に閉じられます。この操作は元に戻せません。",
+"@closeAllTabsConfirmation": {
+  "description": "タブグループ内のすべてのタブを閉じる際の確認メッセージ",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "ノードの変更..",
+"freeenameWebDomain": "FreeName Web3ドメイン",
+"enableFreeNameWeb": "FreeName Web3ドメインのサポートを有効にする",
+"couldnotDownloadBootstrap" : "Belnetブートストラップファイルをダウンロードできませんでした。接続を確認して、もう一度お試しください",
+"couldNotEstablishConnection" : "Belnetへの接続を確立できませんでした。もう一度お試しください",
+"theBelnetServiceNotStarted": "Belnetサービスを開始できませんでした。もう一度お試しください",
+"exitNodeUnreachable" : "終了ノードに到達できません。再接続します",
+
+
+
+
+
+"tab": "タブ",
+"ungroupTabs": "タブのグループ化を解除",
+"closeGroup": "グループを閉じる",
+"ungroupSelectedTabs": "${tabGroupName} から選択したタブのグループ化を解除してもよろしいですか？",
+"@ungroupSelectedTabs": {
+  "description": "タブグループから選択したタブのグループ化を解除するときの確認メッセージ",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex は、分散型でプライバシーを保護するアプリケーションのエコシステムです。Beldex ブラウザアプリは、このエコシステムの一部であり、BChat、BelNet、Beldex プロトコルなどのアプリも含まれています。Beldex ブラウザは、シームレスでプライベートなオンライン体験へのゲートウェイであり、あなたのデータはあなただけのものとして保護されます。堅牢なブロックチェーンインフラ上に構築された Beldex ブラウザは、ユーザーのプライバシーと匿名性を保証します。",
 "atBeldex": " \n Beldex では、個人がデジタルフットプリントを管理する基本的な権利を持つことを重視しています。Beldex ブラウザは、安全でプライベートなオンライン環境を提供し、ユーザーがデジタル世界と安全にコミュニケーションし、相互作用できるよう設計されています。",
 "titlebns": "\nBNS",
