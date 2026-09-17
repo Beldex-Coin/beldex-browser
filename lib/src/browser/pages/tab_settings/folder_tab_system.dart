@@ -1292,15 +1292,17 @@ barrierColor:  themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).wit
                      SizedBox(width: 10,),
                      //Spacer(),
                      //SizedBox(width: 10,),
-                     Text(loc.deleteTabGroup.toUpperCase()
-          ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
-        ),
+                     Expanded(
+                       child: Text(loc.deleteTabGroup.toUpperCase(),overflow: TextOverflow.ellipsis,maxLines: 1
+                                 ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600, ),
+                               ),
+                     ),
         SizedBox(width: 15,)
                   ],
                 ),
                 SizedBox(height: 14,),
-                Text(
-                  '${loc.thisActionWillPermenantClose} ${group.tabs.length > 1 ? "all ${group.tabs.length} tabs" : "tab"} ${loc.inside} "${group.name}". ${loc.thisCannotBeUndone}.',
+                Text('${loc.closeAllTabsConfirmation(group.tabs.length,group.name)}',
+                  
                   style: TextStyle(
                         fontSize:16,
                         color:themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff737373)
@@ -1440,15 +1442,17 @@ barrierColor:  themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).wit
                      SizedBox(width: 10,),
                      //Spacer(),
                      //SizedBox(width: 10,),
-                     Text(loc.deleteTabGroup.toUpperCase()
-          ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
-        ),
+                     Expanded(
+                       child: Text(loc.deleteTabGroup.toUpperCase(),overflow: TextOverflow.ellipsis,maxLines: 1
+                                 ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
+                               ),
+                     ),
         SizedBox(width: 15,)
                   ],
                 ),
                 SizedBox(height: 14,),
-                Text(
-                  '${loc.thisActionWillPermenantClose} ${group.tabs.length > 1 ? "all ${group.tabs.length} tabs" : "tab"} ${loc.inside} "${group.name}". ${loc.thisCannotBeUndone}.',
+                Text('${loc.closeAllTabsConfirmation(group.tabs.length,group.name)}',
+                  //'${loc.thisActionWillPermenantClose} ${group.tabs.length > 1 ? "all ${group.tabs.length} tabs" : "tab"} ${loc.inside} "${group.name}". ${loc.thisCannotBeUndone}.',
                   style: TextStyle(
                         fontSize:16,
                         color:themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff737373)
@@ -1556,9 +1560,11 @@ Future<void> confirmUngroupAllTabs(
                      ),
                      //Spacer(),
                      SizedBox(width: 10,),
-                     Text(loc.ungroupTabGroup.toUpperCase()
-          ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
-        ),
+                     Expanded(
+                       child: Text(loc.ungroupTabGroup.toUpperCase(),overflow: TextOverflow.ellipsis,maxLines: 1
+                                 ,style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
+                               ),
+                     ),
         SizedBox(width: 15,)
                   ],
                 ),
@@ -1682,7 +1688,7 @@ class _GroupScreenState
     final FocusNode _groupNameFocusNode = FocusNode();
 
  final colors = [
-    Color(0xffEBEBEB),
+   // Color(0xffEBEBEB),
     Color(0xff4ED971),
     Color(0xff4EAFFF),
     Color(0xffBB70F9),
@@ -1817,10 +1823,13 @@ void initState() {
                     GestureDetector(
           
                       onTap: () {
-                       
+                       print('SELECTED TAB INSIDE ');
                         /// EXIT SELECTION MODE
+                        setState(() {
+                          
+                        });
                         if (provider.selectionMode) {
-          
+          print('SELECTED TAB INSIDE 1');
                          // setState(() {
           
                             provider.selectionMode =
@@ -1832,7 +1841,7 @@ void initState() {
           
                           return;
                         }
-          
+          print('SELECTED TAB INSIDE 2');
                         Navigator.pop(
                           context,
                         );
@@ -1857,7 +1866,7 @@ void initState() {
                     Expanded(
                               child: provider.selectionMode
                             ? Text(
-                                "${provider.selectedTabs.length} selected",
+                                "${provider.selectedTabs.length} ${loc.selected}",
                                 style: TextStyle(
                                   color: themeProvider.darkTheme ? Colors.white : Colors.black,
                                   fontSize: 18,
@@ -2012,7 +2021,8 @@ void initState() {
                             "select_tabs") {
           
                           setState(() {
-          
+
+                          isEditColorEnabled = false;
                             provider.selectionMode =
                                 true;
                           });
@@ -2023,6 +2033,8 @@ void initState() {
                             "select_all") {
           
                           setState(() {
+        
+                          isEditColorEnabled = false;
           
                             if (provider.selectedTabs
                                     .length ==
@@ -2127,7 +2139,10 @@ void initState() {
                         /// DELETE GROUP
                         else if (value ==
                             "delete_group") {
-                          
+                          setState(() {
+                            
+                          });
+                          isEditColorEnabled = false;
                           confirmDeleteGroupScreen(context,widget.group,loc);
                           // Navigator.pop(
                           //   context,
@@ -2141,6 +2156,10 @@ void initState() {
           
                         if(value == "ungroup_selected_tabs"){
                           print('UNGROUP is clicked in this popup');
+                          setState(() {
+                            
+                          });
+                          isEditColorEnabled = false;
                             if (provider.selectedTabs.isEmpty) {
                                  return;
                              }
@@ -2404,7 +2423,7 @@ void initState() {
           
                 ? "${loc.ungroupTab}"
           
-                : "Ungroup tabs", style:TextStyle(fontSize: 14,fontFamily: 'Inter',color:provider.selectedTabs.isEmpty ? themeProvider.darkTheme ? Color(0xffEBEBEB).withOpacity(0.3) :Color(0xff0B0B0B).withOpacity(0.3) : themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                : "${loc.ungroupTabs}", style:TextStyle(fontSize: 14,fontFamily: 'Inter',color:provider.selectedTabs.isEmpty ? themeProvider.darkTheme ? Color(0xffEBEBEB).withOpacity(0.3) :Color(0xff0B0B0B).withOpacity(0.3) : themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),overflow: TextOverflow.ellipsis,maxLines: 1,),
                               ),
                             ]),
                       ),
@@ -2580,7 +2599,7 @@ void initState() {
                                                       :const Color(0xff282836)),
                                                       SizedBox(width: 8,),
                               Expanded(
-                                child: Text("Close group", style:TextStyle(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                                child: Text(loc.closeGroup, style:TextStyle(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),overflow: TextOverflow.ellipsis,maxLines: 1,),
                               ),
                             ]),
                       ),
@@ -3008,15 +3027,16 @@ Future<void> confirmUngroupSelectedTabs(
                      ),
                      //Spacer(),
                      SizedBox(width: 10,),
-                     Text(loc.ungroupTabGroup.toUpperCase(),
-          style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
-        ),
+                     Expanded(
+                       child: Text(loc.ungroupTabGroup.toUpperCase(),overflow: TextOverflow.ellipsis,maxLines: 1,
+                                 style: TextStyle(fontFamily: 'Conthrax',fontSize: 14,fontWeight: FontWeight.w600),
+                               ),
+                     ),
         SizedBox(width: 15,)
                   ],
                 ),
                 SizedBox(height: 14,),
-                Text(
-                  "Do you really want to upgroup selected tabs from ${group.name}?",
+                Text(loc.ungroupSelectedTabs(group.name),
                 ),
                 SizedBox(height: 14),
                GestureDetector(
@@ -3164,7 +3184,7 @@ Future<void> showCreateGroupDialog({
       final FocusNode focusNode = FocusNode();
 
  final colors = [
-    Color(0xffEBEBEB),
+   // Color(0xffEBEBEB),
     Color(0xff4ED971),
     Color(0xff4EAFFF),
     Color(0xffBB70F9),
@@ -3172,7 +3192,7 @@ Future<void> showCreateGroupDialog({
     Color(0xffE3AD2F),
   ];
 
-  Color selectedColor = Colors.blue;
+  Color selectedColor = Color(0xff4ED971);
 
   await showDialog(
     barrierColor:themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8) ,
@@ -3450,8 +3470,8 @@ final loc = AppLocalizations.of(context)!;
 
           return AlertDialog(
 
-            title: Text(
-              "Create Tab Group",
+            title: Text(loc.newTabGroup
+              //"Create Tab Group",
             ),
 
             shape:
@@ -3473,9 +3493,9 @@ final loc = AppLocalizations.of(context)!;
                       controller,
 
                   decoration:
-                      const InputDecoration(
-                    hintText:
-                        "Group Name",
+                       InputDecoration(
+                    hintText:loc.groupName,
+                       
                     border:
                         OutlineInputBorder(),
                   ),
@@ -3559,9 +3579,7 @@ final loc = AppLocalizations.of(context)!;
                   );
                 },
 
-                child: const Text(
-                  "Cancel",
-                ),
+                child:  Text(loc.cancel ),
               ),
 
               ElevatedButton(
@@ -3588,8 +3606,7 @@ final loc = AppLocalizations.of(context)!;
                   );
                 },
 
-                child: const Text(
-                  "Create",
+                child: Text(loc.create
                 ),
               ),
             ],
@@ -4427,7 +4444,7 @@ Future<void> showEditGroupDialog({
   );
 
   final colors = [
-    Color(0xffEBEBEB),
+   // Color(0xffEBEBEB),
     Color(0xff4ED971),
     Color(0xff4EAFFF),
     Color(0xffBB70F9),
