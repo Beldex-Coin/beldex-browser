@@ -531,6 +531,187 @@ class AppLocalizationsTh extends AppLocalizations {
   String get searchEngineUpdated => 'อัปเดตเครื่องมือค้นหาเรียบร้อยแล้ว!';
 
   @override
+  String get searchusing => 'ค้นหาโดยใช้';
+
+  @override
+  String get addTabToNewGroup => 'เพิ่มแท็บไปยังกลุ่มใหม่';
+
+  @override
+  String get invitePeople => 'เชิญผู้คน';
+
+  @override
+  String get uploadFromGallery => 'อัปโหลดจากแกลเลอรี';
+
+  @override
+  String get noQRCodeFound => 'ไม่พบรหัส QR ในรูปภาพ';
+
+  @override
+  String get searchBarPosition => 'ตำแหน่งแถบค้นหา';
+
+  @override
+  String get choosethePosition => 'เลือกตำแหน่งของแถบค้นหา';
+
+  @override
+  String get iPAddress => 'ที่อยู่ IP';
+
+  @override
+  String get vpnIP => 'IP ของ VPN';
+
+  @override
+  String get myIP => 'IP ของฉัน';
+
+  @override
+  String get marketUpdate => 'อัปเดตตลาด';
+
+  @override
+  String get searchYourTabs => 'ค้นหาแท็บของคุณ';
+
+  @override
+  String get newTabGroup => 'กลุ่มแท็บใหม่';
+
+  @override
+  String get selectTab => 'เลือกแท็บ';
+
+  @override
+  String get selectTabs => 'เลือกแท็บ';
+
+  @override
+  String get deleteTabGroup => 'ลบกลุ่มแท็บ';
+
+  @override
+  String get rename => 'เปลี่ยนชื่อ';
+
+  @override
+  String get renameGroup => 'เปลี่ยนชื่อกลุ่ม';
+
+  @override
+  String get ungroupTab => 'ยกเลิกการจัดกลุ่มแท็บ';
+
+  @override
+  String get deleteGroup => 'ลบกลุ่ม';
+
+  @override
+  String get addToTabGroup => 'เพิ่มไปยังกลุ่มแท็บ';
+
+  @override
+  String get editGroupName => 'แก้ไขชื่อกลุ่ม';
+
+  @override
+  String get editGroupColor => 'แก้ไขสีของกลุ่ม';
+
+  @override
+  String get closeTab => 'ปิดแท็บ';
+
+  @override
+  String get doYouWantToUngroup => 'คุณต้องการยกเลิกการจัดกลุ่มแท็บนี้จริงหรือไม่?';
+
+  @override
+  String get ungroupTabGroup => 'ยกเลิกการจัดกลุ่มแท็บ';
+
+  @override
+  String get ungroup => 'ยกเลิกการจัดกลุ่ม';
+
+  @override
+  String get deletetabGroup => 'ลบกลุ่มแท็บ';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'เพิ่มไปยัง';
+
+  @override
+  String get tabs => 'แท็บ';
+
+  @override
+  String get done => 'เสร็จสิ้น';
+
+  @override
+  String get create => 'สร้าง';
+
+  @override
+  String get groupColor => 'สีของกลุ่ม';
+
+  @override
+  String get groupName => 'ชื่อกลุ่ม';
+
+  @override
+  String get addtoNewTabGroup => 'เพิ่มไปยังกลุ่มแท็บใหม่';
+
+  @override
+  String get tabGroups => 'กลุ่มแท็บต่าง ๆ';
+
+  @override
+  String get tabGroup => 'กลุ่มแท็บ';
+
+  @override
+  String get tabsSelected => 'เลือกแท็บแล้ว';
+
+  @override
+  String get privateResearch => 'เช่น การวิจัยส่วนตัว';
+
+  @override
+  String get deselectAll => 'ยกเลิกการเลือกทั้งหมด';
+
+  @override
+  String get selected => 'เลือกแล้ว';
+
+  @override
+  String get close => 'ปิด';
+
+  @override
+  String get top => 'ด้านบน';
+
+  @override
+  String get bottom => 'ด้านล่าง';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'การดำเนินการนี้จะปิดแท็บทั้ง $tabCount แท็บภายใน “$tabGroupName” อย่างถาวร และไม่สามารถยกเลิกการดำเนินการนี้ได้';
+  }
+
+  @override
+  String get changingNode => 'กำลังเปลี่ยนโหนด';
+
+  @override
+  String get freeenameWebDomain => 'โดเมน Freename Web3';
+
+  @override
+  String get enableFreeNameWeb => 'เปิดใช้งานการสนับสนุนโดเมน FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'ไม่สามารถดาวน์โหลดไฟล์บูตสแตรป Belnet ได้ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง';
+
+  @override
+  String get couldNotEstablishConnection => 'ไม่สามารถสร้างการเชื่อมต่อ Belnet ได้ โปรดลองอีกครั้ง';
+
+  @override
+  String get theBelnetServiceNotStarted => 'ไม่สามารถเริ่มต้นบริการ Belnet ได้ โปรดลองอีกครั้ง';
+
+  @override
+  String get exitNodeUnreachable => 'ไม่สามารถเข้าถึงโหนดทางออกได้ กำลังเชื่อมต่อใหม่';
+
+  @override
+  String get tab => 'แท็บ';
+
+  @override
+  String get ungroupTabs => 'ยกเลิกการจัดกลุ่มแท็บ';
+
+  @override
+  String get closeGroup => 'ปิดกลุ่ม';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'คุณต้องการยกเลิกการจัดกลุ่มแท็บที่เลือกจาก \$$tabGroupName จริงหรือไม่?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex เป็นระบบนิเวศของแอปพลิเคชันแบบกระจายศูนย์ที่เน้นการรักษาความเป็นส่วนตัว แอป Beldex Browser เป็นหนึ่งในระบบนิเวศนี้ ซึ่งยังรวมถึงแอปอย่าง BChat, BelNet และโปรโตคอล Beldex. Beldex Browser คือประตูสู่ประสบการณ์ออนไลน์ที่ราบรื่นและเป็นส่วนตัว ซึ่งข้อมูลของคุณยังคงเป็นของคุณเพียงผู้เดียว สร้างขึ้นบนโครงสร้างบล็อกเชนที่แข็งแกร่ง Beldex Browser รับประกันความเป็นส่วนตัวและความไม่เปิดเผยตัวตนให้กับผู้ใช้.';
 
   @override
