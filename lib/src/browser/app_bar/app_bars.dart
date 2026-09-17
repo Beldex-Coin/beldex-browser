@@ -637,7 +637,8 @@ PreferredSize webViewAppBar(DarkThemeProvider themeProvider,ThemeData theme,AppB
             width: double.infinity,
             margin: EdgeInsets.only( top:appBarPositionProvider.selectedPosition ==
       AppBarPosition.bottom ? 0 : 40,
-                left: 10, right: 10, bottom: 4
+                left: 10, right: 10,
+                 bottom: 4
             ),
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
