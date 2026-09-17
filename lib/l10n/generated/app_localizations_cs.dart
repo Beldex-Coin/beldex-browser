@@ -531,6 +531,187 @@ class AppLocalizationsCs extends AppLocalizations {
   String get searchEngineUpdated => 'Vyhledávač byl úspěšně aktualizován!';
 
   @override
+  String get searchusing => 'Hledat pomocí';
+
+  @override
+  String get addTabToNewGroup => 'Přidat kartu do nové skupiny';
+
+  @override
+  String get invitePeople => 'Pozvat lidi';
+
+  @override
+  String get uploadFromGallery => 'Nahrát z galerie';
+
+  @override
+  String get noQRCodeFound => 'Na obrázku nebyl nalezen žádný QR kód';
+
+  @override
+  String get searchBarPosition => 'Pozice vyhledávacího panelu';
+
+  @override
+  String get choosethePosition => 'Vyberte pozici vyhledávacího panelu';
+
+  @override
+  String get iPAddress => 'IP adresa';
+
+  @override
+  String get vpnIP => 'IP adresa VPN';
+
+  @override
+  String get myIP => 'Moje IP';
+
+  @override
+  String get marketUpdate => 'Aktualizace trhu';
+
+  @override
+  String get searchYourTabs => 'Hledat v kartách';
+
+  @override
+  String get newTabGroup => 'Nová skupina karet';
+
+  @override
+  String get selectTab => 'Vybrat kartu';
+
+  @override
+  String get selectTabs => 'Vybrat karty';
+
+  @override
+  String get deleteTabGroup => 'Smazat skupinu karet';
+
+  @override
+  String get rename => 'Přejmenovat';
+
+  @override
+  String get renameGroup => 'Přejmenovat skupinu';
+
+  @override
+  String get ungroupTab => 'Zrušit seskupení karty';
+
+  @override
+  String get deleteGroup => 'Smazat skupinu';
+
+  @override
+  String get addToTabGroup => 'Přidat do skupiny karet';
+
+  @override
+  String get editGroupName => 'Upravit název skupiny';
+
+  @override
+  String get editGroupColor => 'Upravit barvu skupiny';
+
+  @override
+  String get closeTab => 'Zavřít kartu';
+
+  @override
+  String get doYouWantToUngroup => 'Opravdu chcete zrušit seskupení této skupiny karet?';
+
+  @override
+  String get ungroupTabGroup => 'Zrušit seskupení karet';
+
+  @override
+  String get ungroup => 'Zrušit seskupení';
+
+  @override
+  String get deletetabGroup => 'Smazat skupinu karet';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Přidat do';
+
+  @override
+  String get tabs => 'Karty';
+
+  @override
+  String get done => 'Hotovo';
+
+  @override
+  String get create => 'Vytvořit';
+
+  @override
+  String get groupColor => 'Barva skupiny';
+
+  @override
+  String get groupName => 'Název skupiny';
+
+  @override
+  String get addtoNewTabGroup => 'Přidat do nové skupiny karet';
+
+  @override
+  String get tabGroups => 'Skupiny karet';
+
+  @override
+  String get tabGroup => 'Skupina karet';
+
+  @override
+  String get tabsSelected => 'Vybrané karty';
+
+  @override
+  String get privateResearch => 'např. Soukromý výzkum';
+
+  @override
+  String get deselectAll => 'Zrušit výběr všeho';
+
+  @override
+  String get selected => 'Vybráno';
+
+  @override
+  String get close => 'Zavřít';
+
+  @override
+  String get top => 'nahoře';
+
+  @override
+  String get bottom => 'dole';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Tato akce trvale zavře všechny $tabCount karty ve skupině karet „$tabGroupName“. Tuto akci nelze vrátit zpět.';
+  }
+
+  @override
+  String get changingNode => 'Probíhá změna uzlu';
+
+  @override
+  String get freeenameWebDomain => 'Doména Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Povolit podporu domény Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nepodařilo se stáhnout spouštěcí soubor Belnet. Zkontrolujte připojení a zkuste to znovu';
+
+  @override
+  String get couldNotEstablishConnection => 'Nepodařilo se navázat připojení k Belnet. Zkuste to znovu';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Službu Belnet se nepodařilo spustit. Zkuste to znovu';
+
+  @override
+  String get exitNodeUnreachable => 'Výstupní uzel není dostupný, probíhá opětovné připojení';
+
+  @override
+  String get tab => 'Karta';
+
+  @override
+  String get ungroupTabs => 'Zrušit seskupení karet';
+
+  @override
+  String get closeGroup => 'Zavřít skupinu';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Opravdu chcete zrušit seskupení vybraných karet ze skupiny \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex je ekosystém decentralizovaných aplikací zaměřených na ochranu soukromí. Aplikace Beldex Browser je jednou z těchto aplikací a ekosystém dále zahrnuje aplikace jako BChat, BelNet a protokol Beldex. Prohlížeč Beldex je vaší branou k plynulému a důvěrnému online prostředí, kde vaše data zůstávají pouze vaše. Je postaven na robustní blockchainové infrastruktuře a zajišťuje důvěrnost a anonymitu svým uživatelům.';
 
   @override
