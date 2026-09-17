@@ -531,6 +531,187 @@ class AppLocalizationsEs extends AppLocalizations {
   String get searchEngineUpdated => '¡Motor de búsqueda actualizado correctamente!';
 
   @override
+  String get searchusing => 'Buscar usando';
+
+  @override
+  String get addTabToNewGroup => 'Agregar pestaña a un nuevo grupo';
+
+  @override
+  String get invitePeople => 'Invitar personas';
+
+  @override
+  String get uploadFromGallery => 'Subir desde la galería';
+
+  @override
+  String get noQRCodeFound => 'No se encontró código QR en la imagen';
+
+  @override
+  String get searchBarPosition => 'Posición de la barra de búsqueda';
+
+  @override
+  String get choosethePosition => 'Elija la posición de la barra de búsqueda';
+
+  @override
+  String get iPAddress => 'Dirección IP';
+
+  @override
+  String get vpnIP => 'IP de VPN';
+
+  @override
+  String get myIP => 'Mi IP';
+
+  @override
+  String get marketUpdate => 'Actualización del mercado';
+
+  @override
+  String get searchYourTabs => 'Buscar en sus pestañas';
+
+  @override
+  String get newTabGroup => 'Nuevo grupo de pestañas';
+
+  @override
+  String get selectTab => 'Seleccionar pestaña';
+
+  @override
+  String get selectTabs => 'Seleccionar pestañas';
+
+  @override
+  String get deleteTabGroup => 'Eliminar grupo de pestañas';
+
+  @override
+  String get rename => 'Cambiar nombre';
+
+  @override
+  String get renameGroup => 'Cambiar nombre del grupo';
+
+  @override
+  String get ungroupTab => 'Desagrupar pestaña';
+
+  @override
+  String get deleteGroup => 'Eliminar grupo';
+
+  @override
+  String get addToTabGroup => 'Añadir al grupo de pestañas';
+
+  @override
+  String get editGroupName => 'Editar nombre del grupo';
+
+  @override
+  String get editGroupColor => 'Editar color del grupo';
+
+  @override
+  String get closeTab => 'Cerrar pestaña';
+
+  @override
+  String get doYouWantToUngroup => '¿De verdad quieres desagrupar este grupo de pestañas?';
+
+  @override
+  String get ungroupTabGroup => 'Desagrupar grupo de pestañas';
+
+  @override
+  String get ungroup => 'Desagrupar';
+
+  @override
+  String get deletetabGroup => 'Eliminar grupo de pestañas';
+
+  @override
+  String get thisActionWillPermenantClose => 'Esta acción cerrará permanentemente las';
+
+  @override
+  String get inside => 'dentro del grupo de pestañas seleccionado';
+
+  @override
+  String get thisCannotBeUndone => 'Esta acción no se puede deshacer';
+
+  @override
+  String get addTo => 'Añadir a';
+
+  @override
+  String get tabs => 'Pestañas';
+
+  @override
+  String get done => 'Listo';
+
+  @override
+  String get create => 'Crear';
+
+  @override
+  String get groupColor => 'Color del grupo';
+
+  @override
+  String get groupName => 'Nombre del grupo';
+
+  @override
+  String get addtoNewTabGroup => 'Añadir a un nuevo grupo de pestañas';
+
+  @override
+  String get tabGroups => 'Grupos de pestañas';
+
+  @override
+  String get tabGroup => 'Grupo de pestañas';
+
+  @override
+  String get tabsSelected => 'Pestañas seleccionadas';
+
+  @override
+  String get privateResearch => 'Ej. Investigación privada';
+
+  @override
+  String get deselectAll => 'Deseleccionar todo';
+
+  @override
+  String get selected => 'Seleccionadas';
+
+  @override
+  String get close => 'Cerrar';
+
+  @override
+  String get top => 'Arriba';
+
+  @override
+  String get bottom => 'Abajo';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Esta acción cerrará permanentemente las $tabCount pestañas dentro de «$tabGroupName». Esta acción no se puede deshacer.';
+  }
+
+  @override
+  String get changingNode => 'Cambiar nodo..';
+
+  @override
+  String get freeenameWebDomain => 'Dominio FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Habilitar compatibilidad con dominios FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'No se pudo descargar el archivo de arranque de Belnet. Compruebe su conexión e inténtelo de nuevo';
+
+  @override
+  String get couldNotEstablishConnection => 'No se pudo establecer la conexión con Belnet. Inténtelo de nuevo';
+
+  @override
+  String get theBelnetServiceNotStarted => 'No se pudo iniciar el servicio Belnet. Inténtelo de nuevo';
+
+  @override
+  String get exitNodeUnreachable => 'Nodo de salida inaccesible, reconectando';
+
+  @override
+  String get tab => 'Pestaña';
+
+  @override
+  String get ungroupTabs => 'Desagrupar pestañas';
+
+  @override
+  String get closeGroup => 'Cerrar grupo';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '¿Realmente quieres desagrupar las pestañas seleccionadas de \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex es un ecosistema de aplicaciones descentralizadas y orientadas a preservar la confidencialidad. La aplicación del Navegador Beldex es una de las aplicaciones que componen este ecosistema, junto con BChat, BelNet y el protocolo Beldex. El Navegador Beldex es tu puerta de entrada a una experiencia en línea fluida y confidencial, donde tus datos te pertenecen solo a ti. Construido sobre una infraestructura blockchain robusta, el navegador Beldex garantiza confidencialidad y anonimato a sus usuarios.';
 
   @override
