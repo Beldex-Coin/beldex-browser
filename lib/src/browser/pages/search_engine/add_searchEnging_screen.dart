@@ -8,6 +8,7 @@ import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -786,414 +787,430 @@ void _saveEngine(
         final themeProvider = Provider.of<DarkThemeProvider>(context);
          final theme = Theme.of(context);
          final loc = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar:normalAppBar(context,widget.editEngine == null ? loc.addSearchEngine : loc.editSearchEngine ,themeProvider),
-      //  AppBar(
-      //   centerTitle: true,
-      //   title: Text("${widget.editEngine == null ? 'Add' : 'Edit'} Search Engine",style:theme.textTheme.bodyLarge,),
-      // ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color:themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
-                    borderRadius: BorderRadius.circular(14.5),
-                            
-                  ),
-                            
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric( vertical: 5.0),
-                        child: Text(loc.name,style: TextStyle(fontFamily: 'Poppins',fontSize: 12)),
-                      ),
-                      // Search Engine Name
-                      Container(
+    return Stack(
+      children: [
+           Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+        Scaffold(
+          appBar:normalAppBar(context,widget.editEngine == null ? loc.addSearchEngine : loc.editSearchEngine ,themeProvider,()=> Navigator.pop(context)),
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
+          body: Stack(
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: GlassPanel(
+                      child: Container(
+                        padding: EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                          border: Border.all(color:themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
-                          borderRadius: BorderRadius.circular(8),
-                          // color: Colors.grey
+                          color:Colors.transparent, 
+                          border: Border.all(color:  themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                          //themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3),
+                         // borderRadius: BorderRadius.circular(14.5),
+                                  
                         ),
-                        child: TextField(
-                          controller: nameController,
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(fontSize: 14),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.only(left: 5),
-                            hintText:loc.enterSEName,// 'Enter search engine name',
-                            hintStyle: TextStyle(
-                                fontSize: 14,
-                                color: const Color(0xff77778B),
-                                fontWeight: FontWeight.w400),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              searchNameError = '';
-                                          //                         if (widget.editEngine == null) {
-                                          //   // Only auto-fetch in Add Mode
-                                          //   onSearchEngineNameChanged(value);
-                                          // }
-                            });
-                          },
-                         // onChanged: onSearchEngineNameChanged,
-                        ),
-                      ),
-                                 Text('$searchNameError',style: TextStyle(color: Colors.red,fontSize: 11),),
-                     // const SizedBox(height: 20),
+                                  
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: 5.0),
-                              child: Text(loc.url,style: TextStyle(fontFamily: 'Poppins',fontSize: 12),),
+                              padding: EdgeInsets.symmetric( vertical: 5.0),
+                              child: Text(loc.name,style: TextStyle(fontFamily: 'Inter',fontSize: 12, color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B))),
                             ),
-                      // Homepage URL
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
-                          borderRadius: BorderRadius.circular(8),
-                          // color: Colors.grey
-                        ),
-                        child: TextField(
-                            controller: homepageController,
-                            keyboardType: TextInputType.url,
-                            style: TextStyle(fontSize: 14),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.only(left: 5),
-                              hintText:loc.enterSEURL,// 'Enter search engine home URL',
-                              hintStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: const Color(0xff77778B),
-                                  fontWeight: FontWeight.w400),
+                            // Search Engine Name
+                            Container(
+                              decoration: BoxDecoration(
+                                color: themeProvider.darkTheme ? Colors.transparent : Color(0xffFFFFFF),
+                                border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)),
+                               // borderRadius: BorderRadius.circular(8),
+                                // color: Colors.grey
+                              ),
+                              child: TextField(
+                                controller: nameController,
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(fontSize: 14),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.only(left: 5),
+                                  hintText:loc.enterSEName,// 'Enter search engine name',
+                                  hintStyle: TextStyle(
+                                      fontSize: 14,fontFamily: 'Roboto',
+                                        color: themeProvider.darkTheme ? Color(0xff737373) : const Color(0xffACACAC),
+                                        fontWeight: FontWeight.w400),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    searchNameError = '';
+                                                //                         if (widget.editEngine == null) {
+                                                //   // Only auto-fetch in Add Mode
+                                                //   onSearchEngineNameChanged(value);
+                                                // }
+                                  });
+                                },
+                               // onChanged: onSearchEngineNameChanged,
+                              ),
                             ),
-                            // decoration: const InputDecoration(
-                            //   labelText: "Search Engine Homepage URL",
-                            //   hintText: "https://www.google.com/",
-                            //   //border: OutlineInputBorder(),
+                                       Text('$searchNameError',style: TextStyle(color: Colors.red,fontSize: 11),),
+                           // const SizedBox(height: 20),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                                    child: Text(loc.url,style: TextStyle(fontFamily: 'Inter',fontSize: 12, color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                                  ),
+                            // Homepage URL
+                            Container(
+                              decoration: BoxDecoration(
+                                color: themeProvider.darkTheme ? Colors.transparent : Color(0xffFFFFFF),
+                                border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)),
+                                // color: Colors.grey
+                              ),
+                              child: TextField(
+                                  controller: homepageController,
+                                  keyboardType: TextInputType.url,
+                                  style: TextStyle(fontSize: 14),
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(left: 5),
+                                    hintText:loc.enterSEURL,// 'Enter search engine home URL',
+                                    hintStyle: TextStyle(
+                                        fontSize: 14,fontFamily: 'Roboto',
+                                        color: themeProvider.darkTheme ? Color(0xff737373) : const Color(0xffACACAC),
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  // decoration: const InputDecoration(
+                                  //   labelText: "Search Engine Homepage URL",
+                                  //   hintText: "https://www.google.com/",
+                                  //   //border: OutlineInputBorder(),
+                                  // ),
+                                  onChanged: (value) {
+                                  setState(() {
+                                    homepageUrlError = '';
+                                  });
+                                },
+                                  ),
+                            ),
+                             Text('$homepageUrlError',style: TextStyle(color: Colors.red),),
+                           // const SizedBox(height: 20),
+                                  
+                            // Search Query URL
+                            // TextField(
+                            //   controller: queryUrlController,
+                            //   decoration: const InputDecoration(
+                            //     labelText: "Search Query URL",
+                            //     hintText: "https://www.google.com/search?q=",
+                            //     border: OutlineInputBorder(),
+                            //   ),
                             // ),
-                            onChanged: (value) {
-                            setState(() {
-                              homepageUrlError = '';
-                            });
-                          },
+                                  
+                            //  const SizedBox(height: 30),
+                                  
+                        //     Visibility(
+                        //       visible: isSearchEngine && !addSearchEngineProvider.isLoading,
+                        //       child: Container(
+                        //         width: double.infinity,
+                        //         margin: EdgeInsets.symmetric(vertical: 20),
+                        //         padding: EdgeInsets.all(10),
+                        //         decoration: BoxDecoration(
+                        //             border: Border.all(color: Colors.green),
+                        //             borderRadius: BorderRadius.circular(10)),
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //           children: [
+                        //             CachedNetworkImage(
+                        //               imageUrl: iconUrl ?? '',
+                        //               width: 36,
+                        //               height: 36,
+                        //               errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:nameController.text ,size: 36,),
+                        //             ),
+                        //             Expanded(
+                        //               child: Column(
+                        //                 crossAxisAlignment: CrossAxisAlignment.start,
+                        //                 children: [
+                        //                   Text(
+                        //                     'Search Engine Name:',
+                        //                     style: TextStyle(
+                        //                         fontWeight: FontWeight.w800, fontSize: 16),
+                        //                   ),
+                        //                   Text('$searchEngineName'),
+                        //                   Text(
+                        //                     'Search Engine Home page:',
+                        //                     style: TextStyle(
+                        //                         fontWeight: FontWeight.w800, fontSize: 16),
+                        //                   ),
+                        //                   Text(
+                        //                     '$homepageurl',
+                        //                     overflow: TextOverflow.ellipsis,
+                        //                     maxLines: 2,
+                        //                   ),
+                        //                   Text(
+                        //                     'Search Query:',
+                        //                     style: TextStyle(
+                        //                         fontWeight: FontWeight.w800, fontSize: 16),
+                        //                   ),
+                        //                   Text(
+                        //                     '$searchQuery',
+                        //                     overflow: TextOverflow.ellipsis,
+                        //                     maxLines: 2,
+                        //                   )
+                        //                 ],
+                        //               ),
+                        //             )
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                                  
+                        //     GestureDetector(
+                        //       onTap: ()async {
+                        //         setState(()async {
+                        //           //isLoading = true;
+                        //           addSearchEngineProvider.updateLoader(true);
+                        //           searchNameError = ''; 
+                        //           homepageUrlError = '';
+                        //           searchEngineName = '';
+                        //           debugPrint('Is loader is loading $isLoading');
+                        //           iconUrl = ''; //Timer? _debounce;
+                        //           homepageurl = '';
+                        //           searchQuery = '';
+                        //           isSearchEngine = false;
+                        //           if (nameController.text.trim().isEmpty) {
+                        //             isLoading = false;
+                        //             addSearchEngineProvider.updateLoader(false);
+                        //             searchNameError = 'Please Enter name';
+                                    
+                        //             return ;
+                        //         }
+                                
+                        //         if(homepageController.text.trim().isEmpty){
+                        //          addSearchEngineProvider.updateLoader(false);
+                        //            homepageUrlError = 'Please enter url'; 
+                                   
+                        //            return ;
+                        //         }else if(!isValidUrl(homepageController.text.trim())){
+                        //           addSearchEngineProvider.updateLoader(false);
+                        //                                   homepageurl = 'Please enter valid url';
+                        
+                        //           return ;
+                        //         }
+                                 
+                        //          if (!doesNameMatchHost(nameController.text, homepageController.text)) {
+                        //   addSearchEngineProvider.updateLoader(false);
+                        //   searchNameError = 'Please enter the correct search engine name associated with the given url';
+                        //   return;
+                        // }
+                        //             // Check if URL actually loads
+                        // if (!await isUrlReachable(homepageController.text)) {
+                        //   addSearchEngineProvider.updateLoader(false);
+                        //   homepageUrlError = 'The URL is not reachable. Please enter a working URL';
+                        //   return;
+                        // }
+                        //                     debugPrint('Is loader is loading $isLoading');
+                        
+                        //        onSearchEngineNameChanged(nameController.text);
+                                  
+                        //          addSearchEngineProvider.updateLoader(false);
+                                  
+                        //                     debugPrint('Is loader is loading $isLoading');
+                        
+                                  
+                                  
+                        //         });
+                                
+                        //         // debugPrint("Name: ${nameController.text}");
+                        //         // debugPrint("Homepage: ${homepageController.text}");
+                        //         // debugPrint("Query URL: ${queryUrlController.text}");
+                        //         // debugPrint('Is Search engine: $isSearchEngine');
+                        //         // debugPrint('Icon Url : $iconUrl');
+                        //         // addSearchEngineProvider.addSearchEngine(
+                        //         //   SearchEngineModel(name: "${nameController.text}", url: '${homepageController.text}', searchUrl: '${queryUrlController.text}', assetIcon: '',)
+                        //         // );
+                        //       },
+                        //       child: Container(
+                        //           width: double.infinity,
+                        //           padding: EdgeInsets.all(10),
+                        //           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(10),
+                        //               color: Colors.blue),
+                        //           child: Center(child: const Text("Test Search Engine"))),
+                        //     ),
+                                  
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         debugPrint("Name: ${nameController.text}");
+                        //         debugPrint("Homepage: ${homepageController.text}");
+                        //         debugPrint("Query URL: ${queryUrlController.text}");
+                        //         debugPrint('Is Search engine: $isSearchEngine');
+                        //         debugPrint('Icon Url : $iconUrl');
+                        // //         setState(() {
+                        // //            if(isSearchEngine && (searchEngineName != '' && homepageurl != '' && searchQuery != '' && iconUrl != '')){
+                        // //          final isAvailable = addSearchEngineProvider.allEngines
+                        // // .any((engine) => engine.name.toLowerCase() == searchEngineName.toLowerCase());
+                                  
+                        // //           debugPrint('Is Already available $isAvailable');
+                        // //           if(!isAvailable){
+                        // //                addSearchEngineProvider.addSearchEngine(
+                        // //           SearchEngineModel(name: "${searchEngineName}", url: '${homepageurl}', searchUrl: '$searchQuery', assetIcon: iconUrl,)
+                                  
+                        // //        );
+                        // //        Navigator.pop(context);
+                        // //              showMessage('$searchEngineName search engine added successfully');
+                        
+                        // //           }else if(isAvailable){
+                        // //              showMessage('This Search Engine already exist in the list');
+                        
+                        // //           }
+                        // //         }else if(!isSearchEngine){
+                        // //           showMessage('$searchEngineName is not a Search Engine.Please add valid one!');
+                        // //         }
+                        // //         });
+                               
+                        //   final provider = Provider.of<AddSearchEngineProvider>(context, listen: false);
+                        
+                        //   if (!isSearchEngine) {
+                        //     showMessage("This is not a valid search engine.");
+                        //     return;
+                        //   }
+                        // if(isSearchEngine && (searchEngineName != '' && homepageurl != '' && searchQuery != '' && iconUrl != '')){
+                        
+                        //   if (widget.editEngine == null) {
+                        //     // ---------- ADD MODE ----------
+                        //     bool alreadyExists = provider.allEngines.any(
+                        //       (e) => e.name.toLowerCase() == searchEngineName.toLowerCase(),
+                        //     );
+                        
+                        //     if (alreadyExists) {
+                        //       showMessage("This search engine already exists.");
+                        //       return;
+                        //     }
+                        
+                        //     provider.addSearchEngine(
+                        //       SearchEngineModel(
+                        //         name: searchEngineName,
+                        //         url: homepageurl,
+                        //         searchUrl: searchQuery,
+                        //         assetIcon: iconUrl,
+                        //       ),
+                        //     );
+                        
+                        //     showMessage("$searchEngineName added successfully!");
+                        //   } else {
+                        //     // ---------- EDIT MODE ----------
+                        //     provider.updateSearchEngine(
+                        //       widget.editEngine!,
+                        //       SearchEngineModel(
+                        //         name: nameController.text.trim(),
+                        //         url: homepageController.text.trim(),
+                        //         searchUrl: queryUrlController.text.trim(),
+                        //         assetIcon: iconUrl,
+                        //       ),
+                        //     );
+                        
+                        //     showMessage("Search engine updated successfully!");
+                        //   }
+                        // }
+                        
+                        //   Navigator.pop(context);
+                        
+                        
+                        //       },
+                        //       child: Container(
+                        //           width: double.infinity,
+                        //           padding: EdgeInsets.all(10),
+                        //           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.circular(10),
+                        //               color: Colors.green),
+                        //           child: Center(
+                        //               child: const Text(
+                        //             "Add Search Engine",
+                        //             style: TextStyle(),
+                        //           ))),
+                        //     ),
+                        
+                        
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: ()async{
+                               checkAndSaveEngine(addSearchEngineProvider,context,loc);
+                              },
+                              child: Container(
+                                width: 112,
+                                height: 44,
+                                padding: EdgeInsets.all(10),
+                                margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+                                decoration: BoxDecoration(
+                                  
+                                 // borderRadius: BorderRadius.circular(10),
+                                  color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                   widget.editEngine == null ? loc.add : loc.save, // "Add" : "Save",
+                                    style: TextStyle(color: themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),fontSize:14,fontWeight: FontWeight.w800,fontFamily: 'Poppins' ),
+                                  ),
+                                ),
+                              ),
                             ),
-                      ),
-                       Text('$homepageUrlError',style: TextStyle(color: Colors.red),),
-                     // const SizedBox(height: 20),
-                            
-                      // Search Query URL
-                      // TextField(
-                      //   controller: queryUrlController,
-                      //   decoration: const InputDecoration(
-                      //     labelText: "Search Query URL",
-                      //     hintText: "https://www.google.com/search?q=",
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      // ),
-                            
-                      //  const SizedBox(height: 30),
-                            
-                  //     Visibility(
-                  //       visible: isSearchEngine && !addSearchEngineProvider.isLoading,
-                  //       child: Container(
-                  //         width: double.infinity,
-                  //         margin: EdgeInsets.symmetric(vertical: 20),
-                  //         padding: EdgeInsets.all(10),
-                  //         decoration: BoxDecoration(
-                  //             border: Border.all(color: Colors.green),
-                  //             borderRadius: BorderRadius.circular(10)),
-                  //         child: Row(
-                  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //           children: [
-                  //             CachedNetworkImage(
-                  //               imageUrl: iconUrl ?? '',
-                  //               width: 36,
-                  //               height: 36,
-                  //               errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:nameController.text ,size: 36,),
-                  //             ),
-                  //             Expanded(
-                  //               child: Column(
-                  //                 crossAxisAlignment: CrossAxisAlignment.start,
-                  //                 children: [
-                  //                   Text(
-                  //                     'Search Engine Name:',
-                  //                     style: TextStyle(
-                  //                         fontWeight: FontWeight.w800, fontSize: 16),
-                  //                   ),
-                  //                   Text('$searchEngineName'),
-                  //                   Text(
-                  //                     'Search Engine Home page:',
-                  //                     style: TextStyle(
-                  //                         fontWeight: FontWeight.w800, fontSize: 16),
-                  //                   ),
-                  //                   Text(
-                  //                     '$homepageurl',
-                  //                     overflow: TextOverflow.ellipsis,
-                  //                     maxLines: 2,
-                  //                   ),
-                  //                   Text(
-                  //                     'Search Query:',
-                  //                     style: TextStyle(
-                  //                         fontWeight: FontWeight.w800, fontSize: 16),
-                  //                   ),
-                  //                   Text(
-                  //                     '$searchQuery',
-                  //                     overflow: TextOverflow.ellipsis,
-                  //                     maxLines: 2,
-                  //                   )
-                  //                 ],
-                  //               ),
-                  //             )
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                            
-                  //     GestureDetector(
-                  //       onTap: ()async {
-                  //         setState(()async {
-                  //           //isLoading = true;
-                  //           addSearchEngineProvider.updateLoader(true);
-                  //           searchNameError = ''; 
-                  //           homepageUrlError = '';
-                  //           searchEngineName = '';
-                  //           debugPrint('Is loader is loading $isLoading');
-                  //           iconUrl = ''; //Timer? _debounce;
-                  //           homepageurl = '';
-                  //           searchQuery = '';
-                  //           isSearchEngine = false;
-                  //           if (nameController.text.trim().isEmpty) {
-                  //             isLoading = false;
-                  //             addSearchEngineProvider.updateLoader(false);
-                  //             searchNameError = 'Please Enter name';
-                              
-                  //             return ;
-                  //         }
-                          
-                  //         if(homepageController.text.trim().isEmpty){
-                  //          addSearchEngineProvider.updateLoader(false);
-                  //            homepageUrlError = 'Please enter url'; 
-                             
-                  //            return ;
-                  //         }else if(!isValidUrl(homepageController.text.trim())){
-                  //           addSearchEngineProvider.updateLoader(false);
-                  //                                   homepageurl = 'Please enter valid url';
-                  
-                  //           return ;
-                  //         }
-                           
-                  //          if (!doesNameMatchHost(nameController.text, homepageController.text)) {
-                  //   addSearchEngineProvider.updateLoader(false);
-                  //   searchNameError = 'Please enter the correct search engine name associated with the given url';
-                  //   return;
-                  // }
-                  //             // Check if URL actually loads
-                  // if (!await isUrlReachable(homepageController.text)) {
-                  //   addSearchEngineProvider.updateLoader(false);
-                  //   homepageUrlError = 'The URL is not reachable. Please enter a working URL';
-                  //   return;
-                  // }
-                  //                     debugPrint('Is loader is loading $isLoading');
-                  
-                  //        onSearchEngineNameChanged(nameController.text);
-                            
-                  //          addSearchEngineProvider.updateLoader(false);
-                            
-                  //                     debugPrint('Is loader is loading $isLoading');
-                  
-                            
-                            
-                  //         });
-                          
-                  //         // debugPrint("Name: ${nameController.text}");
-                  //         // debugPrint("Homepage: ${homepageController.text}");
-                  //         // debugPrint("Query URL: ${queryUrlController.text}");
-                  //         // debugPrint('Is Search engine: $isSearchEngine');
-                  //         // debugPrint('Icon Url : $iconUrl');
-                  //         // addSearchEngineProvider.addSearchEngine(
-                  //         //   SearchEngineModel(name: "${nameController.text}", url: '${homepageController.text}', searchUrl: '${queryUrlController.text}', assetIcon: '',)
-                  //         // );
-                  //       },
-                  //       child: Container(
-                  //           width: double.infinity,
-                  //           padding: EdgeInsets.all(10),
-                  //           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                  //           decoration: BoxDecoration(
-                  //               borderRadius: BorderRadius.circular(10),
-                  //               color: Colors.blue),
-                  //           child: Center(child: const Text("Test Search Engine"))),
-                  //     ),
-                            
-                  //     GestureDetector(
-                  //       onTap: () {
-                  //         debugPrint("Name: ${nameController.text}");
-                  //         debugPrint("Homepage: ${homepageController.text}");
-                  //         debugPrint("Query URL: ${queryUrlController.text}");
-                  //         debugPrint('Is Search engine: $isSearchEngine');
-                  //         debugPrint('Icon Url : $iconUrl');
-                  // //         setState(() {
-                  // //            if(isSearchEngine && (searchEngineName != '' && homepageurl != '' && searchQuery != '' && iconUrl != '')){
-                  // //          final isAvailable = addSearchEngineProvider.allEngines
-                  // // .any((engine) => engine.name.toLowerCase() == searchEngineName.toLowerCase());
-                            
-                  // //           debugPrint('Is Already available $isAvailable');
-                  // //           if(!isAvailable){
-                  // //                addSearchEngineProvider.addSearchEngine(
-                  // //           SearchEngineModel(name: "${searchEngineName}", url: '${homepageurl}', searchUrl: '$searchQuery', assetIcon: iconUrl,)
-                            
-                  // //        );
-                  // //        Navigator.pop(context);
-                  // //              showMessage('$searchEngineName search engine added successfully');
-                  
-                  // //           }else if(isAvailable){
-                  // //              showMessage('This Search Engine already exist in the list');
-                  
-                  // //           }
-                  // //         }else if(!isSearchEngine){
-                  // //           showMessage('$searchEngineName is not a Search Engine.Please add valid one!');
-                  // //         }
-                  // //         });
-                         
-                  //   final provider = Provider.of<AddSearchEngineProvider>(context, listen: false);
-                  
-                  //   if (!isSearchEngine) {
-                  //     showMessage("This is not a valid search engine.");
-                  //     return;
-                  //   }
-                  // if(isSearchEngine && (searchEngineName != '' && homepageurl != '' && searchQuery != '' && iconUrl != '')){
-                  
-                  //   if (widget.editEngine == null) {
-                  //     // ---------- ADD MODE ----------
-                  //     bool alreadyExists = provider.allEngines.any(
-                  //       (e) => e.name.toLowerCase() == searchEngineName.toLowerCase(),
-                  //     );
-                  
-                  //     if (alreadyExists) {
-                  //       showMessage("This search engine already exists.");
-                  //       return;
-                  //     }
-                  
-                  //     provider.addSearchEngine(
-                  //       SearchEngineModel(
-                  //         name: searchEngineName,
-                  //         url: homepageurl,
-                  //         searchUrl: searchQuery,
-                  //         assetIcon: iconUrl,
-                  //       ),
-                  //     );
-                  
-                  //     showMessage("$searchEngineName added successfully!");
-                  //   } else {
-                  //     // ---------- EDIT MODE ----------
-                  //     provider.updateSearchEngine(
-                  //       widget.editEngine!,
-                  //       SearchEngineModel(
-                  //         name: nameController.text.trim(),
-                  //         url: homepageController.text.trim(),
-                  //         searchUrl: queryUrlController.text.trim(),
-                  //         assetIcon: iconUrl,
-                  //       ),
-                  //     );
-                  
-                  //     showMessage("Search engine updated successfully!");
-                  //   }
-                  // }
-                  
-                  //   Navigator.pop(context);
-                  
-                  
-                  //       },
-                  //       child: Container(
-                  //           width: double.infinity,
-                  //           padding: EdgeInsets.all(10),
-                  //           margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                  //           decoration: BoxDecoration(
-                  //               borderRadius: BorderRadius.circular(10),
-                  //               color: Colors.green),
-                  //           child: Center(
-                  //               child: const Text(
-                  //             "Add Search Engine",
-                  //             style: TextStyle(),
-                  //           ))),
-                  //     ),
-                  
-                  
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: ()async{
-                         checkAndSaveEngine(addSearchEngineProvider,context,loc);
-                        },
-                        child: Container(
-                          width: 112,
-                          height: 44,
-                          padding: EdgeInsets.all(10),
-                          margin: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-                          decoration: BoxDecoration(
-                            
-                            borderRadius: BorderRadius.circular(10),
-                            color:themeProvider.darkTheme ? Color(0xff0BA70F) : Color(0xff0BA70F),
-                          ),
-                          child: Center(
-                            child: Text(
-                             widget.editEngine == null ? loc.add : loc.save, // "Add" : "Save",
-                              style: TextStyle(color: Colors.white,fontSize:14,fontWeight: FontWeight.w800,fontFamily: 'Poppins' ),
-                            ),
-                          ),
+                          ],
+                        ),
+                        
+                        
+                        
+                        
+                        
+                        
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     debugPrint("Name: ${nameController.text}");
+                            //     debugPrint("Homepage: ${homepageController.text}");
+                            //     debugPrint("Query URL: ${queryUrlController.text}");
+                            //     debugPrint('Is Search engine: $isSearchEngine');
+                            //     debugPrint('Icon Url : $iconUrl');
+                            //     // addSearchEngineProvider.addSearchEngine(
+                            //     //   SearchEngineModel(name: "${nameController.text}", url: '${homepageController.text}', searchUrl: '${queryUrlController.text}', assetIcon: '',)
+                            //     // );
+                                  
+                            //   },
+                            //   child: const Text("Add Search Engine"),
+                            // ),
+                                  
+                            //  Text('Is this a Search engine URL $isSearchEngine')
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  
-                  
-                  
-                  
-                  
-                  
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     debugPrint("Name: ${nameController.text}");
-                      //     debugPrint("Homepage: ${homepageController.text}");
-                      //     debugPrint("Query URL: ${queryUrlController.text}");
-                      //     debugPrint('Is Search engine: $isSearchEngine');
-                      //     debugPrint('Icon Url : $iconUrl');
-                      //     // addSearchEngineProvider.addSearchEngine(
-                      //     //   SearchEngineModel(name: "${nameController.text}", url: '${homepageController.text}', searchUrl: '${queryUrlController.text}', assetIcon: '',)
-                      //     // );
-                            
-                      //   },
-                      //   child: const Text("Add Search Engine"),
-                      // ),
-                            
-                      //  Text('Is this a Search engine URL $isSearchEngine')
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        
-        Visibility(
-          visible: addSearchEngineProvider.isLoading,
-         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.3)
-          ),
-           child: Center(
-              child: CircularProgressIndicator(
+            
+            Visibility(
+              visible: addSearchEngineProvider.isLoading,
+             child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.3)
               ),
-            ),
-         ),
-       )
-        ],
-      ),
+               child: Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xff00B134),
+                  ),
+                ),
+             ),
+           )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
