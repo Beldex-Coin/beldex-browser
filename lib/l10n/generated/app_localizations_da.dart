@@ -363,7 +363,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get closeTabs => 'Luk faner';
 
   @override
-  String get closeAllTabs => 'Luk alle faner';
+  String get closeAllTabs => 'Close all tabs';
 
   @override
   String get copy => 'Kopiér';
@@ -529,6 +529,187 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Søgemaskinen blev opdateret med succes!';
+
+  @override
+  String get searchusing => 'Søg ved hjælp af';
+
+  @override
+  String get addTabToNewGroup => 'Føj fane til ny gruppe';
+
+  @override
+  String get invitePeople => 'Inviter personer';
+
+  @override
+  String get uploadFromGallery => 'Upload fra galleri';
+
+  @override
+  String get noQRCodeFound => 'Ingen QR-kode fundet i billedet';
+
+  @override
+  String get searchBarPosition => 'Søgelinjens placering';
+
+  @override
+  String get choosethePosition => 'Vælg placeringen af søgelinjen';
+
+  @override
+  String get iPAddress => 'IP-adresse';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'Min IP';
+
+  @override
+  String get marketUpdate => 'Markedsopdatering';
+
+  @override
+  String get searchYourTabs => 'Søg i dine faner';
+
+  @override
+  String get newTabGroup => 'Ny fanegruppe';
+
+  @override
+  String get selectTab => 'Vælg fane';
+
+  @override
+  String get selectTabs => 'Vælg faner';
+
+  @override
+  String get deleteTabGroup => 'Slet fanegruppe';
+
+  @override
+  String get rename => 'Omdøb';
+
+  @override
+  String get renameGroup => 'Omdøb gruppe';
+
+  @override
+  String get ungroupTab => 'Ophæv gruppering af fane';
+
+  @override
+  String get deleteGroup => 'Slet gruppe';
+
+  @override
+  String get addToTabGroup => 'Føj til fanegruppe';
+
+  @override
+  String get editGroupName => 'Rediger gruppenavn';
+
+  @override
+  String get editGroupColor => 'Rediger gruppefarve';
+
+  @override
+  String get closeTab => 'Luk fane';
+
+  @override
+  String get doYouWantToUngroup => 'Vil du virkelig ophæve gruppering af denne fanegruppe?';
+
+  @override
+  String get ungroupTabGroup => 'Ophæv gruppering af fanegruppe';
+
+  @override
+  String get ungroup => 'Ophæv gruppering';
+
+  @override
+  String get deletetabGroup => 'Slet fanegruppe';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Føj til';
+
+  @override
+  String get tabs => 'Faner';
+
+  @override
+  String get done => 'Udført';
+
+  @override
+  String get create => 'Opret';
+
+  @override
+  String get groupColor => 'Gruppefarve';
+
+  @override
+  String get groupName => 'Gruppenavn';
+
+  @override
+  String get addtoNewTabGroup => 'Føj til ny fanegruppe';
+
+  @override
+  String get tabGroups => 'Fanegrupper';
+
+  @override
+  String get tabGroup => 'Fanegruppe';
+
+  @override
+  String get tabsSelected => 'Valgte faner';
+
+  @override
+  String get privateResearch => 'f.eks. Privat research';
+
+  @override
+  String get deselectAll => 'Fravælg alle';
+
+  @override
+  String get selected => 'Valgt';
+
+  @override
+  String get close => 'Luk';
+
+  @override
+  String get top => 'øverst';
+
+  @override
+  String get bottom => 'nederst';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Denne handling vil permanent lukke alle $tabCount faner i “$tabGroupName”. Dette kan ikke fortrydes';
+  }
+
+  @override
+  String get changingNode => 'Skifter node..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3-domæne';
+
+  @override
+  String get enableFreeNameWeb => 'Aktiver understøttelse af FreeName Web3-domæner';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Kunne ikke downloade Belnet-bootstrapfilen. Kontroller din forbindelse, og prøv igen';
+
+  @override
+  String get couldNotEstablishConnection => 'Kunne ikke oprette Belnet-forbindelse. Prøv igen';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet-tjenesten kunne ikke startes. Prøv igen';
+
+  @override
+  String get exitNodeUnreachable => 'Afslutningsnoden kan ikke nås, genopretter forbindelse';
+
+  @override
+  String get tab => 'Fane';
+
+  @override
+  String get ungroupTabs => 'Fjern faner fra gruppen';
+
+  @override
+  String get closeGroup => 'Luk gruppe';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Vil du virkelig fjerne de valgte faner fra \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex er et økosystem af decentraliserede og fortrolighedsbevarende applikationer. Beldex Browser-appen er en del af dette økosystem, som også består af applikationer som BChat, BelNet og Beldex-protokollen.Beldex Browser er din indgang til en problemfri og fortrolig onlineoplevelse, hvor dine data forbliver dine alene. Bygget på en robust blockchain-infrastruktur sikrer Beldex Browser fortrolighed og anonymitet for sine brugere.';
