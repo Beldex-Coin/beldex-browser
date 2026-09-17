@@ -188,6 +188,100 @@
 
 
 
+  "searchusing": "Pesquisar usando",
+  "addTabToNewGroup": "Adicionar guia a um novo grupo",
+  "invitePeople": "Convidar pessoas",
+  "uploadFromGallery": "Carregar da galeria",
+  "noQRCodeFound": "Nenhum código QR encontrado na imagem",
+  "searchBarPosition": "Posição da barra de pesquisa",
+  "choosethePosition": "Escolha a posição da barra de pesquisa",
+  "iPAddress": "Endereço IP",
+   "vpnIP": "IP da VPN",
+   "myIP": "Meu IP",
+   "marketUpdate": "Atualização do mercado",
+   "searchYourTabs": "Pesquisar suas guias",
+   "newTabGroup": "Novo grupo de guias",
+   "selectTab": "Selecionar guia",
+   "selectTabs": "Selecionar guias",
+   "closeAllTabs": "Fechar todas as guias",
+   "deleteTabGroup": "Excluir grupo de guias",
+   "rename": "Renomear",
+   "renameGroup": "Renomear grupo",
+   "ungroupTab": "Desagrupar guia",
+   "deleteGroup": "Excluir grupo",
+   "addToTabGroup": "Adicionar ao grupo de guias",
+   "editGroupName": "Editar nome do grupo",
+   "editGroupColor": "Editar cor do grupo",
+   "closeTab": "Fechar guia",
+   "doYouWantToUngroup": "Tem certeza de que deseja desagrupar este grupo de guias?",
+   "ungroupTabGroup": "Desagrupar grupo de guias",
+   "ungroup": "Desagrupar",
+   "deleteGroup": "Excluir grupo",
+   "deletetabGroup": "xcluir grupo de guias",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Adicionar a",
+   "tabs": "Guias",
+   "done": "Concluído",
+   "create": "Criar",
+   "groupColor": "Cor do grupo",
+   "groupName": "Nome do grupo",
+   "newTabGroup": "Novo grupo de guias",
+   "addtoNewTabGroup": "Adicionar ao novo grupo de guias",
+   "tabGroups": "Grupos de guias",
+   "tabGroup": "Grupo de guias",
+   "tabsSelected": "Guias selecionadas",
+   "privateResearch": "Ex.: Pesquisa Privada",
+   "deselectAll": "Desmarcar todas",
+   "selected": "Selecionadas",
+   
+   "close": "Fechar",
+
+   "top": "superior",
+   "bottom": "inferior",
+
+
+
+ "closeAllTabsConfirmation": "Esta ação fechará permanentemente todas as {tabCount} guias dentro de “{tabGroupName}”. Esta ação não pode ser desfeita.",
+"@closeAllTabsConfirmation": {
+  "description": "Mensagem de confirmação ao fechar todas as guias em um grupo de guias",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Alterar nó",
+"freeenameWebDomain" : "Domínio FreeName Web3",
+"enableFreeNameWeb" : "Ativar suporte para domínio FreeName Web3",
+"couldnotDownloadBootstrap" : "Não foi possível baixar o arquivo de inicialização do Belnet. Verifique sua conexão e tente novamente",
+"couldNotEstablishConnection" : "Não foi possível estabelecer a conexão com o Belnet. Tente novamente",
+"theBelnetServiceNotStarted": "O serviço Belnet não pôde ser iniciado. Tente novamente",
+"exitNodeUnreachable" : "Nó de saída inacessível, reconectando",
+
+
+"tab": "Aba",
+"ungroupTabs": "Desagrupar abas",
+"closeGroup": "Fechar grupo",
+"ungroupSelectedTabs": "Tem certeza de que deseja desagrupar as abas selecionadas de ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Mensagem de confirmação ao desagrupar abas selecionadas de um grupo de abas",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex é um ecossistema de aplicações descentralizadas que preservam a confidencialidade. O aplicativo Beldex Browser é parte desse ecossistema, que também inclui apps como BChat, BelNet e o protocolo Beldex. O Beldex Browser é sua porta de entrada para uma experiência online segura e confidencial, onde seus dados permanecem exclusivamente seus. Construído sobre uma infraestrutura robusta de blockchain, o Beldex Browser garante confidencialidade e anonimato aos seus usuários.",
 "atBeldex": " \n Na Beldex, acreditamos em capacitar os indivíduos com o direito fundamental de controlar sua pegada digital. O Beldex Browser foi projetado para fornecer um ambiente online seguro e confidencial, permitindo que os usuários se comuniquem e interajam com o mundo digital com total proteção.",
 "titlebns": "\nBNS",
