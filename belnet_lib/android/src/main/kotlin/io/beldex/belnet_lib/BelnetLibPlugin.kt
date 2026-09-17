@@ -30,6 +30,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry
 import network.beldex.belnet.BelnetDaemon
 import network.beldex.belnet.ConnectionTools
+import androidx.core.content.ContextCompat
+import org.json.JSONObject
 import kotlin.math.roundToLong
 
 import android.content.ServiceConnection
@@ -91,6 +93,26 @@ open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var mEventSink: EventChannel.EventSink? = null
 
 
+
+    // Ported from belnet-app commit df16d27 (audit F4): underlying-network
+    // change events forwarded from BelnetDaemon to the Flutter layer.
+    private lateinit var networkChangeEventChannel: EventChannel
+    private var networkChangeEventSink: EventChannel.EventSink? = null
+    private var networkChangeReceiver: BroadcastReceiver? = null
+
+    // Ported from belnet-app commit df16d27 (audit F9): consolidated 1 Hz
+    // status feed - one GetStatus() JNI call and one TrafficStats sample per
+    // second, pushed to Dart.
+    private lateinit var statusEventChannel: EventChannel
+    private var statusEventSink: EventChannel.EventSink? = null
+    private var statusHandler: Handler? = null
+    private var statusRunnable: Runnable? = null
+    private val speedMeter = SpeedMeter()
+
+    private lateinit var notificationDisconnectEventChannel: EventChannel
+
+     private lateinit var notificationDisconnectReceiver: BroadcastReceiver
+     private var disconnectEventSink: EventChannel.EventSink? = null
 
 
   // Audio Focus
@@ -173,12 +195,192 @@ open class BelnetLibPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 mEventSink = null
             }
         })
+
+
+
+    notificationDisconnectEventChannel = EventChannel(binding.binaryMessenger, "belnet_lib_notification_disconnect_event_channel")
+        notificationDisconnectEventChannel.setStreamHandler(
+            object : EventChannel.StreamHandler {
+                override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                    disconnectEventSink = events
+                    notificationDisconnectReceiver = object : BroadcastReceiver() {
+                        override fun onReceive(context: Context?, intent: Intent?) {
+                            if (intent?.action == "com.belnet.NOTIFICATION_DISCONNECTED") {
+                                Log.d("BelnetLibPlugin", "Received notification disconnect broadcast")
+                                disconnectEventSink?.success("notification_disconnect")
+                            }
+                        }
+                    }
+                    val filter = IntentFilter("com.belnet.NOTIFICATION_DISCONNECTED")
+                    context.registerReceiver(notificationDisconnectReceiver, filter)
+                }
+
+                override fun onCancel(arguments: Any?) {
+                    disconnectEventSink = null
+                    try {
+                        notificationDisconnectReceiver?.let {
+                            context.unregisterReceiver(it)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("BelnetLibPlugin", "Receiver already unregistered: ${e.message}")
+                    }
+                }
+            }
+        )
+
+
+
+
+    // Ported from belnet-app commit df16d27 (audit F4): underlying-network
+        // change events from BelnetDaemon (Wi-Fi <-> mobile handover). The
+        // Flutter side uses this to run an immediate tunnel health probe
+        // instead of waiting for the next periodic one.
+        networkChangeEventChannel =
+            EventChannel(binding.binaryMessenger, "belnet_lib_network_change_event_channel")
+        networkChangeEventChannel.setStreamHandler(
+            object : EventChannel.StreamHandler {
+                override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                    networkChangeEventSink = events
+                    networkChangeReceiver = object : BroadcastReceiver() {
+                        override fun onReceive(ctx: Context?, intent: Intent?) {
+                            if (intent?.action == BelnetDaemon.ACTION_NETWORK_CHANGED) {
+                                Log.d("BelnetLibPlugin", "Received network change broadcast")
+                                networkChangeEventSink?.success("network_changed")
+                            }
+                        }
+                    }
+                    val filter = IntentFilter(BelnetDaemon.ACTION_NETWORK_CHANGED)
+                    ContextCompat.registerReceiver(
+                        context,
+                        networkChangeReceiver,
+                        filter,
+                        ContextCompat.RECEIVER_NOT_EXPORTED
+                    )
+                }
+
+                override fun onCancel(arguments: Any?) {
+                    networkChangeEventSink = null
+                    try {
+                        networkChangeReceiver?.let { context.unregisterReceiver(it) }
+                    } catch (e: Exception) {
+                        Log.e("BelnetLibPlugin", "network change receiver already unregistered: ${e.message}")
+                    }
+                    networkChangeReceiver = null
+                }
+            }
+        )
+
+        // Ported from belnet-app commit df16d27 (audit F9): consolidated
+        // status feed - one 1 Hz tick doing ONE GetStatus() JNI call and ONE
+        // TrafficStats sample, pushed to Dart. Replaces independent Dart
+        // timers each crossing the platform channel every 1-2 seconds.
+        statusEventChannel =
+            EventChannel(binding.binaryMessenger, "belnet_lib_status_event_channel")
+        statusEventChannel.setStreamHandler(
+            object : EventChannel.StreamHandler {
+                override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+                    statusEventSink = events
+                    statusHandler = Handler(Looper.getMainLooper())
+                    statusRunnable = object : Runnable {
+                        override fun run() {
+                            emitStatus()
+                            statusHandler?.postDelayed(this, 1000)
+                        }
+                    }
+                    statusHandler?.post(statusRunnable!!)
+                }
+
+                override fun onCancel(arguments: Any?) {
+                    statusRunnable?.let { statusHandler?.removeCallbacks(it) }
+                    statusRunnable = null
+                    statusHandler = null
+                    statusEventSink = null
+                }
+            }
+        )
+
+
+
+
+
+
         // Audio phone call
         registerCallAndAudioReceivers()
     }
 
+    private fun emitStatus() {
+        val sink = statusEventSink ?: return
+        val speeds = speedMeter.sample()
+        val payload = JSONObject()
+        try {
+            // getStatusSafe(): GetStatus() (belnet-app df16d27) with an
+            // automatic DumpStatus() fallback if the native lib doesn't
+            // export the GetStatus JNI symbol.
+            val raw = mBoundService?.getStatusSafe()
+            payload.put(
+                "status",
+                if (raw.isNullOrEmpty()) JSONObject.NULL else JSONObject(raw)
+            )
+        } catch (e: Exception) {
+            payload.put("status", JSONObject.NULL)
+        }
+        payload.put("upload", speeds.first)
+        payload.put("download", speeds.second)
+        payload.put("isRunning", mBoundService?.IsRunning() ?: false)
+        sink.success(payload.toString())
+    }
+
+    /**
+     * Ported from belnet-app commit df16d27 (audit F9): device-level
+     * throughput sampling shared by the status feed. Values are halved
+     * because with the VPN active TrafficStats counts every payload byte
+     * twice (once on the tun device, once on the physical interface).
+     */
+    private class SpeedMeter {
+        private var lastTimestamp = 0L
+        private var lastRx = 0L
+        private var lastTx = 0L
+
+        /** Returns Pair(uploadBytesPerSec, downloadBytesPerSec). */
+        fun sample(): Pair<Long, Long> {
+            val now = SystemClock.elapsedRealtime()
+            val rx = TrafficStats.getTotalRxBytes()
+            val tx = TrafficStats.getTotalTxBytes()
+            if (lastTimestamp == 0L) {
+                lastTimestamp = now
+                lastRx = rx
+                lastTx = tx
+                return Pair(0L, 0L)
+            }
+            val dt = (now - lastTimestamp) / 1000f
+            if (dt <= 0f) return Pair(0L, 0L)
+            val up = (((tx - lastTx).coerceAtLeast(0) / 2) / dt).roundToLong()
+            val down = (((rx - lastRx).coerceAtLeast(0) / 2) / dt).roundToLong()
+            lastTimestamp = now
+            lastRx = rx
+            lastTx = tx
+            return Pair(up, down)
+        }
+    }
+
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         mMethodChannel.setMethodCallHandler(null)
+        // Ported from belnet-app commit df16d27: stop the 1 Hz status ticker
+        // and unregister the network-change receiver so nothing leaks across
+        // engine restarts.
+        statusRunnable?.let { statusHandler?.removeCallbacks(it) }
+        statusRunnable = null
+        statusHandler = null
+        statusEventSink = null
+        try {
+            networkChangeReceiver?.let { context.unregisterReceiver(it) }
+            notificationDisconnectReceiver?.let {context.unregisterReceiver(it) }
+
+        } catch (e: Exception) {
+            Log.w("BelnetLibPlugin", "network change receiver already unregistered: ${e.message}")
+        }
+        networkChangeReceiver = null
+        networkChangeEventSink = null
         doUnbindService()
         unregisterReceivers()
     }
@@ -247,11 +449,20 @@ private fun registerCallAndAudioReceivers() {
 
                 val exitNode = call.argument<String>("exit_node")
                 val upstreamDNS = call.argument<String>("upstream_dns")
+                // Ported from belnet-app commit df16d27 (audit F5/F12/F13).
+                val logLevel = call.argument<String>("log_level")
+                val mtu = call.argument<Int>("mtu")
+                val routeIpv6 = call.argument<Boolean>("route_ipv6")
+
+
 
                 val belnetIntent = Intent(activityBinding.activity.applicationContext, BelnetDaemon::class.java)
                 belnetIntent.action = BelnetDaemon.ACTION_CONNECT
                 belnetIntent.putExtra(BelnetDaemon.EXIT_NODE, exitNode)
                 belnetIntent.putExtra(BelnetDaemon.UPSTREAM_DNS, upstreamDNS)
+                belnetIntent.putExtra(BelnetDaemon.LOG_LEVEL, logLevel ?: "warn")
+                belnetIntent.putExtra(BelnetDaemon.MTU, mtu ?: 1400)
+                belnetIntent.putExtra(BelnetDaemon.ROUTE_IPV6, routeIpv6 ?: true)
 
                 activityBinding.activity.applicationContext.startService(belnetIntent)
                 doBindService()
@@ -259,18 +470,26 @@ private fun registerCallAndAudioReceivers() {
             }
 
             "disconnect" -> {
-                val intent = VpnService.prepare(activityBinding.activity.applicationContext)
-                if (intent != null) {
-                    result.success(false)
-                    return
+                // val intent = VpnService.prepare(activityBinding.activity.applicationContext)
+                // if (intent != null) {
+                //     result.success(false)
+                //     return
+                // }
+
+                // val belnetIntent = Intent(activityBinding.activity.applicationContext, BelnetDaemon::class.java)
+                // belnetIntent.action = BelnetDaemon.ACTION_DISCONNECT
+
+                // activityBinding.activity.applicationContext.startService(belnetIntent)
+                // doUnbindService()
+                // Log.d("Test", "inside disconnect function")
+                // result.success(true)
+                  val ctx = activityBinding.activity.applicationContext
+                val belnetIntent = Intent(ctx, BelnetDaemon::class.java).apply {
+                    action = BelnetDaemon.ACTION_DISCONNECT
                 }
-
-                val belnetIntent = Intent(activityBinding.activity.applicationContext, BelnetDaemon::class.java)
-                belnetIntent.action = BelnetDaemon.ACTION_DISCONNECT
-
-                activityBinding.activity.applicationContext.startService(belnetIntent)
-                doUnbindService()
-                Log.d("Test", "inside disconnect function")
+                ctx.startService(belnetIntent)
+                doBindService()
+                Log.d("BelnetLibPlugin", "Disconnect called")
                 result.success(true)
             }
 
@@ -279,7 +498,10 @@ private fun registerCallAndAudioReceivers() {
             }
 
             "getStatus" -> {
-                result.success(mBoundService?.DumpStatus() ?: false)
+                 // Ported from belnet-app commit df16d27 (audit F9): return
+                // null (not false) when unbound so the Dart layer never
+                // crashes on a bool-to-String cast.
+                result.success(mBoundService?.DumpStatus())
             }
 
             "getUploadSpeed" -> {
@@ -322,13 +544,53 @@ private fun registerCallAndAudioReceivers() {
             }
 
             "getDataStatus" -> {
-                result.success(false)
+                // Ported from belnet-app commit df16d27 (audit F9): this was
+                // a stub returning `false`. Used by the Dart-side status
+                // consumers; must return null (never `false`) when the
+                // service is not bound so callers keep polling instead of
+                // crashing on a cast.
+                val service = mBoundService
+                if (service == null) {
+                    Log.w("BelnetLibPlugin", "getDataStatus: Service not bound yet")
+                    result.success(null)
+                    return
+                }
+                try {
+                    // getStatusSafe(): GetStatus() (belnet-app df16d27)
+                    // with automatic DumpStatus() fallback.
+                    result.success(service.getStatusSafe())
+                } catch (e: Exception) {
+                    Log.e("BelnetLibPlugin", "Exception in getDataStatus", e)
+                    result.success(null)
+                }
             }
 
             "getMap" -> {
-                val swapNode = call.argument<String>("swap_node")
-                Log.d("Test", "Swap Node from un map")
-                result.success(mBoundService?.unmappingNode(swapNode) ?: false)
+               val swapNode = call.argument<String>("swap_node")
+                val service = mBoundService
+                if (service == null || swapNode == null) {
+                    // Ported from belnet-app commit df16d27: also guard a
+                    // null swap_node argument.
+                    Log.w("BelnetLibPlugin", "getMap: service not bound or no swap_node")
+                    result.success(null)
+                } else {
+                    // Deliver the REAL remap result asynchronously; the old
+                    // code returned a stale field before the worker finished.
+                    // The `replied` flag (belnet-app) protects against a
+                    // double result.success() if the callback ever fires
+                    // twice, which crashes the method channel.
+                    var replied = false
+                    service.unmappingNode(swapNode) { r ->
+                        if (!replied) {
+                            replied = true
+                            result.success(r)
+                        }
+                    }
+                }
+            }
+
+            "isExitReady" -> {
+                result.success(mBoundService?.isExitReady() ?: false)
             }
 
             "getUnmapStatus" -> {
@@ -479,7 +741,7 @@ private fun isCallActive(): Boolean {
         val isVoipActive = audioManager.mode == AudioManager.MODE_IN_COMMUNICATION ||
                            audioManager.mode == AudioManager.MODE_RINGTONE
         if (isVoipActive) {
-            Log.d("CallState", "📶 VoIP or Internet call in progress")
+            Log.d("CallState", "VoIP or Internet call in progress")
             return true
         }
     } catch (e: Exception) {
