@@ -185,6 +185,102 @@
 
 
 
+
+  "searchusing": "Ieškoti naudojant",
+  "addTabToNewGroup": "Pridėti skirtuką prie naujos grupės",
+  "invitePeople": "Pakviesti žmones",
+  "uploadFromGallery": "Įkelti iš galerijos",
+  "noQRCodeFound": "Paveikslėlyje QR kodas nerastas",
+  "searchBarPosition": "Paieškos juostos vieta",
+  "choosethePosition": "Pasirinkite paieškos juostos vietą",
+  "iPAddress": "IP adresas",
+   "vpnIP": "VPN IP",
+   "myIP": "Mano IP",
+   "marketUpdate": "Rinkos atnaujinimas",
+   "searchYourTabs": "Ieškoti savo skirtukuose",
+   "newTabGroup": "Nauja skirtukų grupė",
+   "selectTab": "Pasirinkti skirtuką",
+   "selectTabs": "Pasirinkti skirtukus",
+   "closeAllTabs": "Uždaryti visus skirtukus",
+   "deleteTabGroup": "Ištrinti skirtukų grupę",
+   "rename": "Pervadinti",
+   "renameGroup": "Pervadinti grupę",
+   "ungroupTab": "Pašalinti skirtuką iš grupės",
+   "deleteGroup": "Ištrinti grupę",
+   "addToTabGroup": "Pridėti prie skirtukų grupės",
+   "editGroupName": "Redaguoti grupės pavadinimą",
+   "editGroupColor": "Redaguoti grupės spalvą",
+   "closeTab": "Uždaryti skirtuką",
+   "doYouWantToUngroup": "Ar tikrai norite išgrupuoti šią skirtukų grupę?",
+   "ungroupTabGroup": "Pridėti prie skirtukų grupės",
+   "ungroup": "Išgrupuoti",
+   "deleteGroup": "Ištrinti grupę",
+   "deletetabGroup": "Ištrinti skirtukų grupę",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Pridėti prie",
+   "tabs": "Skirtukai",
+   "done": "Atlikta",
+   "create": "Sukurti",
+   "groupColor": "Grupės spalva",
+   "groupName": "Grupės pavadinimas",
+   "newTabGroup": "Nauja skirtukų grupė",
+   "addtoNewTabGroup": "Pridėti prie naujos skirtukų grupės",
+   "tabGroups": "Skirtukų grupės",
+   "tabGroup": "Skirtukų grupė",
+   "tabsSelected": "Pasirinkti skirtukai",
+   "privateResearch": "pvz., Privatus tyrimas",
+   "deselectAll": "Panaikinti visų pasirinkimą",
+   "selected": "Pasirinkta",
+
+
+   "close": "Uždaryti",
+   "top": "viršuje",
+   "bottom": "apačioje",
+
+
+
+  "closeAllTabsConfirmation": "Šis veiksmas visam laikui uždarys visus {tabCount} skirtukus, esančius „{tabGroupName}“. Šio veiksmo anuliuoti negalima", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Keičiamas mazgas..",
+"freeenameWebDomain" : "FreeName Web3 domenas",
+"enableFreeNameWeb" : "Įjungti FreeName Web3 domeno palaikymą",
+"couldnotDownloadBootstrap" : "Nepavyko atsisiųsti Belnet paleidimo failo. Patikrinkite ryšį ir bandykite dar kartą",
+"couldNotEstablishConnection" : "Nepavyko užmegzti Belnet ryšio. Bandykite dar kartą",
+"theBelnetServiceNotStarted": "Nepavyko paleisti Belnet paslaugos. Bandykite dar kartą",
+"exitNodeUnreachable" : "Išėjimo mazgas nepasiekiamas, jungiamasi iš naujo",
+
+
+"tab": "Skirtukas",
+"ungroupTabs": "Išgrupuoti skirtukus",
+"closeGroup": "Uždaryti grupę",
+"ungroupSelectedTabs": "Ar tikrai norite išgrupuoti pasirinktus skirtukus iš ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Patvirtinimo pranešimas, kai pasirinkti skirtukai išgrupuojami iš skirtukų grupės",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex yra decentralizuotų ir konfidencialumą išsaugančių programų ekosistema. Beldex Browser programa yra viena iš šios ekosistemos dalių, kuri taip pat apima tokias programas kaip BChat, BelNet ir Beldex protokolas. Beldex Browser yra jūsų vartai į sklandžią ir konfidencialią naršymo patirtį, kurioje jūsų duomenys lieka tik jūsų. Sukurta ant tvirtos blokų grandinės infrastruktūros, Beldex Browser užtikrina vartotojų konfidencialumą ir anonimiškumą.",
 "atBeldex": " \n „Beldex“ tikime, kad suteikiame žmonėms pagrindinę teisę kontroliuoti savo skaitmeninį pėdsaką. Beldex Browser sukurta taip, kad užtikrintų saugią ir konfidencialią internetinę aplinką, kurioje vartotojai gali bendrauti ir sąveikauti su skaitmeniniu pasauliu.",
 "titlebns": "\nBNS",
