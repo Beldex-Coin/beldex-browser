@@ -185,6 +185,100 @@
 
 
 
+ "searchusing": "Пошук за допомогою",
+  "addTabToNewGroup": "Додати вкладку до нової групи",
+  "invitePeople": "Запросити людей",
+  "uploadFromGallery": "Завантажити з галереї",
+  "noQRCodeFound": "QR-код на зображенні не знайдено",
+  "searchBarPosition": "Позиція панелі пошук",
+  "choosethePosition": "иберіть положення панелі пошуку",
+  "iPAddress": "IP-адреса",
+   "vpnIP": "IP VPN",
+   "myIP": "Моя IP-адреса",
+   "marketUpdate": "Оновлення ринку",
+   "searchYourTabs": "Пошук ваших вкладок",
+   "newTabGroup": "Нова група вкладок",
+   "selectTab": "Вибрати вкладку",
+   "selectTabs": "Вибрати вкладки",
+   "closeAllTabs": "Закрити всі вкладки ",
+   "deleteTabGroup": "Видалити групу вкладок",
+   "rename": "Перейменувати",
+   "renameGroup": "Перейменувати групу",
+   "ungroupTab": "Розгрупувати вкладку",
+   "deleteGroup": "Видалити групу",
+   "addToTabGroup": "Додати до групи вкладок",
+   "editGroupName": "Редагувати назву групи",
+   "editGroupColor": "Редагувати колір групи",
+   "closeTab": "Закрити вкладку",
+   "doYouWantToUngroup": "Ви дійсно хочете розгрупувати цю групу вкладок?",
+   "ungroupTabGroup": "Розгрупувати групу вкладок",
+   "ungroup": "Розгрупувати",
+   "deleteGroup": "Видалити групу",
+   "deletetabGroup": "Видалити групу вкладок",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Додати до",
+   "tabs": "Вкладки",
+   "done": "Готово",
+   "create": "Створити",
+   "groupColor": "Колір групи",
+   "groupName": "Назва групи",
+   "newTabGroup": "Нова група вкладок",
+   "addtoNewTabGroup": "Додати до нової групи вкладок",
+   "tabGroups": "Групи вкладок",
+   "tabGroup": "Група вкладок",
+   "tabsSelected": "Вибрані вкладки",
+   "privateResearch": "наприклад, Приватне дослідження",
+   "deselectAll": "Скасувати вибір усіх",
+   "selected": "Вибрано",
+
+
+   "close": "Закрити",
+   "top": "вгорі",
+   "bottom": "внизу",
+
+
+
+  "closeAllTabsConfirmation": " Ця дія назавжди закриє всі {tabCount} вкладки в «{tabGroupName}». Цю дію неможливо скасувати", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Зміна вузла..",
+"freeenameWebDomain" : "Домен Web3 FreeName",
+"enableFreeNameWeb" : "Увімкнути підтримку доменів Web3 FreeName",
+"couldnotDownloadBootstrap" : "Не вдалося завантажити файл початкового завантаження Belnet. Перевірте з’єднання та спробуйте ще раз",
+"couldNotEstablishConnection" : "Не вдалося встановити з’єднання з Belnet. Спробуйте ще раз",
+"theBelnetServiceNotStarted": "Не вдалося запустити службу Belnet. Спробуйте ще раз",
+"exitNodeUnreachable" : "Вузол виходу недоступний, повторне підключення",
+
+
+"tab": "Вкладка",
+"ungroupTabs": "Розгрупувати вкладки",
+"closeGroup": "Закрити групу",
+"ungroupSelectedTabs": "Ви дійсно хочете розгрупувати вибрані вкладки з ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Повідомлення підтвердження під час розгрупування вибраних вкладок із групи вкладок",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex — це екосистема децентралізованих застосунків, орієнтованих на збереження конфіденційності. Браузер Beldex є одним із застосунків цієї екосистеми, до якої також входять BChat, BelNet та протокол Beldex. Браузер Beldex — це ваш шлюз до безперешкодного та конфіденційного онлайн-досвіду, де ваші дані належать лише вам. Побудований на надійній блокчейн-інфраструктурі, браузер Beldex забезпечує конфіденційність і анонімність для своїх користувачів.",
 "atBeldex": " \n У Beldex ми віримо в надання людям фундаментального права контролювати свій цифровий слід. Браузер Beldex створений для забезпечення безпечного та конфіденційного онлайн-середовища, у якому користувачі можуть спілкуватися та взаємодіяти з цифровим світом.",
 "titlebns": "\nBNS",
