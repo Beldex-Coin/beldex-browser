@@ -188,6 +188,96 @@
   "searchEngineUpdated": "搜索引擎更新成功！",
 
 
+  "searchusing": "使用以下方式搜索",
+  "addTabToNewGroup": "添加标签页到新分组",
+  "invitePeople": "邀请他人",
+  "uploadFromGallery": "从相册上传",
+  "noQRCodeFound": "图片中未找到二维码",
+  "searchBarPosition": "搜索栏位置",
+  "choosethePosition": "选择搜索栏的位置",
+  "iPAddress": "IP 地址",
+   "vpnIP": "VPN IP",
+   "myIP": "我的 IP",
+   "marketUpdate": "市场更新",
+   "searchYourTabs": "搜索您的标签页",
+   "newTabGroup": "新建标签页分组",
+   "selectTab": "选择标签页",
+   "selectTabs": "选择标签页",
+   "closeAllTabs": "关闭所有标签页",
+   "deleteTabGroup": "删除标签页分组",
+   "rename": "重命名",
+   "renameGroup": "重命名分组",
+   "ungroupTab": "取消标签页分组",
+   "deleteGroup": "Delete group",
+   "addToTabGroup": "添加到标签页分组",
+   "editGroupName": "编辑分组名称",
+   "editGroupColor": "编辑分组颜色",
+   "closeTab": "关闭标签页",
+   "doYouWantToUngroup": "确定要取消此标签页分组吗？",
+   "ungroupTabGroup": "取消标签页分组",
+   "ungroup": "取消分组",
+   "deleteGroup": "删除分组",
+   "deletetabGroup": "删除标签页分组",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "添加到",
+   "tabs": "标签页",
+   "done": "完成",
+   "create": "创建",
+   "groupColor": "分组颜色",
+   "groupName": "分组名称",
+   "newTabGroup": "新建标签页分组",
+   "addtoNewTabGroup": "添加到新标签页分组",
+   "tabGroups": "标签页分组",
+   "tabGroup": "标签页分组",
+   "tabsSelected": "已选择的标签页",
+   "privateResearch": "例如：私人研究",
+   "deselectAll": "取消全选",
+   "selected": "已选择",
+
+
+   "close": "关闭",
+  "top": "顶部",
+  "bottom": "底部",
+
+
+"closeAllTabsConfirmation": "此操作将永久关闭“{tabGroupName}”中的全部 {tabCount} 个标签页，且无法撤销。",
+"@closeAllTabsConfirmation": {
+  "description": "关闭标签页分组中所有标签页时显示的确认消息",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+"changingNode": "正在切换节点",
+"freeenameWebDomain" : "FreeName Web3 域名",
+"enableFreeNameWeb" : "启用 FreeName Web3 域名支持",
+"couldnotDownloadBootstrap" : "无法下载 Belnet 引导文件。请检查您的网络连接，然后重试",
+"couldNotEstablishConnection" : "无法建立 Belnet 连接。请重试",
+"theBelnetServiceNotStarted": "无法启动 Belnet 服务。请重试",
+"exitNodeUnreachable" : "无法访问出口节点，正在重新连接",
+
+"tab": "标签页",
+"ungroupTabs": "取消标签页分组",
+"closeGroup": "关闭群组",
+"ungroupSelectedTabs": "确定要取消 ${tabGroupName} 中所选标签页的分组吗？",
+"@ungroupSelectedTabs": {
+  "description": "取消选定标签页的分组时显示的确认消息",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 
 
 "beldexIsAnEcosystem": "Beldex 是一个去中心化且注重保密性的应用生态系统。Beldex 浏览器应用是该生态系统中的一部分，该生态系统还包括 BChat、BelNet 和 Beldex 协议等应用。Beldex 浏览器是您通往无缝且保密的在线体验的入口，让您的数据始终只属于您自己。基于强大的区块链基础设施，Beldex 浏览器为用户提供保密性和匿名性。",
