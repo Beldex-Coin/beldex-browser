@@ -7,6 +7,7 @@ import 'package:beldex_browser/l10n/generated/app_localizations_ar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/custom_image.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -22,6 +23,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:uuid/uuid.dart';
 import 'models/browser_model.dart';
 import 'models/webview_model.dart';
 import 'util.dart';
@@ -105,39 +107,45 @@ Widget _buildDialogLongPressHitTestResult(
             widget.requestFocusNodeHrefResult != null &&
             widget.requestFocusNodeHrefResult!.url != null &&
             widget.requestFocusNodeHrefResult!.url.toString().isNotEmpty)) {
-      return Container(
-        decoration: BoxDecoration(
+      return GlassSettingPanel(
+         color:themeProvider.darkTheme ? Color(0xFF1A1A1A).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+              // themeProvider.darkTheme
+              //     ? const Color(0xff171720)
+              //     : const Color(0xffFFFFFF),
+             // borderRadius: BorderRadius.circular(5)
+              ),
+          width: MediaQuery.of(context).size.width * 0.03,
+          height: MediaQuery.of(context).size.height / 2.8,
+          //width:double.maxFinite,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+          _buildLinkTile(constraints),
+          Divider(
             color: themeProvider.darkTheme
-                ? const Color(0xff171720)
-                : const Color(0xffFFFFFF),
-            borderRadius: BorderRadius.circular(5)),
-        width: MediaQuery.of(context).size.width * 0.03,
-        height: MediaQuery.of(context).size.height / 2.8,
-        //width:double.maxFinite,
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            // mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-        _buildLinkTile(constraints),
-        Divider(
-          color: themeProvider.darkTheme
-              ? const Color(0xff42425F)
-              : const Color(0xffDADADA),
-          height: 0.05,
-          thickness: 0.30,
+                ? const Color(0xff42425F)
+                : const Color(0xffDADADA),
+            height: 0.05,
+            thickness: 0.30,
+          ),
+          _buildOpenNewTab(constraints),
+         // _buildOpenNewIncognitoTab(constraints),
+          _buildCopyAddressLink(constraints),
+          _buildShareLink(constraints),
+          SizedBox(
+            height: 10,
+          )
+        ]
+                  
+            );
+          }),
         ),
-        _buildOpenNewTab(constraints),
-       // _buildOpenNewIncognitoTab(constraints),
-        _buildCopyAddressLink(constraints),
-        _buildShareLink(constraints),
-        SizedBox(
-          height: 10,
-        )
-      ]
-                
-          );
-        }),
       );
       
       
@@ -399,7 +407,7 @@ Widget _buildDialogLongPressHitTestResult(
     return ListTile(
       title: TextWidget(
         text: loc.openInNewTab,// "Open in new tab",
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
       ),
       onTap: () async{
         webViewModel.settings?.minimumFontSize =
@@ -413,6 +421,7 @@ var url = WebUri(formatUrl(resolved));
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
           webViewModel: WebViewModel(
+            uuid: Uuid().v4(),
               url:url, //widget.requestFocusNodeHrefResult?.url,
               settings: webViewModel.settings),
         ));
@@ -562,6 +571,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
         browserModel.addTab(WebViewTab(
           key: GlobalKey(),
           webViewModel: WebViewModel(
+            uuid: Uuid().v4(),
               url: widget.requestFocusNodeHrefResult?.url,
               isIncognitoMode: true,
               settings: webViewModel.settings),
@@ -576,7 +586,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
     return ListTile(
       title:  TextWidget(
         text: loc.copyAddressLink,// "Copy address link",
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
       ),
       onTap: () {
         Clipboard.setData(ClipboardData(
@@ -596,7 +606,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
           children: [
             TextWidget(
               text:loc.shareLink, //"Share link",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
             ),
             Icon(
               Icons.share,
@@ -624,8 +634,9 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
 
     // List<int> imageList = base64.decode(image);
 
-    return SizedBox(
+    return Container(
         height: constraints.maxHeight * 0.23, //80,
+        padding: EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           children: [
             Expanded(
@@ -664,7 +675,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.normal,fontFamily: 'Inter'),
                   ),
                   // Text(
                   // widget.requestFocusNodeHrefResult?.url?.toString() ?? "",
@@ -723,7 +734,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
       child: ListTile(
         title:  TextWidget(
           text:loc.downloadimage,// "Download image",
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
         ),
         onTap: () async {
           String? url = widget.hitTestResult.extra;
@@ -799,7 +810,7 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
             children: [
               TextWidget(
                 text:loc.shareImage,// "Share image",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
               ),
               Icon(
                 Icons.share,
@@ -971,12 +982,13 @@ Future<String> resolveWeb3IfNeeded(String value,BrowserModel browserModel,WebVie
       child: ListTile(
         title: TextWidget(
           text:loc.openImageInNewTab, //"Open image in new tab",
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
         ),
         onTap: () {
           browserModel.addTab(WebViewTab(
             key: GlobalKey(),
             webViewModel: WebViewModel(
+              uuid: Uuid().v4(),
                 url: WebUri(widget.hitTestResult.extra ?? "about:blank")),
           ));
           Navigator.pop(context);
@@ -994,7 +1006,7 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
       child: ListTile(
         title: Text(
           "${loc.searchImageWith} ${settings.searchEngine.name == 'Bing' ? 'Microsoft Bing' : 'Google Lens'}",
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal,fontFamily: 'inter'),
         ),
         onTap: () {
           print('OPEN IMAGE SEARCH ____ ${widget.hitTestResult.extra}');
@@ -1007,7 +1019,7 @@ Widget _buildSearchImageOnGoogle(BoxConstraints constraints) {
              }
             browserModel.addTab(WebViewTab(
               key: GlobalKey(),
-              webViewModel: WebViewModel(url: WebUri(url)),
+              webViewModel: WebViewModel(uuid: Uuid().v4(),url: WebUri(url)),
             ));
           }
           Navigator.pop(context);
