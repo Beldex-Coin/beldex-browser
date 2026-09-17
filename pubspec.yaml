@@ -141,6 +141,8 @@ dependencies:
   #qr reader
   mobile_scanner: 7.0.1
 
+  image_picker: 1.1.0
+
   #audio_session: ^0.2.2
 
   #phone_state: #^3.0.0

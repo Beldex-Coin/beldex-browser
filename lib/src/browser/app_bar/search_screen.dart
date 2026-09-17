@@ -31,6 +31,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -489,80 +490,272 @@ Future<void> _openQRScanner() async {
 final scannedValue = await showDialog<String>(
     context: context,
     barrierDismissible: true,
+    barrierColor:themeProvider.darkTheme ? Color(0xff0B0B0B).withOpacity(0.6) : Color(0xffFFFFFF).withOpacity(0.6),
     builder: (context) {
       return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-        insetPadding: const EdgeInsets.all(16),
-        child: Container(
-          height: 450,
-          padding: EdgeInsets.all(14),
-          //color: Color(0xff282836),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+  backgroundColor: Colors.transparent,
+  insetPadding: const EdgeInsets.all(16),
+  child: ConstrainedBox(
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.of(context).size.height * 0.90,
+    ),
+    child: GlassSettingPanel(
+      color: themeProvider.darkTheme
+          ? const Color(0xff222222).withOpacity(0.8)
+          : Colors.transparent,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: themeProvider.darkTheme
+              ? const Color(0xff222222).withOpacity(0.8)
+              : Colors.transparent,
+          border: Border.all(
+            color: themeProvider.darkTheme
+                ? Colors.transparent
+                : const Color(0xffD4D4D4),
+          ),
+        ),
+        child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              
+              // HEADER
               Container(
-                padding: const EdgeInsets.only(top:3,bottom: 8),//only(left:12,right:12),
-                margin: EdgeInsets.only(bottom: 5),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                 // color: Colors.blue,
+                padding: const EdgeInsets.only(
+                  top: 3,
+                  bottom: 8,
                 ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline:TextBaseline.ideographic,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: Colors.transparent,)),
-                      Text(loc.scanQR, //"Scan QR",
-                          style: TextStyle( fontSize: 20,fontFamily: 'Poppins',fontWeight: FontWeight.w600)),
-                      
-                      
-                      GestureDetector(
-                       onTap: () {
-                          MobileScannerController().stop();
-                          Navigator.pop(context);
-                        } , // no v
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom:8,top: 5 ),
-                          child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black, height: 18,)),
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Invisible space to balance the close button
+                    SvgPicture.asset(
+                      'assets/images/ai-icons/close.svg',
+                      color: Colors.transparent,
+                      height: 18,
+                    ),
+
+                    Text(
+                      loc.scanQR,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
                       ),
-                      // IconButton(
-                      //   icon: const Icon(Icons.close,),
-                      //   onPressed: () {
-                      //     MobileScannerController().stop();
-                      //     Navigator.pop(context);
-                      //   } , // no value
-                      // ),
-                    ],
+                    ),
+
+                    GestureDetector(
+                      onTap: () {
+                        scannerController.stop();
+                        Navigator.pop(context);
+                      },
+                      child: SvgPicture.asset(
+                        'assets/images/ai-icons/close.svg',
+                        color: themeProvider.darkTheme
+                            ? Colors.white
+                            : Colors.black,
+                        height: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // SQUARE SCANNER
+              SizedBox(
+                width: double.infinity,
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: themeProvider.darkTheme
+                            ? const Color(0xff444444)
+                            : const Color(0xffD4D4D4),
+                      ),
+                    ),
+                    child: MobileScanner(
+                      controller: scannerController,
+                      fit: BoxFit.cover,
+                      onDetect: (capture) {
+                        if (capture.barcodes.isEmpty) return;
+
+                        final barcode = capture.barcodes.first;
+                        final code = barcode.rawValue;
+
+                        if (code != null) {
+                          scannerController.stop();
+                          Navigator.pop(context, code);
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: MobileScanner(
-                    fit: BoxFit.cover,
-                    onDetect: (capture) {
-                      final barcode = capture.barcodes.first;
-                      final code = barcode.rawValue;
-                      if (code != null) {
-                        Navigator.pop(context, code); // return value
-                      }
-                    },
+
+              // DESCRIPTION
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 15,
+                ),
+                child: Text(
+                  loc.alignQRInCenterOFFrame,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 15),
-              child: Center(child: Text(loc.alignQRInCenterOFFrame,
-              textAlign: TextAlign.center ,style: TextStyle(fontSize: 16,fontFamily: 'Poppins'),)))
+
+              // GALLERY BUTTON
+              GestureDetector(
+                onTap: () => _scanFromGallery(context, loc),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    color: themeProvider.darkTheme
+                        ? const Color(0xff0B0B0B)
+                        : const Color(0xffEBEBEB),
+                    border: Border.all(
+                      color: themeProvider.darkTheme
+                          ? const Color(0xff444444)
+                          : const Color(0xffD4D4D4),
+                    ),
+                  ),
+                  child: Text(
+                    loc.uploadFromGallery,
+                    style: const TextStyle(
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-      );
+      ),
+    ),
+  ),
+);
+      // return Dialog(
+      //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      //   backgroundColor: Colors.transparent, //themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
+      //   insetPadding: const EdgeInsets.all(16),
+      //   child: GlassSettingPanel(
+      //     color: themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.8): Colors.transparent,
+
+      //     child: Container(
+      //       height: 450,
+      //       padding: EdgeInsets.all(14),
+      //       decoration: BoxDecoration(
+      //         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.8) : Colors.transparent,
+      //         border: Border.all(color: themeProvider.darkTheme ? Colors.transparent : Color(0xffD4D4D4))
+      //       ),
+      //       //color: Color(0xff282836),
+      //       child: Column(
+      //         children: [
+      //           Container(
+      //             padding: const EdgeInsets.only(top:3,bottom: 8),//only(left:12,right:12),
+      //             margin: EdgeInsets.only(bottom: 5),
+      //             decoration: const BoxDecoration(
+      //               //borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      //              // color: Colors.blue,
+      //             ),
+      //             child: Center(
+      //               child: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                 crossAxisAlignment: CrossAxisAlignment.baseline,
+      //                 textBaseline:TextBaseline.ideographic,
+      //                 children: [
+      //                   Padding(
+      //                     padding: EdgeInsets.symmetric(vertical: 8),
+      //                     child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: Colors.transparent,)),
+      //                   Text(loc.scanQR, //"Scan QR",
+      //                       style: TextStyle( fontSize: 20,fontFamily: 'Inter',fontWeight: FontWeight.w600)),
+                        
+                        
+      //                   GestureDetector(
+      //                    onTap: () {
+      //                       scannerController.stop();
+      //                       Navigator.pop(context);
+      //                     } , // no v
+      //                     child: Padding(
+      //                       padding: EdgeInsets.only(bottom:8,top: 5 ),
+      //                       child: SvgPicture.asset('assets/images/ai-icons/close.svg',color: themeProvider.darkTheme ? Colors.white : Colors.black, height: 18,)),
+      //                   ),
+      //                   // IconButton(
+      //                   //   icon: const Icon(Icons.close,),
+      //                   //   onPressed: () {
+      //                   //     MobileScannerController().stop();
+      //                   //     Navigator.pop(context);
+      //                   //   } , // no value
+      //                   // ),
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //           Expanded(
+      //             child: ClipRRect(
+      //               borderRadius: BorderRadius.zero,
+      //               child: Container(
+      //                 decoration: BoxDecoration(
+      //                   border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444): Colors.transparent)
+      //                 ),
+      //                 child: MobileScanner(
+      //                   controller: scannerController,
+      //                   fit: BoxFit.cover,
+      //                   onDetect: (capture) {
+      //                     final barcode = capture.barcodes.first;
+      //                     final code = barcode.rawValue;
+      //                     if (code != null) {
+      //                       scannerController.stop();
+      //                       Navigator.pop(context, code); // return value
+      //                     }
+      //                   },
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         Container(
+      //           padding: EdgeInsets.symmetric(vertical: 15),
+      //           child: Center(child: Text(loc.alignQRInCenterOFFrame,
+      //           textAlign: TextAlign.center ,style: TextStyle(fontSize: 16,fontFamily: 'Inter',fontWeight: FontWeight.w400),))),
+               
+      //        GestureDetector(
+      //         onTap: ()=>_scanFromGallery(context,loc),
+      //          child: Container(
+      //           padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+      //              decoration: BoxDecoration(
+      //               color: themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),
+      //               border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+      //              ),
+      //              child: Text(loc.uploadFromGallery,style: TextStyle(fontFamily: 'Roboto',fontWeight: FontWeight.w600,fontSize: 14),),
+      //          ),
+      //        )
+               
+      //         //           ElevatedButton.icon(
+      //         //   onPressed: () => _scanFromGallery(context),
+      //         //   //icon: const Icon(Icons.photo_library_outlined),
+      //         //   label: const Text('Upload from Gallery'),
+      //         // ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // );
     },
   );
 
@@ -578,6 +771,32 @@ final scannedValue = await showDialog<String>(
   }
 }
 
+Future<void> _scanFromGallery(BuildContext context,AppLocalizations loc) async {
+  final ImagePicker picker = ImagePicker();
+
+  final XFile? image = await picker.pickImage(
+    source: ImageSource.gallery,
+  );
+
+  if (image == null) return;
+
+  final BarcodeCapture? result =
+      await scannerController.analyzeImage(image.path);
+
+  if (result != null && result.barcodes.isNotEmpty) {
+    final String? code = result.barcodes.first.rawValue;
+
+    if (code != null) {
+      Navigator.pop(context, code);
+    }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(
+        content: Text(loc.noQRCodeFound),
+      ),
+    );
+  }
+}
 
 
 
