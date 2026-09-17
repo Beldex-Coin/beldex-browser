@@ -480,10 +480,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get unabledToSave => 'Neizdevās saglabāt';
 
   @override
-  String get basic => 'Basic';
+  String get basic => 'Pamata';
 
   @override
-  String get advanced => 'Advanced';
+  String get advanced => 'Papildu';
 
   @override
   String get downloadCompelete => 'Lejupielāde pabeigta';
@@ -529,6 +529,187 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Meklētājprogramma veiksmīgi atjaunināta!';
+
+  @override
+  String get searchusing => 'Meklēt, izmantojot';
+
+  @override
+  String get addTabToNewGroup => 'Pievienot cilni jaunai grupai';
+
+  @override
+  String get invitePeople => 'Uzaicināt personas';
+
+  @override
+  String get uploadFromGallery => 'Augšupielādēt no galerijas';
+
+  @override
+  String get noQRCodeFound => 'attēlā netika atrasts QR kods';
+
+  @override
+  String get searchBarPosition => 'Meklēšanas joslas novietojums';
+
+  @override
+  String get choosethePosition => 'Izvēlieties meklēšanas joslas novietojumu';
+
+  @override
+  String get iPAddress => 'IP adrese,';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Mans IP';
+
+  @override
+  String get marketUpdate => 'Tirgus atjauninājums';
+
+  @override
+  String get searchYourTabs => 'Meklēt savās cilnēs';
+
+  @override
+  String get newTabGroup => 'Jauna ciļņu grupa';
+
+  @override
+  String get selectTab => 'Atlasīt cilni';
+
+  @override
+  String get selectTabs => 'Atlasīt cilnes';
+
+  @override
+  String get deleteTabGroup => 'Dzēst ciļņu grupu';
+
+  @override
+  String get rename => 'Pārdēvēt';
+
+  @override
+  String get renameGroup => 'Pārdēvēt grupu';
+
+  @override
+  String get ungroupTab => 'Atgrupēt cilni';
+
+  @override
+  String get deleteGroup => 'Dzēst grupu';
+
+  @override
+  String get addToTabGroup => 'Pievienot ciļņu grupai';
+
+  @override
+  String get editGroupName => 'Rediģēt grupas nosaukumu';
+
+  @override
+  String get editGroupColor => 'Rediģēt grupas krāsu';
+
+  @override
+  String get closeTab => 'Aizvērt cilni';
+
+  @override
+  String get doYouWantToUngroup => 'Vai tiešām vēlaties atgrupēt šo ciļņu grupu?';
+
+  @override
+  String get ungroupTabGroup => 'Atgrupēt ciļņu grupu';
+
+  @override
+  String get ungroup => 'Atgrupēt';
+
+  @override
+  String get deletetabGroup => 'Dzēst ciļņu grupu';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Pievienot';
+
+  @override
+  String get tabs => 'Cilnes';
+
+  @override
+  String get done => 'Gatavs';
+
+  @override
+  String get create => 'Izveidot';
+
+  @override
+  String get groupColor => 'Grupas krāsa';
+
+  @override
+  String get groupName => 'Grupas nosaukums';
+
+  @override
+  String get addtoNewTabGroup => 'Pievienot jaunai ciļņu grupai';
+
+  @override
+  String get tabGroups => 'Ciļņu grupas';
+
+  @override
+  String get tabGroup => 'Ciļņu grupa';
+
+  @override
+  String get tabsSelected => 'Atlasītās cilnes';
+
+  @override
+  String get privateResearch => 'piem., Privāta izpēte';
+
+  @override
+  String get deselectAll => 'Atcelt visu atlasi';
+
+  @override
+  String get selected => 'Atlasīts';
+
+  @override
+  String get close => 'Aizvērt';
+
+  @override
+  String get top => 'augšā';
+
+  @override
+  String get bottom => 'apakšā';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Šī darbība neatgriezeniski aizvērs visas $tabCount cilnes grupā “$tabGroupName”. Šo darbību nevar atsaukt.';
+  }
+
+  @override
+  String get changingNode => 'Mainīt mezglu..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domēns';
+
+  @override
+  String get enableFreeNameWeb => 'Iespējot FreeName Web3 domēna atbalstu';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Neizdevās lejupielādēt Belnet sāknēšanas failu. Lūdzu, pārbaudiet savienojumu un mēģiniet vēlreiz';
+
+  @override
+  String get couldNotEstablishConnection => 'Neizdevās izveidot Belnet savienojumu. Lūdzu, mēģiniet vēlreiz';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet pakalpojumu neizdevās palaist. Lūdzu, mēģiniet vēlreiz';
+
+  @override
+  String get exitNodeUnreachable => 'Izejas mezgls nav sasniedzams, notiek atkārtota savienošana';
+
+  @override
+  String get tab => 'Cilne';
+
+  @override
+  String get ungroupTabs => 'Atgrupēt cilnes';
+
+  @override
+  String get closeGroup => 'Aizvērt grupu';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Vai tiešām vēlaties atgrupēt atlasītās cilnes no \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex ir decentralizētu un konfidencialitāti saglabājošu lietotņu ekosistēma. Beldex pārlūkprogramma ir viena no šīs ekosistēmas lietotnēm, kas ietver arī BChat, BelNet un Beldex protokolu. Beldex pārlūkprogramma nodrošina vienkāršu un konfidenciālu tiešsaistes pieredzi, kur jūsu dati pieder tikai jums. Uz stabilas blokķēdes infrastruktūras balstītā Beldex pārlūkprogramma nodrošina konfidencialitāti un anonimitāti saviem lietotājiem.';
