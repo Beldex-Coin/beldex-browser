@@ -1006,12 +1006,12 @@ print("Response received. Status: ${response.statusCode}");
 //           }
 //         }
 //       } catch (e) {
-//         print("❌ Error decoding JSON: $e");
+//         print(" Error decoding JSON: $e");
 //         // Don't clear the buffer since it might be incomplete JSON
 //       }
 //     }
   } catch (e) {
-    print("🚨 Unexpected error: $e");
+    print(" Unexpected error: $e");
     yield "Erroring";
   }
 

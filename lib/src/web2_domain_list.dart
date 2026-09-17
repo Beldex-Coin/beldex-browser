@@ -35,7 +35,7 @@ class Web2DomainList {
     }
   }
 
-  /// 🌍 DOMAIN CHECK
+  /// DOMAIN CHECK
   bool isWeb2Domain(String input) {
     if (!input.contains(".")) return false;
 
