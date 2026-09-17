@@ -531,6 +531,187 @@ class AppLocalizationsRu extends AppLocalizations {
   String get searchEngineUpdated => 'Поисковая система успешно обновлена!';
 
   @override
+  String get searchusing => 'Искать с помощью';
+
+  @override
+  String get addTabToNewGroup => 'Добавить вкладку в новую группу';
+
+  @override
+  String get invitePeople => 'Пригласить пользователей';
+
+  @override
+  String get uploadFromGallery => 'Загрузить из галереи';
+
+  @override
+  String get noQRCodeFound => 'QR-код на изображении не найден';
+
+  @override
+  String get searchBarPosition => 'Положение строки поиска';
+
+  @override
+  String get choosethePosition => 'выберите положение строки поиска';
+
+  @override
+  String get iPAddress => 'IP-адрес';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Мой IP';
+
+  @override
+  String get marketUpdate => 'Обновление рынка';
+
+  @override
+  String get searchYourTabs => 'Поиск по вкладкам';
+
+  @override
+  String get newTabGroup => 'Новая группа вкладок';
+
+  @override
+  String get selectTab => 'Выбрать вкладку';
+
+  @override
+  String get selectTabs => 'Выбрать вкладки';
+
+  @override
+  String get deleteTabGroup => 'Удалить группу вкладок';
+
+  @override
+  String get rename => 'Переименовать';
+
+  @override
+  String get renameGroup => 'Переименовать группу';
+
+  @override
+  String get ungroupTab => 'Разгруппировать вкладку';
+
+  @override
+  String get deleteGroup => 'Удалить группу';
+
+  @override
+  String get addToTabGroup => 'Добавить в группу вкладок';
+
+  @override
+  String get editGroupName => 'Изменить название группы';
+
+  @override
+  String get editGroupColor => 'Изменить цвет группы';
+
+  @override
+  String get closeTab => 'Закрыть вкладку';
+
+  @override
+  String get doYouWantToUngroup => 'Вы действительно хотите разгруппировать эту группу вкладок?';
+
+  @override
+  String get ungroupTabGroup => 'Разгруппировать группу вкладок';
+
+  @override
+  String get ungroup => 'Разгруппировать';
+
+  @override
+  String get deletetabGroup => 'Удалить группу вкладок';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Добавить в';
+
+  @override
+  String get tabs => 'Вкладки';
+
+  @override
+  String get done => 'Отмена';
+
+  @override
+  String get create => 'Создать';
+
+  @override
+  String get groupColor => 'Цвет группы';
+
+  @override
+  String get groupName => 'Название группы';
+
+  @override
+  String get addtoNewTabGroup => 'Добавить в новую группу вкладок';
+
+  @override
+  String get tabGroups => 'Группы вкладок';
+
+  @override
+  String get tabGroup => 'Группа вкладок';
+
+  @override
+  String get tabsSelected => 'Выбранные вкладки';
+
+  @override
+  String get privateResearch => 'Например: Частное исследование';
+
+  @override
+  String get deselectAll => 'Снять выделение со всех';
+
+  @override
+  String get selected => 'Выбрано';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String get top => 'сверху';
+
+  @override
+  String get bottom => 'снизу';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Это действие навсегда закроет все $tabCount вкладки в группе «$tabGroupName». Это действие нельзя отменить.';
+  }
+
+  @override
+  String get changingNode => 'Смена узла..';
+
+  @override
+  String get freeenameWebDomain => 'Домен Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Включить поддержку доменов Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Не удалось загрузить файл начальной загрузки Belnet. Проверьте подключение и повторите попытку';
+
+  @override
+  String get couldNotEstablishConnection => 'Не удалось установить соединение с Belnet. Повторите попытку';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Не удалось запустить службу Belnet. Повторите попытку.';
+
+  @override
+  String get exitNodeUnreachable => 'Узел выхода недоступен, выполняется повторное подключение';
+
+  @override
+  String get tab => 'Вкладка';
+
+  @override
+  String get ungroupTabs => 'Разгруппировать вкладки';
+
+  @override
+  String get closeGroup => 'Закрыть группу';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Вы действительно хотите разгруппировать выбранные вкладки из \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex – это экосистема децентрализованных приложений, обеспечивающих сохранение конфиденциальности. Приложение Beldex Browser является частью этой экосистемы, которая также включает приложения, такие как BChat, BelNet и протокол Beldex. Браузер Beldex открывает доступ к беспрепятственному и конфиденциальному онлайн-опыту, где ваши данные принадлежат только вам. Построенный на надежной блокчейн-инфраструктуре, браузер Beldex обеспечивает конфиденциальность и анонимность пользователей.';
 
   @override
