@@ -9,7 +9,9 @@ import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -48,6 +50,10 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
   late EditableTextState editableState = EditableTextState();
   bool isSwitched = true;
   //final dynamicTextSizeWidget = DynamicTextSizeWidget();
+
+bool isDropdownSEOpened = false;
+bool isSearchbarDropdownOpened = false;
+
   @override
   void initState() {
     super.initState();
@@ -73,32 +79,41 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
     var vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+final appBarProvider = Provider.of<AppBarPositionProvider>(context,listen: false);
     return LayoutBuilder(builder: (context, constraints) {
-      return Container(
-        margin:const EdgeInsets.all(15),
-        height: constraints.maxHeight,
-        decoration: BoxDecoration(
-            color: themeProvider.darkTheme
-                ? const Color(0xff292937)
-                : const Color(0xffF3F3F3),
-            borderRadius: BorderRadius.circular(15)),
-        child: RawScrollbar(
-          padding: EdgeInsets.only(right: 5, top: 5),
-          thickness: 1.8,
+      return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: GlassCommonPanel(
           child: Container(
-            padding:
-                const EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: _buildBaseSettings(
-                        themeProvider, constraints,vpnStatusProvider), // children,
-                  ),
+           // margin:const EdgeInsets.all(15),
+            height: constraints.maxHeight,
+            decoration: BoxDecoration(
+                color:Colors.transparent,
+                //  themeProvider.darkTheme
+                //     ? const Color(0xff292937)
+                //     : const Color(0xffF3F3F3),
+                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444): Color(0xffD4D4D4))
+               // borderRadius: BorderRadius.circular(15)
                 ),
-              ],
+            child: RawScrollbar(
+              padding: EdgeInsets.only(right: 5, top: 5),
+              thickness: 1.8,
+              child: Container(
+                padding:
+                    const EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        children: _buildBaseSettings(
+                            themeProvider, constraints,vpnStatusProvider,appBarProvider), // children,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -128,7 +143,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
   }
 
   List<Widget> _buildBaseSettings(
-      DarkThemeProvider themeProvider, BoxConstraints constraints,VpnStatusProvider vpnStatusProvider) {
+      DarkThemeProvider themeProvider, BoxConstraints constraints,VpnStatusProvider vpnStatusProvider,AppBarPositionProvider appBarProvider) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
@@ -142,6 +157,9 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
     final width = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     final addSearchEngineProvider = Provider.of<AddSearchEngineProvider>(context,listen: false);
+     
+  final groupProvider = Provider.of<GroupProvider>(context);
+
 
 //
 
@@ -190,13 +208,13 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 children: [
                   TextWidget(text:loc.searchEngine, //"Search Engine",
                       style: theme.textTheme.bodyLarge!
-                          .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                          .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                   TextWidget(
                       text:loc.searchEngineContent, //'Choose your preferred search engine for personalized browsing.',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
                       style: theme.textTheme.bodySmall!
-                          .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                          .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                 ],
               ),
             ),
@@ -205,32 +223,72 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(4),
       side: BorderSide(
-        color: themeProvider.darkTheme
+        color: 
+        themeProvider.darkTheme
             ? const Color(0xff42425F)
-            : const Color(0xffF3F3F3),
+            : const Color(0xffD4D4D4),
       ),
     ),
               ),
               child: PopupMenuButton<SearchEngineModel>(
+
+menuPadding: EdgeInsets.zero,
+                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9): Color(0xffEBEBEB).withOpacity(0.1),
+  elevation: 0,
+  shadowColor: Colors.transparent,
+  surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :Color(0xffEBEBEB).withOpacity(0.1),
+       // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+        constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
+                 onCanceled: () {
+                  setState(() {
+                    isDropdownSEOpened = false;
+                  });
+                 },
+                 onOpened: (){
+                  setState(() {
+                    
+                  });
+                  isDropdownSEOpened = true;
+                 },
+             // icon: SvgPicture.asset('assets/images/ai-icons/new/threedot.svg',color:themeProvider.darkTheme ? Colors.white : Colors.black),// Icon(Icons.more_horiz,
+                  //color: themeProvider.darkTheme ? Colors.white : Colors.black),
+       // onSelected: _popupMenuChoiceAction,
+        //offset: Offset(0, 47),
+        shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+    side: BorderSide(
+      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+      width: 1,
+    ),
+  ),
+
+
+
+
+
                 offset: Offset(-8, 49),
-                color: themeProvider.darkTheme
-                    ? const Color(0xff292937)
-                    : const Color(0xffF3F3F3),
-                surfaceTintColor: themeProvider.darkTheme
-                    ? const Color(0xff292937)
-                    : const Color(0xffF3F3F3),
+                // color: 
+                // themeProvider.darkTheme
+                //     ? const Color(0xff292937)
+                //     : const Color(0xffF3F3F3),
+                // surfaceTintColor: themeProvider.darkTheme
+                //     ? const Color(0xff292937)
+                //     : const Color(0xffF3F3F3),
                 icon: Container(
                   width: 100,
                   height: 40,
                   decoration: BoxDecoration(
                       color: themeProvider.darkTheme
-                          ? const Color(0xff363645)
+                          ? const Color(0xff222222)
                           : const Color(0xffFFFFFF),
                       border: Border.all(
                           color: themeProvider.darkTheme
-                              ? const Color(0xff42425F)
-                              : const Color(0xff3EC745)),
-                      borderRadius: BorderRadius.circular(3)),
+                              ? const Color(0xff333333)
+                              : const Color(0xffD4D4D4)),
+                      //borderRadius: BorderRadius.circular(3)
+                      ),
                   padding:const EdgeInsets.symmetric(horizontal: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -241,17 +299,17 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 12,
+                            fontFamily: 'Inter',
                             color: themeProvider.darkTheme
-                                ? Colors.white
-                                : Color(0xff3EC745)),
+                                ? Color(0xffEBEBEB)
+                                : Color(0xff0B0B0B)),
                       )),
                       SizedBox(
                         width: 25,
-                        child: Icon(Icons.arrow_drop_down,
-                            color: themeProvider.darkTheme
-                                ? const Color(0xff6D6D81)
-                                : const Color(0xff3EC745)),
+                        child: Icon(isDropdownSEOpened  ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                            color:  const Color(0xff8D8D8D)
+                                ),
                       ),
                     ],
                   ),
@@ -260,6 +318,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                   setState(() {
                     settings.searchEngine = value;
                     browserModel.updateSettings(settings);
+                    isDropdownSEOpened = false;
                   });
                     browserModel.updateIconValue(value.assetIcon);
                   // if (value.name == 'Google') {
@@ -285,7 +344,17 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         enabled: true,
                         value: searchEngine,
                         height: 30,
-                        child: Text(searchEngine.name,style: TextStyle(fontWeight: FontWeight.w300),));
+                        padding: EdgeInsets.zero,
+                        child: GlassSettingPanel(
+                          color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.1),
+                          child: Container(
+                          height: 30,
+                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(searchEngine.name,style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w300),)),
+                            ],
+                          ))));
                   }).toList();
                 }),
               ),
@@ -469,11 +538,11 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                     children: [
                       TextWidget(text:loc.homePage, //"Home page",
                           style: theme.textTheme.bodyLarge!.copyWith(
-                              fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                              fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                       TextWidget(
                          text:loc.homepageContent, //'Set your homepage for quick access to favorite sites.',
                           style: theme.textTheme.bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                     ],
                   ),
                 ),
@@ -484,14 +553,14 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
               FlutterSwitch(
                   value: settings.homePageEnabled,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: widget.widthInDp, //width / 8.0, //50,
                   height:widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -512,6 +581,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         
                         showDialog(
                           context: context,
+                           barrierColor:themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8) ,
                           // barrierDismissible: false,
                           builder: (context) {
 
@@ -534,402 +604,423 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
 
 
                             return Dialog(
-                              backgroundColor: themeProvider.darkTheme
-                                  ? const Color(0xff282836)
-                                  : const Color(0xffFFFFFF),
-                              insetPadding: EdgeInsets.all(20),
-                               shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-                              child: Container(
-                                
-                                width: MediaQuery.of(context).size.width,
-                                // height: 200,
-                                padding: EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                 // color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child:  TextWidget(
-                                       text:loc.homePage, //'Home Page',
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w600),
+                              insetPadding: EdgeInsets.all(18),
+            backgroundColor: Colors.transparent,
+            shape:
+                RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(
+                18,
+              ),
+            ),
+                              child: GlassSettingPanel(
+                                color: themeProvider.darkTheme ? Color(0xff1A1A1A).withOpacity(0.7) : Color(0xffEBEBEB).withOpacity(0.8),
+                                child: Container(
+                                  
+                                  width: MediaQuery.of(context).size.width,
+                                  // height: 200,
+                                  padding: EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                   // color: Colors.white,
+                                   border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4),width: 1),
+                                     // borderRadius: BorderRadius.circular(10)
                                       ),
-                                    ),
-                                    // StatefulBuilder(
-                                    //   builder: (context, setState) {
-                                    //     return SwitchListTile(
-                                    //       title: Text(settings.homePageEnabled ? "ON" : "OFF"),
-                                    //       value: settings.homePageEnabled,
-                                    //       onChanged: (value) {
-                                    //         setState(() {
-                                    //           settings.homePageEnabled = value;
-                                    //           browserModel.updateSettings(settings);
-                                    //         });
-                                    //       },
-                                    //     );
-                                    //   },
-                                    // ),
-                                    StatefulBuilder(
-                                        builder: (context, setState) {
-                                          //  Local dialog state
-                  bool isButtonEnabled =
-                      _customHomePageController.text.trim().isNotEmpty;
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                              // mainAxisAlignment: MainAxisAlignment.end,
-                                              children: <Widget>[
-                                                Expanded(
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: themeProvider
-                                                                    .darkTheme
-                                                                ? Color(0xff42425F)
-                                                                : Color(
-                                                                    0xffDADADA)),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                8)),
-                                                    child: TextField(
-                                                      onSubmitted: (value) {
-                                                        if (value.isEmpty ||
-                                                            value == '') {
-                                                          settings.homePageEnabled =
-                                                              false;
-                                                          browserModel
-                                                              .updateSettings(
-                                                                  settings);
-                                                          setState(() {
-                                                            _showError = true;
-                                                            return;
-                                                          });
-                                                        } else if(!isValidURL(value)){
-                                                       _showError = true;
-                                                           return ;
-                                                         }else {
-                                                          setState(() {
-                                                            settings.customUrlHomePage =
-                                                                formatUrl(
-                                                                    value.trim());
-                                          
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child:  TextWidget(
+                                         text:loc.homePage, //'Home Page',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontFamily: 'Inter',color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)
+                                              ),
+                                        ),
+                                      ),
+                                      // StatefulBuilder(
+                                      //   builder: (context, setState) {
+                                      //     return SwitchListTile(
+                                      //       title: Text(settings.homePageEnabled ? "ON" : "OFF"),
+                                      //       value: settings.homePageEnabled,
+                                      //       onChanged: (value) {
+                                      //         setState(() {
+                                      //           settings.homePageEnabled = value;
+                                      //           browserModel.updateSettings(settings);
+                                      //         });
+                                      //       },
+                                      //     );
+                                      //   },
+                                      // ),
+                                      StatefulBuilder(
+                                          builder: (context, setState) {
+                                            //  Local dialog state
+                                                  bool isButtonEnabled =
+                                                      _customHomePageController.text.trim().isNotEmpty;
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    child: Container(
+                                                      padding: EdgeInsets.symmetric(
+                                                          horizontal: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: themeProvider.darkTheme ? Colors.transparent: Color(0xffFFFFFF),
+                                                          border: Border.all(
+                                                              color: themeProvider
+                                                                      .darkTheme
+                                                                  ? Color(0xff444444)
+                                                                  : Color(
+                                                                      0xffDADADA)
+                                                                      ),
+                                                          // borderRadius:
+                                                          //     BorderRadius.circular(
+                                                          //         8)
+                                                        ),
+                                                      child: TextField(
+                                                        onSubmitted: (value) {
+                                                          if (value.isEmpty ||
+                                                              value == '') {
                                                             settings.homePageEnabled =
-                                                                true;
+                                                                false;
                                                             browserModel
                                                                 .updateSettings(
                                                                     settings);
-                                                            Navigator.pop(context);
-                                                          });
-                                                        }
-                                                      },
-                                                      onChanged: (value){
-                                                          setState(() {
-                                _showError = false;
-                                isButtonEnabled =
-                                    value.trim().isNotEmpty;
-                              });
-                          
-                                                      },
-                                                      keyboardType:
-                                                          TextInputType.url,
-                                                      decoration: InputDecoration(
-                                                        border: InputBorder.none,
-                                                        contentPadding: EdgeInsets.only(left:5),
-                                                        hintText:loc.customUrlHomePage,
-                                                            //'Custom URL Home Page',
-                                                        hintStyle: TextStyle(
-                                                          fontSize: 14,
-                                                            color:  const Color(0xff77778B),
-                                                                    fontWeight: FontWeight.w400
-                                                                    ),
-                                                      ),
-                                                      controller:
-                                                          _customHomePageController,
-                                                          magnifierConfiguration:TextMagnifierConfiguration.disabled,
-                                                    contextMenuBuilder: (context, editableTextState) {
-                                                                //final List<ContextMenuButtonItem>
-                                                                buttonItems = editableTextState.contextMenuButtonItems;
-                                          
-                                                                editableState = editableTextState;
-                                          
-                                                                buttonItems.clear(); // Clear all default options
-                                                                if (_customHomePageController.text.isEmpty) {
-                                                                  buttonItems.add(ContextMenuButtonItem(
-                                                                      label:loc.paste,// 'Paste',
+                                                            setState(() {
+                                                              _showError = true;
+                                                              return;
+                                                            });
+                                                          } else if(!isValidURL(value)){
+                                                         _showError = true;
+                                                             return ;
+                                                           }else {
+                                                            setState(() {
+                                                              settings.customUrlHomePage =
+                                                                  formatUrl(
+                                                                      value.trim());
+                                            
+                                                              settings.homePageEnabled =
+                                                                  true;
+                                                              browserModel
+                                                                  .updateSettings(
+                                                                      settings);
+                                                              Navigator.pop(context);
+                                                            });
+                                                          }
+                                                        },
+                                                        onChanged: (value){
+                                                            setState(() {
+                                  _showError = false;
+                                  isButtonEnabled =
+                                      value.trim().isNotEmpty;
+                                });
+                                                          
+                                                        },
+                                                        keyboardType:
+                                                            TextInputType.url,
+                                                        decoration: InputDecoration(
+                                                          border: InputBorder.none,
+                                                          contentPadding: EdgeInsets.only(left:5),
+                                                          hintText:loc.customUrlHomePage,
+                                                              //'Custom URL Home Page',
+                                                          hintStyle: TextStyle(
+                                                            fontSize: 14,
+                                                              color: themeProvider.darkTheme ? const Color(0xff737373) : Color(0xffACACAC),
+                                                                      fontWeight: FontWeight.w400
+                                                                      ),
+                                                        ),
+                                                        controller:
+                                                            _customHomePageController,
+                                                            magnifierConfiguration:TextMagnifierConfiguration.disabled,
+                                                      contextMenuBuilder: (context, editableTextState) {
+                                                                  //final List<ContextMenuButtonItem>
+                                                                  buttonItems = editableTextState.contextMenuButtonItems;
+                                            
+                                                                  editableState = editableTextState;
+                                            
+                                                                  buttonItems.clear(); // Clear all default options
+                                                                  if (_customHomePageController.text.isEmpty) {
+                                                                    buttonItems.add(ContextMenuButtonItem(
+                                                                        label:loc.paste,// 'Paste',
+                                                                        onPressed: () {
+                                                                          Clipboard.getData('text/plain').then((value) {
+                                                                            if (value != null && value.text != null) {
+                                                                              final text = _customHomePageController.text;
+                                                                              //final selection = _searchController.selection;
+                                                                              final selection = editableTextState
+                                            .textEditingValue.selection;
+                                                                              final newText = text.replaceRange(
+                                                                                selection.start,
+                                                                                selection.end,
+                                                                                value.text!,
+                                                                              );
+                                                                              print(
+                                            'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                                                              _customHomePageController.text = newText;
+                                                                              // if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
+                                                                              //   print("The User Message Contains Url 1");
+                                                                              // canShowSearchAI= '';
+                                                                              //   }else
+                                                                              //     canShowSearchAI= _searchController.text;
+                                                                     // print('BELDEX AI ---------> $canShowSearchAI');
+                                                    
+                                                                              //canShowSearchAI = _searchController.text;
+                                                                              final newSelection = TextSelection.collapsed(
+                                                                                offset:
+                                              selection.start + value.text!.length,
+                                                                              );
+                                                                              _customHomePageController.selection = newSelection;
+                                                                              editableTextState.hideToolbar(false);
+                                                                            }
+                                                                          });
+                                                                        }));
+                                                                  } else {
+                                                                    buttonItems.clear();
+                                                                    buttonItems.add(ContextMenuButtonItem(
+                                                                      label:loc.cut,// 'Cut',
+                                                                      onPressed: () {
+                                                                        editableTextState
+                                                                            .cutSelection(SelectionChangedCause.tap);
+                                                                        final TextEditingController controller =
+                                                                            editableTextState.widget.controller;
+                                                                        final TextEditingValue value = controller.value;
+                                                                        final TextSelection selection = value.selection;
+                                                                        if (!selection.isCollapsed) {
+                                                                          final String cutText =
+                                                                              selection.textInside(value.text);
+                                                                          Clipboard.setData(ClipboardData(text: cutText));
+                                            
+                                                                          final String newText = value.text.replaceRange(
+                                                                              selection.start, selection.end, '');
+                                                                          controller.value = TextEditingValue(
+                                                                              text: newText,
+                                                                              selection: TextSelection.collapsed(
+                                            offset: selection.start));
+                                            
+                                                                          final String findOnPageText =
+                                                                              _customHomePageController.text;
+                                                                          final String newFindOnPageText =
+                                                                              findOnPageText.replaceRange(
+                                            selection.start, selection.end, '');
+                                            
+                                                                          print(
+                                                                              'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                                                                          _customHomePageController.text =
+                                                                              findOnPageText; //newFindOnPageText;
+                                                                        }
+                                                                        //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                                                        //   editableTextState.cutSelection(SelectionChangedCause.tap);
+                                                                        //   _searchController.clear();
+                                                                        //   //editableTextState.hideToolbar(false);
+                                                                      },
+                                                                    ));
+                                            
+                                                                    buttonItems.add(ContextMenuButtonItem(
+                                                                      label:loc.copy,// 'Copy',
+                                                                      onPressed: () {
+                                                                        final TextEditingValue value =
+                                                                            editableTextState.textEditingValue;
+                                                                        final TextSelection selection = value.selection;
+                                            
+                                                                        if (!selection.isCollapsed) {
+                                                                          final String selectedText =
+                                                                              selection.textInside(value.text);
+                                                                          Clipboard.setData(
+                                                                              ClipboardData(text: selectedText));
+                                                                          print("Copied value --> $selectedText");
+                                                                        }
+                                                                        editableTextState.hideToolbar(false);
+                                                                      },
+                                                                    ));
+                                                                    if (!isAllTextSelected(
+                                                                        editableTextState.textEditingValue.selection,
+                                                                        editableTextState.textEditingValue.text)) {
+                                                                      buttonItems.add(ContextMenuButtonItem(
+                                                                        label:loc.selectAll, // 'Select All',
+                                                                        onPressed: () {
+                                                                          // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                                                          editableTextState
+                                                                              .selectAll(SelectionChangedCause.tap);
+                                                                          //editableTextState.hideToolbar(false);
+                                                                        },
+                                                                      ));
+                                                                    }
+                                                                    // Add a custom "Paste" button
+                                                                    buttonItems.add(ContextMenuButtonItem(
+                                                                      label:loc.paste, // 'Paste',
                                                                       onPressed: () {
                                                                         Clipboard.getData('text/plain').then((value) {
                                                                           if (value != null && value.text != null) {
                                                                             final text = _customHomePageController.text;
-                                                                            //final selection = _searchController.selection;
+                                                                            // final selection = _searchController.selection;
                                                                             final selection = editableTextState
-                                          .textEditingValue.selection;
+                                                                                .textEditingValue.selection;
                                                                             final newText = text.replaceRange(
                                                                               selection.start,
                                                                               selection.end,
                                                                               value.text!,
                                                                             );
                                                                             print(
-                                          'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                                                                'text --> $text\n selection --> $selection\n newtext --> $newText');
                                                                             _customHomePageController.text = newText;
-                                                                            // if(_searchController.text.trim().isEmpty || containsUrl(_searchController.text)){
-                                                                            //   print("The User Message Contains Url 1");
-                                                                            // canShowSearchAI= '';
-                                                                            //   }else
-                                                                            //     canShowSearchAI= _searchController.text;
-                                                                   // print('BELDEX AI ---------> $canShowSearchAI');
-                                                  
-                                                                            //canShowSearchAI = _searchController.text;
                                                                             final newSelection = TextSelection.collapsed(
-                                                                              offset:
-                                            selection.start + value.text!.length,
+                                                                              offset: selection.start + value.text!.length,
                                                                             );
                                                                             _customHomePageController.selection = newSelection;
                                                                             editableTextState.hideToolbar(false);
                                                                           }
                                                                         });
-                                                                      }));
-                                                                } else {
-                                                                  buttonItems.clear();
-                                                                  buttonItems.add(ContextMenuButtonItem(
-                                                                    label:loc.cut,// 'Cut',
-                                                                    onPressed: () {
-                                                                      editableTextState
-                                                                          .cutSelection(SelectionChangedCause.tap);
-                                                                      final TextEditingController controller =
-                                                                          editableTextState.widget.controller;
-                                                                      final TextEditingValue value = controller.value;
-                                                                      final TextSelection selection = value.selection;
-                                                                      if (!selection.isCollapsed) {
-                                                                        final String cutText =
-                                                                            selection.textInside(value.text);
-                                                                        Clipboard.setData(ClipboardData(text: cutText));
-                                          
-                                                                        final String newText = value.text.replaceRange(
-                                                                            selection.start, selection.end, '');
-                                                                        controller.value = TextEditingValue(
-                                                                            text: newText,
-                                                                            selection: TextSelection.collapsed(
-                                          offset: selection.start));
-                                          
-                                                                        final String findOnPageText =
-                                                                            _customHomePageController.text;
-                                                                        final String newFindOnPageText =
-                                                                            findOnPageText.replaceRange(
-                                          selection.start, selection.end, '');
-                                          
-                                                                        print(
-                                                                            'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
-                                                                        _customHomePageController.text =
-                                                                            findOnPageText; //newFindOnPageText;
-                                                                      }
-                                                                      //  // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                                                                      //   editableTextState.cutSelection(SelectionChangedCause.tap);
-                                                                      //   _searchController.clear();
-                                                                      //   //editableTextState.hideToolbar(false);
-                                                                    },
-                                                                  ));
-                                          
-                                                                  buttonItems.add(ContextMenuButtonItem(
-                                                                    label:loc.copy,// 'Copy',
-                                                                    onPressed: () {
-                                                                      final TextEditingValue value =
-                                                                          editableTextState.textEditingValue;
-                                                                      final TextSelection selection = value.selection;
-                                          
-                                                                      if (!selection.isCollapsed) {
-                                                                        final String selectedText =
-                                                                            selection.textInside(value.text);
-                                                                        Clipboard.setData(
-                                                                            ClipboardData(text: selectedText));
-                                                                        print("Copied value --> $selectedText");
-                                                                      }
-                                                                      editableTextState.hideToolbar(false);
-                                                                    },
-                                                                  ));
-                                                                  if (!isAllTextSelected(
-                                                                      editableTextState.textEditingValue.selection,
-                                                                      editableTextState.textEditingValue.text)) {
-                                                                    buttonItems.add(ContextMenuButtonItem(
-                                                                      label:loc.selectAll, // 'Select All',
-                                                                      onPressed: () {
-                                                                        // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                                                                        editableTextState
-                                                                            .selectAll(SelectionChangedCause.tap);
-                                                                        //editableTextState.hideToolbar(false);
                                                                       },
                                                                     ));
                                                                   }
-                                                                  // Add a custom "Paste" button
-                                                                  buttonItems.add(ContextMenuButtonItem(
-                                                                    label:loc.paste, // 'Paste',
-                                                                    onPressed: () {
-                                                                      Clipboard.getData('text/plain').then((value) {
-                                                                        if (value != null && value.text != null) {
-                                                                          final text = _customHomePageController.text;
-                                                                          // final selection = _searchController.selection;
-                                                                          final selection = editableTextState
-                                                                              .textEditingValue.selection;
-                                                                          final newText = text.replaceRange(
-                                                                            selection.start,
-                                                                            selection.end,
-                                                                            value.text!,
-                                                                          );
-                                                                          print(
-                                                                              'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                                                          _customHomePageController.text = newText;
-                                                                          final newSelection = TextSelection.collapsed(
-                                                                            offset: selection.start + value.text!.length,
-                                                                          );
-                                                                          _customHomePageController.selection = newSelection;
-                                                                          editableTextState.hideToolbar(false);
-                                                                        }
-                                                                      });
-                                                                    },
-                                                                  ));
-                                                                }
-                                                                return  AdaptiveTextSelectionToolbar.buttonItems(
-                                                                  anchors: editableTextState.contextMenuAnchors,
-                                                                  buttonItems: buttonItems,
-                                                                );
-                                                              },
-                                                      
+                                                                  return  AdaptiveTextSelectionToolbar.buttonItems(
+                                                                    anchors: editableTextState.contextMenuAnchors,
+                                                                    buttonItems: buttonItems,
+                                                                  );
+                                                                },
+                                                        
+                                                      ),
                                                     ),
-                                                  ),
-                                                )
-                                              ]),
-                                       
-                                       
-                                       Visibility(
-                                      visible: _showError,
-                                      child: TextWidget(
-                                       text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                    SizedBox(height: 8,),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: MaterialButton(
-                                        color: isButtonEnabled ? Color(0xff0BA70F) : Colors.grey, //const Color(0xff00B134),
-                                        disabledColor:themeProvider.darkTheme ? Color(0xff2C2C3B) : Colors.grey.shade100,
-                                        minWidth: double.maxFinite,
-                                        height: 50,
-                                        child:  Text(loc.ok, // 'OK',
-                                            style: TextStyle(
-                                                color:isButtonEnabled ? Colors.white : themeProvider
-                                                                    .darkTheme
-                                                                ? Color(0xff42425F)
-                                                                : Color(
-                                                                    0xffDADADA),
-                                                fontSize: 18)),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              10.0), // Adjust the radius as needed
+                                                  )
+                                                ]),
+                                         
+                                         
+                                         Visibility(
+                                        visible: _showError,
+                                        child: TextWidget(
+                                         text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
+                                          style: TextStyle(color: Colors.red),
                                         ),
-                                        onPressed:isButtonEnabled ? () {
-                                         setState(() {
-                                            if (_customHomePageController
-                                              .text.isEmpty) {
-                                            settings.homePageEnabled = false;
-                                            //setState(() {
-                                              _showError = true;
-                                              return;
-                                            //});
-                                          }else if(!isValidURL(_customHomePageController.text)){
-                                             _showError = true;
-                                             return ;
-                                          } else {
-                                            //setState(() {
-                                              // _customHomePageController.text = settings.customUrlHomePage;
-                                              _showError = false;
-                                              settings.customUrlHomePage =
-                                                  formatUrl(
-                                                      (_customHomePageController
-                                                              .text)
-                                                          .trim());
-                                              settings.homePageEnabled = true;
-                                              browserModel
-                                                  .updateSettings(settings);
-                                              Navigator.pop(context);
-                                           // });
-                                          }
-                                          });
-                                        }:null,
                                       ),
-                                    )
-                                       
-                                       
+                                      SizedBox(height: 8,),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: MaterialButton(
+                                              color: isButtonEnabled ? themeProvider.darkTheme ? Color(0xffEBEBEB)  : Color(0xff0B0B0B) : Colors.grey, //const Color(0xff00B134),
+                                              disabledColor://themeProvider.darkTheme ? Color(0xff2C2C3B) :
+                                               Colors.grey.shade100,
+                                              minWidth: double.minPositive,
+                                              height: 45,
+                                              elevation: 0,
+                                              shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                                              child:  Text(loc.ok, // 'OK',
+                                                  style: TextStyle(
+                                                      color:isButtonEnabled ? themeProvider.darkTheme ? Colors.black : Colors.white : themeProvider
+                                                                          .darkTheme
+                                                                      ? Color(0xff42425F)
+                                                                      : Color(
+                                                                          0xffDADADA),
+                                                                          fontFamily: 'Poppins',
+                                                                          fontWeight: FontWeight.w900,
+                                                      fontSize: 14)),
+                                             
+                                              onPressed:isButtonEnabled ? () {
+                                               setState(() {
+                                                  if (_customHomePageController
+                                                    .text.isEmpty) {
+                                                  settings.homePageEnabled = false;
+                                                  //setState(() {
+                                                    _showError = true;
+                                                    return;
+                                                  //});
+                                                }else if(!isValidURL(_customHomePageController.text)){
+                                                   _showError = true;
+                                                   return ;
+                                                } else {
+                                                  //setState(() {
+                                                    // _customHomePageController.text = settings.customUrlHomePage;
+                                                    _showError = false;
+                                                    settings.customUrlHomePage =
+                                                        formatUrl(
+                                                            (_customHomePageController
+                                                                    .text)
+                                                                .trim());
+                                                    settings.homePageEnabled = true;
+                                                    browserModel
+                                                        .updateSettings(settings);
+                                                    Navigator.pop(context);
+                                                 // });
+                                                }
+                                                });
+                                              }:null,
+                                            ),
+                                          ),
                                         ],
-                                      );
-                                    }),
-                                    // Visibility(
-                                    //   visible: _showError,
-                                    //   child: TextWidget(
-                                    //    text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
-                                    //     style: TextStyle(color: Colors.red),
-                                    //   ),
-                                    // ),
-                                    // SizedBox(height: 8,),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.symmetric(
-                                    //       vertical: 8.0),
-                                    //   child: MaterialButton(
-                                    //     color: Color(0xff0BA70F), //const Color(0xff00B134),
-                                    //     disabledColor: Color(0xff2C2C3B),
-                                    //     minWidth: double.maxFinite,
-                                    //     height: 50,
-                                    //     child:  Text(loc.ok, // 'OK',
-                                    //         style: TextStyle(
-                                    //             color: Colors.white,
-                                    //             fontSize: 18)),
-                                    //     shape: RoundedRectangleBorder(
-                                    //       borderRadius: BorderRadius.circular(
-                                    //           10.0), // Adjust the radius as needed
-                                    //     ),
-                                    //     onPressed: () {
-                                    //      setState(() {
-                                    //         if (_customHomePageController
-                                    //           .text.isEmpty) {
-                                    //         settings.homePageEnabled = false;
-                                    //         //setState(() {
-                                    //           _showError = true;
-                                    //           return;
-                                    //         //});
-                                    //       }else if(!isValidURL(_customHomePageController.text)){
-                                    //          _showError = true;
-                                    //          return ;
-                                    //       } else {
-                                    //         //setState(() {
-                                    //           // _customHomePageController.text = settings.customUrlHomePage;
-                                    //           _showError = false;
-                                    //           settings.customUrlHomePage =
-                                    //               formatUrl(
-                                    //                   (_customHomePageController
-                                    //                           .text)
-                                    //                       .trim());
-                                    //           settings.homePageEnabled = true;
-                                    //           browserModel
-                                    //               .updateSettings(settings);
-                                    //           Navigator.pop(context);
-                                    //        // });
-                                    //       }
-                                    //       });
-                                    //     },
-                                    //   ),
-                                    // )
-                                  ],
+                                      )
+                                         
+                                         
+                                          ],
+                                        );
+                                      }),
+                                      // Visibility(
+                                      //   visible: _showError,
+                                      //   child: TextWidget(
+                                      //    text:loc.pleaseEnterValidCustomURL, // 'Please enter valid custom Url',
+                                      //     style: TextStyle(color: Colors.red),
+                                      //   ),
+                                      // ),
+                                      // SizedBox(height: 8,),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.symmetric(
+                                      //       vertical: 8.0),
+                                      //   child: MaterialButton(
+                                      //     color: Color(0xff0BA70F), //const Color(0xff00B134),
+                                      //     disabledColor: Color(0xff2C2C3B),
+                                      //     minWidth: double.maxFinite,
+                                      //     height: 50,
+                                      //     child:  Text(loc.ok, // 'OK',
+                                      //         style: TextStyle(
+                                      //             color: Colors.white,
+                                      //             fontSize: 18)),
+                                      //     shape: RoundedRectangleBorder(
+                                      //       borderRadius: BorderRadius.circular(
+                                      //           10.0), // Adjust the radius as needed
+                                      //     ),
+                                      //     onPressed: () {
+                                      //      setState(() {
+                                      //         if (_customHomePageController
+                                      //           .text.isEmpty) {
+                                      //         settings.homePageEnabled = false;
+                                      //         //setState(() {
+                                      //           _showError = true;
+                                      //           return;
+                                      //         //});
+                                      //       }else if(!isValidURL(_customHomePageController.text)){
+                                      //          _showError = true;
+                                      //          return ;
+                                      //       } else {
+                                      //         //setState(() {
+                                      //           // _customHomePageController.text = settings.customUrlHomePage;
+                                      //           _showError = false;
+                                      //           settings.customUrlHomePage =
+                                      //               formatUrl(
+                                      //                   (_customHomePageController
+                                      //                           .text)
+                                      //                       .trim());
+                                      //           settings.homePageEnabled = true;
+                                      //           browserModel
+                                      //               .updateSettings(settings);
+                                      //           Navigator.pop(context);
+                                      //        // });
+                                      //       }
+                                      //       });
+                                      //     },
+                                      //   ),
+                                      // )
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -958,7 +1049,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         // fontWeight: FontWeight.w600),
                         ),
@@ -967,7 +1058,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
-                            .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                            .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                         // TextStyle(
                         //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                         //   fontWeight: FontWeight.w400,
@@ -982,14 +1073,14 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
               FlutterSwitch(
                   value: basicProvider.scrnSecurity, //isSwitched,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                     width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -1039,7 +1130,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(
                         //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         //     fontWeight: FontWeight.w600,
@@ -1054,7 +1145,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                           // TextStyle(
                           //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                           //   fontWeight: FontWeight
@@ -1069,16 +1160,16 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled: groupProvider.totalOpenTabsCount == 0, //browserModel.webViewTabs.isEmpty,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: widget.widthInDp, //width / 8.0, //50,
                   height:widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -1122,7 +1213,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(
                         //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         //     fontWeight: FontWeight.w600,
@@ -1137,7 +1228,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                           // TextStyle(
                           //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                           //   fontWeight: FontWeight
@@ -1152,16 +1243,16 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled: groupProvider.totalOpenTabsCount == 0,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                  width: widget.widthInDp, //width / 8.0, //50,
                   height:widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -1204,7 +1295,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(
                         //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         //     fontWeight: FontWeight.w600,
@@ -1219,7 +1310,7 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                           // TextStyle(
                           //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                           //   fontWeight: FontWeight
@@ -1234,16 +1325,16 @@ class _CrossPlatformSettingsState extends State<CrossPlatformSettings> {
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled: groupProvider.totalOpenTabsCount == 0,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: widget.widthInDp, //width / 8.0, //50,
                   height: widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -1286,7 +1377,7 @@ Padding(
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         // fontWeight: FontWeight.w600),
                         ),
@@ -1295,7 +1386,7 @@ Padding(
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
-                            .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                            .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                         // TextStyle(
                         //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                         //   fontWeight: FontWeight.w400,
@@ -1309,9 +1400,7 @@ Padding(
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg', height:widget.toggleSizeInDp*0.5, //width / 18.5, //16 ,
-                color: themeProvider.darkTheme
-                    ? const Color(0xff56566F)
-                    : const Color(0xffB8B8C0),
+                color: const Color(0xff8D8D8D),
               )
               
             ],
@@ -1335,16 +1424,18 @@ Padding(
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                        .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                     // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                     // fontWeight: FontWeight.w600),
                     ),
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg', height:widget.toggleSizeInDp*0.5, //width / 18.5, //16 ,
-                color: themeProvider.darkTheme
-                    ? const Color(0xff56566F)
-                    : const Color(0xffB8B8C0),
+                color:
+                //  themeProvider.darkTheme
+                //     ? const Color(0xff8D8D8D)
+                //     : 
+                    const Color(0xff8D8D8D),
               )
               //Icon(Icons.arrow_back_,size: 20,)
             ],
@@ -1389,14 +1480,12 @@ Padding(
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                        .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg',
                 height:widget.toggleSizeInDp*0.5, //width / 18.5,
-                color: themeProvider.darkTheme
-                    ? const Color(0xff56566F)
-                    : const Color(0xffB8B8C0),
+                color: const Color(0xff8D8D8D),
               )
             ],
           ),
@@ -1415,14 +1504,12 @@ Padding(
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                        .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
               ),
               SvgPicture.asset(
                 'assets/images/arrow_backs.svg',
                 height:widget.toggleSizeInDp*0.5, //width / 18.5,
-                color: themeProvider.darkTheme
-                    ? const Color(0xff56566F)
-                    : const Color(0xffB8B8C0),
+                color: const Color(0xff8D8D8D),
               )
             ],
           ),

@@ -5,6 +5,9 @@ import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/settings/android_settings.dart';
 import 'package:beldex_browser/src/browser/pages/settings/cross_platform_settings.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -38,6 +41,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
 
 
+int selectedSettingTab = 0;
 
 
 @override
@@ -66,7 +70,7 @@ setValues(){
 }
 
 
-
+List settingType = ['Basic', 'Advanced'];
 
   //final dynamicTextSizeWidget = DynamicTextSizeWidget();
   @override
@@ -93,208 +97,298 @@ final loc = AppLocalizations.of(context)!;
 final double fontSizeInDp2 = (pixelFontSize2 / screenSize.width) * screenSize.width;
 
 final double toggleSizeInDp = (pixelToggleSize / screenSize.width) * screenSize.width;
-    return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          //backgroundColor: Color(0xff171720),
-          appBar: AppBar(
-           // backgroundColor: Color(0xff171720),
-            bottom: TabBar(
-
-                onTap: (value) {
-                  FocusScope.of(context).unfocus();
-                },
-                indicatorColor: Color(0xff00B134),
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Color(0xff00B134),
-                labelStyle: TextStyle(
-                  fontSize: 16
-                ),
-                tabs:[
-                  Tab(
-                    text:loc.basic //"Basic",
-                  ),
-                  Tab(
-                    text:loc.advanced,// "Advanced",
-                  ),
-                ]),
-                centerTitle: true,
-            title: Text(
-              loc.settings,style:Theme.of(context).textTheme.bodyLarge 
+    return Stack(
+      children: [
+        Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+        SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+             // bottom: 
+              // TabBar(
+          
+              //     onTap: (value) {
+              //       FocusScope.of(context).unfocus();
+              //     },
+              //     indicatorColor: Color(0xff00B134),
+              //     indicatorSize: TabBarIndicatorSize.tab,
+              //     labelColor: Color(0xff00B134),
+              //     labelStyle: TextStyle(
+              //       fontSize: 16
+              //     ),
+              //     tabs:[
+              //       Tab(
+              //         text:loc.basic //"Basic",
+              //       ),
+              //       Tab(
+              //         text:loc.advanced,// "Advanced",
+              //       ),
+              //     ]),
+                  //centerTitle: true,
+                  automaticallyImplyLeading: false,
+              title:Row(
+                children: [
+          GestureDetector(
+            onTap: ()=> Navigator.pop(context),
+            child: SvgPicture.asset(
+              'assets/images/back.svg',
+              color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
+              height: 25,
             ),
-            leading:IconButton( 
-          onPressed: ()=>Navigator.pop(context),
-          icon :SvgPicture.asset(  
-            'assets/images/back.svg',
-             color: themeProvider.darkTheme ? Colors.white : Color(0xff282836),
-             height: 30,
-
-             )) ,
-             actions: [
-             
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: IconButton(
-              onPressed: (){
+          ),
+          SizedBox(width: 8,),
+          Text(loc.settings, style: TextStyle(fontFamily: 'Inter',fontSize: 16,fontWeight: FontWeight.w900)),
+                ],
+              ),
+              
+            //   leading:
+            //   IconButton( 
+            // onPressed: ()=>Navigator.pop(context),
+            // icon :SvgPicture.asset(  
+            //   'assets/images/back.svg',
+            //    color: themeProvider.darkTheme ? Colors.white : Color(0xff282836),
+            //    height: 30,
+          
+            //    )) ,
+               actions: [
                
-           resetBrowserSettingsDialog();
-              },
-              icon: SvgPicture.asset('assets/images/reset_browser.svg',color: themeProvider.darkTheme ? Colors.white: Colors.black,))
-             )
-             ],
-            // actions: <Widget>[
-            //   PopupMenuButton<String>(
-            //     onSelected: _popupMenuChoiceAction,
-            //     offset: Offset(0, 47),
-            //     itemBuilder: (context) {
-            //       var items = [
-            //         CustomPopupMenuItem<String>(
-            //           enabled: true,
-            //           value: PopupSettingsMenuActions.RESET_BROWSER_SETTINGS,
-            //           child: Row(
-            //              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: const [
-            //                 Text(PopupSettingsMenuActions
-            //                     .RESET_BROWSER_SETTINGS),
-            //                 Icon(
-            //                   Foundation.web,
-            //                   color: Colors.black,
-            //                 )
-            //               ]),
-            //         ),
-            //         CustomPopupMenuItem<String>(
-            //           enabled: true,
-            //           value: PopupSettingsMenuActions.RESET_WEBVIEW_SETTINGS,
-            //           child: Row(
-            //              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: const [
-            //                 Text(PopupSettingsMenuActions
-            //                     .RESET_WEBVIEW_SETTINGS),
-            //                 Icon(
-            //                   MaterialIcons.web,
-            //                   color: Colors.black,
-            //                 )
-            //               ]),
-            //         )
-            //       ];
-
-            //       return items;
-            //     },
-            //   )
-            // ],
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: IconButton(
+                onPressed: (){
+                 
+             resetBrowserSettingsDialog();
+                },
+                icon: SvgPicture.asset('assets/images/ai-icons/new/reset-setting.svg',color: themeProvider.darkTheme ? Colors.white: Colors.black,))
+               )
+               ],
+            ),
+            body: settingsBody(heightInDp,widthInDp, toggleSizeInDp,fontSizeInDp1,fontSizeInDp2,loc,themeProvider),
           ),
-          body:TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-            
-              CrossPlatformSettings(heightInDp: heightInDp, widthInDp: widthInDp, toggleSizeInDp: toggleSizeInDp,fontSizeInDp1:fontSizeInDp1,fontSizeInDp2:fontSizeInDp2),
-                AndroidSettings(heightInDp: heightInDp, widthInDp: widthInDp, toggleSizeInDp: toggleSizeInDp,fontSizeInDp1:fontSizeInDp1,fontSizeInDp2:fontSizeInDp2),
-             // IOSSettings(),
-            ],
-          ),
-        ));
+        ),
+      ],
+    );
   }
 
+
+Widget settingsBody(double heightInDp,double widthInDp,double toggleSizeInDp, double fontSizeInDp1,double fontSizeInDp2,AppLocalizations loc,DarkThemeProvider themeProvider){
+  return Column(  
+    children:[
+        Container(
+                            height: 50,width: double.infinity,
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal:  10,vertical: 3),
+              decoration: BoxDecoration(
+                border: Border.all(color:themeProvider.darkTheme ? Color(0xff333333) : Color(0xffD4D4D4))
+              ),
+              child: 
+              Row(
+  children: List.generate(
+    settingType.length * 2 - 1,
+    (index) {
+      if (index.isOdd) {
+        return const SizedBox(width: 10);
+      }
+
+     final actualIndex = index ~/ 2;
+
+      return Expanded(
+        child: _tabButton(
+          title: actualIndex == 0 ? loc.basic : loc.advanced,
+          //count: settingType[index].length,
+          selected: selectedSettingTab == actualIndex,
+          onTap: () {
+            setState(() {
+              selectedSettingTab = actualIndex;
+            });
+            //provider.changeTab(actualIndex);
+          },
+        ),
+      );
+    },
+  ),
+)),
+
+
+Expanded(child: selectedSettingTab == 0 ? 
+ CrossPlatformSettings(heightInDp: heightInDp, widthInDp: widthInDp, toggleSizeInDp: toggleSizeInDp,fontSizeInDp1:fontSizeInDp1,fontSizeInDp2:fontSizeInDp2)
+              :  AndroidSettings(heightInDp: heightInDp, widthInDp: widthInDp, toggleSizeInDp: toggleSizeInDp,fontSizeInDp1:fontSizeInDp1,fontSizeInDp2:fontSizeInDp2),
+             // IOSSettings(),
+
+)
+
+
+
+
+
+    ]
+  );
+}
+
+Widget _tabButton({
+  required String title,
+ // required int count,
+  required bool selected,
+  required VoidCallback onTap,
+}) {
+  final themeProvider = Provider.of<DarkThemeProvider>(context);
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      //height: 45,
+      padding:
+          const EdgeInsets.all(
+        9,
+      ),
+      decoration: BoxDecoration(
+        color: selected ?
+            themeProvider.darkTheme ? Colors.black : Color(0xffffffff) : themeProvider.darkTheme ? Color(0xff444444).withOpacity(0.4) : Color(0xffD4D4D4).withOpacity(0.4),
+        border: Border.all(color: selected ? themeProvider.darkTheme ? Colors.white : Colors.black : Colors.transparent,width: 0.3)
+      ),
+      child:  Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text( title,style: TextStyle(fontSize: 12,color:selected ?themeProvider.darkTheme ? Colors.white : Colors.black : themeProvider.darkTheme ?  Color(0xff8D8D8D): Colors.black,fontFamily: 'Inter',fontWeight: selected? FontWeight.w900 : FontWeight.w400)),
+        ],
+      ),
+
+    ),
+  );
+}
 
 
 void resetBrowserSettingsDialog()async{
   final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
-  final theme = Theme.of(context);
-  final height = MediaQuery.of(context).size.height;
-  final width = MediaQuery.of(context).size.width;
+  // final theme = Theme.of(context);
+  // final height = MediaQuery.of(context).size.height;
+  // final width = MediaQuery.of(context).size.width;
   final loc = AppLocalizations.of(context)!;
     return showDialog(
       context: context,
+       barrierColor:themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8) ,
       builder: (BuildContext context) {
         return Dialog(
-                   backgroundColor:
-                  themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-              insetPadding: EdgeInsets.all(20),
-                  child: Container(
-                      width:width,
-               // height:height/4.2, //200,
-                padding: EdgeInsets.all(10),
-                decoration:
-                    BoxDecoration(
-                      color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-                      borderRadius: BorderRadius.circular(15)),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5.0),
-                          child: Text(loc.resetSettings, //'Reset settings',
-                          style: theme.textTheme.bodyLarge,
-                          // TextStyle(fontSize:20,// dynamicTextSizeWidget.dynamicFontSize(20, context),
-                          // fontWeight: FontWeight.bold),
+                   insetPadding: EdgeInsets.all(18),
+            backgroundColor: Colors.transparent,
+            // title: const Text(
+            //   "Create Tab Group",
+            // ),
+           
+            // shape:
+            //     RoundedRectangleBorder(
+            //   borderRadius:
+            //       BorderRadius.circular(
+            //     18,
+            //   ),
+            // ),
+                  child: GlassCommonPanel(
+                    child: Container(
+                       margin: EdgeInsets.all(20),
+                  width: MediaQuery.of(context).size.width,
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                  // ),
+                      //   width:width,
+                      //              // height:height/4.2, //200,
+                      //               padding: EdgeInsets.all(10),
+                      //               decoration:
+                      // BoxDecoration(
+                      //   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
+                      //   borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Text(loc.resetSettings, //'Reset settings',
+                            style: TextStyle(fontFamily: 'inter',fontSize: 18,color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B) ),
+                            // TextStyle(fontSize:20,// dynamicTextSizeWidget.dynamicFontSize(20, context),
+                            // fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical:5.0),
-                          child: Text(loc.doYouWanttoReset,
-                          textAlign: TextAlign.center,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical:5.0),
+                            child: Text(loc.doYouWanttoReset,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontFamily: 'inter',fontSize: 14, color:themeProvider.darkTheme ? Color(0xffACACAC): Color(0xff444444)),
+                            ),
                           ),
-                        ),
-       
-                        Row(
-                          children: [
-                            Expanded(
-                              flex:1,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical:10.0,),
-                                child: MaterialButton(
-                                  elevation: 0,
-                                color:themeProvider.darkTheme ? const Color(0xff42425F)  :const Color(0xffF3F3F3),
-                                disabledColor: Color(0xff2C2C3B),
-                                 minWidth: double.maxFinite,
-                                height: 50,
-                                child: Text(loc.cancel,
-                                style: TextStyle(fontSize:18)),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // Adjust the radius as needed
-                                ),
-                                  onPressed: (){
-                                   Navigator.pop(context);
-                                },
-                                
+                           
+                          Row(
+                            children: [
+                              Expanded(
+                                flex:1,
+                                child: Padding(
+                                  padding: EdgeInsets.zero, //symmetric(vertical:10.0,),
+                                  child: MaterialButton(
+                                    elevation: 0,
+                                  color:themeProvider.darkTheme ? const Color(0xff333333)  :const Color(0xffDEDEDE),
+                                  disabledColor: Color(0xff2C2C3B),
+                                   minWidth: double.maxFinite,
+                                  height: 50,
+                                  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                                  child: Text(loc.cancel,
+                                  style: TextStyle(fontSize:16,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),fontWeight: FontWeight.w600)),
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       10.0), // Adjust the radius as needed
+                                  // ),
+                                    onPressed: (){
+                                     Navigator.pop(context);
+                                  },
+                                  
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                              flex:1,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical:10.0),
-                                child: MaterialButton(
-                                  color: const Color(0xff00B134),
-                                disabledColor:const Color(0xff2C2C3B),
-                                 minWidth: double.maxFinite,
-                                 elevation: 0,
-                                height: 50,
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(loc.reset //'Reset'
-                                  ,style: TextStyle(color: Colors.white,fontSize:18)),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), // Adjust the radius as needed
-                                ),
-                                  onPressed:(){
-                                   resetSettings();
-                                   Navigator.pop(context);
-                                  } 
-                                
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                flex:1,
+                                child: Padding(
+                                  padding: EdgeInsets.zero,//symmetric(vertical:10.0),
+                                  child: MaterialButton(
+                                    color:themeProvider.darkTheme ? const Color(0xffEBEBEB) : Color(0xff0B0B0B),
+                                  disabledColor:const Color(0xff2C2C3B),
+                                   minWidth: double.maxFinite,
+                                   elevation: 0,
+                                  height: 50,
+                                  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(loc.reset //'Reset'
+                                    ,style: TextStyle(color:themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),fontSize:18,fontFamily: 'Inter', fontWeight: FontWeight.w600),),
+                                  ),
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(
+                                  //       10.0), // Adjust the radius as needed
+                                  // ),
+                                    onPressed:(){
+                                     resetSettings();
+                                     Navigator.pop(context);
+                                    } 
+                                  
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
-                      ],
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -306,6 +400,8 @@ void resetBrowserSettingsDialog()async{
 void resetSettings()async{
   
   var browserModel = Provider.of<BrowserModel>(context, listen: false);
+    final groupProvider = Provider.of<GroupProvider>(context,listen: false);
+
  // var selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
    browserModel.getSettings();
    var currentWebViewModel =
@@ -320,7 +416,7 @@ void resetSettings()async{
     browserModel.updateIconValue('assets/images/Google 1.svg');
     browserModel.updateFontSize(8.0);
     
-    if(browserModel.webViewTabs.isNotEmpty){
+    if(groupProvider.totalOpenTabsCount != 0){
       //  var currentWebViewModel =
       //       Provider.of<WebViewModel>(context, listen: false);
         var webViewController = currentWebViewModel.webViewController;
@@ -344,6 +440,7 @@ resetOptions(){
   final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
   final basicProvider = Provider.of<BasicProvider>(context,listen: false);
     final localeProvider = Provider.of<LocaleProvider>(context,listen:false);
+    final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context,listen: false);
   vpnStatusProvider.updateCacheValue(true);
   vpnStatusProvider.updateJSEnabled(true);
   vpnStatusProvider.updateSupportZoomEbld(true);
@@ -356,8 +453,8 @@ resetOptions(){
   basicProvider.updateAutoSuggest(false);
   basicProvider.updateAdblock(true);
     localeProvider.resetAppLocaleToEnglish();
-
-
+  vpnStatusProvider.updateIsEnableFreeName(false);
+ appBarPositionProvider.changePosition(AppBarPosition.top);
 }
 
 
