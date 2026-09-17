@@ -677,7 +677,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get changingNode => 'Changing Node';
+  String get changingNode => 'Changing Node..';
 
   @override
   String get freeenameWebDomain => 'FreeName Web3 domain';
