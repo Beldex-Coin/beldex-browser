@@ -165,7 +165,7 @@
   "unabledToSave": "Imeshindikana kuhifadhi",
   "basic": "Msingi",
   "advanced" :"Juu",
-  "downloadCompelete": "Download complete",
+  "downloadCompelete": "Upakuaji umekamilika",
   "screensecurityCurrentlyEnabled": "Usalama wa skrini umewezeshwa kwa sasa. Hakikisha unauzima kwenye skrini ya mipangilio",
   "openSettings": "Open Settings",
   "noInternetConnection": "Hakuna muunganisho wa intaneti",
@@ -183,6 +183,103 @@
   "searchEngineAlreadyExist": "Injini hii ya utafutaji tayari ipo",
   "searchEngineAdded": "Injini ya utafutaji imeongezwa kwa mafanikio!",
   "searchEngineUpdated": "Injini ya utafutaji imesasishwa kwa mafanikio!",
+
+
+
+
+  "searchusing": "Tafuta kwa kutumia",
+  "addTabToNewGroup": "Ongeza kichupo kwenye kikundi kipya",
+  "invitePeople": "Alika watu",
+  "uploadFromGallery": "Pakia kutoka kwenye ghala",
+  "noQRCodeFound": "Hakuna msimbo wa QR uliopatikana kwenye picha",
+  "searchBarPosition": "Nafasi ya upau wa utafutaj",
+  "choosethePosition": "Chagua nafasi ya upau wa utafutaji",
+  "iPAddress": "Anwani ya IP",
+   "vpnIP": "IP ya VPN",
+   "myIP": "IP yangu",
+   "marketUpdate": "Sasisho la soko",
+   "searchYourTabs": "Tafuta vichupo vyako",
+   "newTabGroup": "Kikundi kipya cha vichupo",
+   "selectTab": "Chagua kichupo",
+   "selectTabs": "Chagua vichupo",
+   "closeAllTabs": "Funga vichupo vyote",
+   "deleteTabGroup": "Futa kikundi cha vichupo",
+   "rename": "Badilisha jina",
+   "renameGroup": "Badilisha jina la kikundi",
+   "ungroupTab": "Ondoa kichupo kwenye kikundi",
+   "deleteGroup": "Futa kikundi",
+   "addToTabGroup": "Ongeza kwenye kikundi cha vichupo",
+   "editGroupName": "Hariri jina la kikundi",
+   "editGroupColor": "Hariri rangi ya kikundi",
+   "closeTab": "Funga kichupo",
+   "doYouWantToUngroup": "Je, kweli ungependa kuondoa kikundi hiki cha vichupo?",
+   "ungroupTabGroup": "Ondoa kikundi cha vichupo",
+   "ungroup": "Ondoa kwenye kikundi",
+   "deleteGroup": "Futa Kikundi",
+   "deletetabGroup": "Futa Kikundi cha Vichupo",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Ongeza kwenye",
+   "tabs": "Vichupo",
+   "done": "Imekamilika",
+   "create": "Unda",
+   "groupColor": "Rangi ya kikundi",
+   "groupName": "Jina la kikundi",
+   "newTabGroup": "Kikundi kipya cha vichupo",
+   "addtoNewTabGroup": "Ongeza kwenye kikundi kipya cha vichupo",
+   "tabGroups": "Vikundi vya Vichupo",
+   "tabGroup": "Kikundi cha Vichupo",
+   "tabsSelected": "Vichupo vilivyochaguliwa",
+   "privateResearch": "Mfano: Utafiti Binafsi",
+   "deselectAll": "Acha kuchagua vyote",
+   "selected": "Imechaguliwa",
+
+
+   "close": "Funga",
+   "top": "Juu",
+   "bottom": "Chini",
+
+
+
+  "closeAllTabsConfirmation": "Kitendo hiki kitafunga kabisa vichupo vyote {tabCount} vilivyo ndani ya “{tabGroupName}”. Hiki hakiwezi kutenduliwa",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Inabadilisha nodi",
+"freeenameWebDomain" : "Kikoa cha Web3 cha FreeName",
+"enableFreeNameWeb" : "Washa usaidizi wa kikoa cha Web3 cha FreeName",
+"couldnotDownloadBootstrap" : "Imeshindikana kupakua faili ya uanzishaji ya Belnet. Tafadhali angalia muunganisho wako na ujaribu tena",
+"couldNotEstablishConnection" : "Imeshindikana kuanzisha muunganisho wa Belnet. Tafadhali jaribu tena",
+"theBelnetServiceNotStarted": "Huduma ya Belnet haikuweza kuanzishwa. Tafadhali jaribu tena",
+"exitNodeUnreachable" : "Nodi ya kutoka haipatikani, inaunganisha tena",
+
+"tab": "Kichupo",
+"ungroupTabs": "Ondoa vichupo kwenye kikundi",
+"closeGroup": "Funga kikundi",
+"ungroupSelectedTabs": "Je, una uhakika unataka kuondoa vichupo vilivyochaguliwa kutoka ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Ujumbe wa uthibitisho wakati wa kuondoa vichupo vilivyochaguliwa kutoka kwenye kikundi cha vichupo",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 
 
 
