@@ -472,7 +472,7 @@ class TabSelectionScreen
                   child: buildBox(
                   
                     title:
-                        tab.title ?? "Tab",
+                        tab.title ?? "${loc.tab}",
                   
                     screenshot:
                         tab.screenshot,
@@ -522,51 +522,156 @@ class TabSelectionScreen
                 );
               }
             ),
-          bottomNavigationBar: Container(
-            height: 65,
-                  decoration: BoxDecoration(
-                    border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3)))
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                 child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                   Row(
-                    children: [
-                      GestureDetector(
-                        onTap:provider.allTabsSelected ? () {
-                          provider.toggleSelectAllTabs();
-                        }: null,
-                        child: Container(
-                          height: 20,width: 20,
-                          child: SvgPicture.asset('assets/images/ai-icons/new/Deselect_all.svg',color: provider.allTabsSelected ? themeProvider.darkTheme ? Colors.white : Colors.black : Color(0xff737373) ,)),
-                      ),
-                      SizedBox(width: 8,),
-                      Text(loc.deselectAll,style: TextStyle(fontFamily: 'Inter',fontSize: 14,color: provider.allTabsSelected ? themeProvider.darkTheme ? Colors.white : Colors.black : Color(0xff737373)),overflow: TextOverflow.ellipsis,maxLines: 1,),
+          bottomNavigationBar: SafeArea(
+            top: false,left: false,right: false,bottom: true,
+            child: Container(
+              height: 65,
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3)))
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                   child: Row(
+  children: [
+    // LEFT: Deselect all
+    Expanded(
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: provider.allTabsSelected
+                ? () {
+                    provider.toggleSelectAllTabs();
+                  }
+                : null,
+            child: SizedBox(
+              height: 20,
+              width: 20,
+              child: SvgPicture.asset(
+                'assets/images/ai-icons/new/Deselect_all.svg',
+                color: provider.allTabsSelected
+                    ? (themeProvider.darkTheme
+                        ? Colors.white
+                        : Colors.black)
+                    : const Color(0xff737373),
+              ),
+            ),
+          ),
 
-                    ],
-                   ),
-                   Row(
-                    children: [
-                       GestureDetector(
-                        onTap: (){
-                          provider.toggleSelectAllTabs();
-                        },
-                         child: Container(
-                          height: 20,width: 20,
-                          decoration: BoxDecoration(
-                            color: provider.allTabsSelected ? Colors.white : Colors.transparent,
-                            border: Border.all(color: themeProvider.darkTheme ? Colors.transparent : Colors.black)
-                          ),
-                          child: provider.allTabsSelected ? Icon(Icons.check,size: 15, color: Colors.black,) : SvgPicture.asset('assets/images/ai-icons/new/Selecttabs.svg')),
-                       ),
-                      SizedBox(width: 8,),
-                      Text(loc.selectAll,style: TextStyle(fontFamily: 'Inter',fontSize: 14),overflow: TextOverflow.ellipsis,maxLines: 1,),
-                      
-                    ],
-                   )
-                  ],
-                  )
+          const SizedBox(width: 8),
+
+          // Text gets only the remaining width
+          Expanded(
+            child: Text(
+              loc.deselectAll,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: provider.allTabsSelected
+                    ? (themeProvider.darkTheme
+                        ? Colors.white
+                        : Colors.black)
+                    : const Color(0xff737373),
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+
+    const SizedBox(width: 20),
+
+    // RIGHT: Select all
+    Expanded(
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              provider.toggleSelectAllTabs();
+            },
+            child: Container(
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
+                color: provider.allTabsSelected
+                    ? Colors.white
+                    : Colors.transparent,
+                border: Border.all(
+                  color: themeProvider.darkTheme
+                      ? Colors.transparent
+                      : Colors.black,
+                ),
+              ),
+              child: provider.allTabsSelected
+                  ? const Icon(
+                      Icons.check,
+                      size: 15,
+                      color: Colors.black,
+                    )
+                  : SvgPicture.asset(
+                      'assets/images/ai-icons/new/Selecttabs.svg',
+                    ),
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          Expanded(
+            child: Text(
+              loc.selectAll,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ],
+), 
+                  //  Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //    Row(
+                  //     children: [
+                  //       GestureDetector(
+                  //         onTap:provider.allTabsSelected ? () {
+                  //           provider.toggleSelectAllTabs();
+                  //         }: null,
+                  //         child: Container(
+                  //           height: 20,width: 20,
+                  //           child: SvgPicture.asset('assets/images/ai-icons/new/Deselect_all.svg',color: provider.allTabsSelected ? themeProvider.darkTheme ? Colors.white : Colors.black : Color(0xff737373) ,)),
+                  //       ),
+                  //       SizedBox(width: 8,),
+                  //       Text(loc.deselectAll,style: TextStyle(fontFamily: 'Inter',fontSize: 14,color: provider.allTabsSelected ? themeProvider.darkTheme ? Colors.white : Colors.black : Color(0xff737373)),overflow: TextOverflow.ellipsis,maxLines: 1,),
+            
+                  //     ],
+                  //    ),
+                  //    Row(
+                  //     children: [
+                  //        GestureDetector(
+                  //         onTap: (){
+                  //           provider.toggleSelectAllTabs();
+                  //         },
+                  //          child: Container(
+                  //           height: 20,width: 20,
+                  //           decoration: BoxDecoration(
+                  //             color: provider.allTabsSelected ? Colors.white : Colors.transparent,
+                  //             border: Border.all(color: themeProvider.darkTheme ? Colors.transparent : Colors.black)
+                  //           ),
+                  //           child: provider.allTabsSelected ? Icon(Icons.check,size: 15, color: Colors.black,) : SvgPicture.asset('assets/images/ai-icons/new/Selecttabs.svg')),
+                  //        ),
+                  //       SizedBox(width: 8,),
+                  //       Text(loc.selectAll,style: TextStyle(fontFamily: 'Inter',fontSize: 14),overflow: TextOverflow.ellipsis,maxLines: 1,),
+                        
+                  //     ],
+                  //    )
+                  //   ],
+                  //   )
+            ),
           ),
           
           ),
@@ -1145,299 +1250,294 @@ final availableGroups = openGroups.where((group) {
       return Dialog(
          insetPadding: EdgeInsets.all(18),
             backgroundColor: Colors.transparent,
-        child: GlassPanel(
+        child: GlassSettingPanel(
+            color:themeProvider.darkTheme ? const Color(0xFF222222).withOpacity(0.5) : const Color(0xffFFFFFF).withOpacity(0.7),
+                          border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444): Color(0xffD4D4D4)),
           child: Container(
-        //      constraints: BoxConstraints(
-        //  // minHeight: 250,
-        //   maxHeight: MediaQuery.of(context).size.height * 0.75,
-        //   minWidth: MediaQuery.of(context).size.width,
-        // ),
-            child: Container(
-              margin: EdgeInsets.all(20),
-                   // width: MediaQuery.of(context).size.width,
-              child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-              
-                children: [
-              
-                  const SizedBox(height: 12),
-              
-                  Text(loc.addTo.toUpperCase(),
-                     //"ADD TO ",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Conthrax",
-                      fontWeight: FontWeight.bold,
-                    ),
+            margin: EdgeInsets.all(20),
+                 // width: MediaQuery.of(context).size.width,
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+            
+              children: [
+            
+                const SizedBox(height: 12),
+            
+                Text(loc.addTo.toUpperCase(),
+                   //"ADD TO ",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Conthrax",
+                    fontWeight: FontWeight.bold,
                   ),
-              
-                  const SizedBox(height: 12),
-                  GestureDetector(
-                    onTap: (){
-                       Navigator.pop(context);
-              
-                      showCreateGroupDialog(
-                        context,loc
-                      );
-                    },
-                    child: Container(
-                       //margin: EdgeInsets.symmetric(horizontal: 15),
-                      height: 50,decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xff444444)),
-                        //color: Colors.black26
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(loc.addtoNewTabGroup,// 'Add to new tab group',
-                            style: TextStyle(fontSize: 14,fontFamily: 'Inter'),),
-                             Icon(Icons.add, size: 15,)
-                          ],
-                        ),
-                    ),
+                ),
+            
+                const SizedBox(height: 12),
+                GestureDetector(
+                  onTap: (){
+                     Navigator.pop(context);
+            
+                    showCreateGroupDialog(
+                      context,loc
+                    );
+                  },
+                  child: Container(
+                     //margin: EdgeInsets.symmetric(horizontal: 15),
+                    height: 50,decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff444444)),
+                      //color: Colors.black26
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(loc.addtoNewTabGroup,// 'Add to new tab group',
+                          style: TextStyle(fontSize: 14,fontFamily: 'Inter'),),
+                           Icon(Icons.add, size: 15,)
+                        ],
+                      ),
                   ),
-                  /// NEW GROUP
-                  // ListTile(
-              
-                  //   leading: const Icon(
-                  //     Icons.add_circle_outline,
-                  //   ),
-              
-                  //   title: const Text(
-                  //     "New Tab Group",
-                  //   ),
-              
-                  //   onTap: () {
-              
-                  //     Navigator.pop(context);
-              
-                  //     showCreateGroupDialog(
-                  //       context,
-                  //     );
-                  //   },
-                  // ),
-              
-                  //const Divider(),
-              
-                  /// EXISTING GROUPS
-                  // ...provider.groups.map(
-                  //   (group) {
-                  
-              
-              // ...provider.groups
-              //     .where(
-              //       (group) =>
-              //           !selectedGroups.any(
-              //         (g) => g.id == group.id,
-              //       ),
-              //     )
-              //     .map(
-              //       (group) {
-              
-
-             
-
-            availableGroups.length != 0 ? Flexible(
+                ),
+                /// NEW GROUP
+                // ListTile(
+            
+                //   leading: const Icon(
+                //     Icons.add_circle_outline,
+                //   ),
+            
+                //   title: const Text(
+                //     "New Tab Group",
+                //   ),
+            
+                //   onTap: () {
+            
+                //     Navigator.pop(context);
+            
+                //     showCreateGroupDialog(
+                //       context,
+                //     );
+                //   },
+                // ),
+            
+                //const Divider(),
+            
+                /// EXISTING GROUPS
+                // ...provider.groups.map(
+                //   (group) {
                 
-                child: ConstrainedBox(
-                   constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.45,
-    ),
-                  child: Scrollbar(
+            
+            // ...provider.groups
+            //     .where(
+            //       (group) =>
+            //           !selectedGroups.any(
+            //         (g) => g.id == group.id,
+            //       ),
+            //     )
+            //     .map(
+            //       (group) {
+            
+          
+           
+          
+          availableGroups.length != 0 ? Flexible(
+              
+              child: ConstrainedBox(
+                 constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.45,
+              ),
+                child: Scrollbar(
+                  controller: scrollController,
+                  thumbVisibility: true,
+                  child: ListView.separated(
                     controller: scrollController,
-                    thumbVisibility: true,
-                    child: ListView.separated(
-                      controller: scrollController,
-                      itemCount: availableGroups.length,
-                      separatorBuilder: (_, __) =>
-                          const SizedBox(height: 8),
-                      itemBuilder: (context, index) {
-                        final group = availableGroups[index];
-                  
-                        return GestureDetector(
-                          onTap: (){
-                                Navigator.pop(
-                              context,
-                            );
-                                
-                            provider
-                                .addSelectedTabsToGroup(
-                              group,
-                            );
-                                
-                            provider
-                                .disableSelectionMode();
-                             Navigator.pop(context);  
-
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical:8.0),
-                            child: GlassGroupPanel(
-                              color: group.color,
-                              child: Container(
-                                height: 90,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                    color: provider
-                                            .groupContainsCurrentTab(
-                                                group)
-                                        ? group.color
-                                        : Colors.transparent,
-                                    width: 0.40,
-                                  ),
+                    itemCount: availableGroups.length,
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final group = availableGroups[index];
+                
+                      return GestureDetector(
+                        onTap: (){
+                              Navigator.pop(
+                            context,
+                          );
+                              
+                          provider
+                              .addSelectedTabsToGroup(
+                            group,
+                          );
+                              
+                          provider
+                              .disableSelectionMode();
+                           Navigator.pop(context);  
+          
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical:8.0),
+                          child: GlassGroupPanel(
+                            color: group.color,
+                            child: Container(
+                              height: 90,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(
+                                  color: provider
+                                          .groupContainsCurrentTab(
+                                              group)
+                                      ? group.color
+                                      : Colors.transparent,
+                                  width: 0.40,
                                 ),
-                                child: Row(
-                                  children: [
-                                    buildGroupThumbnail(group,themeProvider),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              height: 9,
-                                              width: 9,
-                                              decoration:
-                                                  BoxDecoration(
-                                                shape:
-                                                    BoxShape.circle,
-                                                color: group.color,
-                                              ),
+                              ),
+                              child: Row(
+                                children: [
+                                  buildGroupThumbnail(group,themeProvider),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 9,
+                                            width: 9,
+                                            decoration:
+                                                BoxDecoration(
+                                              shape:
+                                                  BoxShape.circle,
+                                              color: group.color,
                                             ),
-                                            const SizedBox(
-                                                width: 6),
-                                            Text(
-                                              group.name,
-                                              style:
-                                                  const TextStyle(
-                                                fontSize: 12,
-                                                fontWeight:
-                                                    FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                            height: 2),
-                                        Text(
-                                          "${group.tabs.length} ${loc.tabs}",
-                                          style:
-                                              const TextStyle(
-                                            fontSize: 14,
                                           ),
+                                          const SizedBox(
+                                              width: 6),
+                                          Text(
+                                            group.name,
+                                            style:
+                                                const TextStyle(
+                                              fontSize: 12,
+                                              fontWeight:
+                                                  FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                          height: 2),
+                                      Text(
+                                        "${group.tabs.length} ${loc.tabs}",
+                                        style:
+                                            const TextStyle(
+                                          fontSize: 14,
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ):SizedBox(),
-
-
-
-
-
-              // ...availableGroups.map((group) {
-              //         return 
-              //         Padding(
-              //           padding: const EdgeInsets.symmetric(vertical:8.0),
-              //           child: GlassGroupPanel(
-              //             color: group.color,
-              //             child: Container(
-              //                height: 90,
-                             
-              //                  padding: const EdgeInsets.all(10),
-              //                  decoration: BoxDecoration(
-              //                    color:Colors.transparent, //group.color,
-              //                    border: Border.all(color: provider.groupContainsCurrentTab(group) ? group.color : Colors.transparent ,width: 0.40),
-              //                   // borderRadius: BorderRadius.circular(12),
-              //                  ),
-              //                  child: Row(
-              //                   children: [
-              //                     buildGroupThumbnail(group),
-              //                     const SizedBox(width: 12),
-                                           
-              //                    Column(
-              //             mainAxisAlignment: MainAxisAlignment.center,
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             mainAxisSize: MainAxisSize.min,
-              //             children: [
-              //               Row(
-              //                 children: [
-              //                   Container(
-              //                     height: 9,width: 9,
-              //                     decoration: BoxDecoration(shape: BoxShape.circle,color: group.color),
-              //                   ),
-              //                   Text(
-              //                     group.name,
-              //                     style: const TextStyle(
-              //                       fontSize: 12,
-              //                       fontWeight: FontWeight.bold,
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //               const SizedBox(height: 2),
-              //               Text(
-              //                 "${group.tabs.length} tabs",
-              //                 style: const TextStyle(fontSize: 14),
-              //               ),
-              //             ],
-              //           )
-              //                   ],
-              //                  ),
-              //             ),
-              //           ),
-              //         );
-              //         // ListTile(
-              
-              //         //   leading: CircleAvatar(
-              //         //     backgroundColor:
-              //         //         group.color,
-              //         //   ),
-              
-              //         //   title: Text(
-              //         //     group.name,
-              //         //   ),
-              
-              //         //   subtitle: Text(
-              //         //     "${group.tabs.length} tabs",
-              //         //   ),
-              
-              //         //   onTap: () {
-              
-              //         //     Navigator.pop(
-              //         //       context,
-              //         //     );
-              
-              //         //     provider
-              //         //         .addSelectedTabsToGroup(
-              //         //       group,
-              //         //     );
-              
-              //         //     provider
-              //         //         .disableSelectionMode();
-              //         //   },
-              //         // );
-              //       },
-              //     ),
-                ],
               ),
+            ):SizedBox(),
+          
+          
+          
+          
+          
+            // ...availableGroups.map((group) {
+            //         return 
+            //         Padding(
+            //           padding: const EdgeInsets.symmetric(vertical:8.0),
+            //           child: GlassGroupPanel(
+            //             color: group.color,
+            //             child: Container(
+            //                height: 90,
+                           
+            //                  padding: const EdgeInsets.all(10),
+            //                  decoration: BoxDecoration(
+            //                    color:Colors.transparent, //group.color,
+            //                    border: Border.all(color: provider.groupContainsCurrentTab(group) ? group.color : Colors.transparent ,width: 0.40),
+            //                   // borderRadius: BorderRadius.circular(12),
+            //                  ),
+            //                  child: Row(
+            //                   children: [
+            //                     buildGroupThumbnail(group),
+            //                     const SizedBox(width: 12),
+                                         
+            //                    Column(
+            //             mainAxisAlignment: MainAxisAlignment.center,
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Container(
+            //                     height: 9,width: 9,
+            //                     decoration: BoxDecoration(shape: BoxShape.circle,color: group.color),
+            //                   ),
+            //                   Text(
+            //                     group.name,
+            //                     style: const TextStyle(
+            //                       fontSize: 12,
+            //                       fontWeight: FontWeight.bold,
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //               const SizedBox(height: 2),
+            //               Text(
+            //                 "${group.tabs.length} tabs",
+            //                 style: const TextStyle(fontSize: 14),
+            //               ),
+            //             ],
+            //           )
+            //                   ],
+            //                  ),
+            //             ),
+            //           ),
+            //         );
+            //         // ListTile(
+            
+            //         //   leading: CircleAvatar(
+            //         //     backgroundColor:
+            //         //         group.color,
+            //         //   ),
+            
+            //         //   title: Text(
+            //         //     group.name,
+            //         //   ),
+            
+            //         //   subtitle: Text(
+            //         //     "${group.tabs.length} tabs",
+            //         //   ),
+            
+            //         //   onTap: () {
+            
+            //         //     Navigator.pop(
+            //         //       context,
+            //         //     );
+            
+            //         //     provider
+            //         //         .addSelectedTabsToGroup(
+            //         //       group,
+            //         //     );
+            
+            //         //     provider
+            //         //         .disableSelectionMode();
+            //         //   },
+            //         // );
+            //       },
+            //     ),
+              ],
             ),
           ),
         ),
@@ -1463,7 +1563,7 @@ final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
   final FocusNode focusNode = FocusNode();
 
   final colors = [
-    Color(0xffEBEBEB),
+   // Color(0xffEBEBEB),
     Color(0xff4ED971),
     Color(0xff4EAFFF),
     Color(0xffBB70F9),
@@ -1471,7 +1571,7 @@ final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
     Color(0xffE3AD2F),
   ];
 
-Color selectedColor = Color(0xffEBEBEB);
+Color selectedColor = Color(0xff4ED971);
 
   showDialog(
 
@@ -1497,7 +1597,9 @@ Color selectedColor = Color(0xffEBEBEB);
              insetPadding: EdgeInsets.all(18),
             backgroundColor: Colors.transparent,
 
-                        child: GlassCommonPanel(
+                        child: GlassSettingPanel(
+            color:themeProvider.darkTheme ? const Color(0xFF222222).withOpacity(0.5) : const Color(0xffFFFFFF).withOpacity(0.7),
+                          border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444): Color(0xffD4D4D4)),
                           child: Container(
                             margin: EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
@@ -1528,8 +1630,7 @@ Color selectedColor = Color(0xffEBEBEB);
                              InputDecoration(
                               contentPadding: EdgeInsets.symmetric(horizontal: 5),
                               hintStyle: TextStyle(fontFamily: 'Roboto',fontSize: 12,color:themeProvider.darkTheme ? Color(0xff737373): Color(0xffACACAC)),
-                          hintText:
-                              "Group Name",border: InputBorder.none,
+                          hintText:loc.groupName,border: InputBorder.none,
                          // border: 
                              // OutlineInputBorder(),
                         ),
