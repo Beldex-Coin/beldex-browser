@@ -285,7 +285,7 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType
     }
 
     modelResponseIndex = messages.length - 1;
-    scrollMessages();
+   // scrollMessages();
     updateUI();
     isTyping = true;
 
@@ -481,7 +481,7 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
   }
 
   modelResponseIndex = messages.length - 1;
-  scrollMessages();
+  //scrollMessages();
   updateUI();
     ///"Note: If this content contains only url then provide general information about the domain from the given URL as summarise, such as its purpose, industry, or key features." 
   isTyping = true;
@@ -517,6 +517,8 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
     // messages[modelResponseIndex!].canShowRegenerate = false;
     // messages[modelResponseIndex!].istyping = false;
     // isTyping = false;
+    scrollMessages(); // added 
+
     updateUI();
     _streamSubscription?.cancel();
   }, onError: (error) {
@@ -688,7 +690,7 @@ Future<void> getTextFromAskBeldexAI(String question, WebViewModel webViewModel,S
       istyping: true
     ));
     modelResponseIndex = messages.length;
-    scrollMessages();
+   // scrollMessages();
     updateUI();
    isTyping = true;
     String response = //containsUrl ?
