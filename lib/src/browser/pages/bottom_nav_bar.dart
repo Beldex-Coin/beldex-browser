@@ -231,7 +231,7 @@ late List<Widget> pages;
                           color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),strokeWidth: 2,),
                       ),
                       SizedBox(height: 10,),
-                      Text('${loc.connecting}', style: TextStyle(fontSize: 18,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) :Color(0xff737373)),)
+                      Text('${loc.changingNode}',overflow: TextOverflow.ellipsis,maxLines: 1, style: TextStyle(fontSize: 18,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) :Color(0xff737373)),)
                     ],
                   ),
                 ),
