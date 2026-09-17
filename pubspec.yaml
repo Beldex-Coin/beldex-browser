@@ -184,6 +184,7 @@ flutter:
     - assets/icon/
     - assets/images/flags/
     - assets/images/ai-icons/
+    - assets/images/ai-icons/new/
     - assets/readability.js
     - assets/tldList.txt
     # - assets/images/Belnet_Text_White.png
@@ -205,6 +206,17 @@ flutter:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-SemiBold.ttf
         - asset: assets/fonts/Poppins-ExtraLight.ttf
+    - family: Conthrax
+      fonts:
+        - asset: assets/fonts/Conthrax-SemiBold.otf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/RobotoMono-Light.ttf
+    - family: Inter 
+      fonts: 
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
+
+          #weight: 400
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
