@@ -188,6 +188,98 @@
 
 
 
+"searchusing": "검색 방법",
+  "addTabToNewGroup": "새 그룹에 탭 추가",
+  "invitePeople": "사람 초대",
+  "uploadFromGallery": "갤러리에서 업로드",
+  "noQRCodeFound": "이미지에서 QR 코드를 찾을 수 없습니다",
+  "searchBarPosition": "검색창 위치",
+  "choosethePosition": "검색창의 위치를 선택하세요",
+  "iPAddress": "IP 주소",
+   "vpnIP": "VPN IP",
+   "myIP": "내 IP",
+   "marketUpdate": "시장 업데이트",
+   "searchYourTabs": "탭 검색",
+   "newTabGroup": "새 탭 그룹",
+   "selectTab": "탭 선택",
+   "selectTabs": "탭 선택",
+   "closeAllTabs": "모든 탭 닫기",
+   "deleteTabGroup": "탭 그룹 삭제",
+   "rename": "이름 변경",
+   "renameGroup": "그룹 이름 변경",
+   "ungroupTab": "탭 그룹 해제",
+   "deleteGroup": "그룹 삭제",
+   "addToTabGroup": "탭 그룹에 추가",
+   "editGroupName": "그룹 이름 편집",
+   "editGroupColor": "그룹 색상 편집",
+   "closeTab": "탭 닫기",
+   "doYouWantToUngroup": "이 탭 그룹을 정말 해제하시겠습니까?",
+   "ungroupTabGroup": "탭 그룹 해제",
+   "ungroup": "해제",
+   "deleteGroup": "그룹 삭제",
+   "deletetabGroup": "탭 그룹 삭제",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "추가 대상",
+   "tabs": "탭",
+   "done": "완료",
+   "create": "만들기",
+   "groupColor": "그룹 색상",
+   "groupName": "그룹 이름",
+   "newTabGroup": "새 탭 그룹",
+   "addtoNewTabGroup": "새 탭 그룹에 추가",
+   "tabGroups": "탭 그룹",
+   "tabGroup": "탭 그룹",
+   "tabsSelected": "선택된 탭",
+   "privateResearch": "예: 비공개 리서치",
+   "deselectAll": "전체 선택 해제",
+   "selected": "선택됨",
+
+
+  "close": "닫기",
+  
+    "top": "상단",
+   "bottom": "하단",
+
+
+  "closeAllTabsConfirmation": "이 작업을 수행하면 “{tabGroupName}” 안의 {tabCount}개 탭이 모두 영구적으로 닫히며 되돌릴 수 없습니다.",
+"@closeAllTabsConfirmation": {
+  "description": "탭 그룹의 모든 탭을 닫을 때 표시되는 확인 메시지",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+"changingNode": "노드 변경 중..",
+"freeenameWebDomain" : "FreeName Web3 도메인",
+"enableFreeNameWeb" : "FreeName Web3 도메인 지원 활성화",
+"couldnotDownloadBootstrap" : "Belnet 부트스트랩 파일을 다운로드할 수 없습니다. 연결 상태를 확인한 후 다시 시도해 주세요",
+"couldNotEstablishConnection" : "Belnet 연결을 설정할 수 없습니다. 다시 시도해 주세요",
+"theBelnetServiceNotStarted": "Belnet 서비스를 시작할 수 없습니다. 다시 시도해 주세요",
+"exitNodeUnreachable" : "출구 노드에 연결할 수 없습니다. 다시 연결하는 중입니다",
+
+
+"tab": "탭",
+"ungroupTabs": "탭 그룹 해제",
+"closeGroup": "그룹 닫기",
+"ungroupSelectedTabs": "${tabGroupName}에서 선택한 탭의 그룹을 해제하시겠습니까?",
+"@ungroupSelectedTabs": {
+  "description": "탭 그룹에서 선택한 탭의 그룹을 해제할 때 표시되는 확인 메시지",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 
 "beldexIsAnEcosystem": "Beldex는 분산형 및 개인정보 보호 애플리케이션으로 구성된 생태계입니다. Beldex 브라우저 앱은 BChat, BelNet, Beldex 프로토콜 등 다양한 앱과 함께 이 생태계의 일부입니다. Beldex 브라우저는 사용자의 데이터를 오직 사용자만 소유하는 안전하고 매끄러운 온라인 경험으로 안내하는 관문입니다. 견고한 블록체인 인프라 위에 구축되어, Beldex 브라우저는 사용자에게 프라이버시와 익명성을 보장합니다.",
 "atBeldex": " \n Beldex는 개인이 자신의 디지털 흔적을 통제할 수 있는 기본 권리를 갖는 것이 중요하다고 믿습니다. Beldex 브라우저는 사용자가 안전하고 개인적인 온라인 환경에서 디지털 세계와 소통하고 상호작용할 수 있도록 설계되었습니다.",
