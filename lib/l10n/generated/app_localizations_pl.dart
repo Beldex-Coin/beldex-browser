@@ -531,6 +531,187 @@ class AppLocalizationsPl extends AppLocalizations {
   String get searchEngineUpdated => 'Wyszukiwarka została zaktualizowana pomyślnie!';
 
   @override
+  String get searchusing => 'Wyszukaj za pomocą';
+
+  @override
+  String get addTabToNewGroup => 'Dodaj kartę do nowej grupy';
+
+  @override
+  String get invitePeople => 'Zaproś osoby';
+
+  @override
+  String get uploadFromGallery => 'Prześlij z galerii';
+
+  @override
+  String get noQRCodeFound => 'Nie znaleziono kodu QR na obrazie';
+
+  @override
+  String get searchBarPosition => 'Pozycja paska wyszukiwania';
+
+  @override
+  String get choosethePosition => 'Wybierz pozycję paska wyszukiwania';
+
+  @override
+  String get iPAddress => 'Adres IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'Moje IP';
+
+  @override
+  String get marketUpdate => 'Aktualizacja rynku';
+
+  @override
+  String get searchYourTabs => 'Wyszukaj swoje karty';
+
+  @override
+  String get newTabGroup => 'Nowa grupa kart';
+
+  @override
+  String get selectTab => 'Wybierz kartę';
+
+  @override
+  String get selectTabs => 'Wybierz karty';
+
+  @override
+  String get deleteTabGroup => 'Usuń grupę kart';
+
+  @override
+  String get rename => 'Zmień nazwę';
+
+  @override
+  String get renameGroup => 'Zmień nazwę grupy';
+
+  @override
+  String get ungroupTab => 'Usuń kartę z grupy';
+
+  @override
+  String get deleteGroup => 'Usuń grupę';
+
+  @override
+  String get addToTabGroup => 'Dodaj do grupy kart';
+
+  @override
+  String get editGroupName => 'Edytuj nazwę grupy';
+
+  @override
+  String get editGroupColor => 'Edytuj kolor grupy';
+
+  @override
+  String get closeTab => 'Zamknij kartę';
+
+  @override
+  String get doYouWantToUngroup => 'Czy na pewno chcesz rozgrupować tę grupę kart?';
+
+  @override
+  String get ungroupTabGroup => 'Rozgrupuj grupę kart';
+
+  @override
+  String get ungroup => 'Rozgrupuj';
+
+  @override
+  String get deletetabGroup => 'Usuń grupę kart';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Dodaj do';
+
+  @override
+  String get tabs => 'Karty';
+
+  @override
+  String get done => 'Gotowe';
+
+  @override
+  String get create => 'Utwórz';
+
+  @override
+  String get groupColor => 'Kolor grupy';
+
+  @override
+  String get groupName => 'Nazwa grupy';
+
+  @override
+  String get addtoNewTabGroup => 'Dodaj do nowej grupy kart';
+
+  @override
+  String get tabGroups => 'Grupy kart';
+
+  @override
+  String get tabGroup => 'Grupa kart';
+
+  @override
+  String get tabsSelected => 'Tabs selected';
+
+  @override
+  String get privateResearch => 'np. Prywatne badania';
+
+  @override
+  String get deselectAll => 'Odznacz wszystko';
+
+  @override
+  String get selected => 'Wybrano';
+
+  @override
+  String get close => 'Zamknij';
+
+  @override
+  String get top => 'góra';
+
+  @override
+  String get bottom => 'dół';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Ta czynność trwale zamknie wszystkie $tabCount karty znajdujące się w „$tabGroupName”. Tej czynności nie można cofnąć';
+  }
+
+  @override
+  String get changingNode => 'Zmiana węzła..';
+
+  @override
+  String get freeenameWebDomain => 'Domena Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Włącz obsługę domeny Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nie można pobrać pliku rozruchowego Belnet. Sprawdź połączenie i spróbuj ponownie';
+
+  @override
+  String get couldNotEstablishConnection => 'Nie można nawiązać połączenia z Belnet. Spróbuj ponownie';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Nie można uruchomić usługi Belnet. Spróbuj ponownie';
+
+  @override
+  String get exitNodeUnreachable => 'Węzeł wyjściowy jest niedostępny, ponowne łączenie';
+
+  @override
+  String get tab => 'Karta';
+
+  @override
+  String get ungroupTabs => 'Rozgrupuj karty';
+
+  @override
+  String get closeGroup => 'Zamknij grupę';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Czy na pewno chcesz rozgrupować wybrane karty z \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex to ekosystem zdecentralizowanych aplikacji skoncentrowanych na ochronie poufności. Aplikacja Przeglądarki Beldex jest jednym z elementów tego ekosystemu, który obejmuje również takie aplikacje jak BChat, BelNet oraz protokół Beldex.Przeglądarka Beldex jest Twoją bramą do płynnego i poufnego korzystania z Internetu, w którym Twoje dane pozostają wyłącznie Twoją własnością. Zbudowana na solidnej infrastrukturze blockchain, Przeglądarka Beldex zapewnia swoim użytkownikom poufność i anonimowość.';
 
   @override
@@ -594,7 +775,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get thusbeldexbrowserOffers => '\nW ten sposób Przeglądarka Beldex stanowi proste i bezpieczne schronienie dla użytkowników poszukujących poufności w coraz bardziej połączonym świecie. Dołącz do nas w podróży ku bardziej poufnej i bezpiecznej przyszłości cyfrowej. Odkrywaj Internet, komunikuj się i eksploruj sieć bez kompromisów w zakresie poufności. Sieć Beldex – Tam, gdzie poufność spotyka się z innowacją.';
 
   @override
-  String get credits => '\nCredits: Beldex & BelNet.\n';
+  String get credits => '\nAutorzy: Beldex & BelNet.\n';
 
   @override
   String get languageChineseSimplifiedChina => 'Chiński (uproszczony, Chiny)';
