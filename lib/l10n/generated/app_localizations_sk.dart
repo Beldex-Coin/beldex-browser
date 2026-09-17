@@ -222,7 +222,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get exitNodeSwitched => 'Výstupný uzol bol úspešne prepnutý';
 
   @override
-  String get thisNodeAlreadySelected => 'ento uzol je už vybraný. Vyberte iný zo zoznamu';
+  String get thisNodeAlreadySelected => 'Tento uzol je už vybraný. Vyberte iný zo zoznamu';
 
   @override
   String get doYouWantToSwitch => 'Chcete prepnúť na vybraný uzol?';
@@ -529,6 +529,187 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Vyhľadávací nástroj bol úspešne aktualizovaný!';
+
+  @override
+  String get searchusing => 'Hľadať pomocou';
+
+  @override
+  String get addTabToNewGroup => 'Pridať kartu do novej skupiny';
+
+  @override
+  String get invitePeople => 'Pozvať ľudí';
+
+  @override
+  String get uploadFromGallery => 'Nahrať z galérie';
+
+  @override
+  String get noQRCodeFound => 'na obrázku sa nenašiel žiadny QR kód';
+
+  @override
+  String get searchBarPosition => 'Pozícia vyhľadávacieho panela';
+
+  @override
+  String get choosethePosition => 'Vyberte pozíciu vyhľadávacieho panela';
+
+  @override
+  String get iPAddress => 'IP adresa';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Moja IP';
+
+  @override
+  String get marketUpdate => 'Aktualizácia trhu';
+
+  @override
+  String get searchYourTabs => 'Hľadať v kartách';
+
+  @override
+  String get newTabGroup => 'Nová skupina kariet';
+
+  @override
+  String get selectTab => 'Vybrať kartu';
+
+  @override
+  String get selectTabs => 'Vybrať karty';
+
+  @override
+  String get deleteTabGroup => 'Odstrániť skupinu kariet';
+
+  @override
+  String get rename => 'Premenovať';
+
+  @override
+  String get renameGroup => 'Premenovať skupinu';
+
+  @override
+  String get ungroupTab => 'Zrušiť zoskupenie karty';
+
+  @override
+  String get deleteGroup => 'Odstrániť skupinu';
+
+  @override
+  String get addToTabGroup => 'Pridať do skupiny kariet';
+
+  @override
+  String get editGroupName => 'Upraviť názov skupiny';
+
+  @override
+  String get editGroupColor => 'Upraviť farbu skupiny';
+
+  @override
+  String get closeTab => 'Zavrieť kartu';
+
+  @override
+  String get doYouWantToUngroup => 'Naozaj chcete zrušiť zoskupenie tejto skupiny kariet?';
+
+  @override
+  String get ungroupTabGroup => 'Zrušiť zoskupenie skupiny kariet';
+
+  @override
+  String get ungroup => 'rušiť zoskupenie';
+
+  @override
+  String get deletetabGroup => 'Odstrániť skupinu kariet';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Pridať do';
+
+  @override
+  String get tabs => 'Karty';
+
+  @override
+  String get done => 'Hotovo';
+
+  @override
+  String get create => 'Vytvoriť';
+
+  @override
+  String get groupColor => 'Farba skupiny';
+
+  @override
+  String get groupName => 'Názov skupiny';
+
+  @override
+  String get addtoNewTabGroup => 'Pridať do novej skupiny kariet';
+
+  @override
+  String get tabGroups => 'Skupiny kariet';
+
+  @override
+  String get tabGroup => 'Skupina kariet';
+
+  @override
+  String get tabsSelected => 'Vybrané karty';
+
+  @override
+  String get privateResearch => 'napr. Súkromný výskum';
+
+  @override
+  String get deselectAll => 'Zrušiť výber všetkého';
+
+  @override
+  String get selected => 'Vybrané';
+
+  @override
+  String get close => 'Zavrieť';
+
+  @override
+  String get top => 'hore';
+
+  @override
+  String get bottom => 'dole';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Táto akcia natrvalo zatvorí všetky $tabCount karty v skupine „$tabGroupName“. Túto akciu nie je možné vrátiť späť.';
+  }
+
+  @override
+  String get changingNode => 'Zmena uzla..';
+
+  @override
+  String get freeenameWebDomain => 'Doména Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Povoliť podporu domény Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nepodarilo sa stiahnuť zavádzací súbor Belnet. Skontrolujte svoje pripojenie a skúste to znova';
+
+  @override
+  String get couldNotEstablishConnection => 'Nepodarilo sa nadviazať pripojenie k Belnetu. Skúste to znova';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Službu Belnet sa nepodarilo spustiť. Skúste to znova';
+
+  @override
+  String get exitNodeUnreachable => 'Výstupný uzol nie je dostupný, prebieha opätovné pripájanie';
+
+  @override
+  String get tab => 'Karta';
+
+  @override
+  String get ungroupTabs => 'Zrušiť zoskupenie kariet';
+
+  @override
+  String get closeGroup => 'Zavrieť skupinu';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Naozaj chcete zrušiť zoskupenie vybraných kariet zo skupiny \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex je ekosystém decentralizovaných aplikácií zachovávajúcich dôvernosť. Aplikácia Beldex Browser je súčasťou tohto ekosystému, ktorý zahŕňa aj aplikácie ako BChat, BelNet a protokol Beldex. Prehliadač Beldex je vašou bránou k plynulému a dôvernému online zážitku, kde vaše údaje patria iba vám. Postavený na robustnej blockchain infraštruktúre, prehliadač Beldex zabezpečuje dôvernosť a anonymitu používateľov.';
