@@ -187,6 +187,102 @@
   "searchEngineUpdated": "Moteur de recherche mis à jour avec succès !",
 
 
+   "searchusing": "Recherche avec",
+  "addTabToNewGroup": "Ajouter un onglet à un nouveau groupe",
+  "invitePeople": "Inviter des personnes",
+  "uploadFromGallery": "Importer depuis la galerie",
+  "noQRCodeFound": "Aucun code QR trouvé dans l'image",
+  "searchBarPosition": "Position de la barre de recherche",
+  "choosethePosition": "Choisissez la position de la barre de recherche",
+  "iPAddress": "Adresse IP",
+   "vpnIP": "Adresse IP du VPN",
+   "myIP": "Mon adresse IP",
+   "marketUpdate": "Mise à jour du marché",
+   "searchYourTabs": "Recherchez vos onglets",
+   "newTabGroup": "Nouveau groupe d’onglets",
+   "selectTab": "Sélectionner l’onglet",
+   "selectTabs": "Sélectionner les onglets",
+   "closeAllTabs": "Fermer tous les onglets",
+   "deleteTabGroup": "Supprimer le groupe d’onglets",
+   "rename": "Renommer",
+   "renameGroup": "Renommer le groupe",
+   "ungroupTab": "Retirer l’onglet du groupe",
+   "deleteGroup": "Supprimer le groupe",
+   "addToTabGroup": "Ajouter au groupe d’onglets",
+   "editGroupName": "Modifier le nom du groupe",
+   "editGroupColor": "Modifier la couleur du groupe",
+   "closeTab": "Fermer l’onglet",
+   "doYouWantToUngroup": "Voulez-vous vraiment dissocier ce groupe d’onglets ?",
+   "ungroupTabGroup": "Dissocier le groupe d’onglets",
+   "ungroup": "Dissocier",
+   "deleteGroup": "Supprimer le groupe",
+   "deletetabGroup": "Supprimer le groupe d’onglets",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Ajouter à",
+   "tabs": "Onglets",
+   "done": "Terminé",
+   "create": "Créer",
+   "groupColor": "Couleur du groupe",
+   "groupName": "Nom du groupe",
+   "newTabGroup": "Nouveau groupe d’onglets",
+   "addtoNewTabGroup": "Ajouter à un nouveau groupe d’onglets",
+   "tabGroups": "Groupes d’onglets",
+   "tabGroup": "Groupe d’onglets",
+   "tabsSelected": "Tabs selected",
+   "privateResearch": "Ex. : Recherche privée",
+   "deselectAll": "Tout désélectionner",
+   "selected": "Sélectionné",
+
+
+   "close": "Fermer",
+   "top": "en haut",
+   "bottom": "en bas",
+
+
+   "closeAllTabsConfirmation": "Cette action fermera définitivement les {tabCount} onglets du groupe « {tabGroupName} ». Cette action est irréversible.",
+"@closeAllTabsConfirmation": {
+  "description": "Message de confirmation lors de la fermeture de tous les onglets d’un groupe d’onglets",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+"changingNode": "Changer de nœud",
+"freeenameWebDomain" : "Domaine FreeName Web3",
+"enableFreeNameWeb" : "Activer la prise en charge du domaine FreeName Web3",
+"couldnotDownloadBootstrap" : "Impossible de télécharger le fichier d'amorçage Belnet. Veuillez vérifier votre connexion et réessayer",
+"couldNotEstablishConnection" : "Impossible d'établir la connexion Belnet. Veuillez réessayer",
+"theBelnetServiceNotStarted": "Le service Belnet n'a pas pu démarrer. Veuillez réessayer",
+"exitNodeUnreachable" : "Nœud de sortie inaccessible, reconnexion en cours",
+
+
+
+"tab": "Onglet",
+"ungroupTabs": "Dissocier les onglets",
+"closeGroup": "Fermer le groupe",
+"ungroupSelectedTabs": "Voulez-vous vraiment dissocier les onglets sélectionnés de ${tabGroupName} ?",
+"@ungroupSelectedTabs": {
+  "description": "Message de confirmation lors de la dissociation des onglets sélectionnés d'un groupe d'onglets",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
+
+
 "beldexIsAnEcosystem": "Beldex est un écosystème d’applications décentralisées et respectueuses de la confidentialité. L’application Navigateur Beldex fait partie de cet écosystème, qui comprend également des applications telles que BChat, BelNet et le protocole Beldex. Le Navigateur Beldex est votre passerelle vers une expérience en ligne fluide et confidentielle, où vos données restent strictement les vôtres. Construit sur une infrastructure blockchain robuste, le navigateur Beldex garantit confidentialité et anonymat à ses utilisateurs.",
 "atBeldex": " \n Chez Beldex, nous croyons en l’autonomisation des individus avec le droit fondamental de contrôler leur empreinte numérique. Le Navigateur Beldex est conçu pour offrir un environnement en ligne sécurisé et confidentiel permettant aux utilisateurs de communiquer et d’interagir avec le monde numérique.",
 "titlebns": "\nBNS",
