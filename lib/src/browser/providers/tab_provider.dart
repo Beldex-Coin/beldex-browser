@@ -566,7 +566,64 @@ Future<WebViewModel?> createNewAutoGroupedTab() async {
 // }
 
 
+
+
 void closeGroup(
+  GroupModel group, {
+  bool closeTabsIfNoOtherTabs = true,
+}) {
+  if (browserProvider == null) {
+    return;
+  }
+
+  final browser = browserProvider!;
+
+  final currentTab = browser.getCurrentTab();
+
+  final currentTabId = currentTab?.webViewModel.uuid;
+
+  final groupContainsCurrentTab =
+      currentTabId != null &&
+      group.tabs.any(
+        (tab) => tab.uuid == currentTabId,
+      );
+
+  if (groupContainsCurrentTab) {
+    final groupTabIds = group.tabs
+        .map((tab) => tab.uuid)
+        .toSet();
+
+    final otherTabIndex =
+        browser.webViewTabs.indexWhere(
+      (tab) => !groupTabIds.contains(
+        tab.webViewModel.uuid,
+      ),
+    );
+
+    if (otherTabIndex != -1) {
+      browser.showTab(otherTabIndex);
+    }
+  }
+
+  // IMPORTANT:
+  // Do NOT call browser.closeTab() here.
+  //
+  // The tabs must remain in browser.webViewTabs
+  // so they can be restored when the group is reopened.
+
+  group.isClosed = true;
+
+  notifyListeners();
+}
+
+
+
+
+
+
+/// Old working but for individual group close is not working
+
+void closedGroup(
   GroupModel group, {
   bool closeTabsIfNoOtherTabs = true,
 }) {
@@ -864,7 +921,7 @@ Future<void> deleteGroupAndTabs(
 
     } catch (e) {
 
-      debugPrint(
+      print(
         "Tab delete error: $e",
       );
     }
@@ -1778,7 +1835,7 @@ Future<void> closeAllTabs(BuildContext context) async {
         const Duration(milliseconds: 30),
       );
     } catch (e) {
-      debugPrint(
+      print(
         'Error closing tab: $e',
       );
     }
