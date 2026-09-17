@@ -185,6 +185,102 @@
 
 
 
+
+
+  "searchusing": "Keresés ezzel",
+  "addTabToNewGroup": "Lap hozzáadása új csoporthoz",
+  "invitePeople": "Emberek meghívása",
+  "uploadFromGallery": "Feltöltés a galériából,",
+  "noQRCodeFound": "nem található QR-kód a képen",
+  "searchBarPosition": "Keresősáv pozíciója",
+  "choosethePosition": "Válassza ki a keresősáv pozícióját",
+  "iPAddress": "IP-cím",
+   "vpnIP": "VPN IP",
+   "myIP": "Saját IP-cím",
+   "marketUpdate": "Piaci frissítés",
+   "searchYourTabs": "Lapok keresése",
+   "newTabGroup": "Új lapcsoport",
+   "selectTab": "Lap kiválasztása",
+   "selectTabs": "Lapok kiválasztása",
+   "closeAllTabs": "Összes lap bezárása",
+   "deleteTabGroup": "Lapcsoport törlése",
+   "rename": "Átnevezés",
+   "renameGroup": "Csoport átnevezése",
+   "ungroupTab": "Lap csoportbontása",
+   "deleteGroup": "Csoport törlése",
+   "addToTabGroup": "Hozzáadás a lapcsoporthoz",
+   "editGroupName": "Csoport nevének szerkesztése",
+   "editGroupColor": "Csoport színének szerkesztése",
+   "closeTab": "Lap bezárása",
+   "doYouWantToUngroup": "Biztosan meg szeretné szüntetni ennek a lapcsoportnak a csoportosítását?",
+   "ungroupTabGroup": "Lapcsoport csoportbontása",
+   "ungroup": "Csoportbontás",
+   "deleteGroup": "Csoport törlése",
+   "deletetabGroup": "Lapcsoport törlése",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Hozzáadás ehhez",
+   "tabs": "Lapok",
+   "done": "Kész",
+   "create": "Létrehozás",
+   "groupColor": "Csoport színe",
+   "groupName": "Csoport neve",
+   "newTabGroup": "Új lapcsoport",
+   "addtoNewTabGroup": "Hozzáadás új lapcsoporthoz",
+   "tabGroups": "Lapcsoportok",
+   "tabGroup": "Lapcsoport",
+   "tabsSelected": "Kiválasztott lapok",
+   "privateResearch": "pl. Privát kutatás",
+   "deselectAll": "Összes kijelölés megszüntetése",
+   "selected": "Kiválasztva",
+
+
+   "close": "Bezárás",
+   "top": "felül",
+   "bottom": "alul",
+
+
+
+ "closeAllTabsConfirmation": "Ez a művelet véglegesen bezárja a „{tabGroupName}” csoportban található mind a {tabCount} lapot. Ez nem vonható vissza.",
+"@closeAllTabsConfirmation": {
+  "description": "Megerősítő üzenet a lapcsoport összes lapjának bezárásakor",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Csomópont módosítása",
+"freeenameWebDomain" : "FreeName Web3 domain",
+"enableFreeNameWeb" : "FreeName Web3 domain támogatásának engedélyezése",
+"couldnotDownloadBootstrap" : "Nem sikerült letölteni a Belnet rendszerindító fájlját. Ellenőrizze a kapcsolatot, majd próbálja újra",
+"couldNotEstablishConnection" : "Nem sikerült létrehozni a Belnet-kapcsolatot. Próbálja újra",
+"theBelnetServiceNotStarted": "A Belnet szolgáltatást nem sikerült elindítani. Próbálja újra",
+"exitNodeUnreachable" : "A kilépési csomópont nem érhető el, újracsatlakozás folyamatban",
+
+"tab": "Lap",
+"ungroupTabs": "Lapok csoportosításának megszüntetése",
+"closeGroup": "Csoport bezárása",
+"ungroupSelectedTabs": "Biztosan megszünteti a kiválasztott lapok csoportosítását a(z) ${tabGroupName} csoportból?",
+"@ungroupSelectedTabs": {
+  "description": "Megerősítő üzenet a kiválasztott lapok lapcsoportból való eltávolításakor",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "A Beldex egy decentralizált és adatvédelmet biztosító alkalmazásokból álló ökoszisztéma. A Beldex Browser alkalmazás ennek az ökoszisztémának az egyik eleme, amely olyan alkalmazásokat is tartalmaz, mint a BChat, a BelNet és a Beldex protokoll. A Beldex böngésző kaput nyit egy zökkenőmentes és bizalmas online élményhez, ahol az adatai kizárólag az Önéi maradnak. A robusztus blokklánc-infrastruktúrára épített Beldex böngésző biztosítja a felhasználók adatvédelmét és anonimitását.",
 "atBeldex": " \n A Beldexnél hiszünk abban, hogy az egyéneket fel kell ruházni azzal az alapvető joggal, hogy irányítsák digitális lábnyomukat. A Beldex böngészőt úgy terveztük, hogy biztonságos és bizalmas online környezetet biztosítson a digitális világgal való kommunikációhoz és interakcióhoz.",
 "titlebns": "\nBNS",
