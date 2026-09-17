@@ -531,6 +531,187 @@ class AppLocalizationsVi extends AppLocalizations {
   String get searchEngineUpdated => 'Cập nhật công cụ tìm kiếm thành công!';
 
   @override
+  String get searchusing => 'Tìm kiếm bằng';
+
+  @override
+  String get addTabToNewGroup => 'Thêm tab vào nhóm mới';
+
+  @override
+  String get invitePeople => 'Mời mọi người';
+
+  @override
+  String get uploadFromGallery => 'Tải lên từ thư viện';
+
+  @override
+  String get noQRCodeFound => 'Không tìm thấy mã QR trong hình ảnh';
+
+  @override
+  String get searchBarPosition => 'Vị trí thanh tìm kiếm';
+
+  @override
+  String get choosethePosition => 'Chọn vị trí của thanh tìm kiếm.';
+
+  @override
+  String get iPAddress => 'Địa chỉ IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'IP của tôi';
+
+  @override
+  String get marketUpdate => 'Cập nhật thị trường';
+
+  @override
+  String get searchYourTabs => 'Tìm kiếm các tab của bạn';
+
+  @override
+  String get newTabGroup => 'Nhóm tab mới';
+
+  @override
+  String get selectTab => 'Chọn tab';
+
+  @override
+  String get selectTabs => 'Chọn tabs';
+
+  @override
+  String get deleteTabGroup => 'Xóa nhóm tab';
+
+  @override
+  String get rename => 'Đổi tên';
+
+  @override
+  String get renameGroup => 'Đổi tên nhóm';
+
+  @override
+  String get ungroupTab => 'Bỏ nhóm tab';
+
+  @override
+  String get deleteGroup => 'Xóa nhóm';
+
+  @override
+  String get addToTabGroup => 'Thêm vào nhóm tab';
+
+  @override
+  String get editGroupName => 'Chỉnh sửa tên nhóm';
+
+  @override
+  String get editGroupColor => 'Chỉnh sửa màu nhóm';
+
+  @override
+  String get closeTab => 'Đóng tab';
+
+  @override
+  String get doYouWantToUngroup => 'Bạn có chắc chắn muốn bỏ nhóm tab này không?';
+
+  @override
+  String get ungroupTabGroup => 'Bỏ nhóm tab';
+
+  @override
+  String get ungroup => 'Bỏ nhóm';
+
+  @override
+  String get deletetabGroup => 'Xóa nhóm tab';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Thêm vào';
+
+  @override
+  String get tabs => 'Các tab';
+
+  @override
+  String get done => 'Hoàn tất';
+
+  @override
+  String get create => 'Tạo';
+
+  @override
+  String get groupColor => 'Màu nhóm';
+
+  @override
+  String get groupName => 'Tên nhóm';
+
+  @override
+  String get addtoNewTabGroup => 'Thêm vào nhóm tab mới';
+
+  @override
+  String get tabGroups => 'Các nhóm tab';
+
+  @override
+  String get tabGroup => 'Nhóm tab';
+
+  @override
+  String get tabsSelected => 'Các tab đã chọn';
+
+  @override
+  String get privateResearch => 'Ví dụ: Nghiên cứu riêng tư';
+
+  @override
+  String get deselectAll => 'Bỏ chọn tất cả';
+
+  @override
+  String get selected => 'Đã chọn';
+
+  @override
+  String get close => 'Đóng';
+
+  @override
+  String get top => 'Trên cùng';
+
+  @override
+  String get bottom => 'Dưới cùng';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Hành động này sẽ đóng vĩnh viễn tất cả $tabCount tab trong “$tabGroupName”. Không thể hoàn tác thao tác này.';
+  }
+
+  @override
+  String get changingNode => 'Đang chuyển nút';
+
+  @override
+  String get freeenameWebDomain => 'Tên miền Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Bật hỗ trợ tên miền Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Không thể tải xuống tệp khởi động Belnet. Vui lòng kiểm tra kết nối của bạn và thử lại';
+
+  @override
+  String get couldNotEstablishConnection => 'Không thể thiết lập kết nối Belnet. Vui lòng thử lại';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Không thể khởi động dịch vụ Belnet. Vui lòng thử lại';
+
+  @override
+  String get exitNodeUnreachable => 'Không thể kết nối đến nút thoát, đang kết nối lại';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Bỏ nhóm các tab';
+
+  @override
+  String get closeGroup => 'Đóng nhóm';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Bạn có chắc chắn muốn bỏ nhóm các tab đã chọn khỏi \$$tabGroupName không?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex là một hệ sinh thái gồm các ứng dụng phi tập trung và bảo vệ quyền riêng tư. Ứng dụng Trình duyệt Beldex là một phần trong hệ sinh thái này, cùng với các ứng dụng như BChat, BelNet và giao thức Beldex. Trình duyệt Beldex là cổng vào trải nghiệm trực tuyến liền mạch và bảo mật, nơi dữ liệu của bạn chỉ thuộc về bạn. Được xây dựng trên cơ sở hạ tầng blockchain mạnh mẽ, trình duyệt Beldex đảm bảo quyền riêng tư và ẩn danh cho người dùng.';
 
   @override
