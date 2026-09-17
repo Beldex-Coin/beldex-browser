@@ -363,7 +363,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get closeTabs => 'إغلاق التبويبات';
 
   @override
-  String get closeAllTabs => 'إغلاق جميع التبويبات';
+  String get closeAllTabs => 'إغلاق جميع علامات التبويب';
 
   @override
   String get copy => 'نسخ';
@@ -529,6 +529,187 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'تم تحديث محرك البحث بنجاح!';
+
+  @override
+  String get searchusing => 'البحث باستخدام';
+
+  @override
+  String get addTabToNewGroup => 'إضافة علامة تبويب إلى مجموعة جديدة';
+
+  @override
+  String get invitePeople => 'دعوة أشخاص';
+
+  @override
+  String get uploadFromGallery => 'تحميل من المعرض';
+
+  @override
+  String get noQRCodeFound => 'لم يتم العثور على رمز الاستجابة السريعة في الصورة';
+
+  @override
+  String get searchBarPosition => 'موضع شريط البحث';
+
+  @override
+  String get choosethePosition => 'اختر موضع شريط البحث.';
+
+  @override
+  String get iPAddress => 'عنوان IP';
+
+  @override
+  String get vpnIP => 'عنوان IP الخاص بشبكة VPN';
+
+  @override
+  String get myIP => 'عنوان IP الخاص بي';
+
+  @override
+  String get marketUpdate => 'تحديث السوق';
+
+  @override
+  String get searchYourTabs => 'ابحث في علامات التبويب الخاصة بك';
+
+  @override
+  String get newTabGroup => 'مجموعة علامات تبويب جديدة';
+
+  @override
+  String get selectTab => 'تحديد علامة التبويب';
+
+  @override
+  String get selectTabs => 'تحديد علامات التبويب';
+
+  @override
+  String get deleteTabGroup => 'حذف مجموعة علامات التبويب';
+
+  @override
+  String get rename => 'إعادة تسمية';
+
+  @override
+  String get renameGroup => 'إعادة تسمية المجموعة';
+
+  @override
+  String get ungroupTab => 'فك تجميع علامات التبويب';
+
+  @override
+  String get deleteGroup => 'حذف المجموعة';
+
+  @override
+  String get addToTabGroup => 'إضافة إلى مجموعة علامات التبويب';
+
+  @override
+  String get editGroupName => 'تعديل اسم المجموعة';
+
+  @override
+  String get editGroupColor => 'تعديل لون المجموعة';
+
+  @override
+  String get closeTab => 'إغلاق علامة التبويب';
+
+  @override
+  String get doYouWantToUngroup => 'هل أنت متأكد من رغبتك في فك تجميع مجموعة علامات التبويب هذه؟';
+
+  @override
+  String get ungroupTabGroup => 'فك تجميع مجموعة علامات التبويب';
+
+  @override
+  String get ungroup => 'فك التجميع';
+
+  @override
+  String get deletetabGroup => 'حذف مجموعة علامات التبويب';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'إضافة إلى';
+
+  @override
+  String get tabs => 'علامات التبويب';
+
+  @override
+  String get done => 'تم';
+
+  @override
+  String get create => 'إنشاء';
+
+  @override
+  String get groupColor => 'لون المجموعة';
+
+  @override
+  String get groupName => 'اسم المجموعة';
+
+  @override
+  String get addtoNewTabGroup => 'إضافة إلى مجموعة علامات تبويب جديدة';
+
+  @override
+  String get tabGroups => 'مجموعات علامات التبويب';
+
+  @override
+  String get tabGroup => 'مجموعة علامات التبويب';
+
+  @override
+  String get tabsSelected => 'علامات التبويب المحددة';
+
+  @override
+  String get privateResearch => 'مثال: بحث خاص';
+
+  @override
+  String get deselectAll => 'إلغاء تحديد الكل';
+
+  @override
+  String get selected => 'تم التحديد';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get top => 'أعلى';
+
+  @override
+  String get bottom => 'أسفل';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'سيؤدي هذا الإجراء إلى إغلاق جميع علامات التبويب $tabCount داخل \"$tabGroupName\" نهائيًا. لا يمكن التراجع عن هذا الإجراء.';
+  }
+
+  @override
+  String get changingNode => 'تغيير العقدة';
+
+  @override
+  String get freeenameWebDomain => 'نطاق FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'تفعيل دعم نطاق FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'تعذر تنزيل ملف تهيئة Belnet. يرجى التحقق من اتصالك والمحاولة مرة أخرى';
+
+  @override
+  String get couldNotEstablishConnection => 'تعذر إنشاء اتصال Belnet. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get theBelnetServiceNotStarted => 'تعذر بدء خدمة Belnet. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get exitNodeUnreachable => 'الخروج العقدة غير متاحة، جارٍ إعادة الاتصال';
+
+  @override
+  String get tab => 'علامة تبويب';
+
+  @override
+  String get ungroupTabs => 'إلغاء تجميع علامات التبويب';
+
+  @override
+  String get closeGroup => 'إغلاق المجموعة';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'هل تريد بالتأكيد إلغاء تجميع علامات التبويب المحددة من \$$tabGroupName؟';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex هو نظام بيئي من التطبيقات اللامركزية والمحافظة على الخصوصية. تطبيق متصفح Beldex هو جزء من هذا النظام البيئي الذي يشمل أيضًا تطبيقات مثل BChat و BelNet وبروتوكول Beldex. متصفح Beldex هو بوابتك لتجربة إنترنت سلسة وسرية، حيث تظل بياناتك ملكًا لك وحدك. وبفضل بنية تحتية قوية للبلوك تشين، يضمن متصفح Beldex السرية وإخفاء الهوية لمستخدميه.';
