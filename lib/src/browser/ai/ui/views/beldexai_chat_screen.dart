@@ -875,7 +875,7 @@ bool isAllTextSelected(TextSelection selection, String text) {
                                                       case AIChatPopupMenuActions.SHARE_CHAT:
                                                         return CustomPopupMenuItem<String>(
                                                           enabled:model.messages.isNotEmpty && !model.isTyping,
-                                                          value:loc.share, // choice,
+                                                          value:choice, // choice,
                                                           height: 35,
                                                           padding: EdgeInsets.zero,
                                                           child: GlassSettingPanel(
