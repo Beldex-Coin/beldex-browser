@@ -1,14 +1,17 @@
 //import 'package:beldex_browser/src/browser/browser_home_page.dart';
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
+import 'package:beldex_browser/src/browser/pages/bottom_nav_bar.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart'
     as exitNodeModel;
 import 'package:beldex_browser/src/model/exitnodeCategoryModel.dart';
@@ -584,770 +587,485 @@ restore() async {
               } else
                 return false;
             },
-            child: Scaffold(
-
-                //backgroundColor: Color(0xff171720),
-                resizeToAvoidBottomInset: true,
-                body: Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: MediaQuery.of(context).size.width * 0.5),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: Transform.translate(
-                          offset: Offset(0,
-                              -100), // Adjust this offset to position the first image
-                          child: SvgPicture.asset(
-                            'assets/images/box_element.svg', // Replace with your first image asset path
-                            fit: BoxFit.contain,
-                            width: MediaQuery.of(context).size.width *
-                                0.15, // Adjust width if necessary
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.width * 0.14,
-                          left: MediaQuery.of(context).size.width * 0.10),
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Transform.translate(
-                          offset: Offset(0,
-                              100), // Adjust this offset to position the second image
-                          child: SvgPicture.asset(
-                            'assets/images/shield.svg', // Replace with your second image asset path
-                            fit: BoxFit.contain,
-                            width: MediaQuery.of(context).size.width *
-                                0.5, // Adjust width if necessary
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedContainer(
-                              //color: Colors.yellow,
-                              margin: EdgeInsets.symmetric(horizontal: 20),
-                              //  padding: EdgeInsets.symmetric(horizontal: 10),
-                              // width: constraints.maxWidth / 1,
-                              // height: constraints.maxHeight / 1.60,
-                              duration: Duration(seconds: 1),
-                              child: themeProvider.darkTheme
-                                  ? Lottie.asset(
-                                     'assets/images/dark.json', //'assets/images/dark_welcome_scrn.json',
-                                      fit: BoxFit.fitWidth)
-                                  : LottieBuilder.asset(
-                                      'assets/images/white.json',
-                                      fit: BoxFit.fitWidth)),
-                              Text(loc.beldexBrowserForAndroid,textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Poppins'),),
-                              SizedBox(height: 10,),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 9),
-                                  child: Text(loc.exitnode,
-                                    //'Exit Node',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                BelnetLib.isConnected ||
-                                        vpnStatusProvider.value ==
-                                            'Connecting...'
-                                    ? Align(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.19 /
-                                                3,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 13),
-                                            decoration: BoxDecoration(
-                                                color: themeProvider.darkTheme
-                                                    ? const Color(0xff242436)
-                                                    : const Color(0xffF3F3F3),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5))),
-                                            child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 4.0,
-                                                    right: 6.0,
-                                                    top: 3.0,
-                                                    bottom: 5.0),
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                        margin: EdgeInsets.symmetric(
-                                                           vertical: 12.0,horizontal: 15),
-                                                        // margin:EdgeInsets.only(right:mHeight*0.03/3,),
-                                                        child: exitIcon != '' ||
-                                                                exitIcon!
-                                                                    .isNotEmpty
-                                                            ? Image.asset(
-                                                                exitIcon!,
-                                                                errorBuilder:
-                                                                    (context,
-                                                                        error,
-                                                                        stackTrace) {
-                                                                  print(
-                                                                      'EXINODE ICON $exitIcon');
-                                                                  return Icon(Icons
-                                                                      .broken_image);
-                                                                },
-                                                              )
-                                                            : const Icon(
-                                                                Icons
-                                                                    .more_horiz,
-                                                                color:
-                                                                    Colors.grey,
-                                                              )),
-                                                    Expanded(
-                                                        child: Text("$exitNode",
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            maxLines: 1,
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: const Color(
-                                                                    0xff00DC00)))),
-                                                    BelnetLib.isConnected ==
-                                                            false
-                                                        ? const Icon(
-                                                            Icons
-                                                                .arrow_drop_down,
-                                                            color: Colors.grey,
-                                                          )
-                                                        : Container()
-                                                  ],
-                                                ))),
-                                      )
-                                    : Align(
-                                        alignment: Alignment.center,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            try {
-                                              setState(() {
-                                                isOpen = isOpen ? false : true;
-                                              });
-                                              if (isOpen &&
-                                                  (exitNodeDataList.isEmpty ||
-                                                      exitNodeDataList == [])) {
-                                                //exitData.clear();
-                                                print(
-                                                    'cleared the data ${exitNodeDataList.length}');
-                                                // saveData();
-                                                //saveCustomForUse();   //hide for version 1.2.0
-                                              } else {
-                                                //saveData();
-                                                OverlayState? overlayState =
-                                                    Overlay.of(context);
-                                                overlayEntry = OverlayEntry(
-                                                  builder: (context) {
-                                                    return _buildExitnodeListView(
-                                                        mHeight,
-                                                        themeProvider,
-                                                        vpnStatusProvider,
-                                                        loc
-                                                        );
-                                                  },
-                                                );
-                                                overlayState
-                                                    .insert(overlayEntry!);
-                                              }
-                                            } catch (e) {
-                                              print('Exception $e');
-                                            }
-                                          },
-                                          child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.19 /
-                                                  3,
-                                              // 48,
-                                              // MediaQuery.of(context).size.height *
-                                              //     0.16 /
-                                              //     3,
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 13),
-                                              decoration: BoxDecoration(
-                                                  color: themeProvider.darkTheme
-                                                      ? const Color(0xff242436)
-                                                      : const Color(0xffF3F3F3),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(5))),
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4.0,
-                                                          right: 6.0,
-                                                          top: 3.0,
-                                                          bottom: 5.0),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                          margin:
-                                                               EdgeInsets.symmetric(
-                                                           vertical: 12.0,horizontal: 15),
-                                                          // margin:EdgeInsets.only(right:mHeight*0.03/3,),
-                                                          child: exitIcon !=
-                                                                      '' ||
-                                                                  exitIcon!
-                                                                      .isNotEmpty
-                                                              ? Image.asset(
-                                                                  exitIcon!,
-                                                                  errorBuilder:
-                                                                      (context,
-                                                                          error,
-                                                                          stackTrace) {
-                                                                    return Icon(
-                                                                        Icons
-                                                                            .broken_image);
-                                                                  },
-                                                                )
-                                                              : const Icon(
-                                                                  Icons
-                                                                      .more_horiz,
-                                                                  color: Colors
-                                                                      .grey,
-                                                                )),
-                                                      Expanded(
-                                                          child: Text(
-                                                              "$exitNode",
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: const Color(
-                                                                      0xff00DC00)))),
-                                                      // BelnetLib.isConnected == false
-                                                      //     ?
-                                                      //     Container(
-                                                      //         child:
-                                                      const Icon(
-                                                        Icons.arrow_drop_down,
-                                                      )
-                                                      //   )
-                                                      // : Container()
-                                                    ],
-                                                  ))),
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-
-                          LayoutBuilder(builder: (context, constraint) {
-                            return GestureDetector(
-                              onTap: vpnStatusProvider.value ==
-                                      'Disconnected' //isLoading
-                                  ? () => toggleBelnet(vpnStatusProvider,
-                                      loadingtickValueProvider,loc)
-                                  // : vpnStatusProvider.value == 'Connected'
-                                  // ? () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Browser()))
-                                  : null,
-                              child: 
-                              IntrinsicWidth(
-  child: ConstrainedBox(
-    constraints: BoxConstraints(
-      minWidth: constraint.maxWidth / 1.6, // same width as Connect
-      maxWidth: constraint.maxWidth * 0.70, // 0.95 allow expansion limit
-    ),
-    child: Container(
-      height: 55,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      decoration: BoxDecoration(
-        color: vpnStatusProvider.value == 'Disconnected'
-            ? const Color(0xff00B134)
-            : themeProvider.darkTheme
-                ? const Color(0xff282836)
-                : const Color(0xffF3F3F3),
-        borderRadius: BorderRadius.circular(10),
-      ),
-
-      child: vpnStatusProvider.value == 'Disconnected'
-          ? Center(
-              child: Text(
-                loc.connect,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            )
-
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                Image.asset(
-                  themeProvider.darkTheme
-                      ? 'assets/images/Load.gif'
-                      : 'assets/images/Load_white_theme.gif',
-                  height: 28,
-                  width: 28,
-                ),
-                const SizedBox(width: 8),
-
-                Flexible(
-                  child: Text(
-                    loc.connecting,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: themeProvider.darkTheme
-                          ? Colors.white
-                          : Colors.black,
-                    ),
-                  ),
+                Positioned.fill(child: themeProvider.darkTheme ? Image.asset('assets/images/ai-icons/new/Splash_dark.png',fit: BoxFit.cover,)
+                       : Image.asset('assets/images/ai-icons/new/Splash_white.png',fit: BoxFit.cover,),),
+                        Positioned.fill(
+                          child:themeProvider.darkTheme ? SvgPicture.asset('assets/images/ai-icons/new/Beldex_browser_white.svg',fit: BoxFit.cover,) : SvgPicture.asset('assets/images/ai-icons/new/Beldex_browser_Black.svg',fit: BoxFit.cover,)
+                        ),
+                SafeArea(
+                  child: Scaffold(
+                      backgroundColor:Colors.transparent,// Color(0xff171720),
+                      resizeToAvoidBottomInset: true,
+                      body: Stack(
+                        children: [
+                          
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //       vertical: MediaQuery.of(context).size.width * 0.5),
+                          //   child: Align(
+                          //     alignment: Alignment.topRight,
+                          //     child: Transform.translate(
+                          //       offset: Offset(0,
+                          //           -100), // Adjust this offset to position the first image
+                          //       child: SvgPicture.asset(
+                          //         'assets/images/box_element.svg', // Replace with your first image asset path
+                          //         fit: BoxFit.contain,
+                          //         width: MediaQuery.of(context).size.width *
+                          //             0.15, // Adjust width if necessary
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(
+                          //       bottom: MediaQuery.of(context).size.width * 0.14,
+                          //       left: MediaQuery.of(context).size.width * 0.10),
+                          //   child: Align(
+                          //     alignment: Alignment.bottomLeft,
+                          //     child: Transform.translate(
+                          //       offset: Offset(0,
+                          //           100), // Adjust this offset to position the second image
+                          //       child: SvgPicture.asset(
+                          //         'assets/images/shield.svg', // Replace with your second image asset path
+                          //         fit: BoxFit.contain,
+                          //         width: MediaQuery.of(context).size.width *
+                          //             0.5, // Adjust width if necessary
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          Positioned.fill(
+                            top: MediaQuery.of(context).size.height*1/3,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // AnimatedContainer(
+                                  //     //color: Colors.yellow,
+                                  //     margin: EdgeInsets.symmetric(horizontal: 20),
+                                  //     //  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  //     // width: constraints.maxWidth / 1,
+                                  //     // height: constraints.maxHeight / 1.60,
+                                  //     duration: Duration(seconds: 1),
+                                  //     child: themeProvider.darkTheme
+                                  //         ? Lottie.asset(
+                                  //            'assets/images/dark.json', //'assets/images/dark_welcome_scrn.json',
+                                  //             fit: BoxFit.fitWidth)
+                                  //         : LottieBuilder.asset(
+                                  //             'assets/images/white.json',
+                                  //             fit: BoxFit.fitWidth)),
+                                      Text(loc.beldexBrowserForAndroid,textAlign: TextAlign.center,style: TextStyle(fontFamily: 'Inter'),),
+                                      SizedBox(height: 10,),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 9),
+                                          child: Text(loc.exitnode,
+                                            //'Exit Node',
+                                            style:
+                                                TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Inter'),
+                                          ),
+                                        ),
+                                        BelnetLib.isConnected ||
+                                                vpnStatusProvider.value ==
+                                                    'Connecting...'
+                                            ? Align(
+                                                alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                                                  child: GlassCommonPanel(
+                                                    child: Container(
+                                                        height: MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.19 /
+                                                            3,
+                                                        // margin: EdgeInsets.symmetric(
+                                                        //     horizontal: 13),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.transparent,
+                                                            border: Border.all(color: themeProvider.darkTheme ? Color(0xff333333): Color(0xffC0C0C0))
+                                                            // themeProvider.darkTheme
+                                                            //     ? const Color(0xff242436)
+                                                            //     : const Color(0xffF3F3F3),
+                                                            // borderRadius: BorderRadius.all(
+                                                            //     Radius.circular(5)
+                                                            //     )
+                                                                ),
+                                                        child: Padding(
+                                                            padding: const EdgeInsets.only(
+                                                                left: 4.0,
+                                                                right: 6.0,
+                                                                top: 3.0,
+                                                                bottom: 5.0),
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.center,
+                                                              children: [
+                                                                Container(
+                                                                    margin: EdgeInsets.symmetric(
+                                                                       vertical: 12.0,horizontal: 15),
+                                                                    // margin:EdgeInsets.only(right:mHeight*0.03/3,),
+                                                                    child: exitIcon != '' ||
+                                                                            exitIcon!
+                                                                                .isNotEmpty
+                                                                        ? Image.asset(
+                                                                            exitIcon!,
+                                                                            errorBuilder:
+                                                                                (context,
+                                                                                    error,
+                                                                                    stackTrace) {
+                                                                              print(
+                                                                                  'EXINODE ICON $exitIcon');
+                                                                              return Icon(Icons
+                                                                                  .broken_image);
+                                                                            },
+                                                                          )
+                                                                        : const Icon(
+                                                                            Icons
+                                                                                .more_horiz,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          )),
+                                                                Expanded(
+                                                                    child: Text("$exitNode",
+                                                                        overflow:
+                                                                            TextOverflow
+                                                                                .ellipsis,
+                                                                        maxLines: 1,
+                                                                        style: TextStyle(
+                                                                            fontSize: 12,
+                                                                            color: themeProvider.darkTheme ? Colors.white : Colors.black,fontFamily: 'Inter'
+                                                                            // const Color(
+                                                                            //     0xff00DC00)
+                                                                                ))),
+                                                                BelnetLib.isConnected ==
+                                                                        false
+                                                                    ? const Icon(
+                                                                        Icons
+                                                                            .arrow_drop_down,
+                                                                        color: Colors.grey,
+                                                                      )
+                                                                    : Container()
+                                                              ],
+                                                            ))),
+                                                  ),
+                                                ),
+                                              )
+                                            : Align(
+                                                alignment: Alignment.center,
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    try {
+                                                      setState(() {
+                                                        isOpen = isOpen ? false : true;
+                                                      });
+                                                      if (isOpen &&
+                                                          (exitNodeDataList.isEmpty ||
+                                                              exitNodeDataList == [])) {
+                                                        //exitData.clear();
+                                                        print(
+                                                            'cleared the data ${exitNodeDataList.length}');
+                                                        // saveData();
+                                                        //saveCustomForUse();   //hide for version 1.2.0
+                                                      } else {
+                                                        //saveData();
+                                                        OverlayState? overlayState =
+                                                            Overlay.of(context);
+                                                        overlayEntry = OverlayEntry(
+                                                          builder: (context) {
+                                                            return _buildExitnodeListView(
+                                                                mHeight,
+                                                                themeProvider,
+                                                                vpnStatusProvider,
+                                                                loc
+                                                                );
+                                                          },
+                                                        );
+                                                        overlayState
+                                                            .insert(overlayEntry!);
+                                                      }
+                                                    } catch (e) {
+                                                      print('Exception $e');
+                                                    }
+                                                  },
+                                                  child: Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                            horizontal: 13),
+                                                    child: GlassCommonPanel(
+                                                      child: Container(
+                                                          height: MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.19 /
+                                                              3,
+                                                          // 48,
+                                                          // MediaQuery.of(context).size.height *
+                                                          //     0.16 /
+                                                          //     3,
+                                                          // margin: EdgeInsets.symmetric(
+                                                          //     horizontal: 13),
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.transparent,
+                                                              border: Border.all(color: themeProvider.darkTheme ? Color(0xff333333): Color(0xffC0C0C0))
+                                                              // themeProvider.darkTheme
+                                                              //     ? const Color(0xff242436)
+                                                              //     : const Color(0xffF3F3F3),
+                                                              // borderRadius:
+                                                              //     BorderRadius.all(
+                                                              //         Radius.circular(5))
+                                                                      ),
+                                                          child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets.only(
+                                                                      left: 4.0,
+                                                                      right: 6.0,
+                                                                      top: 3.0,
+                                                                      bottom: 5.0),
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                      margin:
+                                                                           EdgeInsets.symmetric(
+                                                                       vertical: 12.0,horizontal: 15),
+                                                                      // margin:EdgeInsets.only(right:mHeight*0.03/3,),
+                                                                      child: exitIcon !=
+                                                                                  '' ||
+                                                                              exitIcon!
+                                                                                  .isNotEmpty
+                                                                          ? Image.asset(
+                                                                              exitIcon!,
+                                                                              errorBuilder:
+                                                                                  (context,
+                                                                                      error,
+                                                                                      stackTrace) {
+                                                                                return Icon(
+                                                                                    Icons
+                                                                                        .broken_image);
+                                                                              },
+                                                                            )
+                                                                          : const Icon(
+                                                                              Icons
+                                                                                  .more_horiz,
+                                                                              color: Colors
+                                                                                  .grey,
+                                                                            )),
+                                                                  Expanded(
+                                                                      child: Text(
+                                                                          "$exitNode",
+                                                                          overflow:
+                                                                              TextOverflow
+                                                                                  .ellipsis,
+                                                                          maxLines: 1,
+                                                                          style: TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: themeProvider.darkTheme ? Colors.white : Colors.black,fontFamily: 'Inter'
+                                                                              //  const Color(
+                                                                              //     0xff00DC00)
+                                                                                  
+                                                                                  ))),
+                                                                  // BelnetLib.isConnected == false
+                                                                  //     ?
+                                                                  //     Container(
+                                                                  //         child:
+                                                                  const Icon(
+                                                                    Icons.arrow_drop_down,
+                                                                  )
+                                                                  //   )
+                                                                  // : Container()
+                                                                ],
+                                                              ))),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                            
+                                  LayoutBuilder(builder: (context, constraint) {
+                                    return GestureDetector(
+                                      onTap: vpnStatusProvider.value ==
+                                              'Disconnected' //isLoading
+                                          ? () => toggleBelnet(context, vpnStatusProvider,
+                                              loadingtickValueProvider,loc)
+                                          // : vpnStatusProvider.value == 'Connected'
+                                          // ? () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Browser()))
+                                          : null,
+                                      child: 
+                                      IntrinsicWidth(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  minWidth: constraint.maxWidth / 1.6, // same width as Connect
+                                  maxWidth: constraint.maxWidth * 0.70, // 0.95 allow expansion limit
+                                ),
+                                child: Container(
+                                  height: 55,
+                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  decoration: BoxDecoration(
+                                    color: vpnStatusProvider.value == 'Disconnected'
+                                        ? themeProvider.darkTheme ? Color(0xffEBEBEB) : const Color(0xffEBEBEB)
+                                        : themeProvider.darkTheme
+                                            ? const Color(0xff222222)
+                                            : const Color(0xffEBEBEB),
+                                    border: Border.all(color: themeProvider.darkTheme ?  Colors.transparent : Color(0xff8D8D8D))
+                                   // borderRadius: BorderRadius.circular(10),
+                                  ),
+                            
+                                  child: vpnStatusProvider.value == 'Disconnected'
+                                      ? Center(
+                                          child: Text(
+                                            loc.connect,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Inter',
+                                              color:  Colors.black,
+                                            ),
+                                          ),
+                                        )
+                            
+                                      : Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/ai-icons/new/Loading.gif',
+                                              height: 28,
+                                              width: 28,
+                                            ),
+                                            const SizedBox(width: 8),
+                            
+                                            Flexible(
+                                              child: Text(
+                            loc.connecting,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              color: themeProvider.darkTheme
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            )
+                            
+                                      // Container(
+                                      //   width: constraint.maxWidth / 1.6,
+                                      //   height: 55,
+                                      //   decoration: BoxDecoration(
+                                      //       color: vpnStatusProvider.value ==
+                                      //               'Disconnected'
+                                      //           ? Color(0xff00B134)
+                                      //           : themeProvider.darkTheme
+                                      //               ? Color(0xff282836)
+                                      //               : Color(0xffF3F3F3),
+                                      //       borderRadius: BorderRadius.circular(10)),
+                                      //   child: vpnStatusProvider.value == 'Disconnected'
+                                      //       ? Center(
+                                      //           child: Text(
+                                      //            loc.connect,
+                                      //             // vpnStatusProvider.value == 'Disconnected'
+                                      //             //     ? 'Connect'
+                                      //             //     : vpnStatusProvider.value == 'Connected'
+                                      //             //         ? 'Connecting..'
+                                      //             //         : vpnStatusProvider.value,
+                                                  
+                                      //             style: TextStyle(
+                                      //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                                      //                 fontWeight: FontWeight.w600,
+                                      //                 color: Colors.white),
+                                      //             textAlign: TextAlign.center,
+                                      //           ),
+                                      //         )
+                                      //       : 
+                                      //       Row(
+                                      //           mainAxisSize: MainAxisSize.min,
+                                      //           mainAxisAlignment:
+                                      //               MainAxisAlignment.center,
+                                      //           children: [
+                                      //             Image.asset(
+                                      //               themeProvider.darkTheme
+                                      //                   ? 'assets/images/Load.gif'
+                                      //                   : 'assets/images/Load_white_theme.gif',
+                                      //               height: 30,
+                                      //               width: 40,
+                                      //             ),
+                                      //             Text(
+                                      //              loc.connecting,
+                                      //               // vpnStatusProvider.value == 'Disconnected'
+                                      //               //     ? 'Connect'
+                                      //               //     : vpnStatusProvider.value == 'Connected'
+                                      //               //         ? 'Connecting..'
+                                      //               //         : vpnStatusProvider.value,
+                                      //               overflow: TextOverflow.ellipsis,
+                                      //               maxLines: 2,
+                                      //               style: TextStyle(
+                                      //                 fontWeight: FontWeight.w600,
+                                      //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
+                                      //               ),
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      // ),
+                                    );
+                                  }),
+                                  SizedBox(height: 10,),
+                                  vpnStatusProvider.value != 'Disconnected'
+                                      ? Container(
+                                          height: mHeight / 40,
+                                          //margin: EdgeInsets.symmetric(vertical: 20),
+                                          child: Center(
+                                            child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                //crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: messages
+                                                    .map((log) => Text(
+                                                          log,
+                                                          style: Theme.of(context)
+                                                              .textTheme
+                                                              .bodySmall!.copyWith(fontFamily: 'Inter'),
+                                                        ))
+                                                    .toList()),
+                                          ),
+                                        )
+                                      : Container(
+                                          height: mHeight / 40,
+                                        ),
+                          
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
                 ),
               ],
             ),
-    ),
-  ),
-)
-
-                              // Container(
-                              //   width: constraint.maxWidth / 1.6,
-                              //   height: 55,
-                              //   decoration: BoxDecoration(
-                              //       color: vpnStatusProvider.value ==
-                              //               'Disconnected'
-                              //           ? Color(0xff00B134)
-                              //           : themeProvider.darkTheme
-                              //               ? Color(0xff282836)
-                              //               : Color(0xffF3F3F3),
-                              //       borderRadius: BorderRadius.circular(10)),
-                              //   child: vpnStatusProvider.value == 'Disconnected'
-                              //       ? Center(
-                              //           child: Text(
-                              //            loc.connect,
-                              //             // vpnStatusProvider.value == 'Disconnected'
-                              //             //     ? 'Connect'
-                              //             //     : vpnStatusProvider.value == 'Connected'
-                              //             //         ? 'Connecting..'
-                              //             //         : vpnStatusProvider.value,
-                                          
-                              //             style: TextStyle(
-                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
-                              //                 fontWeight: FontWeight.w600,
-                              //                 color: Colors.white),
-                              //             textAlign: TextAlign.center,
-                              //           ),
-                              //         )
-                              //       : 
-                              //       Row(
-                              //           mainAxisSize: MainAxisSize.min,
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment.center,
-                              //           children: [
-                              //             Image.asset(
-                              //               themeProvider.darkTheme
-                              //                   ? 'assets/images/Load.gif'
-                              //                   : 'assets/images/Load_white_theme.gif',
-                              //               height: 30,
-                              //               width: 40,
-                              //             ),
-                              //             Text(
-                              //              loc.connecting,
-                              //               // vpnStatusProvider.value == 'Disconnected'
-                              //               //     ? 'Connect'
-                              //               //     : vpnStatusProvider.value == 'Connected'
-                              //               //         ? 'Connecting..'
-                              //               //         : vpnStatusProvider.value,
-                              //               overflow: TextOverflow.ellipsis,
-                              //               maxLines: 2,
-                              //               style: TextStyle(
-                              //                 fontWeight: FontWeight.w600,
-                              //                 fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 20,
-                              //               ),
-                              //             ),
-                              //           ],
-                              //         ),
-                              // ),
-                            );
-                          }),
-                          SizedBox(height: 10,),
-                          vpnStatusProvider.value != 'Disconnected'
-                              ? Container(
-                                  height: mHeight / 40,
-                                  //margin: EdgeInsets.symmetric(vertical: 20),
-                                  child: Center(
-                                    child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        //crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: messages
-                                            .map((log) => Text(
-                                                  log,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall,
-                                                ))
-                                            .toList()),
-                                  ),
-                                )
-                              : Container(
-                                  height: mHeight / 40,
-                                ),
-
-                          // LayoutBuilder(builder: (context, constraints) {
-                          //   return Column(
-                          //     //mainAxisSize: MainAxisSize.min,
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     //crossAxisAlignment: CrossAxisAlignment.center,
-                          //     children: [
-                          //       // SizedBox(
-                          //       //   height: constraints.maxHeight / 35.5,
-                          //       // ),
-                          //       // AnimatedContainer(
-                          //       //     // color: Colors.yellow,
-                          //       //     padding: EdgeInsets.symmetric(horizontal: 5),
-                          //       //     width: constraints.maxWidth / 1,
-                          //       //     height: constraints.maxHeight / 1.60,
-                          //       //     duration: Duration(seconds: 1),
-                          //       //     child: themeProvider.darkTheme
-                          //       //                                 ? Lottie.asset('assets/images/dark_short.json',
-                          //       //                                 fit: BoxFit.fitWidth
-                          //       //                                 )
-                          //       //                                 : LottieBuilder.asset(
-                          //       //                                     'assets/images/white_short.json',
-                          //       //                                     fit: BoxFit.fitWidth
-                          //       //                                     )),
-                          //       // //SizedBox(height: constraints.maxHeight / 15),
-
-                          // //     Padding(
-                          // //             padding: const EdgeInsets.symmetric(
-                          // //                                         horizontal: 10.0,),
-                          // //             child: Column(
-                          // //                                       crossAxisAlignment: CrossAxisAlignment.start,
-                          // //                                       children: [
-                          // //                                         Padding(
-                          // //                                           padding:
-                          // //                                               const EdgeInsets.symmetric(vertical: 8.0,horizontal: 9),
-                          // //                                           child:const Text(
-                          // //                                             'Exit Node',
-                          // //                                             style:
-                          // //                                                 TextStyle(fontWeight: FontWeight.bold),
-                          // //                                           ),
-                          // //                                         ),
-                          // //                                         BelnetLib.isConnected || vpnStatusProvider.value == 'Connecting...'
-                          // //                                         ? Align(
-                          // //                                             alignment: Alignment.center,
-                          // //                                             child: Container(
-                          // //                                                 height: MediaQuery.of(context).size.height *
-                          // //                                                     0.16 /
-                          // //                                                     3,
-                          // //                                                  margin: EdgeInsets.symmetric(horizontal: 8),
-                          // //                                                 decoration: BoxDecoration(
-                          // //                                                     color: themeProvider.darkTheme
-                          // //                                                         ? const Color(0xff39394B)
-                          // //                                                         : const Color(0xffF3F3F3),
-                          // //                                                     borderRadius: BorderRadius.all(
-                          // //                                                         Radius.circular(10))),
-                          // //                                                 child: Padding(
-                          // //                                                     padding: const EdgeInsets.only(
-                          // //                                                         left: 4.0,
-                          // //                                                         right: 6.0,
-                          // //                                                         top: 3.0,
-                          // //                                                         bottom: 5.0),
-                          // //                                                     child: Row(
-                          // //                                                       crossAxisAlignment:
-                          // // CrossAxisAlignment.center,
-                          // //                                                       children: [
-                          // //                                                         Container(
-                          // //   margin: EdgeInsets.all(8.0),
-                          // //   // margin:EdgeInsets.only(right:mHeight*0.03/3,),
-                          // //   child: exitIcon != '' ||
-                          // //           exitIcon!.isNotEmpty
-                          // //       ? Image.asset(
-                          // //           exitIcon!,
-                          // //           errorBuilder: (context,
-                          // //               error, stackTrace) {
-                          // //                 print('EXINODE ICON $exitIcon');
-                          // //             return Icon(Icons
-                          // //                 .broken_image);
-                          // //           },
-                          // //         )
-                          // //       : const Icon(
-                          // //           Icons.more_horiz,
-                          // //           color: Colors.grey,
-                          // //         )),
-                          // //                                                         Expanded(
-                          // //   child: Text("$exitNode",
-                          // //       overflow:
-                          // //           TextOverflow.ellipsis,
-                          // //       maxLines: 1,
-                          // //       style: TextStyle(
-                          // //         fontSize: 12,
-                          // //           color: const Color(
-                          // //               0xff00DC00)))),
-                          // //                                                         BelnetLib.isConnected == false
-                          // //   ? const Icon(
-                          // //       Icons.arrow_drop_down,
-                          // //       color: Colors.grey,
-                          // //     )
-                          // //   : Container()
-                          // //                                                       ],
-                          // //                                                     ))),
-                          // //                                           )
-                          // //                                         :
-                          // //                                         Align(
-                          // //                                           alignment: Alignment.center,
-                          // //                                           child: GestureDetector(
-                          // //                                             onTap: () {
-                          // //                                               try {
-                          // //                                                 setState(() {
-                          // //                                                   isOpen = isOpen ? false : true;
-                          // //                                                 });
-                          // //                                                 if (isOpen &&
-                          // //                                                     (exitNodeDataList.isEmpty ||
-                          // //                                                         exitNodeDataList == [])) {
-                          // //                                                   //exitData.clear();
-                          // //                                                   print(
-                          // //                                                       'cleared the data ${exitNodeDataList.length}');
-                          // //                                                   // saveData();
-                          // //                                                   //saveCustomForUse();   //hide for version 1.2.0
-                          // //                                                 } else {
-                          // //                                                   //saveData();
-                          // //                                                   OverlayState? overlayState =
-                          // //                                                       Overlay.of(context);
-                          // //                                                   overlayEntry = OverlayEntry(
-                          // //                                                     builder: (context) {
-                          // //                                                       return _buildExitnodeListView(
-                          // // mHeight,
-                          // // themeProvider,
-                          // // vpnStatusProvider);
-                          // //                                                     },
-                          // //                                                   );
-                          // //                                                   overlayState.insert(overlayEntry!);
-                          // //                                                 }
-                          // //                                               } catch (e) {
-                          // //                                                 print('Exception $e');
-                          // //                                               }
-                          // //                                             },
-                          // //                                             child: Container(
-                          // //                                                 height: 40,
-                          // //                                                     // MediaQuery.of(context).size.height *
-                          // //                                                     //     0.16 /
-                          // //                                                     //     3,
-                          // //                                                 margin: EdgeInsets.symmetric(horizontal: 8),
-                          // //                                                 decoration: BoxDecoration(
-                          // //                                                     color: themeProvider.darkTheme
-                          // //                                                         ? const Color(0xff39394B)
-                          // //                                                         : const Color(0xffF3F3F3),
-                          // //                                                     borderRadius: BorderRadius.all(
-                          // //                                                         Radius.circular(10))),
-                          // //                                                 child: Padding(
-                          // //                                                     padding: const EdgeInsets.only(
-                          // //                                                         left: 4.0,
-                          // //                                                         right: 6.0,
-                          // //                                                         top: 3.0,
-                          // //                                                         bottom: 5.0),
-                          // //                                                     child: Row(
-                          // //                                                       crossAxisAlignment:
-                          // // CrossAxisAlignment.center,
-                          // //                                                       children: [
-                          // //                                                         Container(
-                          // //   margin:
-                          // //       const EdgeInsets.all(
-                          // //           8.0),
-                          // //   // margin:EdgeInsets.only(right:mHeight*0.03/3,),
-                          // //   child: exitIcon != '' ||
-                          // //           exitIcon!.isNotEmpty
-                          // //       ? Image.asset(
-                          // //           exitIcon!,
-                          // //           errorBuilder:
-                          // //               (context, error,
-                          // //                   stackTrace) {
-                          // //             return Icon(Icons
-                          // //                 .broken_image);
-                          // //           },
-                          // //         )
-                          // //       : const Icon(
-                          // //           Icons.more_horiz,
-                          // //           color: Colors.grey,
-                          // //         )),
-                          // //                                                         Expanded(
-                          // //   child: Text("$exitNode",
-                          // //       overflow: TextOverflow
-                          // //           .ellipsis,
-                          // //       maxLines: 1,
-                          // //       style: TextStyle(
-                          // //         fontSize: 12,
-                          // //           color: const Color(
-                          // //               0xff00DC00)))),
-                          // //                                                         // BelnetLib.isConnected == false
-                          // //                                                         //     ?
-                          // //                                                         //     Container(
-                          // //                                                         //         child:
-                          // //                                                         const Icon(
-                          // // Icons.arrow_drop_down,
-                          // //                                                         )
-                          // //                                                         //   )
-                          // //                                                         // : Container()
-                          // //                                                       ],
-                          // //                                                     ))),
-                          // //                                           ),
-                          // //                                         ),
-                          // //                                       ],
-                          // //             ),
-                          // //           ),
-                          // //     //  SizedBox(height: constraints.maxHeight / 30),
-                          //       LayoutBuilder(builder: (context, constraint) {
-                          //         return GestureDetector(
-                          //                                       onTap:vpnStatusProvider.value == 'Disconnected' //isLoading
-                          //                                           ? () => toggleBelnet(vpnStatusProvider,
-                          //                                               loadingtickValueProvider)
-                          //                                           // : vpnStatusProvider.value == 'Connected'
-                          //                                           // ? () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Browser()))
-                          //                                           : null,
-                          //                                       child: Container(
-                          //                                         width: constraint.maxWidth / 1.4,
-                          //                                       height: 55,
-                          //                                         decoration: BoxDecoration(
-                          //                                           color: vpnStatusProvider.value == 'Disconnected' ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-                          //                                           borderRadius: BorderRadius.circular(10)
-                          //                                         ),
-                          //                                         child:
-                          //                                          vpnStatusProvider.value == 'Disconnected'
-                          //                                         ? Center(
-                          //                                           child: Text('Connect',
-                          //                                                 // vpnStatusProvider.value == 'Disconnected'
-                          //                                                 //     ? 'Connect'
-                          //                                                 //     : vpnStatusProvider.value == 'Connected'
-                          //                                                 //         ? 'Connecting..'
-                          //                                                 //         : vpnStatusProvider.value,
-                          //                                                 style: const TextStyle(
-                          //                                                     fontSize: 20, color: Colors.white),
-                          //                                                     textAlign: TextAlign.center,
-                          //                                               ),
-                          //                                         ):
-                          //                                         Row(
-                          //                                           mainAxisSize: MainAxisSize.min,
-                          //                                           mainAxisAlignment: MainAxisAlignment.center,
-                          //                                           children: [
-                          //                                             Image.asset(themeProvider.darkTheme ? 'assets/images/Load.gif' : 'assets/images/Load_white_theme.gif',
-                          //                                             height: 30,width: 40,
-                          //                                             ),
-                          //                                             Text('Connecting...',
-                          //                                               // vpnStatusProvider.value == 'Disconnected'
-                          //                                               //     ? 'Connect'
-                          //                                               //     : vpnStatusProvider.value == 'Connected'
-                          //                                               //         ? 'Connecting..'
-                          //                                               //         : vpnStatusProvider.value,
-                          //                                               style: const TextStyle(
-                          //                                                 fontWeight: FontWeight.w600,
-                          //                                                   fontSize: 20,),
-                          //                                             ),
-                          //                                           ],
-                          //                                         ),
-                          //                                       ),
-                          //             );
-                          //       }),
-                          // //        SizedBox(height:  constraints.maxHeight / 50,),
-                          //       // Visibility(
-                          //       //   visible: vpnStatusProvider.value == 'Disconnected'
-                          //       //       ? true
-                          //       //       : false,
-                          //       //   child: GestureDetector(
-                          //       //     onTap: () {
-                          //       //       print(BelnetLib.isConnected);
-                          //       //       Navigator.push(
-                          //       //           context,
-                          //       //           MaterialPageRoute(
-                          //       //               builder: (context) =>
-                          //       //                   NodeDropdownListPage(
-                          //       //                       exitData: exitNodeDataList)));
-                          //       //     },
-                          //       //     child: Container(
-                          //       //       height: constraints.maxHeight / 17, //40,
-                          //       //       width: MediaQuery.of(context).size.width / 2.3,
-                          //       //       margin: EdgeInsets.symmetric(vertical: 20),
-                          //       //       decoration: BoxDecoration(
-                          //       //           border:
-                          //       //               Border.all(color: Color(0xff00B134)),
-                          //       //           borderRadius: BorderRadius.circular(20)),
-                          //       //       child: Row(
-                          //       //         mainAxisAlignment: MainAxisAlignment.center,
-                          //       //         children: [
-                          //       //           SvgPicture.asset(
-                          //       //             'assets/images/change_node.svg',
-                          //       //             height: 15,
-                          //       //           ),
-                          //       //           Padding(
-                          //       //             padding: const EdgeInsets.only(left: 8.0),
-                          //       //             child: Text(
-                          //       //               'Change node',
-                          //       //               style: TextStyle(
-                          //       //                   fontWeight: FontWeight.w600),
-                          //       //             ),
-                          //       //           )
-                          //       //         ],
-                          //       //       ),
-                          //       //     ),
-                          //       //   ),
-                          //       // ),
-                          //       vpnStatusProvider.value != 'Disconnected'
-                          //           ? Container(
-                          //                                       height: constraints.maxHeight / 40,
-                          //                                       //margin: EdgeInsets.symmetric(vertical: 20),
-                          //                                       child: Center(
-                          //                                         child: Row(
-                          //                                           crossAxisAlignment: CrossAxisAlignment.center,
-                          //                                             mainAxisAlignment:
-                          //                                                 MainAxisAlignment.center,
-                          //                                             //crossAxisAlignment: CrossAxisAlignment.center,
-                          //                                             children: messages
-                          //                                                 .map((log) => Text(
-                          //                                                       log,
-                          //                                                       style: Theme.of(context)
-                          // .textTheme
-                          // .bodySmall,
-                          //                                                     ))
-                          //                                                 .toList()),
-                          //                                       ),
-                          //             )
-                          //           : Container(
-                          //              height: constraints.maxHeight / 40,
-                          //           ),
-                          //     ],
-                          //   );
-                          // }),
-                        ],
-                      ),
-                    ),
-                  ],
-                )),
           );
   }
 
@@ -1375,86 +1093,92 @@ restore() async {
                 bottom: MediaQuery.of(context).size.height * 0.10 / 3,
                 left: mHeight * 0.10 / 3,
                 right: mHeight * 0.10 / 3),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.70 / 3,
-              width: MediaQuery.of(context).size.width * 2.7 / 3, // 2.7
-              // padding: EdgeInsets.all(0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9.0),
-                  color: themeProvider.darkTheme
-                      ? const Color(0xff242436)
-                      : const Color(0xffF3F3F3),
-                  border: Border.all(
-                      color: themeProvider.darkTheme
-                          ? const Color(0xff282836)
-                          : const Color(0xffF3F3F3))),
-              child: exitNodeDataList.length == 0
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: const Color(0xff00DC00),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      itemCount: exitNodeDataList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        // print("data inside listview ${exitData[index]}");
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            dividerColor: Colors.transparent,
-                            listTileTheme: ListTileTheme.of(context).copyWith(
-                                dense: true,
-                                minVerticalPadding: 2,
-                                visualDensity: VisualDensity(vertical: 0)),
-                          ),
-                          child: ExpansionTile(
-                            tilePadding: EdgeInsets.only(
-                                left: mHeight * 0.05 / 3,
-                                right: mHeight * 0.03 / 3),
-                            title: Text(
-                              exitNodeDataList[index].type == 'Beldex Official' ? loc.beldexofficial : loc.contributorExitNode,
-                              style: TextStyle(
-                                  color: index == 0
-                                      ? const Color(0xff1CBE20)
-                                      : const Color(0xff1994FC),
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      0.048 /
-                                      3,
-                                  fontWeight: FontWeight.bold),
+            child: GlassDropDownPanel(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.70 / 3,
+                width: MediaQuery.of(context).size.width * 2.7 / 3, // 2.7
+                // padding: EdgeInsets.all(0),
+                decoration: BoxDecoration(
+                   // borderRadius: BorderRadius.circular(9.0),
+                    color: Colors.transparent,
+                    // themeProvider.darkTheme
+                    //     ? const Color(0xff242436)
+                    //     : const Color(0xffF3F3F3),
+                    border: Border.all(
+                        color: themeProvider.darkTheme
+                            ? const Color(0xff333333 //282836
+                            )
+                            : const Color(0xffF3F3F3))),
+                child: exitNodeDataList.length == 0
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: const Color(0xff00DC00),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: exitNodeDataList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          // print("data inside listview ${exitData[index]}");
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              dividerColor: Colors.transparent,
+                              listTileTheme: ListTileTheme.of(context).copyWith(
+                                  dense: true,
+                                  minVerticalPadding: 2,
+                                  visualDensity: VisualDensity(vertical: 0)),
                             ),
-                            iconColor: index == 0
-                                ? const Color(0xff1CBE20)
-                                : const Color(0xff1994FC),
-                            collapsedIconColor: index == 0
-                                ? const Color(0xff1CBE20)
-                                : const Color(0xff1994FC),
-                            subtitle: Text(
-                              // exitData[index].type == "Custom Exit Node" &&
-                              //         customExitAdd.isNotEmpty
-                              //     ? "${customExitAdd.length} Nodes":
-                              "${exitNodeDataList[index].node.length} ${loc.nodes}",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: MediaQuery.of(context).size.height *
-                                      0.033 /
-                                      3),
-                            ),
-                            children: <Widget>[
-                              Column(
-                                children: _buildExpandableContent(
-                                    exitNodeDataList[index].node,
-                                    exitNodeDataList[index].type,
-                                    themeProvider,
-                                    mHeight,
-                                    vpnStatusProvider),
+                            child: ExpansionTile(
+                              tilePadding: EdgeInsets.only(
+                                  left: mHeight * 0.05 / 3,
+                                  right: mHeight * 0.03 / 3),
+                              title: Text(
+                                exitNodeDataList[index].type == 'Beldex Official' ? loc.beldexofficial : loc.contributorExitNode,
+                                style: TextStyle(
+                                    color: index == 0
+                                        ? const Color(0xff1CBE20)
+                                        : const Color(0xff1994FC),
+                                    fontSize: MediaQuery.of(context).size.height *
+                                        0.048 /
+                                        3,
+                                        fontFamily: 'Inter',
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ],
-                          ),
-                        );
-                      }
-                      // _buildList(exitData[index]),
-                      ),
+                              iconColor: index == 0
+                                  ? const Color(0xff1CBE20)
+                                  : const Color(0xff1994FC),
+                              collapsedIconColor: index == 0
+                                  ? const Color(0xff1CBE20)
+                                  : const Color(0xff1994FC),
+                              subtitle: Text(
+                                // exitData[index].type == "Custom Exit Node" &&
+                                //         customExitAdd.isNotEmpty
+                                //     ? "${customExitAdd.length} Nodes":
+                                "${exitNodeDataList[index].node.length} ${loc.nodes}",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'Inter',
+                                    fontSize: MediaQuery.of(context).size.height *
+                                        0.033 /
+                                        3),
+                              ),
+                              children: <Widget>[
+                                Column(
+                                  children: _buildExpandableContent(
+                                      exitNodeDataList[index].node,
+                                      exitNodeDataList[index].type,
+                                      themeProvider,
+                                      mHeight,
+                                      vpnStatusProvider),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                        // _buildList(exitData[index]),
+                        ),
+              ),
             ),
             // ),
           ),
@@ -1500,12 +1224,13 @@ restore() async {
               top: mHeight * 0.02 / 3,
               bottom: mHeight * 0.02 / 3),
           height: mHeight * 0.15 / 3,
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+             // borderRadius: BorderRadius.circular(5),
               color:
-                  exitNode == vnode[i].name ? Colors.blue : Colors.transparent,
-              border: Border(
+                  exitNode == vnode[i].name ? themeProvider.darkTheme ? Colors.transparent : Color(0xffFFFFFF) : Colors.transparent,
+              border: exitNode == vnode[i].name ? Border.all(color: Color(0xff1CBE20)) :
+               Border(
                   bottom: BorderSide(
                       width: 0.5,
                       color: const Color(0xff56566F).withOpacity(0.2)))),
@@ -1563,9 +1288,13 @@ restore() async {
                         child: Text(
                           vnode[i].name,
                           style: TextStyle(
-                              color: exitNode == vnode[i].name
-                                  ? Colors.white
-                                  : themeProvider.darkTheme
+                            fontFamily: 'Inter',
+                              color: 
+                              // exitNode == vnode[i].name
+                              //     ? 
+                                  // Colors.white
+                                  // : 
+                                  themeProvider.darkTheme
                                       ? Colors.white
                                       : Colors.black,
                               fontWeight: exitNode == vnode[i].name
@@ -1581,9 +1310,12 @@ restore() async {
                       Text(
                         vnode[i].country,
                         style: TextStyle(
-                            color: exitNode == vnode[i].name
-                                ? Colors.white
-                                : Colors.grey,
+                            color: 
+                            // exitNode == vnode[i].name
+                            //     ? Colors.white
+                            //     :
+                                 Colors.grey,
+                                fontFamily: 'Inter',
                             fontSize:
                                 MediaQuery.of(context).size.height * 0.031 / 3),
                         overflow: TextOverflow.ellipsis,
