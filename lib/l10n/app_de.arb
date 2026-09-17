@@ -187,11 +187,98 @@
 
   
 
+  "searchusing": "Suche mit",
+  "addTabToNewGroup": "Tab zu neuer Gruppe hinzufügen",
+  "invitePeople": "Personen einladen",
+  "uploadFromGallery": "Aus Galerie hochladen",
+  "noQRCodeFound": "Kein QR-Code im Bild gefunden",
+  "searchBarPosition": "Position der Suchleiste",
+  "choosethePosition": "Position der Suchleiste auswählen",
+  "iPAddress": "IP-Adresse",
+   "vpnIP": "VPN-IP",
+   "myIP": "Meine IP",
+   "marketUpdate": "Markt-Update",
+   "searchYourTabs": "Suchen Sie Ihre Tabs",
+   "newTabGroup": "Neue Tab-Gruppe",
+   "selectTab": "Tab auswählen",
+   "selectTabs": "Tabs auswählen",
+   "closeAllTabs": "Alle Tabs schließen",
+   "deleteTabGroup": "Tab-Gruppe löschen",
+   "rename": "Umbenennen",
+   "renameGroup": "Gruppe umbenennen",
+   "ungroupTab": "Tab-Gruppierung aufheben",
+   "deleteGroup": "Gruppe löschen",
+   "addToTabGroup": "Zur Tab-Gruppe hinzufügen",
+   "editGroupName": "Gruppennamen bearbeiten",
+   "editGroupColor": "Gruppenfarbe bearbeiten",
+   "closeTab": "Tab schließen",
+   "doYouWantToUngroup": "Möchten Sie diese Tabgruppe wirklich aufheben?",
+   "ungroupTabGroup": "Tabgruppe aufheben",
+   "ungroup": "Gruppierung aufheben",
+   "deleteGroup": "Gruppe löschen",
+   "deletetabGroup": "Tabgruppe löschen",
+   "thisActionWillPermenantClose": "Diese Aktion schließt alle",
+   "inside": "dauerhaft",
+   "thisCannotBeUndone": "Dies kann nicht rückgängig gemacht werden",
+   "addTo": "Hinzufügen zu",
+   "tabs": "Tabs",
+   "done": "Fertig",
+   "create": "Erstellen",
+   "groupColor": "Gruppenfarbe",
+   "groupName": "Gruppenname",
+   "newTabGroup": "Neue Tab-Gruppe",
+   "addtoNewTabGroup": "Zur neuen Tab-Gruppe hinzufügen",
+   "tabGroups": "Tab-Gruppen",
+   "tabGroup": "Tab-Gruppe",
+   "tabsSelected": "Ausgewählte Tabs",
+   "privateResearch": "z. B. Private Recherche",
+   "deselectAll": "Auswahl aufheben",
+
+    "selected": "Ausgewählt",
+
+
+   "close": "Schließen",
+"top": "Oben",
+"bottom": "Unten",
+
+
+"closeAllTabsConfirmation": "Diese Aktion schließt alle {tabCount} Tabs in „{tabGroupName}“ dauerhaft. Dies kann nicht rückgängig gemacht werden.",
+"@closeAllTabsConfirmation": {
+  "description": "Bestätigungsmeldung beim Schließen aller Tabs in einer Tab-Gruppe",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+"changingNode": "Knoten wechseln",
+"freeenameWebDomain": "FreeName Web3-Domäne",
+"enableFreeNameWeb": "FreeName Web3-Domänenunterstützung aktivieren",
+"couldnotDownloadBootstrap" : "Die Belnet-Bootstrap-Datei konnte nicht heruntergeladen werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut",
+"couldNotEstablishConnection" : "Belnet-Verbindung konnte nicht hergestellt werden. Bitte versuchen Sie es erneut",
+"theBelnetServiceNotStarted": "Der Belnet-Dienst konnte nicht gestartet werden. Bitte versuchen Sie es erneut",
+"exitNodeUnreachable" : "Knoten nicht erreichbar, erneute Verbindung wird hergestellt",
 
 
 
 
 
+"tab": "Tab",
+"ungroupTabs": "Tabs aus Gruppe entfernen",
+"closeGroup": "Gruppe schließen",
+"ungroupSelectedTabs": "Möchtest du die ausgewählten Tabs wirklich aus ${tabGroupName} entfernen?",
+"@ungroupSelectedTabs": {
+  "description": "Bestätigungsmeldung beim Entfernen ausgewählter Tabs aus einer Tab-Gruppe",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
 
 
 "beldexIsAnEcosystem": "Beldex ist ein Ökosystem aus dezentralisierten Anwendungen, die die Vertraulichkeit der Nutzer wahren. Der Beldex Browser ist eine dieser Anwendungen und Teil dieses Ökosystems, zu dem auch BChat, BelNet und das Beldex-Protokoll gehören. Der Beldex Browser ist Ihr Tor zu einem nahtlosen und vertraulichen Online-Erlebnis, bei dem Ihre Daten ausschließlich Ihnen gehören. Basierend auf einer stabilen Blockchain-Infrastruktur gewährleistet der Beldex Browser Vertraulichkeit und Anonymität für seine Nutzer.",
