@@ -8,6 +8,7 @@ import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/ai/beldex_ai_screen.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/beldexai_chat_screen.dart';
+import 'package:beldex_browser/src/browser/app_bar/app_bars.dart';
 //import 'package:beldex_browser/src/browser/app_bar/content_translate_page.dart';
 // import 'package:beldex_browser/src/browser/app_bar/reader_mode_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
@@ -21,6 +22,8 @@ import 'package:beldex_browser/src/browser/models/favorite_model.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/web_archive_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/bottom_nav_bar.dart';
+import 'package:beldex_browser/src/browser/pages/change_node_screen.dart';
 import 'package:beldex_browser/src/browser/pages/developers/main.dart';
 import 'package:beldex_browser/src/browser/pages/download_page.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
@@ -29,6 +32,10 @@ import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
 import 'package:beldex_browser/src/browser/pages/settings/main.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/browser/tab_popup_menu_actions.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
@@ -59,13 +66,14 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 import '../custom_popup_dialog.dart';
 import '../custom_popup_menu_item.dart';
 import '../popup_menu_actions.dart';
 import '../project_info_popup.dart';
 import '../webview_tab.dart';
 
-TextEditingController? findOnPageController = TextEditingController();
+//TextEditingController? findOnPageController = TextEditingController();
 
 bool checkSearchEngineInUrl(
   List<SearchEngineModel> firstList,
@@ -141,6 +149,8 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
    final FlutterTts flutterTts = FlutterTts();
 
     bool _isReporting = false;
+
+     bool _isSharing = false;
 //  final TextEditingController _textController = TextEditingController();
 
   @override
@@ -157,6 +167,7 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
         var webViewController = webViewModel?.webViewController;
         _searchController!.text =
             (await webViewController?.getUrl())?.toString() ?? "";
+            browserModel.updateUserInput(_searchController!.text);
       }
     });
     Provider.of<BrowserModel>(context, listen: false)
@@ -192,10 +203,12 @@ class WebViewTabAppBarState extends State<WebViewTabAppBar>
     final theme = Theme.of(context);
      final addEngineProvider =
         Provider.of<AddSearchEngineProvider>(context, listen: true);
-
+        final groupProvider = Provider.of<GroupProvider>(context);
+    final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context);
     final selectedSessionEngines =
         addEngineProvider.selectedSessionEngines;
-    return Selector<WebViewModel, WebViewModel>(
+    return 
+    Selector<WebViewModel, WebViewModel>(
         selector: (context, webViewModel) => webViewModel,
         builder: (context, webViewModel, child) {
           // if (url == null) {
@@ -234,15 +247,19 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
     _searchController?.text = currentUrl;
 }
 
+if(groupProvider.totalOpenTabsCount == 0){
+  _searchController?.text = '';
+}
+
   // _searchController?.text = webViewModel.getDisplayUrl(webViewModel.url.toString());
     //_searchController?.text = displayText;
    print('Return the IP URL 1 $currentUrl -- ${_searchController?.text}');
  }
 
           return browserModel.isFindingOnPage
-                  ? findOnPageAppBar(themeProvider,theme)
+                  ? findOnPageAppBar(themeProvider,theme,appBarPositionProvider)
                   : webViewAppBar(
-                      themeProvider,theme);
+                      themeProvider,theme,appBarPositionProvider);
         });
   }
 
@@ -252,7 +269,7 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
     }
   }
 
-  Widget findOnPageAppBar(DarkThemeProvider themeProvider,ThemeData theme) {
+  Widget findOnPageAppBar(DarkThemeProvider themeProvider,ThemeData theme,AppBarPositionProvider appBarPositionProvider){
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var webViewModel = browserModel.getCurrentTab()?.webViewModel;
     var webViewModelPro = Provider.of<WebViewModel>(context, listen: false);
@@ -266,52 +283,165 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
         child: Container(
           height: 45,
           width: double.infinity,
-          margin: EdgeInsets.only(top: 40, left: 15, right: 15, bottom: 4),
-          decoration: BoxDecoration(
-              color: //webViewModel.isIncognitoMode ? Color(0xff040404) :
-                  themeProvider.darkTheme
-                      ? Color(0xff282836)
-                      : Color(0xffF3F3F3),
-              borderRadius: BorderRadius.circular(8)),
+          margin: EdgeInsets.only(top: appBarPositionProvider.selectedPosition ==
+      AppBarPosition.bottom ? 0 : 40, left: 15, right: 15, bottom:appBarPositionProvider.selectedPosition == AppBarPosition.bottom ? 10 : 4),
+           padding: EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+                color: //webViewModel.isIncognitoMode ? Color(0xff040404) :
+                    themeProvider.darkTheme
+                        ?const Color(0xff111111)
+                        :const Color(0xffFFFFFF),
+                        border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                //borderRadius: BorderRadius.circular(8)
+                ),
+          
+          
+          
+          
+          
           child: 
           LayoutBuilder(builder: (context, constraint) {
             return Row(
               children: [
-                Container(
-                  width: constraint.maxWidth / 1.5,
-                  // color: Colors.yellow,
-                  child: TextField(
-                    key: const ValueKey('findOnPageField'),
-                    onSubmitted: (value) {
-                      findInteractionController?.findAll(find: value);
-                    },
-                    keyboardType: TextInputType.url,
-                    focusNode: _focusNode,
-                    autofocus: true,
-                    controller: findOnPageController,
-                    textInputAction: TextInputAction.go,
-                                        magnifierConfiguration: TextMagnifierConfiguration.disabled,
-                    // contextMenuBuilder: (context, editableTextState) {
-                    //   return Text('TEXTEEEEES');
-                    // },
-                    contextMenuBuilder: (context, editableTextState) {
-                      buttonItems = editableTextState.contextMenuButtonItems;
-
-                      editableState = editableTextState;
-
-                      buttonItems.clear(); // Clear all default options
-                      if (findOnPageController!.text
-                              .isEmpty //|| _searchController.selection != TextSelection.collapsed(offset: _searchController.selection.baseOffset)
-                          ) {
-                        // Clipboard.getData('text/plain').then((clipboardContent) {
-                        //    if(clipboardContent != null && clipboardContent.text!.isNotEmpty){
-                        buttonItems.add(ContextMenuButtonItem(
-                            label:loc.paste, //'Paste',
+                Expanded(
+                  child: Container(
+                    //width: constraint.maxWidth / 1.5,
+                    // color: Colors.yellow,
+                    child: TextField(
+                      key: const ValueKey('findOnPageField'),
+                      onSubmitted: (value) {
+                        findInteractionController?.findAll(find: value);
+                      },
+                      keyboardType: TextInputType.url,
+                      focusNode: _focusNode,
+                      autofocus: true,
+                      controller: findOnPageController,
+                      
+                      textInputAction: TextInputAction.go,
+                                          magnifierConfiguration: TextMagnifierConfiguration.disabled,
+                      // contextMenuBuilder: (context, editableTextState) {
+                      //   return Text('TEXTEEEEES');
+                      // },
+                      contextMenuBuilder: (context, editableTextState) {
+                        buttonItems = editableTextState.contextMenuButtonItems;
+                  
+                        editableState = editableTextState;
+                  
+                        buttonItems.clear(); // Clear all default options
+                        if (findOnPageController!.text
+                                .isEmpty //|| _searchController.selection != TextSelection.collapsed(offset: _searchController.selection.baseOffset)
+                            ) {
+                          // Clipboard.getData('text/plain').then((clipboardContent) {
+                          //    if(clipboardContent != null && clipboardContent.text!.isNotEmpty){
+                          buttonItems.add(ContextMenuButtonItem(
+                              label:loc.paste, //'Paste',
+                              onPressed: () {
+                                Clipboard.getData('text/plain').then((value) {
+                                  if (value != null && value.text != null) {
+                                    final text = findOnPageController!.text;
+                                    //final selection = _searchController.selection;
+                                    final selection = editableTextState
+                                        .textEditingValue.selection;
+                                    final newText = text.replaceRange(
+                                      selection.start,
+                                      selection.end,
+                                      value.text!,
+                                    );
+                                    print(
+                                        'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                    findOnPageController!.text = newText;
+                                    final newSelection = TextSelection.collapsed(
+                                      offset:
+                                          selection.start + value.text!.length,
+                                    );
+                                    findOnPageController!.selection =
+                                        newSelection;
+                                    editableTextState.hideToolbar(false);
+                                  }
+                                });
+                              }));
+                        } else {
+                          buttonItems.clear();
+                          buttonItems.add(ContextMenuButtonItem(
+                            label:loc.cut,// 'Cut',
+                            onPressed: () {
+                              editableTextState
+                                  .cutSelection(SelectionChangedCause.tap);
+                              final TextEditingController controller =
+                                  editableTextState.widget.controller;
+                              final TextEditingValue value = controller.value;
+                              final TextSelection selection = value.selection;
+                              if (!selection.isCollapsed) {
+                                final String cutText =
+                                    selection.textInside(value.text);
+                                Clipboard.setData(ClipboardData(text: cutText));
+                  
+                                final String newText = value.text.replaceRange(
+                                    selection.start, selection.end, '');
+                                controller.value = TextEditingValue(
+                                    text: newText,
+                                    selection: TextSelection.collapsed(
+                                        offset: selection.start));
+                  
+                                final String findOnPageText =
+                                    findOnPageController!.text;
+                                final String newFindOnPageText =
+                                    findOnPageText.replaceRange(
+                                        selection.start, selection.end, '');
+                  
+                                print(
+                                    'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                                findOnPageController!.text =
+                                    findOnPageText; //newFindOnPageText;
+                              }
+                  
+                              // // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                              // editableTextState
+                              //     .cutSelection(SelectionChangedCause.tap);
+                              // findOnPageController!.clear();
+                              // //editableTextState.hideToolbar(false);
+                            },
+                          ));
+                  
+                          buttonItems.add(ContextMenuButtonItem(
+                            label:loc.copy,// 'Copy',
+                            onPressed: () {
+                              final TextEditingValue value =
+                                  editableTextState.textEditingValue;
+                              final TextSelection selection = value.selection;
+                  
+                              if (!selection.isCollapsed) {
+                                final String selectedText =
+                                    selection.textInside(value.text);
+                                Clipboard.setData(
+                                    ClipboardData(text: selectedText));
+                                print("Copied value --> $selectedText");
+                              }
+                  
+                              editableTextState.hideToolbar(false);
+                            },
+                          ));
+                          if (!isAllTextSelected(
+                              editableTextState.textEditingValue.selection,
+                              editableTextState.textEditingValue.text)) {
+                            buttonItems.add(ContextMenuButtonItem(
+                              label:loc.selectAll,// 'Select All',
+                              onPressed: () {
+                                // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
+                                editableTextState
+                                    .selectAll(SelectionChangedCause.tap);
+                                //editableTextState.hideToolbar(false);
+                              },
+                            ));
+                          }
+                          // Add a custom "Paste" button
+                          buttonItems.add(ContextMenuButtonItem(
+                            label:loc.paste,// 'Paste',
                             onPressed: () {
                               Clipboard.getData('text/plain').then((value) {
                                 if (value != null && value.text != null) {
                                   final text = findOnPageController!.text;
-                                  //final selection = _searchController.selection;
+                                  // final selection = _searchController.selection;
                                   final selection = editableTextState
                                       .textEditingValue.selection;
                                   final newText = text.replaceRange(
@@ -323,159 +453,52 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
                                       'text --> $text\n selection --> $selection\n newtext --> $newText');
                                   findOnPageController!.text = newText;
                                   final newSelection = TextSelection.collapsed(
-                                    offset:
-                                        selection.start + value.text!.length,
+                                    offset: selection.start + value.text!.length,
                                   );
-                                  findOnPageController!.selection =
-                                      newSelection;
+                                  findOnPageController!.selection = newSelection;
                                   editableTextState.hideToolbar(false);
                                 }
                               });
-                            }));
-                      } else {
-                        buttonItems.clear();
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.cut,// 'Cut',
-                          onPressed: () {
-                            editableTextState
-                                .cutSelection(SelectionChangedCause.tap);
-                            final TextEditingController controller =
-                                editableTextState.widget.controller;
-                            final TextEditingValue value = controller.value;
-                            final TextSelection selection = value.selection;
-                            if (!selection.isCollapsed) {
-                              final String cutText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(ClipboardData(text: cutText));
-
-                              final String newText = value.text.replaceRange(
-                                  selection.start, selection.end, '');
-                              controller.value = TextEditingValue(
-                                  text: newText,
-                                  selection: TextSelection.collapsed(
-                                      offset: selection.start));
-
-                              final String findOnPageText =
-                                  findOnPageController!.text;
-                              final String newFindOnPageText =
-                                  findOnPageText.replaceRange(
-                                      selection.start, selection.end, '');
-
-                              print(
-                                  'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
-                              findOnPageController!.text =
-                                  findOnPageText; //newFindOnPageText;
-                            }
-
-                            // // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                            // editableTextState
-                            //     .cutSelection(SelectionChangedCause.tap);
-                            // findOnPageController!.clear();
-                            // //editableTextState.hideToolbar(false);
-                          },
-                        ));
-
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.copy,// 'Copy',
-                          onPressed: () {
-                            final TextEditingValue value =
-                                editableTextState.textEditingValue;
-                            final TextSelection selection = value.selection;
-
-                            if (!selection.isCollapsed) {
-                              final String selectedText =
-                                  selection.textInside(value.text);
-                              Clipboard.setData(
-                                  ClipboardData(text: selectedText));
-                              print("Copied value --> $selectedText");
-                            }
-
-                            editableTextState.hideToolbar(false);
-                          },
-                        ));
-                        if (!isAllTextSelected(
-                            editableTextState.textEditingValue.selection,
-                            editableTextState.textEditingValue.text)) {
-                          buttonItems.add(ContextMenuButtonItem(
-                            label:loc.selectAll,// 'Select All',
-                            onPressed: () {
-                              // Clipboard.setData(ClipboardData(text: editableTextState.textEditingValue.text));
-                              editableTextState
-                                  .selectAll(SelectionChangedCause.tap);
-                              //editableTextState.hideToolbar(false);
+                              // Clipboard.getData('text/plain').then((value) {
+                              //   if (value != null) {
+                              //     _searchController.text += value.text!;
+                              //     editableTextState.hideToolbar(false);
+                              //     //_focusNode!.unfocus();
+                              //   }
+                              // });
                             },
                           ));
                         }
-                        // Add a custom "Paste" button
-                        buttonItems.add(ContextMenuButtonItem(
-                          label:loc.paste,// 'Paste',
-                          onPressed: () {
-                            Clipboard.getData('text/plain').then((value) {
-                              if (value != null && value.text != null) {
-                                final text = findOnPageController!.text;
-                                // final selection = _searchController.selection;
-                                final selection = editableTextState
-                                    .textEditingValue.selection;
-                                final newText = text.replaceRange(
-                                  selection.start,
-                                  selection.end,
-                                  value.text!,
-                                );
-                                print(
-                                    'text --> $text\n selection --> $selection\n newtext --> $newText');
-                                findOnPageController!.text = newText;
-                                final newSelection = TextSelection.collapsed(
-                                  offset: selection.start + value.text!.length,
-                                );
-                                findOnPageController!.selection = newSelection;
-                                editableTextState.hideToolbar(false);
-                              }
-                            });
-                            // Clipboard.getData('text/plain').then((value) {
-                            //   if (value != null) {
-                            //     _searchController.text += value.text!;
-                            //     editableTextState.hideToolbar(false);
-                            //     //_focusNode!.unfocus();
-                            //   }
-                            // });
-                          },
-                        ));
-                      }
-                      return AdaptiveTextSelectionToolbar.buttonItems(
-                        anchors: editableTextState.contextMenuAnchors,
-                        buttonItems: buttonItems,
-                      );
-                    },
-                     onChanged: (value) {
-                      if(value.isEmpty){
-                        editableState.hideToolbar(true);
-                      }
-                    },
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            top: 5.0, left: 15, right: 10.0, bottom: 10.0),
-                        border: InputBorder.none,
-                        hintText:"${loc.findOnPage}...",  //"Find on page ...",
-                        hintStyle: TextStyle(
-                            color:const Color(0xff6D6D81),
-                           // fontSize: 14.0,
-                            fontWeight: FontWeight
-                                .normal), //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
-                        ),
-                    style: theme.textTheme.bodyMedium,
+                        return AdaptiveTextSelectionToolbar.buttonItems(
+                          anchors: editableTextState.contextMenuAnchors,
+                          buttonItems: buttonItems,
+                        );
+                      },
+                       onChanged: (value) {
+                        if(value.isEmpty){
+                          editableState.hideToolbar(true);
+                        }
+                      },
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                              top: 5.0, left: 15, right: 10.0, bottom: 10.0),
+                          border: InputBorder.none,
+                          hintText:"${loc.findOnPage}...",  //"Find on page ...",
+                          hintStyle: TextStyle(
+                              color: Color(0xff8D8D8D),
+                             // fontSize: 14.0,
+                              fontWeight: FontWeight
+                                  .normal), //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+                          ),
+                      style: theme.textTheme.bodyMedium,
+                    ),
                   ),
                 ),
                 Container(
-                  width: constraint.maxWidth / 3,
-                  // color: Colors.green,
-                  child: Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
                         // color: Colors.blue,
-                        width: constraint.maxWidth / 9,
+                        width: 30,
                         child: IconButton(
-                          icon: Icon(Icons.keyboard_arrow_up,size :constraint.maxHeight/2),
+                          icon: Icon(Icons.keyboard_arrow_up,size :15),
                           onPressed: () {
                             findInteractionController?.findNext(forward: false);
                           },
@@ -483,20 +506,20 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
                       ),
                       SizedBox(
                         //color: Colors.yellow,
-                        width: constraint.maxWidth / 12,
+                        width: 30,
                         child: IconButton(
-                          icon: Icon(Icons.keyboard_arrow_down,size :constraint.maxHeight/2),
+                          icon: Icon(Icons.keyboard_arrow_down,size :15),
                           onPressed: () {
                             findInteractionController?.findNext(forward: true);
                           },
                         ),
                       ),
-                      Spacer(),
+                      //Spacer(),
                       Container(
                         // color: Colors.pink,
-                        width: constraint.maxWidth / 9,
+                        width: 30,
                         child: IconButton(
-                          icon: Icon(Icons.close,size :constraint.maxHeight/2),
+                          icon: Icon(Icons.close,size :15),
                           onPressed: () {
                             findInteractionController?.clearMatches();
                             findOnPageController?.text = "";
@@ -507,9 +530,51 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
                           },
                         ),
                       ),
-                    ],
-                  ),
-                )
+                // Container(
+                //   width: constraint.maxWidth / 3,
+                //   // color: Colors.green,
+                //   child: Row(
+                //     //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //     children: [
+                //       Container(
+                //         // color: Colors.blue,
+                //         width: constraint.maxWidth / 9,
+                //         child: IconButton(
+                //           icon: Icon(Icons.keyboard_arrow_up,size :constraint.maxHeight/2),
+                //           onPressed: () {
+                //             findInteractionController?.findNext(forward: false);
+                //           },
+                //         ),
+                //       ),
+                //       SizedBox(
+                //         //color: Colors.yellow,
+                //         width: constraint.maxWidth / 12,
+                //         child: IconButton(
+                //           icon: Icon(Icons.keyboard_arrow_down,size :constraint.maxHeight/2),
+                //           onPressed: () {
+                //             findInteractionController?.findNext(forward: true);
+                //           },
+                //         ),
+                //       ),
+                //       Spacer(),
+                //       Container(
+                //         // color: Colors.pink,
+                //         width: constraint.maxWidth / 9,
+                //         child: IconButton(
+                //           icon: Icon(Icons.close,size :constraint.maxHeight/2),
+                //           onPressed: () {
+                //             findInteractionController?.clearMatches();
+                //             findOnPageController?.text = "";
+
+                //             if (widget.hideFindOnPage != null) {
+                //               widget.hideFindOnPage!();
+                //             }
+                //           },
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             );
           }),
@@ -521,7 +586,7 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
 
 
  
-  PreferredSize webViewAppBar(DarkThemeProvider themeProvider,ThemeData theme) {
+  PreferredSize webViewAppBar(DarkThemeProvider themeProvider,ThemeData theme,AppBarPositionProvider appBarPositionProvider){
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
     var settings = browserModel.getSettings();
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
@@ -530,47 +595,56 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
     final loc = AppLocalizations.of(context)!;
     var webViewController = webViewModel.webViewController;
     final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
+    final groupProvider = Provider.of<GroupProvider>(context,listen: false);
     return PreferredSize(
         preferredSize: Size.fromHeight(150),
-        child: LayoutBuilder(builder: (context, constraints) {
-          return Container(
-            height:45, //constraints.maxHeight/1.6, //45,
-            width: double.infinity,
-            margin: EdgeInsets.only( top: 40,
-                left: 10, right: 10, bottom: 4
-            ),
-            decoration: BoxDecoration(
-                color: //webViewModel.isIncognitoMode ? Color(0xff040404) :
-                    themeProvider.darkTheme
-                        ?const Color(0xff282836)
-                        :const Color(0xffF3F3F3),
-                borderRadius: BorderRadius.circular(8)),
-            child: LayoutBuilder(builder: (context, constraint) {
-              return Row(
-                children: [
-                  SizedBox(
-                    width:  webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false 
-                        ? constraint.maxWidth / 4.2
-                        : constraint.maxWidth / 5.6,
-                    // color: Colors.yellow,
-                    child: Row(
+        child: 
+        // LayoutBuilder(builder: (context, constraints) {
+        //   return 
+          SafeArea(
+            child: Container(
+              height: 45,
+              width: double.infinity,
+              margin: EdgeInsets.only(top: appBarPositionProvider.selectedPosition ==
+                  AppBarPosition.bottom ? 0 : 40, //left: 15, right: 15, 
+                  bottom:appBarPositionProvider.selectedPosition == AppBarPosition.bottom ? 10 : 4),
+               padding: EdgeInsets.symmetric(horizontal: 10),
+                  //       height:57, //constraints.maxHeight/1.6, //45,
+                  //       width: double.infinity,
+                  //       margin: EdgeInsets.only( top:appBarPositionProvider.selectedPosition ==
+                  // AppBarPosition.bottom ? 0 : 40,
+                  //          // left: 10, right: 10, 
+                  //           bottom: 4
+                  //       ),
+              decoration: BoxDecoration(
+                  color: //webViewModel.isIncognitoMode ? Color(0xff040404) :
+                      themeProvider.darkTheme
+                          ?const Color(0xff111111)
+                          :const Color(0xffF3F3F3),
+                          //border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                  //borderRadius: BorderRadius.circular(8)
+                  ),
+              child: LayoutBuilder(builder: (context, constraint) {
+            
+                    return Row(
                       children: [
-                        browserModel.webViewTabs.isEmpty == false && vpnStatusProvider.canShowHomeScreen == false
-                       ?  GestureDetector(
-                        onTap: ()async{
-                          vpnStatusProvider.updateCanShowHomeScreen(true);
-                          await webViewController?.stopLoading();
-                          vpnStatusProvider.updateFAB(false);
-                         ttsProvider.updateTTSDisplayStatus(false);
-
-                  //            await webViewController?.evaluateJavascript(
-                  // source: "document.activeElement.blur();");
-                        if (await webViewController?.getSelectedText() != null) {
-                // await webViewController?.evaluateJavascript(
-                //     source: "window.getSelection().removeAllRanges();"
-                //      );
-
-                      await webViewController?.evaluateJavascript(source: """
+                        
+                          GestureDetector(
+                            onTap:groupProvider.totalOpenTabsCount != 0 //browserModel.webViewTabs.isEmpty == false 
+                            && vpnStatusProvider.canShowHomeScreen == false ? ()async{
+                              vpnStatusProvider.updateCanShowHomeScreen(true);
+                            await webViewController?.stopLoading();
+                            vpnStatusProvider.updateFAB(false);
+                           ttsProvider.updateTTSDisplayStatus(false);
+            
+                    //            await webViewController?.evaluateJavascript(
+                    // source: "document.activeElement.blur();");
+                          if (await webViewController?.getSelectedText() != null) {
+                  // await webViewController?.evaluateJavascript(
+                  //     source: "window.getSelection().removeAllRanges();"
+                  //      );
+            
+                        await webViewController?.evaluateJavascript(source: """
                     
                     //Close keyboard if open
                     document.activeElement.blur();
@@ -592,286 +666,651 @@ if(currentUrl.isNotEmpty && !(currentUrl.toString().startsWith('https://') && ch
                     }
                   });
                 """);
-              }
-                         final ByteData data = await rootBundle.load('assets/images/screen-shot.png');
-                          setState(() {
-                            imageScreenshot = data.buffer.asUint8List();
-                          });
-                      
-                          // webViewController!.loadData(data: homeHtmlContent,
-                          // mimeType: 'text/html',
-                          // encoding: 'utf-8'
-                          // );
-                          //browserModel.closeAllTabs();
-                        },
-                         child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                 height: 33,
-                                 width: 33,
-                                 decoration: BoxDecoration(
-                                     color:
-                                         themeProvider.darkTheme ? Color(0xff39394B) : Color(0xffffffff),
-                                     borderRadius: BorderRadius.circular(5)),
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.center,
-                                   children: [
-                                // browserModel.webViewTabs.isEmpty == false && widget.canHomeShown == true
-                                  SvgPicture.asset(themeProvider.darkTheme ? 'assets/images/home.svg' : 'assets/images/home_wht_theme.svg',) 
-                                    
-                                   ],
-                                 ),
-                               ),
-                       ):
-                        SearchSettingsPopupList(
-                          browserModel: browserModel,
-                          browserSettings: settings,
-                        ),
-                         VerticalDivider(
-                          width: 1,
-                          indent: 10,
-                          endIndent: 10,
-                          color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
-                        ),
-                        Visibility(
-                          visible: vpnStatusProvider.canShowHomeScreen ? false: webViewModel.url != null ? true : false,
-                          // webViewModel.url != null ||
-                          //     webViewModel.isIncognitoMode,
-                          child: Selector<WebViewModel, bool>(
-                              selector: (context, webViewModel) =>
-                                  webViewModel.isSecure,
-                              builder: (context, isSecure, child) {
-                                var image =  themeProvider.darkTheme
-                                        ? 'assets/images/https.svg'
-                                        : 'assets/images/https_white_theme.svg';
-                                if (webViewModel.isIncognitoMode) {
-                                  print('Incognito ----> ');
-                                  image = Util.urlIsSecure(webViewModel.url as Uri) == false 
-                                  //!(webViewModel.isSecure)
-                                      ? 'assets/images/private_http.svg'
-                                      : 'assets/images/privatetab.svg';
-                                      print('Incognito ----? $image');
-                                } else if (isSecure &&
-                                    !(webViewModel.isIncognitoMode)) {
-                                  if (webViewModel.url != null &&
-                                      webViewModel.url!.scheme == "file") {
-                                    image = themeProvider.darkTheme
-                                           ? 'assets/images/Web Archieves.svg'
-                                           : 'assets/images/web_arc-black.svg';
-                                  } else if(isSecure && browserModel.isUrlInDomainList(webViewModel.url.toString())){
-                                    image = themeProvider.darkTheme
-                                      ? 'assets/images/http.svg'
-                                      : 'assets/images/http_white_theme.svg';
-                                  }else {
-                                    image = themeProvider.darkTheme
-                                        ? 'assets/images/https.svg'
-                                        : 'assets/images/https_white_theme.svg';
-                                  }
-                                } else if ((webViewModel.url != null &&
-                                        (isSecure == false)) &&
-                                    !webViewModel.isIncognitoMode) {
-                                       if(webViewModel.url.toString().endsWith('.bdx') || webViewModel.url.toString().endsWith('.bdx/')){
-                                       image = themeProvider.darkTheme
-                                        ? 'assets/images/mnLock-dark-theme.svg'
-                                        : 'assets/images/mnLock-white-theme.svg';
-                                    }else{
-                                       image = themeProvider.darkTheme
-                                      ? 'assets/images/http.svg'
-                                      : 'assets/images/http_white_theme.svg';
+                }
+                           final ByteData data = await rootBundle.load('assets/images/screen-shot.png');
+                            setState(() {
+                              imageScreenshot = data.buffer.asUint8List();
+                            });
+                            }: null,
+                            child: SvgPicture.asset('assets/images/ai-icons/new/Home.svg')),
+                          Expanded(
+                            child: Container(
+                              height: 40,
+                              margin: EdgeInsets.symmetric( horizontal: 4,vertical: 3),
+                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                              ),
+                              child: Row(
+                                children: [
+                                                  Visibility(
+                            visible:groupProvider.totalOpenTabsCount != 0 && (vpnStatusProvider.canShowHomeScreen ? false: webViewModel.url != null ? true : false),
+                            // webViewModel.url != null ||
+                            //     webViewModel.isIncognitoMode,
+                            child: Selector<WebViewModel, bool>(
+                                selector: (context, webViewModel) =>
+                                    webViewModel.isSecure,
+                                builder: (context, isSecure, child) {
+                                  var image =  themeProvider.darkTheme
+                                          ? 'assets/images/https.svg'
+                                          : 'assets/images/https_white_theme.svg';
+                                  if (webViewModel.isIncognitoMode) {
+                                    print('Incognito ----> ');
+                                    image = Util.urlIsSecure(webViewModel.url as Uri) == false 
+                                    //!(webViewModel.isSecure)
+                                        ? 'assets/images/private_http.svg'
+                                        : 'assets/images/privatetab.svg';
+                                        print('Incognito ----? $image');
+                                  } else if (isSecure &&
+                                      !(webViewModel.isIncognitoMode)) {
+                                    if (webViewModel.url != null &&
+                                        webViewModel.url!.scheme == "file") {
+                                      image = themeProvider.darkTheme
+                                             ? 'assets/images/Web Archieves.svg'
+                                             : 'assets/images/web_arc-black.svg';
+                                    } else if(isSecure && browserModel.isUrlInDomainList(webViewModel.url.toString())){
+                                      image = themeProvider.darkTheme
+                                        ? 'assets/images/http.svg'
+                                        : 'assets/images/http_white_theme.svg';
+                                    }else {
+                                      image = themeProvider.darkTheme
+                                          ? 'assets/images/https.svg'
+                                          : 'assets/images/https_white_theme.svg';
                                     }
-                                  
-                                }
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: SvgPicture.asset(
-                                    image,
-                                    height: constraint.maxWidth / 16.5,
-                                    width: constraint.maxWidth / 16.5,
-                                  ),
-                                );
-                              }),
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false && ttsProvider.canTTSDisplay == false
-                        ? constraint.maxWidth / 2
-                       : ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 2.1 
-                          : constraint.maxWidth / 1.8,
-                    child: GestureDetector(
-                      onTap: () async {
-                        if (webViewController != null) {
-                  webViewController.evaluateJavascript(source: "hideFooter();");
-                    }
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchScreen(
-                                      controller: _searchController!,
-                                      browserModel: browserModel,
-                                      settings: settings,
-                                      webViewController: webViewController,
-                                      webViewModel: webViewModel,
-                                      //  pageTitle:pageTitles ,//pageTitle,
-                                      //  favIcons:favIcon, //favIcon,
-                                    )));
-
-                        //  if (_searchTextController.text.isNotEmpty) {
-                        //   setState(() {
-                        //     _searchController = _searchTextController;
-                        //   });
-                        // }
-                      },
-                      child:
-                      vpnStatusProvider.canShowHomeScreen ?
-
-                       TextField(
-                        readOnly: true,
-                        enabled: false,
-                        canRequestFocus: false,
-                        // onSubmitted: (value) {
-                        //   if(canShowExpandedTextField){
-                        //      var url = WebUri(value.trim());
-                        //   if (!url.scheme.startsWith("http") &&
-                        //       !Util.isLocalizedContent(url)) {
-                        //     url = WebUri(settings.searchEngine.searchUrl + value);
-                        //   }
-
-                        //   if (webViewController != null) {
-                        //     webViewController.loadUrl(
-                        //         urlRequest: URLRequest(url: url));
-                        //   } else {
-                        //     addNewTab(url: url);
-                        //     webViewModel.url = url;
-                        //   }
-                        //   canShowExpandedTextField = false;
-                        //   }
-
-                        // },
-                        keyboardType: TextInputType.url,
-                        focusNode: _focusNode,
-                        autofocus: false,
-                        controller: _homeSerachController,
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                top: 5.0, right: 10.0, bottom: 10.0),
-                            border: InputBorder.none,
-                            hintText: loc.searchOrEnterAddress, // "Search or enter Address",
-                            hintStyle: TextStyle(
-                                color: themeProvider.darkTheme
-                                    ?const Color(0xff6D6D81)
-                                    : const Color(0xff6D6D81),
-                                fontWeight: FontWeight
-                                    .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+                                  } else if ((webViewModel.url != null &&
+                                          (isSecure == false)) &&
+                                      !webViewModel.isIncognitoMode) {
+                                         if(webViewModel.url.toString().endsWith('.bdx') || webViewModel.url.toString().endsWith('.bdx/')){
+                                         image = themeProvider.darkTheme
+                                          ? 'assets/images/mnLock-dark-theme.svg'
+                                          : 'assets/images/mnLock-white-theme.svg';
+                                      }else{
+                                         image = themeProvider.darkTheme
+                                        ? 'assets/images/http.svg'
+                                        : 'assets/images/http_white_theme.svg';
+                                      }
+                                    
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 5.0),
+                                    child: SvgPicture.asset(
+                                      image,
+                                      height: constraint.maxWidth / 16.5,
+                                      width: constraint.maxWidth / 16.5,
+                                    ),
+                                  );
+                                }),
+                          ),
+                          Visibility(
+                            visible:!(groupProvider.totalOpenTabsCount != 0 //browserModel.webViewTabs.isEmpty == false 
+                            && vpnStatusProvider.canShowHomeScreen == false),
+                            child: Container(
+                              height: 30,
+                              //margin: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                        color: themeProvider.darkTheme ? Color(0xff1A1A1A) : Color(0xffEBEBEB),
+                                        border: Border.all(color:themeProvider.darkTheme ? Color(0xff333333) : Color(0xffC0C0C0))),
+                              child: SearchSettingsPopupList(
+                                browserModel: browserModel,
+                                browserSettings: settings,
+                              ),
                             ),
-                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
-                      ):
-                      TextField(
-                        readOnly: true,
-                        enabled: false,
-                        canRequestFocus: false,
-                        // onSubmitted: (value) {
-                        //   var url = WebUri(value.trim());
-                        //   if (!url.scheme.startsWith("http") &&
-                        //       !Util.isLocalizedContent(url)) {
-                        //     url = WebUri(settings.searchEngine.searchUrl + value);
-                        //   }
+                          ),
+                     SizedBox(width:5),
+                    Expanded(
+                      child: Container(
+                        // width: webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false && ttsProvider.canTTSDisplay == false
+                        //     ? constraint.maxWidth / 2
+                        //    : ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 2.1 
+                        //       : constraint.maxWidth / 1.8,
+                        child: GestureDetector(
+                          onTap: () async {
+                            if (webViewController != null) {
+                      webViewController.evaluateJavascript(source: "hideFooter();");
+                        }
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchScreen(
+                                          controller: _searchController!,
+                                          browserModel: browserModel,
+                                          settings: settings,
+                                          webViewController: webViewController,
+                                          webViewModel: webViewModel,
+                                          //  pageTitle:pageTitles ,//pageTitle,
+                                          //  favIcons:favIcon, //favIcon,
+                                        )));
                       
-                        //   if (webViewController != null) {
-                        //     webViewController.loadUrl(
-                        //         urlRequest: URLRequest(url: url));
-                        //   } else {
-                        //     addNewTab(url: url);
-                        //     webViewModel.url = url;
-                        //   }
-                        // },
-                        keyboardType: TextInputType.url,
-                        focusNode: _focusNode,
-                        autofocus: false,
-                        controller: _searchController,
-                        textInputAction: TextInputAction.go,
-                        decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                top: 5.0, right: 10.0, bottom: 10.0),
-                            border: InputBorder.none,
-                            hintText:loc.searchOrEnterAddress, // "Search or enter Address",
-                            hintStyle: TextStyle(
-                                color: themeProvider.darkTheme
-                                    ? const Color(0xff6D6D81)
-                                    : const Color(0xff6D6D81),
-                               // fontSize: 14,
-                                // DynamicTextSizeWidget()
-                                //     .dynamicFontSize(14.0, context),
-                                fontWeight: FontWeight
-                                    .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
-                            ),
-                        style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
+                            //  if (_searchTextController.text.isNotEmpty) {
+                            //   setState(() {
+                            //     _searchController = _searchTextController;
+                            //   });
+                            // }
+                          },
+                          child:
+                          vpnStatusProvider.canShowHomeScreen ?
+                      
+                           TextField(
+                            readOnly: true,
+                            enabled: false,
+                            canRequestFocus: false,
+                            // onSubmitted: (value) {
+                            //   if(canShowExpandedTextField){
+                            //      var url = WebUri(value.trim());
+                            //   if (!url.scheme.startsWith("http") &&
+                            //       !Util.isLocalizedContent(url)) {
+                            //     url = WebUri(settings.searchEngine.searchUrl + value);
+                            //   }
+                      
+                            //   if (webViewController != null) {
+                            //     webViewController.loadUrl(
+                            //         urlRequest: URLRequest(url: url));
+                            //   } else {
+                            //     addNewTab(url: url);
+                            //     webViewModel.url = url;
+                            //   }
+                            //   canShowExpandedTextField = false;
+                            //   }
+                      
+                            // },
+                            keyboardType: TextInputType.url,
+                            focusNode: _focusNode,
+                            autofocus: false,
+                            controller: _homeSerachController,
+                            textInputAction: TextInputAction.go,
+                            decoration: InputDecoration(
+                            
+                                contentPadding: const EdgeInsets.only(
+                                    top: 5.0, right: 2.0, bottom: 10.0),
+                                border: InputBorder.none,
+                                hintText: loc.searchOrEnterAddress, // "Search or enter Address",
+                                hintStyle: TextStyle(
+                                    color:const Color(0xff737373),fontFamily: 'Inter',
+                                    fontWeight: FontWeight
+                                        .normal), //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+                                         suffixIcon: _homeSerachController!.text.isEmpty
+              ? const Icon(Icons.search)
+              : null,
+               suffixIconConstraints: const BoxConstraints(
+                  minWidth: 22,
+                  minHeight: 22,
+                ),
+                                ),
+                                
+                            style: theme.textTheme.bodyMedium!.copyWith(fontSize: 12, fontFamily: 'Roboto'),
+                          ):
+                          TextField(
+                            readOnly: true,
+                            enabled: false,
+                            canRequestFocus: false,
+                            // onSubmitted: (value) {
+                            //   var url = WebUri(value.trim());
+                            //   if (!url.scheme.startsWith("http") &&
+                            //       !Util.isLocalizedContent(url)) {
+                            //     url = WebUri(settings.searchEngine.searchUrl + value);
+                            //   }
+                          
+                            //   if (webViewController != null) {
+                            //     webViewController.loadUrl(
+                            //         urlRequest: URLRequest(url: url));
+                            //   } else {
+                            //     addNewTab(url: url);
+                            //     webViewModel.url = url;
+                            //   }
+                            // },
+                            keyboardType: TextInputType.url,
+                            focusNode: _focusNode,
+                            autofocus: false,
+                            controller: _searchController,
+                            textInputAction: TextInputAction.go,
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.only(
+                                    top: 5.0, right: 2.0, bottom: 10.0),
+                                border: InputBorder.none,
+                                hintText:loc.searchOrEnterAddress, // "Search or enter Address",
+                                suffixIcon: _searchController!.text.isEmpty
+                                      ? const Icon(Icons.search)
+                                      : null,
+                                       suffixIconConstraints: const BoxConstraints(
+                                minWidth: 22,
+                                minHeight: 22,
+                              ),
+                                hintStyle: TextStyle(
+                                    color: themeProvider.darkTheme
+                                        ? const Color(0xff737373)
+                                        : const Color(0xff6D6D81),
+                                    
+                                   // fontSize: 14,
+                                    // DynamicTextSizeWidget()
+                                    //     .dynamicFontSize(14.0, context),
+                                    fontWeight: FontWeight
+                                        .normal), //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+                          //                                       suffix:Visibility(
+                          //                           visible: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty,
+                          //                           child: GestureDetector(
+                          //                             onTap: ()async{
+                          //                               final article = await extractReadableContent(webViewController);
+                          //                            hideSelectionMenu(webViewController!);
+                          // if (article != null) {
+                          //    showModalBottomSheet(
+                          //       context: context,
+                          //       isScrollControlled: true,
+                          //      builder: (context){
+                          
+                          //      return ChangeNotifierProvider(
+                          //       create: (context) => ReaderProvider(
+                          //         (article['title'] != null && article['title'].toString().isNotEmpty)
+                          //                                       ? '<h2>${article['title']}</h2>${article['content'] ?? article['textContent'] ?? ""}'
+                          //                                       : article['content'] ?? article['textContent'] ?? ""
+                                 
+                          //         ),
+                                
+                          //          child: SpeechHtmlScreen(article: article,)
+                                
+                          //      ); //TtsHtmlScreen(article: article,); //ReadingModeScreen(article: article,); //DraggableAISheet();
+                          //           //return BeldexAiScreen();
+                          //      });
+                          // } else {
+                          //   debugPrint("No article extracted");
+                          // }
+                          
+                          //                             },
+                          //                             child: Container(
+                          //                               width: 20,
+                          //                               child: themeProvider.darkTheme ?  SvgPicture.asset('assets/images/ai-icons/reading_mode.svg') : SvgPicture.asset('assets/images/ai-icons/Reading_mode_wht.svg'))) ),
+                                                
+                                ),
+                            style: theme.textTheme.bodyMedium!.copyWith(fontSize: 12, fontFamily: 'Roboto'),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 3.8 : constraint.maxWidth / 4.1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Visibility(
-                          visible: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty,
-                          child: GestureDetector(
-                            onTap: ()async{
-                              final article = await extractReadableContent(webViewController);
-                           hideSelectionMenu(webViewController!);
-if (article != null) {
-   showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-     builder: (context){
-
-     return ChangeNotifierProvider(
-      create: (context) => ReaderProvider(
-        (article['title'] != null && article['title'].toString().isNotEmpty)
-                                      ? '<h2>${article['title']}</h2>${article['content'] ?? article['textContent'] ?? ""}'
-                                      : article['content'] ?? article['textContent'] ?? ""
-       
-        ),
-      
-         child: SpeechHtmlScreen(article: article,)
-      
-     ); //TtsHtmlScreen(article: article,); //ReadingModeScreen(article: article,); //DraggableAISheet();
-          //return BeldexAiScreen();
-     });
-} else {
-  debugPrint("No article extracted");
-}
-
-                            },
-                            child: themeProvider.darkTheme ?  SvgPicture.asset('assets/images/ai-icons/reading_mode.svg') : SvgPicture.asset('assets/images/ai-icons/Reading_mode_wht.svg')) ),
-                      
-                        tabList(themeProvider,theme),
-                        // SearchSettingsPopupList(browserModel: browserModel, browserSettings: settings,),
-                         VerticalDivider(
-                          width: 1,
-                          indent: 10,
-                          endIndent: 10,
-                          color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
-                        ),
-                        //   IconButton(icon:Icon(Icons.ads_click),
-                        //  onPressed: ()async {
-                        //   if(webViewController != null){
-                        //     await webViewController.loadUrl(urlRequest: URLRequest(url: WebUri( _searchController!.text)));
-                        //   }
-
-                        //   },),
-                        threeDotMenu(themeProvider,theme)
+            
+                     Visibility(
+                           visible: ttsProvider.canTTSDisplay && groupProvider.totalOpenTabsCount != 0,//browserModel.webViewTabs.isNotEmpty,
+                           child: Container(
+                             width: 20,
+                             child: GestureDetector(
+                               onTap: ()async{
+                                 final article = await extractReadableContent(webViewController);
+                              hideSelectionMenu(webViewController!);
+                             if (article != null) {
+                                showModalBottomSheet(
+                                   context: context,
+                                   isScrollControlled: true,
+                                  builder: (context){
+                             
+                                  return ChangeNotifierProvider(
+                                   create: (context) => ReaderProvider(
+                                     (article['title'] != null && article['title'].toString().isNotEmpty)
+                                         ? '<h2>${article['title']}</h2>${article['content'] ?? article['textContent'] ?? ""}'
+                                         : article['content'] ?? article['textContent'] ?? ""
+                                    
+                                     ),
+                                   
+                                      child: SpeechHtmlScreen(article: article,)
+                                   
+                                  ); //TtsHtmlScreen(article: article,); //ReadingModeScreen(article: article,); //DraggableAISheet();
+                                       //return BeldexAiScreen();
+                                  });
+                             } else {
+                               debugPrint("No article extracted");
+                             }
+                             
+                               },
+                               child: Container(
+                                 width: 20,
+                                 child: themeProvider.darkTheme ?  SvgPicture.asset('assets/images/ai-icons/reading_mode.svg') : SvgPicture.asset('assets/images/ai-icons/Reading_mode_wht.svg'))),
+                           ) )
+            
+            
+            
+                                ],
+                              ),
+                            ),
+                          ),
+                          tabList(themeProvider, theme),
+                          MainPopupMenu()
                       ],
-                    ),
-                  )
-                ],
-              );
-            }),
-          );
-        }));
+                    );
+            
+            //               return Row(
+            //                 children: [
+            //                   SizedBox(
+            //                     width:  webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false 
+            //                         ? constraint.maxWidth / 4.2
+            //                         : constraint.maxWidth / 5.6,
+            //                     // color: Colors.yellow,
+            //                     child: Row(
+            //                       children: [
+            //                         browserModel.webViewTabs.isEmpty == false && vpnStatusProvider.canShowHomeScreen == false
+            //                        ?  GestureDetector(
+            //                         onTap: ()async{
+            //                           vpnStatusProvider.updateCanShowHomeScreen(true);
+            //                           await webViewController?.stopLoading();
+            //                           vpnStatusProvider.updateFAB(false);
+            //                          ttsProvider.updateTTSDisplayStatus(false);
+            
+            //                   //            await webViewController?.evaluateJavascript(
+            //                   // source: "document.activeElement.blur();");
+            //                         if (await webViewController?.getSelectedText() != null) {
+            //                 // await webViewController?.evaluateJavascript(
+            //                 //     source: "window.getSelection().removeAllRanges();"
+            //                 //      );
+            
+            //                       await webViewController?.evaluateJavascript(source: """
+                      
+            //                     //Close keyboard if open
+            //                     document.activeElement.blur();
+            
+            //                    // Close context menu
+            //                    window.getSelection().removeAllRanges();
+            
+            //                   document.querySelectorAll('video').forEach(video => video.pause());
+            
+            //                   // Pause all HTML5 audio elements
+            //                   document.querySelectorAll('audio').forEach(audio => audio.pause());
+            
+            //                   // Pause YouTube videos
+            //                   var iframes = document.querySelectorAll('iframe');
+            //                   iframes.forEach(iframe => {
+            //                     var src = iframe.src;
+            //                     if (src.includes('youtube.com/embed')) {
+            //                       iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            //                     }
+            //                   });
+            //                 """);
+            //               }
+            //                          final ByteData data = await rootBundle.load('assets/images/screen-shot.png');
+            //                           setState(() {
+            //                             imageScreenshot = data.buffer.asUint8List();
+            //                           });
+                        
+            //                           // webViewController!.loadData(data: homeHtmlContent,
+            //                           // mimeType: 'text/html',
+            //                           // encoding: 'utf-8'
+            //                           // );
+            //                           //browserModel.closeAllTabs();
+            //                         },
+            //                          child: Container(
+            //                             margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+            //                                  height: 33,
+            //                                  width: 33,
+            //                                  decoration: BoxDecoration(
+            //                                      color:
+            //                                          themeProvider.darkTheme ? Color(0xff39394B) : Color(0xffffffff),
+            //                                      borderRadius: BorderRadius.circular(5)),
+            //                                  child: Row(
+            //                                    mainAxisAlignment: MainAxisAlignment.center,
+            //                                    children: [
+            //                                 // browserModel.webViewTabs.isEmpty == false && widget.canHomeShown == true
+            //                                   SvgPicture.asset(themeProvider.darkTheme ? 'assets/images/home.svg' : 'assets/images/home_wht_theme.svg',) 
+                                      
+            //                                    ],
+            //                                  ),
+            //                                ),
+            //                        ):
+            //                         SearchSettingsPopupList(
+            //                           browserModel: browserModel,
+            //                           browserSettings: settings,
+            //                         ),
+            //                          VerticalDivider(
+            //                           width: 1,
+            //                           indent: 10,
+            //                           endIndent: 10,
+            //                           color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+            //                         ),
+            //                         Visibility(
+            //                           visible: vpnStatusProvider.canShowHomeScreen ? false: webViewModel.url != null ? true : false,
+            //                           // webViewModel.url != null ||
+            //                           //     webViewModel.isIncognitoMode,
+            //                           child: Selector<WebViewModel, bool>(
+            //                               selector: (context, webViewModel) =>
+            //                                   webViewModel.isSecure,
+            //                               builder: (context, isSecure, child) {
+            //                                 var image =  themeProvider.darkTheme
+            //                                         ? 'assets/images/https.svg'
+            //                                         : 'assets/images/https_white_theme.svg';
+            //                                 if (webViewModel.isIncognitoMode) {
+            //                                   print('Incognito ----> ');
+            //                                   image = Util.urlIsSecure(webViewModel.url as Uri) == false 
+            //                                   //!(webViewModel.isSecure)
+            //                                       ? 'assets/images/private_http.svg'
+            //                                       : 'assets/images/privatetab.svg';
+            //                                       print('Incognito ----? $image');
+            //                                 } else if (isSecure &&
+            //                                     !(webViewModel.isIncognitoMode)) {
+            //                                   if (webViewModel.url != null &&
+            //                                       webViewModel.url!.scheme == "file") {
+            //                                     image = themeProvider.darkTheme
+            //                                            ? 'assets/images/Web Archieves.svg'
+            //                                            : 'assets/images/web_arc-black.svg';
+            //                                   } else if(isSecure && browserModel.isUrlInDomainList(webViewModel.url.toString())){
+            //                                     image = themeProvider.darkTheme
+            //                                       ? 'assets/images/http.svg'
+            //                                       : 'assets/images/http_white_theme.svg';
+            //                                   }else {
+            //                                     image = themeProvider.darkTheme
+            //                                         ? 'assets/images/https.svg'
+            //                                         : 'assets/images/https_white_theme.svg';
+            //                                   }
+            //                                 } else if ((webViewModel.url != null &&
+            //                                         (isSecure == false)) &&
+            //                                     !webViewModel.isIncognitoMode) {
+            //                                        if(webViewModel.url.toString().endsWith('.bdx') || webViewModel.url.toString().endsWith('.bdx/')){
+            //                                        image = themeProvider.darkTheme
+            //                                         ? 'assets/images/mnLock-dark-theme.svg'
+            //                                         : 'assets/images/mnLock-white-theme.svg';
+            //                                     }else{
+            //                                        image = themeProvider.darkTheme
+            //                                       ? 'assets/images/http.svg'
+            //                                       : 'assets/images/http_white_theme.svg';
+            //                                     }
+                                    
+            //                                 }
+            //                                 return Padding(
+            //                                   padding: const EdgeInsets.only(left: 5.0),
+            //                                   child: SvgPicture.asset(
+            //                                     image,
+            //                                     height: constraint.maxWidth / 16.5,
+            //                                     width: constraint.maxWidth / 16.5,
+            //                                   ),
+            //                                 );
+            //                               }),
+            //                         ),
+            
+            //                       ],
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     width: webViewModel.url != null && vpnStatusProvider.canShowHomeScreen == false && ttsProvider.canTTSDisplay == false
+            //                         ? constraint.maxWidth / 2
+            //                        : ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 2.1 
+            //                           : constraint.maxWidth / 1.8,
+            //                     child: GestureDetector(
+            //                       onTap: () async {
+            //                         if (webViewController != null) {
+            //                   webViewController.evaluateJavascript(source: "hideFooter();");
+            //                     }
+            //                         Navigator.push(
+            //                             context,
+            //                             MaterialPageRoute(
+            //                                 builder: (context) => SearchScreen(
+            //                                       controller: _searchController!,
+            //                                       browserModel: browserModel,
+            //                                       settings: settings,
+            //                                       webViewController: webViewController,
+            //                                       webViewModel: webViewModel,
+            //                                       //  pageTitle:pageTitles ,//pageTitle,
+            //                                       //  favIcons:favIcon, //favIcon,
+            //                                     )));
+            
+            //                         //  if (_searchTextController.text.isNotEmpty) {
+            //                         //   setState(() {
+            //                         //     _searchController = _searchTextController;
+            //                         //   });
+            //                         // }
+            //                       },
+            //                       child:
+            //                       vpnStatusProvider.canShowHomeScreen ?
+            
+            //                        TextField(
+            //                         readOnly: true,
+            //                         enabled: false,
+            //                         canRequestFocus: false,
+            //                         // onSubmitted: (value) {
+            //                         //   if(canShowExpandedTextField){
+            //                         //      var url = WebUri(value.trim());
+            //                         //   if (!url.scheme.startsWith("http") &&
+            //                         //       !Util.isLocalizedContent(url)) {
+            //                         //     url = WebUri(settings.searchEngine.searchUrl + value);
+            //                         //   }
+            
+            //                         //   if (webViewController != null) {
+            //                         //     webViewController.loadUrl(
+            //                         //         urlRequest: URLRequest(url: url));
+            //                         //   } else {
+            //                         //     addNewTab(url: url);
+            //                         //     webViewModel.url = url;
+            //                         //   }
+            //                         //   canShowExpandedTextField = false;
+            //                         //   }
+            
+            //                         // },
+            //                         keyboardType: TextInputType.url,
+            //                         focusNode: _focusNode,
+            //                         autofocus: false,
+            //                         controller: _homeSerachController,
+            //                         textInputAction: TextInputAction.go,
+            //                         decoration: InputDecoration(
+            //                             contentPadding: const EdgeInsets.only(
+            //                                 top: 5.0, right: 10.0, bottom: 10.0),
+            //                             border: InputBorder.none,
+            //                             hintText: loc.searchOrEnterAddress, // "Search or enter Address",
+            //                             hintStyle: TextStyle(
+            //                                 color: themeProvider.darkTheme
+            //                                     ?const Color(0xff6D6D81)
+            //                                     : const Color(0xff6D6D81),
+            //                                 fontWeight: FontWeight
+            //                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+            //                             ),
+            //                         style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
+            //                       ):
+            //                       TextField(
+            //                         readOnly: true,
+            //                         enabled: false,
+            //                         canRequestFocus: false,
+            //                         // onSubmitted: (value) {
+            //                         //   var url = WebUri(value.trim());
+            //                         //   if (!url.scheme.startsWith("http") &&
+            //                         //       !Util.isLocalizedContent(url)) {
+            //                         //     url = WebUri(settings.searchEngine.searchUrl + value);
+            //                         //   }
+                        
+            //                         //   if (webViewController != null) {
+            //                         //     webViewController.loadUrl(
+            //                         //         urlRequest: URLRequest(url: url));
+            //                         //   } else {
+            //                         //     addNewTab(url: url);
+            //                         //     webViewModel.url = url;
+            //                         //   }
+            //                         // },
+            //                         keyboardType: TextInputType.url,
+            //                         focusNode: _focusNode,
+            //                         autofocus: false,
+            //                         controller: _searchController,
+            //                         textInputAction: TextInputAction.go,
+            //                         decoration: InputDecoration(
+            //                             contentPadding: const EdgeInsets.only(
+            //                                 top: 5.0, right: 10.0, bottom: 10.0),
+            //                             border: InputBorder.none,
+            //                             hintText:loc.searchOrEnterAddress, // "Search or enter Address",
+            //                             hintStyle: TextStyle(
+            //                                 color: themeProvider.darkTheme
+            //                                     ? const Color(0xff6D6D81)
+            //                                     : const Color(0xff6D6D81),
+            //                                // fontSize: 14,
+            //                                 // DynamicTextSizeWidget()
+            //                                 //     .dynamicFontSize(14.0, context),
+            //                                 fontWeight: FontWeight
+            //                                     .normal) //const TextStyle(fontSize: 14.0,fontWeight: FontWeight.normal),
+            //                             ),
+            //                         style:isLengthyLanguageInList(localeProvider.selectedLanguage) ? theme.textTheme.bodyMedium!.copyWith(fontSize: 9) : theme.textTheme.bodyMedium,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     width: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty ? constraint.maxWidth / 3.8 : constraint.maxWidth / 4.1,
+            //                     child: Row(
+            //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //                       children: [
+            //                         Visibility(
+            //                           visible: ttsProvider.canTTSDisplay && browserModel.webViewTabs.isNotEmpty,
+            //                           child: GestureDetector(
+            //                             onTap: ()async{
+            //                               final article = await extractReadableContent(webViewController);
+            //                            hideSelectionMenu(webViewController!);
+            // if (article != null) {
+            //    showModalBottomSheet(
+            //       context: context,
+            //       isScrollControlled: true,
+            //      builder: (context){
+            
+            //      return ChangeNotifierProvider(
+            //       create: (context) => ReaderProvider(
+            //         (article['title'] != null && article['title'].toString().isNotEmpty)
+            //                                       ? '<h2>${article['title']}</h2>${article['content'] ?? article['textContent'] ?? ""}'
+            //                                       : article['content'] ?? article['textContent'] ?? ""
+                   
+            //         ),
+                  
+            //          child: SpeechHtmlScreen(article: article,)
+                  
+            //      ); //TtsHtmlScreen(article: article,); //ReadingModeScreen(article: article,); //DraggableAISheet();
+            //           //return BeldexAiScreen();
+            //      });
+            // } else {
+            //   debugPrint("No article extracted");
+            // }
+            
+            //                             },
+            //                             child: themeProvider.darkTheme ?  SvgPicture.asset('assets/images/ai-icons/reading_mode.svg') : SvgPicture.asset('assets/images/ai-icons/Reading_mode_wht.svg')) ),
+                        
+            //                         tabList(themeProvider,theme),
+            //                         // SearchSettingsPopupList(browserModel: browserModel, browserSettings: settings,),
+            //                          VerticalDivider(
+            //                           width: 1,
+            //                           indent: 10,
+            //                           endIndent: 10,
+            //                           color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA),
+            //                         ),
+            //                         //   IconButton(icon:Icon(Icons.ads_click),
+            //                         //  onPressed: ()async {
+            //                         //   if(webViewController != null){
+            //                         //     await webViewController.loadUrl(urlRequest: URLRequest(url: WebUri( _searchController!.text)));
+            //                         //   }
+            
+            //                         //   },),
+            
+            
+            
+            // MainPopupMenu()
+            
+            
+            //                        // threeDotMenu(themeProvider,theme)
+            //                       ],
+            //                     ),
+            //                   )
+            //                 ],
+            //               );
+              
+              
+              }),
+            ),
+          ),//;
+        // }
+        // )
+        );
   }
 
 
@@ -896,7 +1335,11 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
   Widget tabList(DarkThemeProvider themeProvider,ThemeData theme) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+     final bottomNavigationProvider =Provider.of<BottomNavigationProvider>(context);
      final loc = AppLocalizations.of(context)!;
+          final tabGroupProvider = Provider.of<GroupProvider>(context,listen: false);
+          final groupProvider = Provider.of<GroupProvider>(context);
+
     return InkWell(
       key: tabInkWellKey,
       onLongPress: () {
@@ -908,7 +1351,7 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
         vpnStatusProvider.updateFAB(false);
         Offset position = box.localToGlobal(Offset.zero);
        
-         browserModel.webViewTabs.isEmpty ?
+         groupProvider.totalOpenTabsCount == 0 ?
           showMenu(
                 context: context,
                  color: themeProvider.darkTheme ?const Color(0xff282836) : const Color(0xffF3F3F3),
@@ -1065,8 +1508,8 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
       },
       onTap: () async {
         //Navigator.push(context,MaterialPageRoute(builder: ((context) => TabsList() )));
-        
-        if (browserModel.webViewTabs.isNotEmpty) {
+        groupProvider.autoGroupAllTabs();
+        if (groupProvider.totalOpenTabsCount != 0) {
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
            hideFooter(webViewController);
@@ -1081,7 +1524,7 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
             }
             await Future.delayed(const Duration(milliseconds: 300));
           }
-
+        tabGroupProvider.changeViewMode(ViewMode.all);
         vpnStatusProvider.updateFAB(false);
          if(vpnStatusProvider.canShowHomeScreen){
      if (webViewModel != null && imageScreenshot != null){
@@ -1098,44 +1541,62 @@ String getLocalizedTabListPopupMenuItemsName(String actionName,AppLocalizations 
                   onTimeout: () => null,
                 );
           }
-
+          bottomNavigationProvider.changeView(HomeView.tabs);
           browserModel.showTabScroller = true;
         }
       },
-      child: Container(
-        width: 18,
-        height: 18,
-        margin: const EdgeInsets.only(
-            left: 10.0, top: 10.0, right: 5.0, bottom: 10.0),
-        decoration: BoxDecoration(
-            color:
-                themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
-            border: Border.all(
-                width: 1.0,
-                color: themeProvider.darkTheme ? Colors.white : Colors.black),
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(3.0)),
-        constraints: const BoxConstraints(minWidth: 18.0),
-        child: Center(
-          child: browserModel.webViewTabs.length >= 100
-              ? Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: SvgPicture.asset(
+      child: Stack(
+              children: [
+
+                SvgPicture.asset('assets/images/ai-icons/new/Tabs.svg',color: Color(0xff8D8D8D),),
+                Positioned.fill(
+                  right: 2,
+                  child: Center(
+                  child:groupProvider.totalOpenTabsCount  > 99 ? SvgPicture.asset(
                     'assets/images/Infinity_white_theme.svg',
                     color:
                         themeProvider.darkTheme ? Colors.white : Colors.black,
-                  ),
-                )
-              : TextWidget(
-                 text: browserModel.webViewTabs.length.toString(),
-                  style: TextStyle(
-                      color:
-                          themeProvider.darkTheme ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 12.0),
-                ),
-        ),
-      ),
+                  ):Text(groupProvider.totalOpenTabsCount.toString(),
+                  style: TextStyle(fontSize: 10),
+                  )
+                  )
+                  )
+              ],
+            ),
+      // Container(
+      //   width: 18,
+      //   height: 18,
+      //   margin: const EdgeInsets.only(
+      //       left: 10.0, top: 10.0, right: 5.0, bottom: 10.0),
+      //   decoration: BoxDecoration(
+      //       color:
+      //           themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
+      //       border: Border.all(
+      //           width: 1.0,
+      //           color: themeProvider.darkTheme ? Colors.white : Colors.black),
+      //       shape: BoxShape.rectangle,
+      //       borderRadius: BorderRadius.circular(3.0)),
+      //   constraints: const BoxConstraints(minWidth: 18.0),
+      //   child: Center(
+      //     child: browserModel.webViewTabs.length >= 100
+      //         ? Padding(
+      //             padding: const EdgeInsets.all(2.0),
+      //             child: SvgPicture.asset(
+      //               'assets/images/Infinity_white_theme.svg',
+      //               color:
+      //                   themeProvider.darkTheme ? Colors.white : Colors.black,
+      //             ),
+      //           )
+      //         : TextWidget(
+      //            text: browserModel.webViewTabs.length.toString(),
+      //             style: TextStyle(
+      //                 color:
+      //                     themeProvider.darkTheme ? Colors.white : Colors.black,
+      //                 fontWeight: FontWeight.normal,
+      //                 fontSize: 12.0),
+      //           ),
+      //   ),
+      // ),
     );
   }
 
@@ -1180,7 +1641,19 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
 
 
 
-
+Widget glassyPopupMenu(){
+    var browserModel = Provider.of<BrowserModel>(context, listen: true);
+    var webViewModel = Provider.of<WebViewModel>(context, listen: true);
+    var webViewController = webViewModel.webViewController;
+    final width = MediaQuery.of(context).size.width;
+    final loc = AppLocalizations.of(context)!;
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen:true);
+        final ttsProvider = Provider.of<TtsProvider>(context);
+        final localeProvider =  Provider.of<LocaleProvider>(context);
+   return Container(
+     
+   );
+}
 
 
 
@@ -1453,7 +1926,7 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                                   Navigator.pop(popupMenuContext);
                                   await route?.completed;
                                   if (!basicProvider.scrnSecurity) {
-                                    takeScreenshotAndShow();
+                                    takeScreenshotAndShow(loc);
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:loc.screensecurityCurrentlyEnabled);
@@ -1676,6 +2149,30 @@ Future onMenuOpen(InAppWebViewController? webViewController,VpnStatusProvider vp
                               SizedBox(width: 8),    
                           Expanded(
                             child: Text(loc.downloads, //choice,
+                                style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
+                          ),
+                        ]),
+                      ),
+                    ),
+                  );
+                  case PopupMenuActions.INVITE_PEOPLE:
+                  return CustomPopupMenuItem<String>(
+                    enabled: true,
+                    value: choice,
+                    height: 35,
+                    padding: EdgeInsets.only(left: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: SizedBox(
+                        width: 190,
+                        child: Row(children: [
+                          SvgPicture.asset('assets/images/downloads-2.svg',
+                              color: themeProvider.darkTheme
+                                  ?const Color(0xffFFFFFF)
+                                  :const Color(0xff282836)),
+                              SizedBox(width: 8),    
+                          Expanded(
+                            child: Text("Invite people", //choice,
                                 style: theme.textTheme.bodySmall, maxLines: 1,overflow: TextOverflow.ellipsis,),
                           ),
                         ]),
@@ -2185,7 +2682,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
       //   addNewIncognitoTab();
       //   break;
       case PopupMenuActions.FAVORITES:
-        showFavorites(loc);
+        showFavorites(loc,themeProvider);
         break;
       case PopupMenuActions.HISTORY:
         showHistory();
@@ -2218,6 +2715,12 @@ Future<Map<String, dynamic>?> extractReadableContent(
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => DownloadUI()));
         break;
+case PopupMenuActions.INVITE_PEOPLE:
+           invitePeople();
+        // Navigator.push(
+        //     context, MaterialPageRoute(builder: (context) => DownloadUI()));
+        break;
+
       case PopupMenuActions.DESKTOP_MODE:
         toggleDesktopMode();
         break;
@@ -2285,7 +2788,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
       Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => NodeDropdownListPage(
+          builder: (context) => ChangeNodePage(
                 exitData: [], canChangeNode: true,
                 webViewController: webViewController,
               )));
@@ -2355,10 +2858,10 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           height: 50,
                           child: TextWidget(text:loc.cancel, // 'Cancel',
                            style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
-                          ),
+                          shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+
                           onPressed: () {
                             Navigator.of(context).pop(false);
                           },
@@ -2380,13 +2883,14 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           disabledColor: Color(0xff2C2C3B),
                           minWidth: double.maxFinite,
                           height: 50,
+                          shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+
                           child: TextWidget(text:loc.quit, //'Quit',
                               style:
                                   TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
-                          ),
+                          
                           onPressed: () async {
                             var disConnectValue =
                                 await BelnetLib.disconnectFromBelnet();
@@ -2422,7 +2926,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
-      webViewModel: WebViewModel(url: url, settings: webViewModel.settings),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url, settings: webViewModel.settings),
     ));
   }
 
@@ -2439,7 +2943,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
     browserModel.save();
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
-      webViewModel: WebViewModel(url: url, isIncognitoMode: true, settings: webViewModel.settings),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url, isIncognitoMode: true, settings: webViewModel.settings),
     ));
   }
 
@@ -2469,161 +2973,179 @@ Future<Map<String, dynamic>?> extractReadableContent(
 }
 
 
-  void showFavorites(AppLocalizations loc) async {
-    await showDialog<void>(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          var browserModel = Provider.of<BrowserModel>(context, listen: true);
-          final themeProvider =
-              Provider.of<DarkThemeProvider>(context, listen: true);
-          final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: true);
-          return Dialog(
-            backgroundColor:
-                themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffF3F3F3),
-            insetPadding: EdgeInsets.all(15),
-              shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12)
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.all(10),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(12)),
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 15, left: 8, right: 8),
-                        child: TextWidget(
-                         text:loc.favorites, //'Favorites',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Expanded(
-                          child: browserModel.favorites.isEmpty
-                              ? Center(child: TextWidget(text:loc.noFavorites, //'No Favorites'
-                              ))
-                              :
-                              // listViewChildren.isEmpty ?  Center(child: Text('No Web archives')):
-                              ListView(
-                                  children:
-                                      browserModel.favorites.map((favorite) {
-                                    var url = favorite.url;
-                                    var faviconUrl = favorite.favicon != null
-                                        ? favorite.favicon!.url
-                                        : WebUri(
-                                            "${url?.origin ?? ""}/favicon.ico");
-                                    return InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                              vpnStatusProvider.updateCanShowHomeScreen(false);
-                                          addNewTab(url: favorite.url);
-                                          Navigator.pop(context);
-                                        });
-                                      },
-                                      child: Container(
-                                          margin: EdgeInsets.only(bottom: 10),
-                                          padding: EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: themeProvider.darkTheme
-                                                      ?const Color(0xff42425F)
-                                                      :const Color(0xffDADADA)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          height: 60,
-                                          child: Row(children: [
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: CustomImage(
-                                                  url: faviconUrl,
-                                                  maxWidth: 30.0,
-                                                  height: 30.0,
-                                                )),
-                                            Expanded(
-                                              child: Container(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    TextWidget(
-                                                       text: favorite.title ??
-                                                            favorite.url
-                                                                ?.toString() ??
-                                                            "",
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                    TextWidget(
-                                                     text:  browserModel.getDisplayUrl(favorite.url
-                                                              ?.toString() ??
-                                                          ""),
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color: themeProvider
-                                                                  .darkTheme
-                                                              ? const Color(
-                                                                  0xff6D6D81)
-                                                              :const Color(
-                                                                  0xff6D6D81)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 35,
-                                              //color: Colors.yellow,
-                                              child: IconButton(
-                                                icon: Icon(Icons.close,
-                                                    color:
-                                                        themeProvider.darkTheme
-                                                            ?const Color(0xff6D6D81)
-                                                            :const Color(0xffC5C5C5),
-                                                    size:
-                                                        20), //SvgPicture.asset('assets/images/close.svg', color:  themeProvider.darkTheme ? Color(0xff6D6D81) : Color(0xffC5C5C5), height: 20,width: 20,),
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    browserModel.removeFavorite(
-                                                        favorite);
-                                                    if (browserModel
-                                                        .favorites.isEmpty) {
-                                                      Navigator.pop(context);
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                            ),
-                                          ])),
-                                    );
-                                  }).toList(),
-                                ))
-                    ],
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 7, right: 10),
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle),
-                            child: Icon(Icons.close)),
-                      ))
-                ],
-              ),
-            ),
-          );
-        });
+  void showFavorites(AppLocalizations loc,DarkThemeProvider themeProvider) async {
+
+
+showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return FavoritesScreen();
+      //DraggableAISheet();
+
+
+
+
+          //return BeldexAiScreen();
+     });
+
+
+
+    // await showDialog<void>(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       var browserModel = Provider.of<BrowserModel>(context, listen: true);
+    //       final themeProvider =
+    //           Provider.of<DarkThemeProvider>(context, listen: true);
+    //       final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: true);
+    //       return Dialog(
+    //         backgroundColor:
+    //             themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffF3F3F3),
+    //         insetPadding: EdgeInsets.all(15),
+    //           shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.circular(12)
+    //         ),
+    //         child: Container(
+    //           width: MediaQuery.of(context).size.width,
+    //           height: MediaQuery.of(context).size.height,
+    //           padding: EdgeInsets.all(10),
+    //           decoration:
+    //               BoxDecoration(borderRadius: BorderRadius.circular(12)),
+    //           child: Stack(
+    //             children: [
+    //               Column(
+    //                 children: [
+    //                   Padding(
+    //                     padding: const EdgeInsets.only(
+    //                         top: 8.0, bottom: 15, left: 8, right: 8),
+    //                     child: TextWidget(
+    //                      text:loc.favorites, //'Favorites',
+    //                       style: TextStyle(
+    //                           fontSize: 20, fontWeight: FontWeight.bold),
+    //                     ),
+    //                   ),
+    //                   Expanded(
+    //                       child: browserModel.favorites.isEmpty
+    //                           ? Center(child: TextWidget(text:loc.noFavorites, //'No Favorites'
+    //                           ))
+    //                           :
+    //                           // listViewChildren.isEmpty ?  Center(child: Text('No Web archives')):
+    //                           ListView(
+    //                               children:
+    //                                   browserModel.favorites.map((favorite) {
+    //                                 var url = favorite.url;
+    //                                 var faviconUrl = favorite.favicon != null
+    //                                     ? favorite.favicon!.url
+    //                                     : WebUri(
+    //                                         "${url?.origin ?? ""}/favicon.ico");
+    //                                 return InkWell(
+    //                                   onTap: () {
+    //                                     setState(() {
+    //                                           vpnStatusProvider.updateCanShowHomeScreen(false);
+    //                                       addNewTab(url: favorite.url);
+    //                                       Navigator.pop(context);
+    //                                     });
+    //                                   },
+    //                                   child: Container(
+    //                                       margin: EdgeInsets.only(bottom: 10),
+    //                                       padding: EdgeInsets.all(8),
+    //                                       decoration: BoxDecoration(
+    //                                           border: Border.all(
+    //                                               color: themeProvider.darkTheme
+    //                                                   ?const Color(0xff42425F)
+    //                                                   :const Color(0xffDADADA)),
+    //                                           borderRadius:
+    //                                               BorderRadius.circular(10)),
+    //                                       height: 60,
+    //                                       child: Row(children: [
+    //                                         Padding(
+    //                                             padding: const EdgeInsets.only(
+    //                                                 right: 8.0),
+    //                                             child: CustomImage(
+    //                                               url: faviconUrl,
+    //                                               maxWidth: 30.0,
+    //                                               height: 30.0,
+    //                                             )),
+    //                                         Expanded(
+    //                                           child: Container(
+    //                                             child: Column(
+    //                                               crossAxisAlignment:
+    //                                                   CrossAxisAlignment.start,
+    //                                               children: [
+    //                                                 TextWidget(
+    //                                                    text: favorite.title ??
+    //                                                         favorite.url
+    //                                                             ?.toString() ??
+    //                                                         "",
+    //                                                     maxLines: 1,
+    //                                                     overflow: TextOverflow
+    //                                                         .ellipsis),
+    //                                                 TextWidget(
+    //                                                  text:  browserModel.getDisplayUrl(favorite.url
+    //                                                           ?.toString() ??
+    //                                                       ""),
+    //                                                   maxLines: 1,
+    //                                                   overflow:
+    //                                                       TextOverflow.ellipsis,
+    //                                                   style: TextStyle(
+    //                                                       color: themeProvider
+    //                                                               .darkTheme
+    //                                                           ? const Color(
+    //                                                               0xff6D6D81)
+    //                                                           :const Color(
+    //                                                               0xff6D6D81)),
+    //                                                 ),
+    //                                               ],
+    //                                             ),
+    //                                           ),
+    //                                         ),
+    //                                         Container(
+    //                                           width: 35,
+    //                                           //color: Colors.yellow,
+    //                                           child: IconButton(
+    //                                             icon: Icon(Icons.close,
+    //                                                 color:
+    //                                                     themeProvider.darkTheme
+    //                                                         ?const Color(0xff6D6D81)
+    //                                                         :const Color(0xffC5C5C5),
+    //                                                 size:
+    //                                                     20), //SvgPicture.asset('assets/images/close.svg', color:  themeProvider.darkTheme ? Color(0xff6D6D81) : Color(0xffC5C5C5), height: 20,width: 20,),
+    //                                             onPressed: () async {
+    //                                               setState(() {
+    //                                                 browserModel.removeFavorite(
+    //                                                     favorite);
+    //                                                 if (browserModel
+    //                                                     .favorites.isEmpty) {
+    //                                                   Navigator.pop(context);
+    //                                                 }
+    //                                               });
+    //                                             },
+    //                                           ),
+    //                                         ),
+    //                                       ])),
+    //                                 );
+    //                               }).toList(),
+    //                             ))
+    //                 ],
+    //               ),
+    //               Container(
+    //                   margin: EdgeInsets.only(top: 7, right: 10),
+    //                   alignment: Alignment.topRight,
+    //                   child: InkWell(
+    //                     onTap: () {
+    //                       Navigator.pop(context);
+    //                     },
+    //                     child: Container(
+    //                         decoration: BoxDecoration(shape: BoxShape.circle),
+    //                         child: Icon(Icons.close)),
+    //                   ))
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 
   void showHistory() {
@@ -2688,152 +3210,177 @@ Future<Map<String, dynamic>?> extractReadableContent(
   }
 
   void showWebArchives(DarkThemeProvider themeProvider,VpnStatusProvider vpnStatusProvider, AppLocalizations loc) async {
-    await showDialog<void>(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          var browserModel = Provider.of<BrowserModel>(context, listen: true);
-          var webArchives = browserModel.webArchives;
+    
 
-          var listViewChildren = <Widget>[];
-          webArchives.forEach((key, webArchive) {
-            var path = webArchive.path;
-            // String fileName = path.substring(path.lastIndexOf('/') + 1);
 
-            var url = webArchive.url;
 
-            listViewChildren.add(InkWell(
-              onTap: () {
-                if (path != null) {
-                  var browserModel =
-                      Provider.of<BrowserModel>(context, listen: false);
-                  vpnStatusProvider.updateCanShowHomeScreen(false);
-                  browserModel.addTab(WebViewTab(
-                    key: GlobalKey(),
-                    webViewModel: WebViewModel(url: WebUri("file://$path")),
-                  ));
-                }
-                Navigator.pop(context);
-              },
-              child: Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          color: themeProvider.darkTheme
-                              ? Color(0xff42425F)
-                              : Color(0xffDADADA)),
-                      borderRadius: BorderRadius.circular(8)
-                      ),
-                  height: 60,
-                  child: Row(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: SvgPicture.asset(
-                        'assets/images/webarchives.svg',
-                        color: themeProvider.darkTheme
-                            ? Color(0xff6D6D81)
-                            : Color(0xffC5C5C5),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget(
-                             text: webArchive.title ?? url?.toString() ?? "",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            TextWidget(
-                             text:browserModel.getDisplayUrl(url?.toString() ?? ""),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: themeProvider.darkTheme
-                                      ? Color(0xff6D6D81)
-                                      : Color(0xff6D6D81)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 35,
-                      //color: Colors.yellow,
-                      child: IconButton(
-                        icon: SvgPicture.asset(
-                          'assets/images/delete.svg',
-                          color: themeProvider.darkTheme
-                              ? Color(0xff6D6D81)
-                              : Color(0xffC5C5C5),
-                          height: 20,
-                          width: 20,
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            browserModel.removeWebArchive(webArchive);
-                            browserModel.save();
-                          });
-                        },
-                      ),
-                    ),
-                  ])),
-            ));
-          });
-          return Dialog(
-            backgroundColor:
-                themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffF3F3F3),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12)
-            ),
-            insetPadding: EdgeInsets.all(15),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.all(10),
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(12)),
-              child: Stack(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 8.0, bottom: 15, left: 8, right: 8),
-                        child: TextWidget(
-                         text:loc.webArchives, // 'Web Archives',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Expanded(
-                          child: listViewChildren.isEmpty
-                              ? Center(child: TextWidget(text:loc.noWebArchives, //'No Web Archives'
-                              ))
-                              : ListView(
-                                  children: listViewChildren,
-                                ))
-                    ],
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 7, right: 10),
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(shape: BoxShape.circle),
-                            child:const Icon(Icons.close)),
-                      ))
-                ],
-              ),
-            ),
-          );
-        });
+
+showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+     builder: (context){
+
+     return WebArchives();
+      //DraggableAISheet();
+
+
+
+
+          //return BeldexAiScreen();
+     });
+
+
+
+
+
+
+
+    // await showDialog<void>(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       var browserModel = Provider.of<BrowserModel>(context, listen: true);
+    //       var webArchives = browserModel.webArchives;
+
+    //       var listViewChildren = <Widget>[];
+    //       webArchives.forEach((key, webArchive) {
+    //         var path = webArchive.path;
+    //         // String fileName = path.substring(path.lastIndexOf('/') + 1);
+
+    //         var url = webArchive.url;
+
+    //         listViewChildren.add(InkWell(
+    //           onTap: () {
+    //             if (path != null) {
+    //               var browserModel =
+    //                   Provider.of<BrowserModel>(context, listen: false);
+    //               vpnStatusProvider.updateCanShowHomeScreen(false);
+    //               browserModel.addTab(WebViewTab(
+    //                 key: GlobalKey(),
+    //                 webViewModel: WebViewModel(uuid: Uuid().v4(),url: WebUri("file://$path")),
+    //               ));
+    //             }
+    //             Navigator.pop(context);
+    //           },
+    //           child: Container(
+    //               margin: EdgeInsets.only(bottom: 10),
+    //               padding: EdgeInsets.all(8),
+    //               decoration: BoxDecoration(
+    //                   border: Border.all(
+    //                       color: themeProvider.darkTheme
+    //                           ? Color(0xff42425F)
+    //                           : Color(0xffDADADA)),
+    //                   borderRadius: BorderRadius.circular(8)
+    //                   ),
+    //               height: 60,
+    //               child: Row(children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(right: 8.0),
+    //                   child: SvgPicture.asset(
+    //                     'assets/images/webarchives.svg',
+    //                     color: themeProvider.darkTheme
+    //                         ? Color(0xff6D6D81)
+    //                         : Color(0xffC5C5C5),
+    //                   ),
+    //                 ),
+    //                 Expanded(
+    //                   child: Container(
+    //                     child: Column(
+    //                       crossAxisAlignment: CrossAxisAlignment.start,
+    //                       children: [
+    //                         TextWidget(
+    //                          text: webArchive.title ?? url?.toString() ?? "",
+    //                           maxLines: 1,
+    //                           overflow: TextOverflow.ellipsis,
+    //                           style: TextStyle(fontWeight: FontWeight.w600),
+    //                         ),
+    //                         TextWidget(
+    //                          text:browserModel.getDisplayUrl(url?.toString() ?? ""),
+    //                           maxLines: 1,
+    //                           overflow: TextOverflow.ellipsis,
+    //                           style: TextStyle(
+    //                               color: themeProvider.darkTheme
+    //                                   ? Color(0xff6D6D81)
+    //                                   : Color(0xff6D6D81)),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //                 Container(
+    //                   width: 35,
+    //                   //color: Colors.yellow,
+    //                   child: IconButton(
+    //                     icon: SvgPicture.asset(
+    //                       'assets/images/delete.svg',
+    //                       color: themeProvider.darkTheme
+    //                           ? Color(0xff6D6D81)
+    //                           : Color(0xffC5C5C5),
+    //                       height: 20,
+    //                       width: 20,
+    //                     ),
+    //                     onPressed: () async {
+    //                       setState(() {
+    //                         browserModel.removeWebArchive(webArchive);
+    //                         browserModel.save();
+    //                       });
+    //                     },
+    //                   ),
+    //                 ),
+    //               ])),
+    //         ));
+    //       });
+    //       return Dialog(
+    //         backgroundColor:
+    //             themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffF3F3F3),
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.circular(12)
+    //         ),
+    //         insetPadding: EdgeInsets.all(15),
+    //         child: Container(
+    //           width: MediaQuery.of(context).size.width,
+    //           height: MediaQuery.of(context).size.height,
+    //           padding: EdgeInsets.all(10),
+    //           decoration:
+    //               BoxDecoration(borderRadius: BorderRadius.circular(12)),
+    //           child: Stack(
+    //             children: [
+    //               Column(
+    //                 children: [
+    //                   Padding(
+    //                     padding: const EdgeInsets.only(
+    //                         top: 8.0, bottom: 15, left: 8, right: 8),
+    //                     child: TextWidget(
+    //                      text:loc.webArchives, // 'Web Archives',
+    //                       style: TextStyle(
+    //                           fontSize: 20, fontWeight: FontWeight.bold),
+    //                     ),
+    //                   ),
+    //                   Expanded(
+    //                       child: listViewChildren.isEmpty
+    //                           ? Center(child: TextWidget(text:loc.noWebArchives, //'No Web Archives'
+    //                           ))
+    //                           : ListView(
+    //                               children: listViewChildren,
+    //                             ))
+    //                 ],
+    //               ),
+    //               Container(
+    //                   margin: EdgeInsets.only(top: 7, right: 10),
+    //                   alignment: Alignment.topRight,
+    //                   child: InkWell(
+    //                     onTap: () {
+    //                       Navigator.pop(context);
+    //                     },
+    //                     child: Container(
+    //                         decoration: BoxDecoration(shape: BoxShape.circle),
+    //                         child:const Icon(Icons.close)),
+    //                   ))
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 
   void share() {
@@ -2914,6 +3461,26 @@ Future<Map<String, dynamic>?> extractReadableContent(
     );
   }
 
+void invitePeople() async{
+   if (_isSharing) return; // Ignore if already sharing
+   setState(() {
+     
+   });
+   _isSharing = true; // Set flag to block further clicks
+  const String playStoreUrl = 'https://play.google.com/store/apps/details?id=io.beldex.beldex_browser&hl=en_IN&pli=1'; // Replace with your real Play Store URL
+ final result = await SharePlus.instance.share(ShareParams(text:"Hey, I've been using Beldex browser to browse confidentially. Try it yourself! Download it at $playStoreUrl") ); //.share('Check out this app: $playStoreUrl');
+
+   _isSharing = false; 
+
+ if (result.status == ShareResultStatus.success) {
+      print('Shared successfully');
+    } else if (result.status == ShareResultStatus.dismissed) {
+      print('Share dismissed');
+    }
+
+}
+
+
   void goToDevelopersPage() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => const DevelopersPage()));
@@ -2935,7 +3502,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
     );
   }
 
-  void takeScreenshotAndShow() async {
+  void takeScreenshotAndShow(AppLocalizations loc) async {
     var webViewModel = Provider.of<WebViewModel>(context, listen: false);
     var screenshot = await webViewModel.webViewController?.takeScreenshot();
     // var themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
@@ -2999,7 +3566,7 @@ Future<Map<String, dynamic>?> extractReadableContent(
                           disabledColor: Color(0xff2C2C3B),
                           //minWidth: double.minPositive,
                           height: 40,
-                          child:const TextWidget(text:'Share',
+                          child: TextWidget(text:loc.share,
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                           shape: RoundedRectangleBorder(
@@ -3038,4 +3605,581 @@ Future<Map<String, dynamic>?> extractReadableContent(
       //  file.delete();
     }
   }
+}
+
+
+
+class WebArchives extends StatefulWidget {
+  const WebArchives({super.key});
+
+  @override
+  State<WebArchives> createState() => _WebArchivesState();
+}
+
+class _WebArchivesState extends State<WebArchives> {
+
+var listViewChildren = <Widget>[];
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+// final browserModel = Provider.of<BrowserModel>(context,listen: false);
+// final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+//  final themeProvider = Provider.of<DarkThemeProvider>(context,listen: false);
+
+
+//     var webArchives = browserModel.webArchives;
+
+          
+//           webArchives.forEach((key, webArchive) {
+//             var path = webArchive.path;
+//             // String fileName = path.substring(path.lastIndexOf('/') + 1);
+
+//             var url = webArchive.url;
+
+//             listViewChildren.add(InkWell(
+//               onTap: () {
+//                 if (path != null) {
+//                   var browserModel =
+//                       Provider.of<BrowserModel>(context, listen: false);
+//                   vpnStatusProvider.updateCanShowHomeScreen(false);
+//                   browserModel.addTab(WebViewTab(
+//                     key: GlobalKey(),
+//                     webViewModel: WebViewModel(uuid: Uuid().v4(),url: WebUri("file://$path")),
+//                   ));
+//                 }
+//                 Navigator.pop(context);
+//               },
+//               child: Container(
+//                   margin: EdgeInsets.only(bottom: 10),
+//                   padding: EdgeInsets.all(8),
+//                   decoration: BoxDecoration(
+//                     border: Border.all(
+//                                                       color: 
+//                                                       themeProvider.darkTheme
+//                                                           ?const Color(0xff444444)
+//                                                           :const Color(0xffD4D4D4),width: 1),
+//                       // border: Border.all(
+//                       //     color: themeProvider.darkTheme
+//                       //         ? Color(0xff42425F)
+//                       //         : Color(0xffDADADA)),
+//                       // borderRadius: BorderRadius.circular(8)
+//                       ),
+//                   height: 60,
+//                   child: Row(children: [
+//                     Padding(
+//                       padding: const EdgeInsets.only(right: 8.0),
+//                       child: SvgPicture.asset(
+//                         'assets/images/webarchives.svg',
+//                         color: themeProvider.darkTheme
+//                             ? Color(0xff6D6D81)
+//                             : Color(0xffC5C5C5),
+//                       ),
+//                     ),
+//                     Expanded(
+//                       child: Container(
+//                         child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             TextWidget(
+//                              text: webArchive.title ?? url?.toString() ?? "",
+//                               maxLines: 1,
+//                               overflow: TextOverflow.ellipsis,
+//                                style: TextStyle(fontSize: 14,fontFamily: 'Inter',fontWeight: FontWeight.w700,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B))
+//                             ),
+//                             TextWidget(
+//                              text:browserModel.getDisplayUrl(url?.toString() ?? ""),
+//                               maxLines: 1,
+//                               overflow: TextOverflow.ellipsis,
+//                               style: TextStyle(
+//                                   fontFamily: 'Roboto',fontSize: 12,
+//                                   color:Color(0xff8D8D8D)),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                     Container(
+//                       width: 35,
+//                       //color: Colors.yellow,
+//                       child: IconButton(
+//                         icon: SvgPicture.asset(
+//                           'assets/images/delete.svg',
+//                           color: themeProvider.darkTheme
+//                               ? Color(0xff6D6D81)
+//                               : Color(0xffC5C5C5),
+//                           height: 20,
+//                           width: 20,
+//                         ),
+//                         onPressed: () async {
+//                           setState(() {
+//                             browserModel.removeWebArchive(webArchive);
+//                             browserModel.save();
+//                           });
+//                         },
+//                       ),
+//                     ),
+//                   ])),
+//             ));
+//           });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
+     var browserModel = Provider.of<BrowserModel>(context, listen: true);
+          
+          final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: true);
+    return DraggableScrollableSheet(
+      initialChildSize: 0.95,
+                minChildSize: 0.3,
+                maxChildSize: 0.95,
+      builder: (context,scrollcontroller){
+      
+        return Container(
+          decoration: BoxDecoration(),
+          child: LayoutBuilder(builder:(context, constraints) {
+            return Stack(
+               children:[
+                 Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+            GlassSettingPanel(
+              color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.1),
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Text(
+      loc.webArchives,
+      style: TextStyle(
+        color: themeProvider.darkTheme
+            ? Colors.white
+            : Colors.black,
+        fontFamily: 'Inter',
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      ),
+    ),
+
+    IconButton(
+      onPressed: () => Navigator.pop(context),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(
+        minWidth: 40,
+        minHeight: 40,
+      ),
+      icon: Icon(
+        Icons.close,
+        size: 24,
+        color: themeProvider.darkTheme
+            ? Colors.white
+            : Colors.black,
+      ),
+    ),
+  ],
+),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(loc.webArchives,style: TextStyle(color:themeProvider.darkTheme ? Colors.white : Colors.black, fontFamily: 'Inter',fontSize: 18,fontWeight: FontWeight.w800),),
+                    //     GestureDetector(
+                    //       onTap: () => Navigator.pop(context),
+                    //       child: Icon(Icons.close))
+                    //   ],
+                    // ),
+                    SizedBox(height: 15,),
+                     
+                      // Expanded(
+                      //     child: listViewChildren.isEmpty
+                      //         ? Center(child: TextWidget(text:loc.noWebArchives, //'No Web Archives'
+                      //         ))
+                      //         : ListView(
+                      //             children: listViewChildren,
+                      //           ))
+                      Expanded(
+  child: browserModel.webArchives.isEmpty
+      ? Center(
+          child: TextWidget(
+            text: loc.noWebArchives,
+          ),
+        )
+      : ListView.builder(
+          itemCount: browserModel.webArchives.length,
+          itemBuilder: (context, index) {
+            final webArchive =
+                browserModel.webArchives.values.elementAt(index);
+
+            final path = webArchive.path;
+            final url = webArchive.url;
+
+            return InkWell(
+              onTap: () {
+                if (path != null) {
+                  vpnStatusProvider.updateCanShowHomeScreen(false);
+
+                  browserModel.addTab(
+                    WebViewTab(
+                      key: GlobalKey(),
+                      webViewModel: WebViewModel(
+                        uuid: const Uuid().v4(),
+                        url: WebUri("file://$path"),
+                      ),
+                    ),
+                  );
+                }
+
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.all(8),
+                height: 60,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: themeProvider.darkTheme
+                        ? const Color(0xff444444)
+                        : const Color(0xffD4D4D4),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: SvgPicture.asset(
+                        'assets/images/webarchives.svg',
+                        color: themeProvider.darkTheme
+                            ? const Color(0xff737373)
+                            : const Color(0xffACACAC),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextWidget(
+                            text: webArchive.title ??
+                                url?.toString() ??
+                                "",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w700,
+                              color: themeProvider.darkTheme
+                                  ? const Color(0xffEBEBEB)
+                                  : const Color(0xff0B0B0B),
+                            ),
+                          ),
+                          TextWidget(
+                            text: browserModel.getDisplayUrl(
+                                url?.toString() ?? ""),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 12,
+                              color: Color(0xff8D8D8D),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 35,
+                      child: IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/images/delete.svg',
+                          color: themeProvider.darkTheme
+                              ? const Color(0xff737373)
+                              : const Color(0xffACACAC),
+                          height: 20,
+                          width: 20,
+                        ),
+                        onPressed: () {
+                          browserModel.removeWebArchive(webArchive);
+                          browserModel.save();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+)
+                  ],
+                ),
+              ),
+            )
+               ]
+            );
+          }
+,)
+        );
+     });
+  }
+  void addNewTab({WebUri? url}) {
+    var browserModel = Provider.of<BrowserModel>(context, listen: false);
+    var settings = browserModel.getSettings();
+    final webViewModel = Provider.of<WebViewModel>(context, listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+
+
+    url ??=
+        WebUri(settings.searchEngine.url);
+        webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
+    browserModel.save();
+    browserModel.addTab(WebViewTab(
+      key: GlobalKey(),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url, settings: webViewModel.settings),
+    ));
+  }
+
+
+}
+
+
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
+
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
+     var browserModel = Provider.of<BrowserModel>(context, listen: true);
+          
+          final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: true);
+    return DraggableScrollableSheet(
+      initialChildSize: 0.95,
+                minChildSize: 0.3,
+                maxChildSize: 0.95,
+      builder: (context,scrollcontroller){
+      
+        return Container(
+          decoration: BoxDecoration(),
+          child: LayoutBuilder(builder:(context, constraints) {
+            return Stack(
+               children:[
+                 Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+            GlassSettingPanel(
+              color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.1),
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Text(
+      loc.favorites,
+      style: TextStyle(
+        color: themeProvider.darkTheme
+            ? Colors.white
+            : Colors.black,
+        fontFamily: 'Inter',
+        fontSize: 18,
+        fontWeight: FontWeight.w800,
+      ),
+    ),
+
+    IconButton(
+      onPressed: () => Navigator.pop(context),
+      padding: EdgeInsets.zero,
+      constraints: const BoxConstraints(
+        minWidth: 40,
+        minHeight: 40,
+      ),
+      icon: Icon(
+        Icons.close,
+        size: 24,
+        color: themeProvider.darkTheme
+            ? Colors.white
+            : Colors.black,
+      ),
+    ),
+  ],
+),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(loc.favorites,style: TextStyle(color:themeProvider.darkTheme ? Colors.white : Colors.black, fontFamily: 'Inter',fontSize: 18,fontWeight: FontWeight.w800),),
+                    //     GestureDetector(
+                    //        onTap: () => Navigator.pop(context),
+                    //       child: Icon(Icons.close))
+                    //   ],
+                    // ),
+                    SizedBox(height: 15,),
+                     Expanded(
+                              child: browserModel.favorites.isEmpty
+                                  ? Center(child: TextWidget(text:loc.noFavorites, style: TextStyle(fontFamily: 'Inter',fontSize: 14), //'No Favorites'
+                                  ))
+                                  :
+                                  // listViewChildren.isEmpty ?  Center(child: Text('No Web archives')):
+                                  ListView(
+                                      children:
+                                          browserModel.favorites.map((favorite) {
+                                        var url = favorite.url;
+                                        var faviconUrl = favorite.favicon != null
+                                            ? favorite.favicon!.url
+                                            : WebUri(
+                                                "${url?.origin ?? ""}/favicon.ico");
+                                        return InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                                  vpnStatusProvider.updateCanShowHomeScreen(false);
+                                              addNewTab(url: favorite.url);
+                                              Navigator.pop(context);
+                                            });
+                                          },
+                                          child: Container(
+                                              margin: EdgeInsets.only(bottom: 10),
+                                              padding: EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: 
+                                                      themeProvider.darkTheme
+                                                          ?const Color(0xff444444)
+                                                          :const Color(0xffD4D4D4),width: 1),
+                                                  // borderRadius:
+                                                  //     BorderRadius.circular(10)
+                                                      ),
+                                              height: 60,
+                                              child: Row(children: [
+                                                Padding(
+                                                    padding: const EdgeInsets.only(
+                                                        right: 8.0),
+                                                    child: CustomImage(
+                                                      url: faviconUrl,
+                                                      maxWidth: 30.0,
+                                                      height: 30.0,
+                                                    )),
+                                                Expanded(
+                                                  child: Container(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                      children: [
+                                                        TextWidget(
+                                                           text: favorite.title ??
+                                                                favorite.url
+                                                                    ?.toString() ??
+                                                                "",
+                                                            maxLines: 1,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                                style: TextStyle(fontSize: 14,fontFamily: 'Inter',fontWeight: FontWeight.w700,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                                                ),
+                                                        TextWidget(
+                                                         text:  browserModel.getDisplayUrl(favorite.url
+                                                                  ?.toString() ??
+                                                              ""),
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                            fontFamily: 'Roboto',fontSize: 12,
+                                                              color:Color(0xff8D8D8D)
+                                                              //  themeProvider
+                                                              //         .darkTheme
+                                                              //     ? const Color(
+                                                              //         0xff6D6D81)
+                                                              //     :const Color(
+                                                              //         0xff6D6D81)
+                                                                      ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 35,
+                                                  //color: Colors.yellow,
+                                                  child: IconButton(
+                                                    icon: Icon(Icons.close,
+                                                        color: 
+                                                                const Color(0xffACACAC),
+                                                        size:
+                                                            20), //SvgPicture.asset('assets/images/close.svg', color:  themeProvider.darkTheme ? Color(0xff6D6D81) : Color(0xffC5C5C5), height: 20,width: 20,),
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        browserModel.removeFavorite(
+                                                            favorite);
+                                                        if (browserModel
+                                                            .favorites.isEmpty) {
+                                                          Navigator.pop(context);
+                                                        }
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ])),
+                                        );
+                                      }).toList(),
+                                    ))
+                  ],
+                ),
+              ),
+            )
+               ]
+            );
+          }
+,)
+        );
+     });
+  }
+
+void addNewTab({WebUri? url}) {
+    var browserModel = Provider.of<BrowserModel>(context, listen: false);
+    var settings = browserModel.getSettings();
+    final webViewModel = Provider.of<WebViewModel>(context, listen: false);
+   // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context,listen: false);
+
+
+    url ??=
+        WebUri(settings.searchEngine.url);
+        webViewModel.settings?.minimumFontSize = browserModel.fontSize.round();
+        print('The WEBVIEWMODEL fontSize ${webViewModel.settings?.minimumFontSize}----- ${browserModel.fontSize.round()}');
+    browserModel.save();
+    browserModel.addTab(WebViewTab(
+      key: GlobalKey(),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url, settings: webViewModel.settings),
+    ));
+  }
+
+
 }
