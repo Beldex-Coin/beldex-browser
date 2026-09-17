@@ -1778,92 +1778,104 @@ String getDownloadFile(String name){
         final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
+      barrierColor:  themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8),
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor:
-              themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffFFFFFF),
-          insetPadding: EdgeInsets.all(15),
-          child: Container(
-            width: width,
-            // height: 200,
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: themeProvider.darkTheme
-                    ?const Color(0xff282836)
-                    :const Color(0xffFFFFFF),
-                borderRadius: BorderRadius.circular(8)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(loc.download,
-                    //'Download',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+         insetPadding: EdgeInsets.all(18),
+            backgroundColor: Colors.transparent,
+          child: GlassSettingPanel(
+           color: themeProvider.darkTheme ? Color(0xff1A1A1A).withOpacity(0.8) : Color(0xffEBEBEB),
+            child: Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))),
+              // width: width,
+              // // height: 200,
+              // padding: EdgeInsets.all(15),
+              // decoration: BoxDecoration(
+              //     color: themeProvider.darkTheme
+              //         ?const Color(0xff282836)
+              //         :const Color(0xffFFFFFF),
+              //     borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(loc.download,
+                      //'Download',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Inter'),
+                    ),
                   ),
-                ),
-                Text( 
-                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                        ),
-                        child: MaterialButton(
+                  Text( 
+                    '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: TextStyle(fontFamily: 'Roboto',color: themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff444444)),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                          ),
+                          child: MaterialButton(
                           elevation: 0,
-                          color: themeProvider.darkTheme
-                              ? Color(0xff42425F)
-                              : Color(0xffF3F3F3),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: Text(loc.cancel, style: TextStyle(fontSize: 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                            color: themeProvider.darkTheme
+                                ? Color(0xff333333)
+                                : Color(0xffF3F3F3),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                            child: Text(loc.cancel, style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600, fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff444444))),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(
+                            //       10.0), // Adjust the radius as needed
+                            // ),
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: MaterialButton(
-                          color: Color(0xff00B134),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: Text(loc.download,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: MaterialButton(
+                            color:  themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),// Color(0xff00B134),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                            child: Text(loc.download,
+                              style: TextStyle(fontSize: 16,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),fontWeight: FontWeight.w600)),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(
+                            //       10.0), // Adjust the radius as needed
+                            // ),
+                            onPressed: () async {
+                              Navigator.of(context).pop(true);
+                            },
                           ),
-                          onPressed: () async {
-                            Navigator.of(context).pop(true);
-                          },
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
