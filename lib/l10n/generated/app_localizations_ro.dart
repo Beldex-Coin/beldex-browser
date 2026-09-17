@@ -531,6 +531,187 @@ class AppLocalizationsRo extends AppLocalizations {
   String get searchEngineUpdated => 'Motorul de căutare a fost actualizat cu succes!';
 
   @override
+  String get searchusing => 'Caută folosind';
+
+  @override
+  String get addTabToNewGroup => 'Adaugă fila într-un grup nou';
+
+  @override
+  String get invitePeople => 'Invită persoane';
+
+  @override
+  String get uploadFromGallery => 'Încarcă din galerie';
+
+  @override
+  String get noQRCodeFound => 'Nu a fost găsit niciun cod QR în imagine';
+
+  @override
+  String get searchBarPosition => 'Poziția barei de căutare';
+
+  @override
+  String get choosethePosition => 'Alege poziția barei de căutare';
+
+  @override
+  String get iPAddress => 'Adresă IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'P-ul meu';
+
+  @override
+  String get marketUpdate => 'Actualizare piață';
+
+  @override
+  String get searchYourTabs => 'Caută filele tale';
+
+  @override
+  String get newTabGroup => 'Grup nou de file';
+
+  @override
+  String get selectTab => 'Selectează fila';
+
+  @override
+  String get selectTabs => 'Selectează filele';
+
+  @override
+  String get deleteTabGroup => 'Șterge grupul de file';
+
+  @override
+  String get rename => 'Redenumește';
+
+  @override
+  String get renameGroup => 'Redenumește grupul';
+
+  @override
+  String get ungroupTab => 'Elimină fila din grup';
+
+  @override
+  String get deleteGroup => 'Șterge grupul';
+
+  @override
+  String get addToTabGroup => 'Adaugă la grupul de file';
+
+  @override
+  String get editGroupName => 'Editează numele grupului';
+
+  @override
+  String get editGroupColor => 'Editează culoarea grupului';
+
+  @override
+  String get closeTab => 'Închide fila';
+
+  @override
+  String get doYouWantToUngroup => 'Sigur dorești să separi acest grup de file?';
+
+  @override
+  String get ungroupTabGroup => 'Separă grupul de file';
+
+  @override
+  String get ungroup => 'Separă';
+
+  @override
+  String get deletetabGroup => 'Șterge grupul de file';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Adaugă la';
+
+  @override
+  String get tabs => 'File';
+
+  @override
+  String get done => 'Gata';
+
+  @override
+  String get create => 'Creează';
+
+  @override
+  String get groupColor => 'Culoarea grupului';
+
+  @override
+  String get groupName => 'Numele grupului';
+
+  @override
+  String get addtoNewTabGroup => 'Adaugă într-un grup nou de file';
+
+  @override
+  String get tabGroups => 'Grupuri de file';
+
+  @override
+  String get tabGroup => 'Grup de file';
+
+  @override
+  String get tabsSelected => 'Selectează filele';
+
+  @override
+  String get privateResearch => 'de ex. Cercetare privată';
+
+  @override
+  String get deselectAll => 'Deselectează tot';
+
+  @override
+  String get selected => 'Selectat';
+
+  @override
+  String get close => 'Închide';
+
+  @override
+  String get top => 'sus';
+
+  @override
+  String get bottom => 'jos';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Această acțiune va închide definitiv toate cele $tabCount file din „$tabGroupName”. Această acțiune nu poate fi anulată';
+  }
+
+  @override
+  String get changingNode => 'Se schimbă nodul';
+
+  @override
+  String get freeenameWebDomain => 'Domeniul Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Activează suportul pentru domeniul Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nu s-a putut descărca fișierul de inițializare Belnet. Verificați conexiunea și încercați din nou';
+
+  @override
+  String get couldNotEstablishConnection => 'Nu s-a putut stabili conexiunea Belnet. Încercați din nou';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Serviciul Belnet nu a putut fi pornit. Încercați din nou';
+
+  @override
+  String get exitNodeUnreachable => 'Nodul de ieșire nu este accesibil, se reconectează';
+
+  @override
+  String get tab => 'Filă';
+
+  @override
+  String get ungroupTabs => 'Degrupează filele';
+
+  @override
+  String get closeGroup => 'Închide grupul';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Sigur doriți să degrupați filele selectate din \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex este un ecosistem de aplicații descentralizate care pun accent pe protejarea confidențialității. Aplicația Browserul Beldex este una dintre componentele acestui ecosistem, care include și aplicații precum BChat, BelNet și protocolul Beldex. Browserul Beldex este poarta ta către o experiență online fluidă și confidențială, în care datele tale rămân exclusiv ale tale. Construit pe o infrastructură blockchain robustă, Browserul Beldex asigură utilizatorilor săi confidențialitate și anonimat.';
 
   @override
