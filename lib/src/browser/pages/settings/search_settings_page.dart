@@ -4,6 +4,7 @@ import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchEnging_screen.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/searchengine_icon_placeholder.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -67,115 +68,149 @@ class _SearchSettingsPageState extends State<SearchSettingsPage> {
     var settings = browserModel.getSettings();
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final loc = AppLocalizations.of(context)!;
-    return Scaffold(
-      //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context, loc.search, themeProvider),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(loc.searchEngine,
-                style: TextStyle(
-                    color: Color(0xff00BD40),
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                  height: 158,
-                  padding:
-                     const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
-                  decoration: BoxDecoration(
-                      color: themeProvider.darkTheme
-                          ?const Color(0xff292937)
-                          :const Color(0xffF3F3F3),
-                      borderRadius: BorderRadius.circular(15.0)),
-                  child:
-                      // LayoutBuilder(builder: ((context, constraints) {
-                      //   return
-                      Column(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: ListTile(
-                          //contentPadding: EdgeInsets.symmetric(vertical: 5),
-                          leading: SvgPicture.asset(
-                            'assets/images/find_on_page.svg',
-                            color: themeProvider.darkTheme
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          title: Text(loc.defaultSearchEngine,
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.normal),
-                          ),
-                          subtitle: Text(settings.searchEngine.name,
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w400)),
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => DefaultSearchEngine()))),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: ListTile(
-                          leading: SvgPicture.asset(
-                            'assets/images/shortcut.svg',
-                            color: themeProvider.darkTheme
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          title:  Text(loc.manageSearchShortcuts,
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.normal),
-                          ),
-                          subtitle: Text(loc.editEnginesVisible,
-                              //'Edit engines visible in the search menu',
-                              style: TextStyle(
-                                  fontSize: 11, fontWeight: FontWeight.w400)),
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ItemsScreen())),
-                        ),
-                      ),
-                    ],
-                  )
-                  //}))
-              
-                  ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Container())
-          ],
+    return Stack(
+      children: [
+           Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
         ),
       ),
+        Scaffold(
+          backgroundColor: Colors.transparent, //Color(0xff171720),
+          appBar: normalAppBar(context, loc.search, themeProvider,()=>Navigator.pop(context)),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(loc.searchEngine,
+                    style: TextStyle(
+                        color:themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff444444),
+                        fontSize: 14,fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: GlassCommonPanel(
+                    child: Container(
+                        height: 158,
+                        padding:
+                           const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 15),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                            // color: themeProvider.darkTheme
+                            //     ?const Color(0xff292937)
+                            //     :const Color(0xffF3F3F3),
+                           // borderRadius: BorderRadius.circular(15.0)
+                            ),
+                        child:
+                            // LayoutBuilder(builder: ((context, constraints) {
+                            //   return
+                            Column(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: ListTile(
+                                //contentPadding: EdgeInsets.symmetric(vertical: 5),
+                                leading: SvgPicture.asset(
+                                  'assets/images/find_on_page.svg',
+                                  color: themeProvider.darkTheme
+                                      ? Color(0xffACACAC)
+                                      : Color(0xff444444),
+                                ),
+                                title: Text(loc.defaultSearchEngine,
+                                  style: TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.w600,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                ),
+                                subtitle: Text(settings.searchEngine.name,
+                                    style: TextStyle(
+                                        fontSize: 12, fontWeight: FontWeight.w400, fontFamily: 'Roboto', color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff444444))),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => DefaultSearchEngine()))),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: ListTile(
+                                leading: SvgPicture.asset(
+                                  'assets/images/shortcut.svg',
+                                  color: themeProvider.darkTheme
+                                      ? Color(0xffACACAC)
+                                      : Color(0xff444444),
+                                ),
+                                title:  Text(loc.manageSearchShortcuts,
+                                  style: TextStyle(
+                                      fontSize: 12, fontWeight: FontWeight.w600,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                ),
+                                subtitle: Text(loc.editEnginesVisible,
+                                    //'Edit engines visible in the search menu',
+                                    style: TextStyle(
+                                       fontSize: 12, fontWeight: FontWeight.w400, fontFamily: 'Roboto', color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff444444))),
+                                onTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ItemsScreen())),
+                              ),
+                            ),
+                          ],
+                        )
+                        //}))
+                    
+                        ),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container())
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 AppBar normalAppBar(
-    BuildContext context, String title, DarkThemeProvider themeProvider) {
+    BuildContext context, String title, DarkThemeProvider themeProvider,VoidCallback onTap) {
       final theme = Theme.of(context);
   return AppBar(
-    centerTitle: true,
-    leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: SvgPicture.asset(
-          'assets/images/back.svg',
-          color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
-          height: 30,
-        )),
-    title: Text(title, style: theme.textTheme.bodyLarge),
+    backgroundColor: Colors.transparent,
+    automaticallyImplyLeading: false,
+    //centerTitle: true,
+    // leading:
+    //  IconButton(
+    //     onPressed: () => Navigator.pop(context),
+    //     padding: EdgeInsets.zero,
+    //     icon: SvgPicture.asset(
+    //       'assets/images/back.svg',
+    //       color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
+    //       height: 25,
+    //     )),
+    title: Row(
+      children: [
+        GestureDetector(
+          onTap: onTap,
+          child: SvgPicture.asset(
+            'assets/images/back.svg',
+            color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
+            height: 25,
+          ),
+        ),
+        SizedBox(width: 8,),
+        Text(title, style: theme.textTheme.bodyLarge!.copyWith(fontFamily: 'Inter',fontSize: 16)),
+      ],
+    ),
   );
 }
 
@@ -193,220 +228,280 @@ class _DefaultSearchEngineState extends State<DefaultSearchEngine> {
     var settings = browserModel.getSettings();
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final loc = AppLocalizations.of(context)!;
-    return Scaffold(
-      //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context, loc.defaultSearchEngine, themeProvider),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-              child: Text(loc.selectOne,
-                style: TextStyle(
-                    color: Color(0xff00BD40),
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            defaultSearchEngineList(themeProvider)
-          ],
+    return Stack(
+      children: [
+         Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
         ),
       ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: normalAppBar(context,
+           loc.defaultSearchEngine, 
+          themeProvider,
+          (){
+            Navigator.pop(context);
+          }),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
+                  child: Text(loc.selectOne,
+                   style: TextStyle(
+                        color:themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff444444),
+                        fontSize: 14,fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                defaultSearchEngineList(themeProvider)
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-Container defaultSearchEngineList(DarkThemeProvider themeProvider) {
+Widget defaultSearchEngineList(DarkThemeProvider themeProvider) {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     var settings = browserModel.getSettings();
     //var provider = Provider.of<SelectedItemsProvider>(context,listen: false);
     final addSearchEngineProvider = Provider.of<AddSearchEngineProvider>(context,listen: true);
     final loc = AppLocalizations.of(context)!;
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color:
-              themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3)),
-      padding: EdgeInsets.only(left: 15.0, right: 15, top: 15, bottom: 20),
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        itemCount:addSearchEngineProvider.allEngines.length + 1,  //SearchEngines.length + 1,
-        itemExtent: 43,
-        itemBuilder: (context, index) {
-             if (index == addSearchEngineProvider.allEngines.length //SearchEngines.length
-             ) {
-          return InkWell(
-            onTap: () {
-              Navigator.push(context,MaterialPageRoute(builder: (context)=> AddSearchEngineScreen()));
-              // your action to open "Add search engine" screen
-              print("Add Search Engine Clicked");
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: Icon(Icons.image,size: 22,color: Colors.transparent,
-                      
-                    ),
-                  ),
-                  Icon(Icons.add,size: 15, color: Color(0xff00BD40)),
-                  SizedBox(width: 3),
-                  Text( loc.addSearchEngine,
-                    //"Add Search Engine",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xff00BD40),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        }
-          bool isSelected = false;
-          // setState(() {
-          isSelected = addSearchEngineProvider.allEngines[index].name == settings.searchEngine.name  //SearchEngines[index].name == settings.searchEngine.name
-              ? true
-              : false;
-          //});
-           // final bool isNetwork = SearchEnginesIcons[index].startsWith('http://') || SearchEnginesIcons[index].startsWith('https://');
-          return ListTile(
-            leading: Container(
-              height: 15,
-              width: 15,
-              padding: EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Color(0xff00B134))),
-              child: isSelected
-                  ? Container(
-                      decoration: BoxDecoration(
-                          color:const Color(0xff00B134), shape: BoxShape.circle),
-                    )
-                  : SizedBox(),
-            ),
-            minLeadingWidth: 15,
-            onTap: () {
-              setState(() {
-                isSelected = true;
-                // if (SearchEngines.isNotEmpty) {
-                //   settings.searchEngine = SearchEngines[index];
-                // }
-               if(addSearchEngineProvider.allEngines.isNotEmpty){
-                settings.searchEngine = addSearchEngineProvider.allEngines[index];
-               }
-                browserModel.updateSettings(settings);
-              });
+    return GlassCommonPanel(
+      child: Container(
+        decoration: BoxDecoration(
+            //borderRadius: BorderRadius.circular(15.0),
+            color: Colors.transparent,
+            border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
 
-              browserModel.updateIconValue(addSearchEngineProvider.allEngines[index].assetIcon);
-              // if(index == 0){
-              //    provider.updateIconValue('assets/images/Google 1.svg');
-              // }else if(index == 1){
-              //    provider.updateIconValue('assets/images/Yahoo 1.svg');
-              // }else if(index == 2){
-              //   provider.updateIconValue('assets/images/Bing 1.svg');
-              // }else if(index == 3){
-              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
-              // }else if(index == 4){
-              //   provider.updateIconValue('assets/images/Ecosia.svg');
-              // }else if(index == 5){
-              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
-              // }else if(index == 6){
-              //   provider.updateIconValue('assets/images/DuckDuckGo 2.svg');
-              // }
-             
-            },
-            title: Container(
-              //color: Colors.yellow,
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: buildIcon(addSearchEngineProvider.allEngines[index].assetIcon,addSearchEngineProvider.allEngines[index].name)
-                    //  SvgPicture.asset(
-                    //   SearchEnginesIcons[index],
-                    //   height: 22,
-                    //   width: 22,
+               // themeProvider.darkTheme ? Color(0xff292937) : Color(0xffF3F3F3)
+                ),
+        padding: EdgeInsets.only(left: 10.0, right: 10, top: 15, bottom: 20),
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount:addSearchEngineProvider.allEngines.length + 1,  //SearchEngines.length + 1,
+          itemExtent: 43,
+          itemBuilder: (context, index) {
+               if (index == addSearchEngineProvider.allEngines.length //SearchEngines.length
+               ) {
+            return InkWell(
+              onTap: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context)=> AddSearchEngineScreen()));
+                // your action to open "Add search engine" screen
+                print("Add Search Engine Clicked");
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 10.0),
+                    //   child: Icon(Icons.image,size: 22,color: Colors.transparent,
+                        
+                    //   ),
                     // ),
-                  ),
-                  Text(
-                   addSearchEngineProvider.allEngines[index].name, //SearchEngines[index].name,
-                    style: TextStyle(
-                        color: themeProvider.darkTheme
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 17,
-                        fontWeight: FontWeight.normal),
-                  ),
-                ],
+                    Icon(Icons.add,size: 15, color: Color(0xff00BD40)),
+                    SizedBox(width: 3),
+                    Text( loc.addSearchEngine,
+                      //"Add Search Engine",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'Inter',
+                        color: themeProvider.darkTheme ? Color(0xffEBEBEB): Color(0xff0B0B0B),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            trailing: addSearchEngineProvider
-          .isUserEngine(addSearchEngineProvider.allEngines[index]) ? Semantics(
-            label: 'options',
-            child: PopupMenuButton<String>(
-               color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
-                  surfaceTintColor:
-            themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
-                  elevation: 14,
-            onSelected: (value) {
-              final engine =
-                  addSearchEngineProvider.allEngines[index];
-            
-              if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        AddSearchEngineScreen(editEngine: engine),
-                  ),
-                );
-              }
-            
-              if (value == 'delete') {
-                addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
-            
-                /// If deleted engine was selected → reset to Google
-                if (engine.name == settings.searchEngine.name) {
-                  settings.searchEngine = GoogleSearchEngine;
+            );
+          }
+            bool isSelected = false;
+            // setState(() {
+            isSelected = addSearchEngineProvider.allEngines[index].name == settings.searchEngine.name  //SearchEngines[index].name == settings.searchEngine.name
+                ? true
+                : false;
+            //});
+             // final bool isNetwork = SearchEnginesIcons[index].startsWith('http://') || SearchEnginesIcons[index].startsWith('https://');
+            return ListTile(
+              leading: Container(
+                height: 15,
+                width: 15,
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Color(0xff00B134))),
+                child: isSelected
+                    ? Container(
+                        decoration: BoxDecoration(
+                            color:const Color(0xff00B134), shape: BoxShape.circle),
+                      )
+                    : SizedBox(),
+              ),
+              minLeadingWidth: 15,
+              onTap: () {
+                setState(() {
+                  isSelected = true;
+                  // if (SearchEngines.isNotEmpty) {
+                  //   settings.searchEngine = SearchEngines[index];
+                  // }
+                 if(addSearchEngineProvider.allEngines.isNotEmpty){
+                  settings.searchEngine = addSearchEngineProvider.allEngines[index];
+                 }
                   browserModel.updateSettings(settings);
-                  browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
-                }
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
+                });
+      
+                browserModel.updateIconValue(addSearchEngineProvider.allEngines[index].assetIcon);
+               
+              },
+              title: Container(
+                //color: Colors.yellow,
                 child: Row(
                   children: [
-                    Icon(Icons.edit, size: 18),
-                    SizedBox(width: 8),
-                    Text(loc.edit),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete, size: 18,),
-                    SizedBox(width: 8),
-                    Text(loc.delete),
-                  ],
-                ),
-              ),
-            ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: buildIcon(addSearchEngineProvider.allEngines[index].assetIcon,addSearchEngineProvider.allEngines[index].name)
+                      //  SvgPicture.asset(
+                      //   SearchEnginesIcons[index],
+                      //   height: 22,
+                      //   width: 22,
+                      // ),
                     ),
-          ): SizedBox.shrink(),
-          );
-        },
+                    Text(
+                     addSearchEngineProvider.allEngines[index].name, //SearchEngines[index].name,
+                      style: TextStyle(
+                          color: themeProvider.darkTheme
+                              ? Color(0xffEBEBEB)
+                              : Color(0xff0B0B0B),
+                          fontSize: 15,fontFamily: 'Inter',
+                          fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
+              ),
+              trailing: addSearchEngineProvider
+            .isUserEngine(addSearchEngineProvider.allEngines[index]) ? Semantics(
+              label: 'options',
+              child: PopupMenuButton<String>(
+                 menuPadding: EdgeInsets.zero,
+                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9):  Color(0xffEBEBEB).withOpacity(0.9),
+  elevation: 0,
+  shadowColor: Colors.transparent,
+  surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :  Color(0xffEBEBEB).withOpacity(0.9),
+       // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+        constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
+             // icon: SvgPicture.asset('assets/images/ai-icons/new/threedot.svg',color:themeProvider.darkTheme ? Colors.white : Colors.black),// Icon(Icons.more_horiz,
+                  //color: themeProvider.darkTheme ? Colors.white : Colors.black),
+        //onSelected: _popupMenuChoiceAction,
+        offset: Offset(0, 47),
+        shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+    side: BorderSide(
+      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+      width: 1,
+    ),
+  ),
+              //    color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
+              //       surfaceTintColor:
+              // themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
+              //       elevation: 14,
+              onSelected: (value) {
+                final engine =
+                    addSearchEngineProvider.allEngines[index];
+              
+                if (value == 'edit') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AddSearchEngineScreen(editEngine: engine),
+                    ),
+                  );
+                }
+              
+                if (value == 'delete') {
+                 
+                  addSearchEngineProvider.removeSessionEngineIfSelected(engine);
+                      addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
+                                      
+                      /// If deleted engine was selected → reset to Google
+                      if (engine.name == settings.searchEngine.name) {
+                        settings.searchEngine = GoogleSearchEngine;
+                        browserModel.updateSettings(settings);
+                        browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
+                      }
+                 
+                  // addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
+              
+                  // /// If deleted engine was selected → reset to Google
+                  // if (engine.name == settings.searchEngine.name) {
+                  //   settings.searchEngine = GoogleSearchEngine;
+                  //   browserModel.updateSettings(settings);
+                  //   browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
+                  // }
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  height: 35,
+                  padding: EdgeInsets.zero,
+                  child: GlassSettingPanel(
+                     color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+                    child: Container(
+                      height: 35,
+                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                      child: 
+                      Row(
+                        children: [
+                          //Icon(Icons.edit,color: Colors.transparent,),
+                          SizedBox(width: 8),
+                          Text(loc.edit,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  height: 35,
+                  padding: EdgeInsets.zero,
+                  child: GlassSettingPanel(
+                     color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+                    child: Container(
+                      height: 35,
+                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                      child: Row(
+                        children: [
+                         // Icon(Icons.delete,color: Colors.transparent,),
+                          SizedBox(width: 8),
+                          Text(loc.delete,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+                      ),
+            ): SizedBox.shrink(),
+            );
+          },
+        ),
       ),
     );
   }
@@ -585,7 +680,7 @@ class _SearchShortcutsState extends State<SearchShortcuts> {
     final loc = AppLocalizations.of(context)!;
     return Scaffold(
       //backgroundColor: Color(0xff171720),
-      appBar: normalAppBar(context,loc.manageSearchShortcuts, themeProvider),
+      appBar: normalAppBar(context,loc.manageSearchShortcuts, themeProvider,()=> Navigator.pop(context)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
         child: Column(

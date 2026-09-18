@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class CustomPopupMenuItem<T> extends PopupMenuEntry<T> {
@@ -87,4 +89,36 @@ class CustomPopupMenuItemState<T, W extends CustomPopupMenuItem<T>>
       child: item,
     );
   }
+}
+
+
+class GlassPopupMenuItem<T> extends PopupMenuItem<T> {
+  GlassPopupMenuItem({
+    super.key,
+    super.value,
+    super.enabled,
+    super.height,
+    final EdgeInsets padding = EdgeInsets.zero,
+    required Widget child,
+  }) : super(
+          padding: EdgeInsets.zero,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 25,
+                sigmaY: 25,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.08),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.15),
+                  ),
+                ),
+                child: child,
+              ),
+            ),
+          ),
+        );
 }

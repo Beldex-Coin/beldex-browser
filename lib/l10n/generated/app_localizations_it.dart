@@ -531,6 +531,187 @@ class AppLocalizationsIt extends AppLocalizations {
   String get searchEngineUpdated => 'Motore di ricerca aggiornato con successo!';
 
   @override
+  String get searchusing => 'Cerca usando';
+
+  @override
+  String get addTabToNewGroup => 'Aggiungi la scheda a un nuovo gruppo';
+
+  @override
+  String get invitePeople => 'Invita persone';
+
+  @override
+  String get uploadFromGallery => 'Carica dalla galleria';
+
+  @override
+  String get noQRCodeFound => 'Nessun codice QR trovato nell\'immagine';
+
+  @override
+  String get searchBarPosition => 'Posizione della barra di ricerca';
+
+  @override
+  String get choosethePosition => 'Scegli la posizione della barra di ricerca';
+
+  @override
+  String get iPAddress => 'Indirizzo IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'Il mio IP';
+
+  @override
+  String get marketUpdate => 'Aggiornamento del mercato';
+
+  @override
+  String get searchYourTabs => 'Cerca tra le tue schede';
+
+  @override
+  String get newTabGroup => 'Nuovo gruppo di schede';
+
+  @override
+  String get selectTab => 'Seleziona scheda';
+
+  @override
+  String get selectTabs => 'Seleziona schede';
+
+  @override
+  String get deleteTabGroup => 'Elimina gruppo di schede';
+
+  @override
+  String get rename => 'Rinomina';
+
+  @override
+  String get renameGroup => 'Rinomina gruppo';
+
+  @override
+  String get ungroupTab => 'Rimuovi la scheda dal gruppo';
+
+  @override
+  String get deleteGroup => 'Elimina gruppo';
+
+  @override
+  String get addToTabGroup => 'Aggiungi al gruppo di schede';
+
+  @override
+  String get editGroupName => 'Modifica nome del gruppo';
+
+  @override
+  String get editGroupColor => 'Modifica colore del gruppo';
+
+  @override
+  String get closeTab => 'Chiudi scheda';
+
+  @override
+  String get doYouWantToUngroup => 'Vuoi davvero separare questo gruppo di schede?';
+
+  @override
+  String get ungroupTabGroup => 'Separa gruppo di schede';
+
+  @override
+  String get ungroup => 'Separa';
+
+  @override
+  String get deletetabGroup => 'Elimina gruppo di schede';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Aggiungi a';
+
+  @override
+  String get tabs => 'Schede';
+
+  @override
+  String get done => 'Fatto';
+
+  @override
+  String get create => 'Crea';
+
+  @override
+  String get groupColor => 'Colore del gruppo';
+
+  @override
+  String get groupName => 'Nome del gruppo';
+
+  @override
+  String get addtoNewTabGroup => 'Aggiungi a un nuovo gruppo di schede';
+
+  @override
+  String get tabGroups => 'Gruppi di schede';
+
+  @override
+  String get tabGroup => 'Gruppo di schede';
+
+  @override
+  String get tabsSelected => 'Schede selezionate';
+
+  @override
+  String get privateResearch => 'Es. Ricerca privata';
+
+  @override
+  String get deselectAll => 'Deseleziona tutto';
+
+  @override
+  String get selected => 'Selezionato';
+
+  @override
+  String get close => 'Chiudi';
+
+  @override
+  String get top => 'in alto';
+
+  @override
+  String get bottom => 'in basso';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Questa azione chiuderà definitivamente tutte le $tabCount schede all\'interno di “$tabGroupName”. Questa azione non può essere annullata.';
+  }
+
+  @override
+  String get changingNode => 'Cambio nodo..';
+
+  @override
+  String get freeenameWebDomain => 'Dominio FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Abilita il supporto per il dominio FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Impossibile scaricare il file bootstrap di Belnet. Verifica la connessione e riprova';
+
+  @override
+  String get couldNotEstablishConnection => 'Impossibile stabilire la connessione a Belnet. Riprova';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Impossibile avviare il servizio Belnet. Riprova';
+
+  @override
+  String get exitNodeUnreachable => 'Uscita: nodo irraggiungibile, riconnessione in corso';
+
+  @override
+  String get tab => 'Scheda';
+
+  @override
+  String get ungroupTabs => 'Rimuovi schede dal gruppo';
+
+  @override
+  String get closeGroup => 'Chiudi gruppo';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Vuoi davvero rimuovere le schede selezionate da \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex è un ecosistema di applicazioni decentralizzate e orientate alla privacy. L’app Browser Beldex è una delle applicazioni di questo ecosistema, che comprende anche app come BChat, BelNet e il protocollo Beldex. Il Browser Beldex è la tua porta d’accesso a un’esperienza online fluida e riservata, dove i tuoi dati rimangono esclusivamente tuoi. Costruito su un’infrastruttura blockchain robusta, il browser Beldex garantisce riservatezza e anonimato agli utenti.';
 
   @override

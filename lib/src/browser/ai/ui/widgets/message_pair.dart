@@ -6,6 +6,7 @@ import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/message_body.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -100,180 +101,247 @@ static bool _isSharing = false;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0
       ),
-      child: Container(
-        decoration: BoxDecoration(
-          //color: ColorConstants.grey7A8194,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color:themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA))
-        ),
-        //padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-           
-           Padding(
-             padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
-             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Row(
-                  children: [
-                    SvgPicture.asset(themeProvider.darkTheme ? IconConstants.userIconDark : IconConstants.userIconWhite),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(loc.you,style: TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',),),
-                    ),
-                    Spacer(),
-
-                    GestureDetector(
-                      onTap: ()=> copyText(userMessage.text,loc),
-                      child: SvgPicture.asset(IconConstants.copyIconDark)),
-
-                      Padding(
-                        padding: const EdgeInsets.only(left:10.0),
-                        child: Visibility(
-                          visible: userMessage.text.isNotEmpty && modelMessage.text.isNotEmpty ,
-                          child: GestureDetector(
-                          onTap: _isSharing ? null : ()=> _shareContent(userMessage.text, modelMessage.text),
-                        //   ()async{
-                        //     //Share.share('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}', subject:'');
-                        //  ShareResult result =  await Share.shareWithResult('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}');
-                         
-                        //   },
-                          child: SvgPicture.asset(IconConstants.shareIcon)),
-                        ),
-                      )
-                  ],
-                 ),
-               
-             userMessage.text.contains(webviewModel.title.toString()) || userMessage.text.contains('null - Summarise page') ? Column(
+      child: GlassGroupPanel(
+        color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4),
+        child: Container(
+          decoration: BoxDecoration(
+            //color: ColorConstants.grey7A8194,
+            //borderRadius: BorderRadius.circular(12),
+            //border: Border.all(color:themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA))
+          ),
+          //padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+             
+             Padding(
+               padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
+               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical:8.0),
-                    child: Text(loc.summariseThisPage,style: TextStyle(fontFamily: 'Poppins'),),
-                  ),
-                  Container(
-                    //height: 30,
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color:themeProvider.darkTheme ? Color(0xff292937): Color(0xffF3F3F3),
-                      border: Border.all(
-                        color:themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDDDDDD)
-                      ),
-                      borderRadius: BorderRadius.circular(8.0)
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right:8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child:  Image.network(webviewModel.favicon?.url.toString() ?? '',height: 20,width: 20,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container();//Icon(Icons.)
-                            },
-                            // loadingBuilder: (context, child, loadingProgress) {
-                            //   return ;
-                            // },
-                            ),
-                          ),
-                        ),
-                        Expanded(child: Text(webviewModel.title ?? 'Summarise ')),
-                      ],
-                    ),
-                  )
-                ],
-               ):
-               Padding(
-                 padding: const EdgeInsets.symmetric(vertical :8.0),
-                 child: Text(userMessage.text,style: TextStyle( fontSize: 14,
-                  fontFamily: 'Poppins'),),
-               ),
-            //      MessageBody(
-            //   isLoading: false,
-            //   message: userMessage,
-            //   topLeft: 20,
-            //   topRight: 20,
-            //   bottomLeft: 20,
-            //   model: model,
-            //   bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
-            // )
-               ],
-             ),
-           ),
-            SizedBox(
-              //color: Colors.green,
-              height: 2,
-              child: Divider(
-                
-                color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
-            ),
-
-            // Padding(
-            //  padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
-            // child: 
-             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Padding(
-                   padding:const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
-                   child: Row(
+                 children: [
+                   Row(
                     children: [
-                      SvgPicture.asset(IconConstants.beldexAILogoSvg,
-                      width: 18,
-                      height: 18,
-                      ),
+                      SvgPicture.asset(themeProvider.darkTheme ? IconConstants.userIconDark : IconConstants.userIconWhite),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(loc.beldexAI,
-                          //StringConstants.beldexAI,
-                          style : TextStyle(color: Color(0xff9595B5),fontFamily: 'Poppins',
-                        ),),
+                        child: Text(loc.you,style: TextStyle(color: Color(0xff8D8D8D),fontFamily: 'Inter',),),
                       ),
                       Spacer(),
-                     modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
-                     if(modelMessage.text.isNotEmpty){
-                      copyText(modelMessage.text,loc);
-                     }
-                      },
-                       child: SvgPicture.asset(IconConstants.copyIconDark)):SizedBox()
-                      
+        
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: GestureDetector(
+                          onTap: ()=> copyText(userMessage.text,loc),
+                          child: SvgPicture.asset(IconConstants.copyIconDark,color: Color(0xff8D8D8D),)),
+                      ),
+        
+                        Padding(
+                          padding: const EdgeInsets.only(left:10.0,),
+                          child: Visibility(
+                            visible: userMessage.text.isNotEmpty && modelMessage.text.isNotEmpty ,
+                            child: GestureDetector(
+                            onTap: _isSharing ? null : ()=> _shareContent(userMessage.text, modelMessage.text),
+                          //   ()async{
+                          //     //Share.share('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}', subject:'');
+                          //  ShareResult result =  await Share.shareWithResult('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}');
+                           
+                          //   },
+                            child: SvgPicture.asset(IconConstants.shareIcon,color: Color(0xff8D8D8D),)),
+                          ),
+                        )
                     ],
                    ),
-                 ),
-                 modelMessage.text.isNotEmpty || modelMessage.image != null
-                 ? 
-                MessageBody(
-                    isLoading: true,
-                    message: modelMessage,
-                    topLeft: 20,
-                    topRight: 20,
-                    bottomLeft: 20,
-                    model: model,
-                    bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
-                  )
-                : 
-                Padding(
-                  padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    decoration: BoxDecoration(
-                     color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-                     borderRadius: BorderRadius.circular(12.0)
+                 
+               userMessage.text.contains(webviewModel.title.toString()) || userMessage.text.contains('null - Summarise page') ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical:8.0),
+                      child: Text(loc.summariseThisPage,style: TextStyle(fontFamily: 'Inter'),),
                     ),
-                                padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
-                                child: LoadingAnimationWidget.waveDots(
-                  color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
-                  size: 30,
-                                ),
+                    Container(
+                      //height: 30,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color:themeProvider.darkTheme ? Color(0xff222222): Color(0xffFFFFFF),
+                        border: Border.all(
+                          color:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)
+                        ),
+                        //borderRadius: BorderRadius.circular(8.0)
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right:8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child:  Image.network(webviewModel.favicon?.url.toString() ?? '',height: 20,width: 20,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container();//Icon(Icons.)
+                              },
+                              // loadingBuilder: (context, child, loadingProgress) {
+                              //   return ;
+                              // },
                               ),
-                ),
-               ],
+                            ),
+                          ),
+                          Expanded(child: Text(webviewModel.title ?? 'Summarise ', style: TextStyle(fontFamily: 'Inter',fontSize: 14),)),
+                        ],
+                      ),
+                    )
+                  ],
+                 ):
+                 Padding(
+                   padding: const EdgeInsets.symmetric(vertical :8.0),
+                   child: SelectableText(userMessage.text,
+                   style: TextStyle( fontSize: 14,
+                    fontFamily: 'Inter'),
+                     contextMenuBuilder: (
+    BuildContext context,
+    EditableTextState editableTextState,
+  ) {
+    return AdaptiveTextSelectionToolbar(
+      anchors: editableTextState.contextMenuAnchors,
+      children: [
+        // Copy
+        TextSelectionToolbarTextButton(
+          padding: const EdgeInsets.all(8),
+          onPressed: () {
+            editableTextState.copySelection(
+              SelectionChangedCause.toolbar,
+            );
+          },
+          child: const Text('Copy'),
+        ),
+
+        // Select All
+        TextSelectionToolbarTextButton(
+          padding: const EdgeInsets.all(8),
+          onPressed: () {
+            editableTextState.selectAll(
+              SelectionChangedCause.toolbar,
+            );
+          },
+          child: const Text('Select All'),
+        ),
+
+        // Share
+        TextSelectionToolbarTextButton(
+          padding: const EdgeInsets.all(8),
+          onPressed: () {
+            final selectedText = editableTextState
+                .textEditingValue
+                .selection
+                .textInside(
+                  editableTextState.textEditingValue.text,
+                );
+
+            Share.share(
+              selectedText.isNotEmpty
+                  ? selectedText
+                  : userMessage.text,
+            );
+
+            editableTextState.hideToolbar();
+          },
+          child: const Text('Share'),
+        ),
+      ],
+    );
+  },
+                    
+                    
+                    ),
+                 ),
+              //      MessageBody(
+              //   isLoading: false,
+              //   message: userMessage,
+              //   topLeft: 20,
+              //   topRight: 20,
+              //   bottomLeft: 20,
+              //   model: model,
+              //   bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
+              // )
+                 ],
+               ),
              ),
-          // ),
-           
-          ],
+              SizedBox(
+                //color: Colors.green,
+                height: 2,
+                child: Divider(
+                  
+                  color: themeProvider.darkTheme ? Color(0xff333333) : Color(0xffD4D4D4)),
+              ),
+        
+              // Padding(
+              //  padding: const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
+              // child: 
+               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Padding(
+                     padding:const EdgeInsets.only(left:15.0,right:15.0,top:15.0,bottom: 10),
+                     child: Row(
+                      children: [
+                        SvgPicture.asset(IconConstants.beldexAILogoSvg,
+                        width: 18,
+                        height: 18,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(loc.beldexAI,
+                            //StringConstants.beldexAI,
+                            style : TextStyle(color: Color(0xff8D8D8D),fontFamily: 'Inter',
+                          ),),
+                        ),
+                        Spacer(),
+                       modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
+                       if(modelMessage.text.isNotEmpty){
+                        copyText(modelMessage.text,loc);
+                       }
+                        },
+                         child: SvgPicture.asset(IconConstants.copyIconDark,color: Color(0xff8D8D8D),)):SizedBox()
+                        
+                      ],
+                     ),
+                   ),
+                   modelMessage.text.isNotEmpty || modelMessage.image != null
+                   ? 
+                  MessageBody(
+                      isLoading: true,
+                      message: modelMessage,
+                      topLeft: 20,
+                      topRight: 20,
+                      bottomLeft: 20,
+                      model: model,
+                      bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
+                    )
+                  : 
+                  Center(
+                    child: Padding(
+                      padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 15),
+                        decoration: BoxDecoration(
+                         color://themeProvider.darkTheme ?
+                          Color(0xff333333),// : Color(0xffF3F3F3),
+                         borderRadius: BorderRadius.circular(20.0)
+                        ),
+                                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+                                    child: LoadingAnimationWidget.waveDots(
+                      color://themeProvider.darkTheme ?
+                       Color(0xff8D8D8D),// : Color(0xffACACAC),
+                      size: 30,
+                                    ),
+                                  ),
+                    ),
+                  ),
+                 ],
+               ),
+            // ),
+             
+            ],
+          ),
         ),
       ),
     );

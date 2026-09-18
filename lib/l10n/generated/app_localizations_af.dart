@@ -531,6 +531,187 @@ class AppLocalizationsAf extends AppLocalizations {
   String get searchEngineUpdated => 'Soekenjin suksesvol opgedateer!';
 
   @override
+  String get searchusing => 'Soek met';
+
+  @override
+  String get addTabToNewGroup => 'Voeg oortjie by nuwe groep';
+
+  @override
+  String get invitePeople => 'Nooi mense';
+
+  @override
+  String get uploadFromGallery => 'Laai vanaf galery op';
+
+  @override
+  String get noQRCodeFound => 'Geen QR-kode in prent gevind nie';
+
+  @override
+  String get searchBarPosition => 'Soekbalkposisie';
+
+  @override
+  String get choosethePosition => 'Kies die posisie van die soekbalk';
+
+  @override
+  String get iPAddress => 'IP-adres';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'My IP';
+
+  @override
+  String get marketUpdate => 'Markopdatering';
+
+  @override
+  String get searchYourTabs => 'Soek jou oortjies';
+
+  @override
+  String get newTabGroup => 'Nuwe oortjiegroep';
+
+  @override
+  String get selectTab => 'Kies oortjies';
+
+  @override
+  String get selectTabs => 'Kies oortjies';
+
+  @override
+  String get deleteTabGroup => 'Verwyder oortjiegroep';
+
+  @override
+  String get rename => 'Hernoem';
+
+  @override
+  String get renameGroup => 'Hernoem groep';
+
+  @override
+  String get ungroupTab => 'Ontbondel oortjie';
+
+  @override
+  String get deleteGroup => ' Verwyder groep';
+
+  @override
+  String get addToTabGroup => 'Voeg by oortjiegroep';
+
+  @override
+  String get editGroupName => 'Wysig groepnaam';
+
+  @override
+  String get editGroupColor => 'Wysig groepkleur';
+
+  @override
+  String get closeTab => 'Sluit oortjies';
+
+  @override
+  String get doYouWantToUngroup => 'Wil jy werklik hierdie oortjiegroep ontbondel?';
+
+  @override
+  String get ungroupTabGroup => 'Ontbondel oortjiegroep';
+
+  @override
+  String get ungroup => 'Ontbondel';
+
+  @override
+  String get deletetabGroup => 'Verwyder oortjiegroep';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Voeg by';
+
+  @override
+  String get tabs => 'Oortjies';
+
+  @override
+  String get done => 'Klaar';
+
+  @override
+  String get create => 'Skep';
+
+  @override
+  String get groupColor => 'Groepkleur';
+
+  @override
+  String get groupName => 'Groepnaam';
+
+  @override
+  String get addtoNewTabGroup => 'Voeg by nuwe oortjiegroep';
+
+  @override
+  String get tabGroups => 'Oortjiegroepe';
+
+  @override
+  String get tabGroup => 'Oortjiegroep';
+
+  @override
+  String get tabsSelected => 'Oortjies gekies';
+
+  @override
+  String get privateResearch => 'bv. Privaat navorsing';
+
+  @override
+  String get deselectAll => 'Ontkies alles';
+
+  @override
+  String get selected => 'Gekies';
+
+  @override
+  String get close => 'Sluit';
+
+  @override
+  String get top => ' bo';
+
+  @override
+  String get bottom => 'onder';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Hierdie handeling sal al $tabCount oortjies binne “$tabGroupName” permanent sluit. Dit kan nie ongedaan gemaak word nie';
+  }
+
+  @override
+  String get changingNode => 'Besig om nodus te verander';
+
+  @override
+  String get freeenameWebDomain => 'Freename Web3-domein';
+
+  @override
+  String get enableFreeNameWeb => 'Aktiveer FreeName Web3-domeinondersteuning';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Kon nie die Belnet-opstartlêer aflaai nie. Kontroleer asseblief u verbinding en probeer weer';
+
+  @override
+  String get couldNotEstablishConnection => 'Kon nie Belnet-verbinding tot stand bring nie. Probeer asseblief weer';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Die Belnet-diens kon nie begin word nie. Probeer asseblief weer';
+
+  @override
+  String get exitNodeUnreachable => 'Uitgangsknoop onbereikbaar, herverbind';
+
+  @override
+  String get tab => 'Oortjie';
+
+  @override
+  String get ungroupTabs => 'Ontgroepeer oortjies';
+
+  @override
+  String get closeGroup => 'Maak groep toe';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Wil jy regtig die geselekteerde oortjies uit \$$tabGroupName ontgroepeer?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex is ’n ekosisteem van gedesentraliseerde en vertroulikheid-bewarende toepassings. Die Beldex Browser-toepassing is een van hierdie ekosisteem, wat ook toepassings soos BChat, BelNet en die Beldex-protokol insluit. Die Beldex Browser is jou toegangspoort tot ’n naatlose en vertroulike aanlyn ervaring, waar jou data uitsluitlik joune bly. Gebou op ’n robuuste blokkettinginfrastruktuur, verseker die Beldex Browser vertroulikheid en anonimiteit vir sy gebruikers.';
 
   @override
@@ -555,7 +736,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get theBeldexBrowserIsCrossplatform => 'Die Beldex Browser is kruisplatform, aangesien dit vir beide mobiele en lessenaar-toestelle ontwikkel word.';
 
   @override
-  String get titleKeyFeature => '\nKey Features';
+  String get titleKeyFeature => '\nBelangrike kenmerke';
 
   @override
   String get followingAreTheFeatures => '\nHieronder volg die kenmerke wat beskikbaar is in die Beta-weergawe van die Beldex-blaaiertoepassing. Meer kenmerke sal by die alfa-weergawe gevoeg word.\n';

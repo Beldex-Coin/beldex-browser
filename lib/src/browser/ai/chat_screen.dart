@@ -10,6 +10,7 @@ import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_preference.dart';
@@ -419,6 +420,8 @@ void callSummaryRetry(BuildContext context) async {
     //   },
     //    builder: (context, model, child) {
            return SafeArea(
+            top: true,
+            bottom: false,
         child: DraggableScrollableSheet(
           initialChildSize: 0.95, // Initial size of the sheet
           minChildSize: 0.3, // Minimum size of the sheet
@@ -426,12 +429,24 @@ void callSummaryRetry(BuildContext context) async {
           builder: (context, scrollController) {
             return Stack(
               children: [
+ Positioned.fill(
+        child: themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ):Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+
+
                 Container(
                   decoration: BoxDecoration(
-                    border: Border(
-                        top: BorderSide(color: Color(0xff42425F), width: 0.7)),
-                    color: themeProvider.darkTheme ? Color(0xff45454E) : Color(0xffF3F3F3), // Background color of the sheet
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    //border: Border(
+                        //top: BorderSide(color: Color(0xff42425F), width: 0.7)),
+                    color:Colors.transparent, //themeProvider.darkTheme ? Color(0xff45454E) : Color(0xffF3F3F3), // Background color of the sheet
+                   // borderRadius: BorderRadius.vertical(top: Radius.circular(20)
+                   // ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,9 +467,10 @@ void callSummaryRetry(BuildContext context) async {
                               //StringConstants.beldexAI,
                               style: TextStyle(
                                // color: Colors.white,
-                               fontFamily: 'Poppins',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                               fontFamily: 'Inter',
+                                fontSize: 15,
+                                color: themeProvider.darkTheme ?Color(0xffEBEBEB) : Color(0xff0B0B0B),
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             Spacer(),
@@ -465,18 +481,19 @@ void callSummaryRetry(BuildContext context) async {
                                       vertical: 9.0, horizontal: 15.0),
                                   margin: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      color: themeProvider.darkTheme ? Color(0xff2C2C3B): Color(0xffFDFDFD),
-                                      borderRadius: BorderRadius.circular(10)),
+                                      color: themeProvider.darkTheme ? Color(0xff222222): Color(0xff222222),
+                                      //borderRadius: BorderRadius.circular(10)
+                                      ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       FittedBox(
                                         fit: BoxFit.scaleDown,
-                                        child: Text(loc.hideSummarise,maxLines:1,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',fontSize: 10,overflow: TextOverflow.ellipsis,))),
+                                        child: Text(loc.hideSummarise,maxLines:1,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Inter',fontSize: 10,overflow: TextOverflow.ellipsis,color: Color(0xffEBEBEB),))),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8.0),
                                         child: SvgPicture.asset(
-                                            IconConstants.summariseIcon, color: themeProvider.darkTheme ? Colors.white:Colors.black,),
+                                            IconConstants.summariseIcon, color: Color(0xffEBEBEB),),
                                       )
                                     ],
                                   )),
@@ -485,96 +502,103 @@ void callSummaryRetry(BuildContext context) async {
                         ),
                       ),
                       Divider(
-                        color: themeProvider.darkTheme ? Color(0xff9B9B9B): Color(0xff9B9B9B),
-                        height: 0.7,
+                        color: themeProvider.darkTheme ? Color(0xff333333): Color(0xffD4D4D4),
+                        height: 0.5,
                       ),
-                      title == 'Erroring' ?  Expanded(
-                        child: Center(
-                          child:Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 8.0),
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(StringConstants.retryMessage, //loc.thereWasAnErrorGenerateResponse,
-                                  textAlign: TextAlign.center,maxLines: 2,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Poppins',color:themeProvider.darkTheme ? Color(0xff9B9B9B) :Color(0xffACACAC)),)),
-                              ),
-                              // Padding(
-                              //            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              //            child: Center(
-                              //              child: ElevatedButton(
-                              //               onPressed: () {
-                              //                  callSummaryRetry(context);
-                              //                  setState(() {
-                              //                    title = '';
-                              //                  });
-                                               
-                              //               },
-                              //               child: Text("Retry"),
-                              //              ),
-                              //            ),
-                              // ),
-                              GestureDetector(
-                onTap: (){
-                  callSummaryRetry(context);
-                  setState(() {
-                   title = '';
-                   copyResult = '';
-                   });                              
-                },
-                child: 
-                Container(
-  margin: const EdgeInsets.symmetric(vertical: 10),
-  padding: const EdgeInsets.symmetric(
-    vertical: 9.0,
-    horizontal: 12.0,
-  ),
-  decoration: BoxDecoration(
-    color: themeProvider.darkTheme
-        ? const Color(0xff282836)
-        : const Color(0xffFFFFFF),
-    borderRadius: BorderRadius.circular(12),
-  ),
-  child: Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      SvgPicture.asset(
-        'assets/images/ai-icons/retry.svg',
-        width: 18,
-        height: 18,
-      ),
-      const SizedBox(width: 8),
-      Text(
-        loc.retry,
-        style: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Color(0xff00B134),
-        ),
-      ),
-    ],
-  ),
-),
-                // Container(
-                //   margin: EdgeInsets.symmetric(vertical: 10),
-                //    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
-                //    width:double.infinity,// 93,
-                //    decoration: BoxDecoration(
-                //     color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-                //     borderRadius: BorderRadius.circular(12)
-                //    ),
-                //      child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //        children: [
-                //         SvgPicture.asset('assets/images/ai-icons/retry.svg'),
-                //          Text(loc.retry,style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
-                //        ],
-                //      ),
-                // ),
-              ),
-                            ],
-                          )
+                      title == 'Erroring' ?  
+                      Expanded(
+                        child: GlassSettingPanel(
+                          color:themeProvider.darkTheme ? Color(0xff111111).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4),
+                          child: Center(
+                            child:Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset('assets/images/ai-icons/errors.svg',height: 40,width: 38,color: Color(0xff737373)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical:10.0,horizontal: 8.0),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(StringConstants.retryMessage, //loc.thereWasAnErrorGenerateResponse,
+                                    textAlign: TextAlign.center,maxLines: 2,overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: 'Inter',color:themeProvider.darkTheme ? Color(0xff8D8D8D): Color(0xff737373),fontSize: 14),)),
+                                ),
+                                // Padding(
+                                //            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                //            child: Center(
+                                //              child: ElevatedButton(
+                                //               onPressed: () {
+                                //                  callSummaryRetry(context);
+                                //                  setState(() {
+                                //                    title = '';
+                                //                  });
+                                                 
+                                //               },
+                                //               child: Text("Retry"),
+                                //              ),
+                                //            ),
+                                // ),
+                                GestureDetector(
+                                          onTap: (){
+                                            callSummaryRetry(context);
+                                            setState(() {
+                                             title = '';
+                                             copyResult = '';
+                                             });                              
+                                          },
+                                          child: 
+                                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 9.0,
+                              horizontal: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: themeProvider.darkTheme
+                                  ? const Color(0xff111111)
+                                  : const Color(0xffFFFFFF),
+                                  border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))
+                             // borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  loc.retry,
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    color:themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                SvgPicture.asset(
+                                  'assets/images/ai-icons/retry.svg',
+                                  width: 18,
+                                  height: 18,
+                                ),
+                                
+                                
+                              ],
+                            ),
+                          ),
+                                          // Container(
+                                          //   margin: EdgeInsets.symmetric(vertical: 10),
+                                          //    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
+                                          //    width:double.infinity,// 93,
+                                          //    decoration: BoxDecoration(
+                                          //     color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
+                                          //     borderRadius: BorderRadius.circular(12)
+                                          //    ),
+                                          //      child: Row(
+                                          //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          //        children: [
+                                          //         SvgPicture.asset('assets/images/ai-icons/retry.svg'),
+                                          //          Text(loc.retry,style: TextStyle(fontFamily: 'Poppins',color: Color(0xff00B134)),),
+                                          //        ],
+                                          //      ),
+                                          // ),
+                                        ),
+                              ],
+                            )
+                          ),
                         ),
                       )
                       :
@@ -584,30 +608,36 @@ void callSummaryRetry(BuildContext context) async {
                           thumbVisibility:
                               true, //!_isLoading, //?? false, //: true,
       
-                          thumbColor:themeProvider.darkTheme ? Color(0xff45454E) : Color(0xffC5C5C5),
-                          trackColor:themeProvider.darkTheme ? Color(0xff2C2C3B) : Color(0xffFBFBFB),
+                          thumbColor:themeProvider.darkTheme ? Color(0xff666666) : Color(0xffACACAC),
+                          trackColor:themeProvider.darkTheme ? Color(0xff222222) : Color(0xffEBEBEB),
                           trackVisibility: true,
                           crossAxisMargin: 0.9,
                           //thickness: 3.0,
                           mainAxisMargin: 0.8,
                           // minThumbLength: 20,
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(5.0),
                           radius: Radius.circular(5),
                           child: SingleChildScrollView(
                             controller: scrollController,
-                            child: urlSummaryProvider.isLoading  //_isLoading
-                                ? Container(
-                  margin: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                   color:themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFDFDFD),
-                   borderRadius: BorderRadius.circular(12.0)
-                  ),
-              padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
-              child: LoadingAnimationWidget.waveDots(
-                color:themeProvider.darkTheme ? Color(0xff9595B5) : Color(0xffACACAC),
-                size: 30,
-              ),
-            )
+                            child:
+                             urlSummaryProvider.isLoading //_isLoading
+                                ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                                      margin: EdgeInsets.all(15),
+                                                      decoration: BoxDecoration(
+                                                       color: Color(0xff333333),
+                                                       borderRadius: BorderRadius.circular(20.0)
+                                                      ),
+                                                  padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+                                                  child: LoadingAnimationWidget.waveDots(
+                                                    color: Color(0xff8D8D8D),// : Color(0xffACACAC),
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                  ],
+                                )
                                 : title.isNotEmpty && paragraph.isEmpty && bullets.isEmpty ?
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -623,7 +653,7 @@ void callSummaryRetry(BuildContext context) async {
                                                   textTheme: TextTheme(
                                                       bodyMedium: TextStyle(
                                                     fontSize: 15,
-                                                    fontFamily: 'Poppins',
+                                                    fontFamily: 'Inter',
                                                 fontWeight: FontWeight.normal
                                                   )),
                                                 ),
@@ -649,7 +679,7 @@ void callSummaryRetry(BuildContext context) async {
                                                 textTheme: TextTheme(
                                                     bodyMedium: TextStyle(
                                                   fontSize: 24,
-                                                  fontFamily: 'Poppins',
+                                                  fontFamily: 'Inter',
                                               fontWeight: FontWeight.bold
                                                 )),
                                               ),
@@ -721,7 +751,7 @@ void callSummaryRetry(BuildContext context) async {
                                                             textTheme: TextTheme(
                                                                 bodyMedium:
                                                                     TextStyle(
-                                                                      fontFamily: 'Poppins',
+                                                                      fontFamily: 'Inter',
                                                               //color: ColorConstants.white,
                                                               fontSize: 15,
                                                               //fontWeight: FontWeight.w400,
@@ -762,11 +792,13 @@ void callSummaryRetry(BuildContext context) async {
                               width: 50,
                               padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
-                                  color: const Color(0xff00B134),
-                                  borderRadius: BorderRadius.circular(8.0)),
+                                  color: themeProvider.darkTheme ? const Color(0xff222222) : Color(0xffFFFFFF),
+                                  border: Border.all(color: themeProvider.darkTheme ? Colors.transparent : Color(0xffD4D4D4))
+                                 // borderRadius: BorderRadius.circular(8.0)
+                                  ),
                               child: SvgPicture.asset(
                                 IconConstants.copyIconDark,
-                                color: Colors.white,
+                                color: Color(0xff00B134),
                               )),
                         ),
                       )
@@ -800,20 +832,21 @@ class InitialSummariseWelcomeWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 10),
+            padding: const EdgeInsets.only(top: 10, left: 10,right: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SvgPicture.asset(themeProvider.darkTheme
-                    ? IconConstants.welcomeBeldexAIDark
-                    : IconConstants.welcomeBeldexAIWhite),
+                    ? "assets/images/ai-icons/new/aihome_dark.svg"// IconConstants.welcomeBeldexAIDark
+                    : "assets/images/ai-icons/new/aihome_white.svg"  //IconConstants.welcomeBeldexAIWhite
+                    ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Text(loc.beldexAIEnhancesTheBeldexBrowser,
                    // StringConstants.welcomeAIContent,
                     //textAlign: TextAlign.center,
-                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Poppins' , fontSize: 13,fontWeight: FontWeight.w300),
+                    style: TextStyle(color:themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff000000),fontFamily: 'Inter' , fontSize: 13,fontWeight: FontWeight.w300),
                   ),
                 )
               ],

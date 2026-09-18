@@ -486,7 +486,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get advanced => 'Juu';
 
   @override
-  String get downloadCompelete => 'Download complete';
+  String get downloadCompelete => 'Upakuaji umekamilika';
 
   @override
   String get screensecurityCurrentlyEnabled => 'Usalama wa skrini umewezeshwa kwa sasa. Hakikisha unauzima kwenye skrini ya mipangilio';
@@ -529,6 +529,187 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Injini ya utafutaji imesasishwa kwa mafanikio!';
+
+  @override
+  String get searchusing => 'Tafuta kwa kutumia';
+
+  @override
+  String get addTabToNewGroup => 'Ongeza kichupo kwenye kikundi kipya';
+
+  @override
+  String get invitePeople => 'Alika watu';
+
+  @override
+  String get uploadFromGallery => 'Pakia kutoka kwenye ghala';
+
+  @override
+  String get noQRCodeFound => 'Hakuna msimbo wa QR uliopatikana kwenye picha';
+
+  @override
+  String get searchBarPosition => 'Nafasi ya upau wa utafutaj';
+
+  @override
+  String get choosethePosition => 'Chagua nafasi ya upau wa utafutaji';
+
+  @override
+  String get iPAddress => 'Anwani ya IP';
+
+  @override
+  String get vpnIP => 'IP ya VPN';
+
+  @override
+  String get myIP => 'IP yangu';
+
+  @override
+  String get marketUpdate => 'Sasisho la soko';
+
+  @override
+  String get searchYourTabs => 'Tafuta vichupo vyako';
+
+  @override
+  String get newTabGroup => 'Kikundi kipya cha vichupo';
+
+  @override
+  String get selectTab => 'Chagua kichupo';
+
+  @override
+  String get selectTabs => 'Chagua vichupo';
+
+  @override
+  String get deleteTabGroup => 'Futa kikundi cha vichupo';
+
+  @override
+  String get rename => 'Badilisha jina';
+
+  @override
+  String get renameGroup => 'Badilisha jina la kikundi';
+
+  @override
+  String get ungroupTab => 'Ondoa kichupo kwenye kikundi';
+
+  @override
+  String get deleteGroup => 'Futa Kikundi';
+
+  @override
+  String get addToTabGroup => 'Ongeza kwenye kikundi cha vichupo';
+
+  @override
+  String get editGroupName => 'Hariri jina la kikundi';
+
+  @override
+  String get editGroupColor => 'Hariri rangi ya kikundi';
+
+  @override
+  String get closeTab => 'Funga kichupo';
+
+  @override
+  String get doYouWantToUngroup => 'Je, kweli ungependa kuondoa kikundi hiki cha vichupo?';
+
+  @override
+  String get ungroupTabGroup => 'Ondoa kikundi cha vichupo';
+
+  @override
+  String get ungroup => 'Ondoa kwenye kikundi';
+
+  @override
+  String get deletetabGroup => 'Futa Kikundi cha Vichupo';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Ongeza kwenye';
+
+  @override
+  String get tabs => 'Vichupo';
+
+  @override
+  String get done => 'Imekamilika';
+
+  @override
+  String get create => 'Unda';
+
+  @override
+  String get groupColor => 'Rangi ya kikundi';
+
+  @override
+  String get groupName => 'Jina la kikundi';
+
+  @override
+  String get addtoNewTabGroup => 'Ongeza kwenye kikundi kipya cha vichupo';
+
+  @override
+  String get tabGroups => 'Vikundi vya Vichupo';
+
+  @override
+  String get tabGroup => 'Kikundi cha Vichupo';
+
+  @override
+  String get tabsSelected => 'Vichupo vilivyochaguliwa';
+
+  @override
+  String get privateResearch => 'Mfano: Utafiti Binafsi';
+
+  @override
+  String get deselectAll => 'Acha kuchagua vyote';
+
+  @override
+  String get selected => 'Imechaguliwa';
+
+  @override
+  String get close => 'Funga';
+
+  @override
+  String get top => 'Juu';
+
+  @override
+  String get bottom => 'Chini';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Kitendo hiki kitafunga kabisa vichupo vyote $tabCount vilivyo ndani ya “$tabGroupName”. Hiki hakiwezi kutenduliwa';
+  }
+
+  @override
+  String get changingNode => 'Inabadilisha nodi';
+
+  @override
+  String get freeenameWebDomain => 'Kikoa cha Web3 cha FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Washa usaidizi wa kikoa cha Web3 cha FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Imeshindikana kupakua faili ya uanzishaji ya Belnet. Tafadhali angalia muunganisho wako na ujaribu tena';
+
+  @override
+  String get couldNotEstablishConnection => 'Imeshindikana kuanzisha muunganisho wa Belnet. Tafadhali jaribu tena';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Huduma ya Belnet haikuweza kuanzishwa. Tafadhali jaribu tena';
+
+  @override
+  String get exitNodeUnreachable => 'Nodi ya kutoka haipatikani, inaunganisha tena';
+
+  @override
+  String get tab => 'Kichupo';
+
+  @override
+  String get ungroupTabs => 'Ondoa vichupo kwenye kikundi';
+
+  @override
+  String get closeGroup => 'Funga kikundi';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Je, una uhakika unataka kuondoa vichupo vilivyochaguliwa kutoka \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex ni mfumo ikolojia wa programu zilizogatuliwa na zinazohifadhi faragha. Programu ya Kivinjari cha Beldex ni moja ya programu katika mfumo huu, ambao pia unajumuisha programu kama BChat, BelNet, na itifaki ya Beldex. Kivinjari cha Beldex ni lango lako la uzoefu wa mtandaoni usio na mshono na wenye faragha, ambapo data yako inabaki kuwa yako pekee. Kimejengwa juu ya miundombinu imara ya blockchain, Kivinjari cha Beldex huhakikisha faragha na kutokujulikana kwa watumiaji wake.';

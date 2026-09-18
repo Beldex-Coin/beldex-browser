@@ -185,6 +185,101 @@
 
 
 
+  "searchusing": "Caută folosind",
+  "addTabToNewGroup": "Adaugă fila într-un grup nou",
+  "invitePeople": "Invită persoane",
+  "uploadFromGallery": "Încarcă din galerie",
+  "noQRCodeFound": "Nu a fost găsit niciun cod QR în imagine",
+  "searchBarPosition": "Poziția barei de căutare",
+  "choosethePosition": "Alege poziția barei de căutare",
+  "iPAddress": "Adresă IP",
+   "vpnIP": "IP VPN",
+   "myIP": "P-ul meu",
+   "marketUpdate": "Actualizare piață",
+   "searchYourTabs": "Caută filele tale",
+   "newTabGroup": "Grup nou de file",
+   "selectTab": "Selectează fila",
+   "selectTabs": "Selectează filele",
+   "closeAllTabs": "Închide toate filele",
+   "deleteTabGroup": "Șterge grupul de file",
+   "rename": "Redenumește",
+   "renameGroup": "Redenumește grupul",
+   "ungroupTab": "Elimină fila din grup",
+   "deleteGroup": "Șterge grupul",
+   "addToTabGroup": "Adaugă la grupul de file",
+   "editGroupName": "Editează numele grupului",
+   "editGroupColor": "Editează culoarea grupului",
+   "closeTab": "Închide fila",
+   "doYouWantToUngroup": "Sigur dorești să separi acest grup de file?",
+   "ungroupTabGroup": "Separă grupul de file",
+   "ungroup": "Separă",
+   "deleteGroup": "Șterge grupul",
+   "deletetabGroup": "Șterge grupul de file",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Adaugă la",
+   "tabs": "File",
+   "done": "Gata",
+   "create": "Creează",
+   "groupColor": "Culoarea grupului",
+   "groupName": "Numele grupului",
+   "newTabGroup": "Grup nou de file",
+   "addtoNewTabGroup": "Adaugă într-un grup nou de file",
+   "tabGroups": "Grupuri de file",
+   "tabGroup": "Grup de file",
+   "tabsSelected": "Selectează filele",
+   "privateResearch": "de ex. Cercetare privată",
+   "deselectAll": "Deselectează tot",
+   "selected": "Selectat",
+
+
+   "close": "Închide",
+   "top": "sus",
+   "bottom": "jos",
+
+
+
+  "closeAllTabsConfirmation": "Această acțiune va închide definitiv toate cele {tabCount} file din „{tabGroupName}”. Această acțiune nu poate fi anulată", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Se schimbă nodul",
+"freeenameWebDomain" : "Domeniul Web3 FreeName",
+"enableFreeNameWeb" : "Activează suportul pentru domeniul Web3 FreeName",
+"couldnotDownloadBootstrap" : "Nu s-a putut descărca fișierul de inițializare Belnet. Verificați conexiunea și încercați din nou",
+"couldNotEstablishConnection" : "Nu s-a putut stabili conexiunea Belnet. Încercați din nou",
+"theBelnetServiceNotStarted": "Serviciul Belnet nu a putut fi pornit. Încercați din nou",
+"exitNodeUnreachable" : "Nodul de ieșire nu este accesibil, se reconectează",
+
+
+
+"tab": "Filă",
+"ungroupTabs": "Degrupează filele",
+"closeGroup": "Închide grupul",
+"ungroupSelectedTabs": "Sigur doriți să degrupați filele selectate din ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Mesaj de confirmare la degruparea filelor selectate dintr-un grup de file",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex este un ecosistem de aplicații descentralizate care pun accent pe protejarea confidențialității. Aplicația Browserul Beldex este una dintre componentele acestui ecosistem, care include și aplicații precum BChat, BelNet și protocolul Beldex. Browserul Beldex este poarta ta către o experiență online fluidă și confidențială, în care datele tale rămân exclusiv ale tale. Construit pe o infrastructură blockchain robustă, Browserul Beldex asigură utilizatorilor săi confidențialitate și anonimat.",
 "atBeldex": " \n La Beldex, credem în oferirea utilizatorilor a dreptului fundamental de a-și controla amprenta digitală. Browserul Beldex este conceput pentru a oferi un mediu online sigur și confidențial, în care utilizatorii pot comunica și interacționa cu lumea digitală.",
 "titlebns": "\nBNS",

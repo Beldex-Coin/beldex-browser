@@ -185,6 +185,100 @@
   "searchEngineUpdated": "Zoekmachine succesvol bijgewerkt!",
 
 
+  "searchusing": "Zoeken met",
+  "addTabToNewGroup": "Tabblad toevoegen aan nieuwe groep",
+  "invitePeople": "Mensen uitnodigen",
+  "uploadFromGallery": "Uploaden vanuit galerij",
+  "noQRCodeFound": "Geen QR-code gevonden in afbeelding",
+  "searchBarPosition": "Positie van de zoekbalk",
+  "choosethePosition": "Kies de positie van de zoekbalk",
+  "iPAddress": "IP-adres",
+   "vpnIP": "VPN-IP",
+   "myIP": "Mijn IP",
+   "marketUpdate": "Marktupdate",
+   "searchYourTabs": "Zoek in je tabbladen",
+   "newTabGroup": "Nieuwe tabbladgroep",
+   "selectTab": "Tabblad selecteren",
+   "selectTabs": "Tabbladen selecteren",
+   "closeAllTabs": "Alle tabbladen sluiten",
+   "deleteTabGroup": "Tabbladgroep verwijderen",
+   "rename": "Hernoemen",
+   "renameGroup": "Groep hernoemen",
+   "ungroupTab": "Tabblad uit groep halen",
+   "deleteGroup": "Groep verwijderen",
+   "addToTabGroup": "Toevoegen aan tabbladgroep",
+   "editGroupName": "Groepsnaam bewerken",
+   "editGroupColor": "Groepskleur bewerken",
+   "closeTab": "Tabblad sluiten",
+   "doYouWantToUngroup": "Weet je zeker dat je deze tabbladgroep wilt opheffen?",
+   "ungroupTabGroup": "Tabbladgroep opheffen",
+   "ungroup": "Opheffen",
+   "deleteGroup": "Groep verwijderen",
+   "deletetabGroup": "Tabbladgroep verwijderen",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Toevoegen aan",
+   "tabs": "Tabbladen",
+   "done": "Gereed",
+   "create": "Maken",
+   "groupColor": "Groepskleur",
+   "groupName": "Groepsnaam",
+   "newTabGroup": "Nieuwe tabbladgroep",
+   "addtoNewTabGroup": "Toevoegen aan nieuwe tabbladgroep",
+   "tabGroups": "Tabbladgroepen",
+   "tabGroup": "Tabbladgroep",
+   "tabsSelected": "Geselecteerde tabbladen",
+   "privateResearch": "bijv. Privéonderzoek",
+   "deselectAll": "Alles deselecteren",
+   "selected": "Geselecteerd",
+
+
+   "close": "Sluiten",
+   "top": "boven",
+   "bottom": "onder",
+
+
+
+  "closeAllTabsConfirmation": "Deze actie sluit permanent alle {tabCount} tabbladen in “{tabGroupName}”. Dit kan niet ongedaan worden gemaakt",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Node wijzigen..",
+"freeenameWebDomain" : "FreeName Web3-domein",
+"enableFreeNameWeb" : "FreeName Web3-domeinondersteuning inschakelen",
+"couldnotDownloadBootstrap" : "Het Belnet-bootstrapbestand kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw",
+"couldNotEstablishConnection" : "Er kon geen Belnet-verbinding tot stand worden gebracht. Probeer het opnieuw.",
+"theBelnetServiceNotStarted": "De Belnet-service kon niet worden gestart. Probeer het opnieuw",
+"exitNodeUnreachable" : "Uitgangsknooppunt onbereikbaar, opnieuw verbinden",
+
+
+"tab": "Tabblad",
+"ungroupTabs": "Tabbladen uit groep halen",
+"closeGroup": "Groep sluiten",
+"ungroupSelectedTabs": "Weet je zeker dat je de geselecteerde tabbladen uit ${tabGroupName} wilt halen?",
+"@ungroupSelectedTabs": {
+  "description": "Bevestigingsbericht bij het verwijderen van geselecteerde tabbladen uit een tabbladgroep",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex is een ecosysteem van gedecentraliseerde en vertrouwelijkheidsbehoudende applicaties. De Beldex Browser-app is één van de toepassingen binnen dit ecosysteem, dat ook apps bevat zoals BChat, BelNet en het Beldex-protocol. De Beldex Browser is uw toegangspoort tot een naadloze en vertrouwelijke online ervaring, waarbij uw gegevens uitsluitend van u blijven. Gebouwd op een robuuste blockchaininfrastructuur garandeert de Beldex Browser vertrouwelijkheid en anonimiteit voor zijn gebruikers.",
 "atBeldex": " \n Bij Beldex geloven we in het versterken van individuen met het fundamentele recht om hun digitale voetafdruk te beheren. De Beldex Browser is ontworpen om een veilige en vertrouwelijke online omgeving te bieden waarin gebruikers kunnen communiceren en interageren met de digitale wereld.",
 "titlebns": "\nBNS",

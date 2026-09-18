@@ -187,6 +187,101 @@
 
 
 
+  "searchusing": "Chwilio gan ddefnyddio",
+  "addTabToNewGroup": "Ychwanegu tab at grŵp newydd",
+  "invitePeople": "Gwahodd pobl",
+  "uploadFromGallery": "Uwchlwytho o'r oriel",
+  "noQRCodeFound": "Ni chanfuwyd cod QR yn y ddelwedd",
+  "searchBarPosition": "Safle'r bar chwilio",
+  "choosethePosition": "Dewiswch safle'r bar chwilio",
+  "iPAddress": "Cyfeiriad IP,",
+   "vpnIP": "IP VPN",
+   "myIP": "Fy IP",
+   "marketUpdate": "Diweddariad y farchnad",
+   "searchYourTabs": "Chwiliwch eich tabiau",
+   "newTabGroup": "Grŵp tabiau newydd",
+   "selectTab": "Dewis tab",
+   "selectTabs": "Dewis tabiau",
+   "closeAllTabs": "Cau pob tab",
+   "deleteTabGroup": "Dileu grŵp tabiau",
+   "rename": "Ailenwi",
+   "renameGroup": "Ailenwi'r grŵp",
+   "ungroupTab": "Dad-grwpio'r tab",
+   "deleteGroup": "Dileu'r grŵp",
+   "addToTabGroup": "Ychwanegu at grŵp tabiau",
+   "editGroupName": "Golygu enw'r grŵp",
+   "editGroupColor": "Golygu lliw'r grŵp",
+   "closeTab": "Cau tab",
+   "doYouWantToUngroup": "Ydych chi wir am ddad-grwpio'r grŵp tabiau hwn?",
+   "ungroupTabGroup": "Dad-grwpio grŵp tabiau",
+   "ungroup": "Dad-grwpio",
+   "deleteGroup": "Dileu'r grŵp",
+   "deletetabGroup": "Dileu grŵp tabiau",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Ychwanegu at",
+   "tabs": "Tabiau",
+   "done": "Wedi gorffen",
+   "create": "Creu",
+   "groupColor": "Lliw'r grŵp",
+   "groupName": "Enw'r grŵp",
+   "newTabGroup": "Grŵp tabiau newydd",
+   "addtoNewTabGroup": "Ychwanegu at grŵp tabiau newydd",
+   "tabGroups": "Grwpiau tabiau",
+   "tabGroup": "Grŵp tabiau",
+   "tabsSelected": "Tabiau wedi'u dewis",
+   "privateResearch": "e.e. Ymchwil Breifat",
+   "deselectAll": "Dad-ddewis pob un",
+   "selected": "Wedi'i ddewis",
+
+
+   "close": "Cau",
+   "top": "brig",
+   "bottom": "gwaelod",
+
+
+
+  "closeAllTabsConfirmation": "Bydd y weithred hon yn cau pob un o'r {tabCount} tab yn “{tabGroupName}” yn barhaol. Ni ellir dadwneud hyn.",
+"@closeAllTabsConfirmation": {
+  "description": "Neges gadarnhau wrth gau pob tab mewn grŵp tabiau",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "Newid Nôde..",
+"freeenameWebDomain" : "Parth FreeName Web3",
+"enableFreeNameWeb" : "Galluogi cefnogaeth i barth FreeName Web3",
+"couldnotDownloadBootstrap" : "Methwyd lawrlwytho'r ffeil cychwyn Belnet. Gwiriwch eich cysylltiad a cheisiwch eto",
+"couldNotEstablishConnection" : "Methwyd sefydlu cysylltiad Belnet. Ceisiwch eto",
+"theBelnetServiceNotStarted": "Methwyd cychwyn y gwasanaeth Belnet. Ceisiwch eto",
+"exitNodeUnreachable" : "Ni ellir cyrraedd y nod ymadael, yn ailgysylltu",
+
+
+
+"tab": "Tab",
+"ungroupTabs": "Dadgrwpio tabiau",
+"closeGroup": "Cau'r grŵp",
+"ungroupSelectedTabs": "Ydych chi'n siŵr eich bod am ddadgrwpio'r tabiau a ddewiswyd o ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Neges gadarnhau wrth ddadgrwpio tabiau a ddewiswyd o grŵp tabiau",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Mae Beldex yn ecosystem o gymwysiadau datganoledig sy’n cadw cyfrinachedd. Mae ap Porwr Beldex yn un o’r ecosystem hon, sydd hefyd yn cynnwys apiau fel BChat, BelNet, a phrotocol Beldex. Porwr Beldex yw eich porth i brofiad ar-lein di-dor a chyfrinachol, lle mae eich data’n aros yn eiddo i chi’n unig. Wedi’i adeiladu ar seilwaith blockchain cadarn, mae porwr Beldex yn sicrhau cyfrinachedd ac anhysbysrwydd i’w ddefnyddwyr.",
 "atBeldex": " \n Yn Beldex, rydym yn credu mewn grymuso unigolion gyda’r hawl sylfaenol i reoli eu hôl-troed digidol. Mae Porwr Beldex wedi’i ddylunio i ddarparu amgylchedd ar-lein diogel a chyfrinachol i ddefnyddwyr gyfathrebu a rhyngweithio â’r byd digidol.",
 "titlebns": "\nBNS",

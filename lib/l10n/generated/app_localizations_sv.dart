@@ -531,6 +531,187 @@ class AppLocalizationsSv extends AppLocalizations {
   String get searchEngineUpdated => 'Sökmotorn har uppdaterats!';
 
   @override
+  String get searchusing => 'Sök med hjälp av';
+
+  @override
+  String get addTabToNewGroup => 'Lägg till flik i ny grupp';
+
+  @override
+  String get invitePeople => 'Bjud in personer';
+
+  @override
+  String get uploadFromGallery => 'Ladda upp från galler';
+
+  @override
+  String get noQRCodeFound => 'Ingen QR-kod hittades i bilden';
+
+  @override
+  String get searchBarPosition => 'Sökfältets position';
+
+  @override
+  String get choosethePosition => 'Välj sökfältets position';
+
+  @override
+  String get iPAddress => 'IP-adress';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'Min IP';
+
+  @override
+  String get marketUpdate => 'Marknadsuppdatering';
+
+  @override
+  String get searchYourTabs => 'Sök bland dina flikar';
+
+  @override
+  String get newTabGroup => 'Ny flikgrupp';
+
+  @override
+  String get selectTab => 'Select tab';
+
+  @override
+  String get selectTabs => 'Välj flikar';
+
+  @override
+  String get deleteTabGroup => 'Ta bort flikgrupp';
+
+  @override
+  String get rename => 'Byt namn';
+
+  @override
+  String get renameGroup => 'Byt namn på grupp';
+
+  @override
+  String get ungroupTab => 'Ta bort flik från grupp';
+
+  @override
+  String get deleteGroup => 'Ta bort grupp';
+
+  @override
+  String get addToTabGroup => 'Lägg till i flikgrupp';
+
+  @override
+  String get editGroupName => 'Redigera gruppnamn';
+
+  @override
+  String get editGroupColor => 'Redigera gruppfärg';
+
+  @override
+  String get closeTab => 'Stäng flik';
+
+  @override
+  String get doYouWantToUngroup => 'Vill du verkligen dela upp den här flikgruppen?';
+
+  @override
+  String get ungroupTabGroup => 'Dela upp flikgrupp';
+
+  @override
+  String get ungroup => 'Dela upp';
+
+  @override
+  String get deletetabGroup => 'Ta bort flikgrupp';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Lägg till i';
+
+  @override
+  String get tabs => 'Flikar';
+
+  @override
+  String get done => 'Klar';
+
+  @override
+  String get create => 'Skapa';
+
+  @override
+  String get groupColor => 'Gruppfärg';
+
+  @override
+  String get groupName => 'Gruppnamn';
+
+  @override
+  String get addtoNewTabGroup => 'Lägg till i ny flikgrupp';
+
+  @override
+  String get tabGroups => 'Flikgrupper';
+
+  @override
+  String get tabGroup => 'Flikgrupp';
+
+  @override
+  String get tabsSelected => 'Valda flikar';
+
+  @override
+  String get privateResearch => 't.ex. Privat forskning';
+
+  @override
+  String get deselectAll => 'Avmarkera alla';
+
+  @override
+  String get selected => 'Vald';
+
+  @override
+  String get close => 'Stäng';
+
+  @override
+  String get top => 'överst';
+
+  @override
+  String get bottom => 'nederst';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Den här åtgärden kommer att stänga alla $tabCount flikar i ”$tabGroupName” permanent. Det går inte att ångra';
+  }
+
+  @override
+  String get changingNode => 'Changing Node..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3-domän';
+
+  @override
+  String get enableFreeNameWeb => 'Aktivera stöd för FreeName Web3-domän';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Det gick inte att ladda ner Belnet-startfilen. Kontrollera din anslutning och försök igen';
+
+  @override
+  String get couldNotEstablishConnection => 'Det gick inte att upprätta en Belnet-anslutning. Försök igen';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet-tjänsten kunde inte startas. Försök igen';
+
+  @override
+  String get exitNodeUnreachable => 'Utgångsnoden kan inte nås, ansluter igen';
+
+  @override
+  String get tab => 'Flik';
+
+  @override
+  String get ungroupTabs => 'Ta bort flikar från gruppen';
+
+  @override
+  String get closeGroup => 'Stäng grupp';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Vill du verkligen ta bort de valda flikarna från \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex är ett ekosystem av decentraliserade och konfidentialitetsbevarande applikationer. Beldex Browser-appen är en del av detta ekosystem, som även består av appar som BChat, BelNet och Beldex-protokollet. Beldex Browser är din ingång till en sömlös och konfidentiell onlineupplevelse, där dina data förblir dina egna. Byggd på en robust blockkedjeinfrastruktur säkerställer Beldex Browser konfidentialitet och anonymitet för sina användare.';
 
   @override

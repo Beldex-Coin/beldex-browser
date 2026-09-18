@@ -33,7 +33,7 @@ class DownloadProvider extends ChangeNotifier {
   void _bindBackgroundIsolate() {
     bool isSuccess = IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     if (!isSuccess) {
-      _unbindBackgroundIsolate();
+      unbindBackgroundIsolate();
       _bindBackgroundIsolate();
       return;
     }
@@ -116,14 +116,14 @@ if(status == DownloadTaskStatus.failed.index){
     });
   }
 
-  void _unbindBackgroundIsolate() {
+  void unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
   Future<void> addTask(String url, dir, fileName,AppLocalizations loc) async {
     print('whole tasks ----> ${tasks.length}');
     try {
-      showMessage(loc.startDownloading);
+      showMessage(_loc?.startDownloading);
       String newFileName = fileName;
       int fileNumber = 1;
       String baseName = fileName;

@@ -5,14 +5,21 @@ import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/chat_screen.dart';
+import 'package:beldex_browser/src/browser/app_bar/app_bars.dart';
 import 'package:beldex_browser/src/browser/app_bar/browser_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
 import 'package:beldex_browser/src/browser/app_bar/tab_viewer_app_bar.dart';
 import 'package:beldex_browser/src/browser/app_bar/webview_tab_app_bar.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/bottom_nav_bar.dart';
 import 'package:beldex_browser/src/browser/pages/settings/app_language_screen.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/search_tab_screen.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/browser/tab_viewer.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
@@ -33,6 +40,7 @@ import 'package:listen_sharing_intent/listen_sharing_intent.dart';
 import 'package:provider/provider.dart';
 //import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:uuid/uuid.dart';
 // import 'app_bar/sample_webview_tab_app_bar.dart';
 import 'empty_tab.dart';
 import 'models/browser_model.dart';
@@ -71,7 +79,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
 
      WidgetsBinding.instance.addObserver(this);
      WidgetsBinding.instance.addPostFrameCallback((_) {
-    checkForNetwork(AppLocalizations.of(context)!);
+    checkForNetwork();
   });
    // final browserModel = Provider.of<BrowserModel>(context,listen: false);
     // Listen for incoming text or URL when the app is running or resumed
@@ -161,11 +169,13 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin, 
   }
 
 
-checkForNetwork(AppLocalizations loc){
+checkForNetwork(){
   _connectivity = Connectivity();
     _connectivitySubscription = _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen((event) {
       if (!(event.contains(ConnectivityResult.wifi)) && !(event.contains(ConnectivityResult.mobile))) {
+        final loc = AppLocalizations.of(context)!;
+        
          showMessage(loc.youAreNotConnectedToInternet);
       }
     });
@@ -342,7 +352,7 @@ var url = WebUri(formatUrl(resolved));
      
       browserModel.addTab(WebViewTab(
         key: GlobalKey(),
-        webViewModel: WebViewModel(url: url),
+        webViewModel: WebViewModel(uuid: Uuid().v4(),url: url),
       ));
     }
     setState(() {
@@ -379,7 +389,9 @@ var url = WebUri(formatUrl(resolved));
 
 void closeTabListPage(){
    var browserModel = Provider.of<BrowserModel>(context, listen: false);
+   //final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context,listen: false);
    //if(
+   //bottomNavigationProvider.changeView(HomeView.home);
     browserModel.showTabScroller = false;
     browserModel.showTab(browserModel.getCurrentTabIndex());
 }
@@ -395,7 +407,7 @@ void closeTabListPage(){
           var browserModel = Provider.of<BrowserModel>(context, listen: false);
           browserModel.addTab(WebViewTab(
             key: GlobalKey(),
-            webViewModel: WebViewModel(url: WebUri(url)),
+            webViewModel: WebViewModel(uuid: Uuid().v4(),url: WebUri(url)),
           ));
         }
       }
@@ -414,7 +426,8 @@ void closeTabListPage(){
 
   void closeAllTabs(context) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
-
+    // final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context,listen:false);
+    // bottomNavigationProvider.changeView(HomeView.home);
     browserModel.showTabScroller = false;
 
     browserModel.closeAllTabs();
@@ -445,6 +458,7 @@ void closeTabListPage(){
     var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+    final groupProvider = Provider.of<GroupProvider>(context);
      print('The URL For the FAB ------------> ${vpnStatusProvider.showFAB}');
     browserModel.addListener(() {
       browserModel.save();
@@ -454,7 +468,7 @@ void closeTabListPage(){
     });
 
     var canShowTabScroller =
-        browserModel.showTabScroller && browserModel.webViewTabs.isNotEmpty;
+        browserModel.showTabScroller && groupProvider.totalOpenTabsCount != 0; //browserModel.webViewTabs.isNotEmpty;
 
     return IndexedStack(
       index: canShowTabScroller ? 1 : 0,
@@ -472,13 +486,29 @@ void closeTabListPage(){
           var webViewModel = browserModel.getCurrentTab()?.webViewModel;
           var webViewController = webViewModel?.webViewController;
           final ttsProvider = Provider.of<TtsProvider>(context,listen: false);
+          final themeProvider = Provider.of<DarkThemeProvider>(context,listen:false);
+          final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context,listen: false);
+          final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context);
+          final groupProvider = Provider.of<GroupProvider>(context,listen: false); 
+
     return WillPopScope(
         onWillPop: () async {
      
+
+         if(vpnStatusProvider.isChangeNode){
+        return false;
+       }
+
              // vpnStatusProvider.updateCanShowHomeScreen(false);
+       if(bottomNavigationProvider.currentIndex != 0){
+        bottomNavigationProvider.changeIndex(0);
+        return false;
+       }
+
       
 
      if(browserModel.showTabScroller == true){
+        // bottomNavigationProvider.changeView(HomeView.home);
          browserModel.showTabScroller = false;
          return false;
         }
@@ -494,7 +524,7 @@ void closeTabListPage(){
       }
 
 if (vpnStatusProvider.canShowHomeScreen == true) {
-            bool? result = await _showDownloadConfirmationDialog(context);
+            bool? result = await _showQuitBrowserConfirmationDialog(context);
             if (result != null && result) {
               return true;
             } else {
@@ -511,6 +541,7 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                   findOnPageController!.text = '';
                 });
                 await webViewModel?.findInteractionController!.clearMatches();
+                print('THE CLR FIND_ONPAGE 1');
               }
               browserModel.updateFindOnPage(false);
 
@@ -523,6 +554,7 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
               setState(() {
                 findOnPageController!.text = '';
               });
+              print('THE CLR FIND_ONPAGE 2');
               await webViewModel?.findInteractionController!.clearMatches();
             }
             browserModel.updateFindOnPage(false);
@@ -545,8 +577,9 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
             return false;
           }
 
-          if (browserModel.webViewTabs.isEmpty) {
-            bool? result = await _showDownloadConfirmationDialog(context);
+          if (groupProvider.totalOpenTabsCount == 0) {
+           // browserModel.closeAllTabs();
+            bool? result = await _showQuitBrowserConfirmationDialog(context);
             if (result != null && result) {
               return true;
             } else {
@@ -564,39 +597,72 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
           upgrader: Upgrader(
             debugLogging: true
           ),
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-              // backgroundColor: Color(0xff171720),
-              appBar: const BrowserAppBar(),
-              body: _buildWebViewTabsContent(),
-              floatingActionButton: vpnStatusProvider.showFAB && browserModel.webViewTabs.isNotEmpty  ? FloatingActionButton(
-                onPressed: (){
-                 // if (!vpnStatusProvider.showFAB) return; // Prevent multiple taps
-                  vpnStatusProvider.updateFAB(false);
-                   hideContextMenu(webViewController);
-                   showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-     builder: (context){
-          return SummariseUrlResult(aiModelProvider: aiModelProvider,);
-     });
-              },
-              backgroundColor: Colors.transparent,
-              child: ClipOval(
-                child: Image.asset('assets/images/ai-icons/Ai-Button.png'),
-              )
-              // Container(
-              //   height: 50,
-              //   width: 50,
-              //   decoration: BoxDecoration(
-              //     color: Colors.green,
-              //     shape: BoxShape.circle
-              //   ),
-              // )
-
-              ): Container(),
-              floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          child: SafeArea(
+             top: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,
+            bottom: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,
+            left: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,
+            right: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,
+            child: Scaffold(
+              backgroundColor:themeProvider.darkTheme ? Color(0xff111111) :  Color(0xffffffff),
+              resizeToAvoidBottomInset: true,
+                // backgroundColor: Color(0xff171720),
+                appBar: //appBarPositionProvider.selectedPosition == AppBarPosition.top ||
+                 (appBarPositionProvider.selectedPosition == AppBarPosition.top && groupProvider.totalOpenTabsCount != 0 //browserModel.webViewTabs.isNotEmpty
+                  && vpnStatusProvider.canShowHomeScreen == false) ? FlexibleAppbar() : null, //BrowserAppBar() : null,
+                body: _buildWebViewTabsContent(),
+                floatingActionButton: vpnStatusProvider.showFAB && groupProvider.totalOpenTabsCount != 0  ? FloatingActionButton(
+                  onPressed: (){
+                   // if (!vpnStatusProvider.showFAB) return; // Prevent multiple taps
+                    vpnStatusProvider.updateFAB(false);
+                     hideContextMenu(webViewController);
+                     showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                 builder: (context){
+            return SummariseUrlResult(aiModelProvider: aiModelProvider,);
+                 });
+                },
+                backgroundColor: Colors.transparent,
+                child: SvgPicture.asset('assets/images/ai-icons/new/Beldex_ai_summarise.svg')
+                // Container(
+                //   height: 50,
+                //   width: 50,
+                //   decoration: BoxDecoration(
+                //     color: Colors.green,
+                //     shape: BoxShape.circle
+                //   ),
+                // )
+            
+                ): Container(),
+                floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+                bottomNavigationBar:
+                
+                appBarPositionProvider.selectedPosition == AppBarPosition.bottom  ?
+                AnimatedPadding(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
+              child:  Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                 groupProvider.totalOpenTabsCount != 0 || vpnStatusProvider.canShowHomeScreen ? _createProgressIndicator(groupProvider) : SizedBox(),
+                  BrowserAppBar(),
+                ],
+              ),
+            )
+                // BrowserAppBar(isBottom: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,) 
+                : SizedBox.shrink(),
+            //     // BrowserAppBar(isBottom: appBarPositionProvider.selectedPosition == AppBarPosition.bottom,) 
+            // //    : appBarPositionProvider.selectedPosition ==
+            // //             AppBarPosition.top &&
+            // // bottomNavigationProvider.showBottomNav
+            //       :  CustomBottomNavigationBar()
+                    // : Container(
+                    //   color: Colors.green,
+                    //   child: Text('HELLOE HEELOOOOOOOOOO'),)
+                ),
+          ),
         ));
   }
 
@@ -633,108 +699,109 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
 
 
 
-  Future<bool?> _showDownloadConfirmationDialog(BuildContext context) {
+  Future<bool?> _showQuitBrowserConfirmationDialog(BuildContext context) {
     final themeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
         final loc = AppLocalizations.of(context)!;
         final localeProvider = Provider.of<LocaleProvider>(context,listen: false);
     return showDialog<bool>(
       context: context,
+      barrierColor:  themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8),
       builder: (BuildContext context) {
                 return Dialog(
-          backgroundColor:
-              themeProvider.darkTheme ? Color(0xff282836) : Color(0xffFFFFFF),
-          insetPadding:const EdgeInsets.all(20),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            //height: 170,
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: themeProvider.darkTheme
-                    ? const Color(0xff282836)
-                    :const Color(0xffFFFFFF),
-                borderRadius: BorderRadius.circular(15)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextWidget(
-                    text: loc.quitBrowser, //'Quit Browser',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          insetPadding: EdgeInsets.all(18),
+            backgroundColor: Colors.transparent,
+          child: GlassSettingPanel(
+           color: themeProvider.darkTheme ? Color(0xff1A1A1A).withOpacity(0.8) : Color(0xffEBEBEB) ,
+            child: Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextWidget(
+                      text: loc.quitBrowser, //'Quit Browser',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Inter'),
+                    ),
                   ),
-                ),
-                TextWidget(
-                 text:loc.rUSureWantToQuitApp,// 'Are you sure you want to quit?',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                        ),
-                        child: MaterialButton(
-                          elevation: 0,
-                          color: themeProvider.darkTheme
-                              ? Color(0xff39394B)
-                              : Color(0xffF3F3F3),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: TextWidget(text:loc.cancel ,// 'Cancel',
-                           style: TextStyle(fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                  TextWidget(
+                   text:loc.rUSureWantToQuitApp,// 'Are you sure you want to quit?',
+                    style: TextStyle(fontWeight: FontWeight.w500,fontFamily: 'Roboto',),
+                    textAlign: TextAlign.center,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
+                          child: MaterialButton(
+                            elevation: 0,
+                            color: themeProvider.darkTheme
+                                ? Color(0xff333333)
+                                : Color(0xffF3F3F3),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+
+                            child: TextWidget(text:loc.cancel ,// 'Cancel',
+                             style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600, fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff444444))),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(
+                            //       10.0), // Adjust the radius as needed
+                            // ),
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: MaterialButton(
-                          elevation: 0,
-                          color: themeProvider.darkTheme
-                              ? const Color(0xff39394B)
-                              :const Color(0xffF3F3F3), // Color(0xff00B134),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: TextWidget( text:loc.quit, // 'Quit',
-                              style:
-                                  TextStyle(color: Colors.red, fontSize:isLengthyLanguageInList(localeProvider.selectedLanguage) ? 13 : 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: MaterialButton(
+                            elevation: 0,
+                            color:  themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),// Color(0xff00B134),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+
+                            child: TextWidget( text:loc.quit, // 'Quit',
+                                style:
+                                    TextStyle(fontSize: 16,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),fontWeight: FontWeight.w600)),
+                            
+                            onPressed: () async {
+                              var disConnectValue =
+                                  await BelnetLib.disconnectFromBelnet();
+                              print('belnet vpn disconnected $disConnectValue');
+                              Future.delayed(Duration(milliseconds: 200),
+                                  (() => Navigator.of(context).pop(true)));
+                              // Navigator.of(context).pop(true);
+                            },
                           ),
-                          onPressed: () async {
-                            var disConnectValue =
-                                await BelnetLib.disconnectFromBelnet();
-                            print('belnet vpn disconnected $disConnectValue');
-                            Future.delayed(Duration(milliseconds: 200),
-                                (() => Navigator.of(context).pop(true)));
-                            // Navigator.of(context).pop(true);
-                          },
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -745,8 +812,15 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
   Widget _buildWebViewTabsContent() {
     var browserModel = Provider.of<BrowserModel>(context, listen: true);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
-    if (browserModel.webViewTabs.isEmpty //|| browserModel.isNewTab
+    final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context);
+    final groupProvider = Provider.of<GroupProvider>(context);
+   // final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context);
+    if (groupProvider.totalOpenTabsCount == 0 //|| browserModel.isNewTab
         ) {
+      //  if(appBarPositionProvider.selectedPosition == AppBarPosition.top){
+      //   bottomNavigationProvider.changeView(HomeView.home);
+      //  }
+       print("HERE THE PLAN EMPTY PAGE IS CALLING");
       return const EmptyTab();
     }
 
@@ -765,15 +839,15 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
 
     var stackChildren = <Widget>[
       browserModel.getCurrentTab() ?? Container(),
-      vpnStatusProvider.canShowHomeScreen == false ? _createProgressIndicator() : Container()
+      vpnStatusProvider.canShowHomeScreen == false && appBarPositionProvider.selectedPosition == AppBarPosition.top  ? _createProgressIndicator(groupProvider) : Container()
     ];
 
     return Stack(
       children: stackChildren,
     );
   }
-Widget _createProgressIndicator() {
-  return Selector<WebViewModel, double>(
+Widget _createProgressIndicator(GroupProvider groupProvider) {
+  return groupProvider.totalOpenTabsCount != 0 ? Selector<WebViewModel, double>(
     selector: (context, webViewModel) => webViewModel.progress,
     builder: (context, progress, child) {
       final clampedProgress = progress.clamp(0.0, 1.0);
@@ -795,7 +869,7 @@ Widget _createProgressIndicator() {
         ),
       );
     },
-  );
+  ): SizedBox();
 }
 
   // Widget _createProgressIndicator() {
@@ -827,116 +901,292 @@ String currentUrl = '';
    // final selectedItemsProvider = Provider.of<SelectedItemsProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
         final ttsProvider = Provider.of<TtsProvider>(context);
-final appLocaleProvider = Provider.of<LocaleProvider>(context);
+//final appLocaleProvider = Provider.of<LocaleProvider>(context);
+final loc = AppLocalizations.of(context)!;
+//final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context);
+  final provider =
+        Provider.of<GroupProvider>(context);
+
+    final widgets =
+        provider.getHomeWidgets();
+        
     return WillPopScope(
         onWillPop: () async {
+         // bottomNavigationProvider.changeView(HomeView.home);
           browserModel.showTabScroller = false;
           return false;
         },
-        child: Scaffold(
-            //backgroundColor: Color(0xff171720),
-            appBar: const TabViewerAppBar(),
-            body: TabViewer(
-              currentIndex: browserModel.getCurrentTabIndex(),
-              children: browserModel.webViewTabs.map((webViewTab) {
-                webViewTabStateKey.currentState?.pause();
-                var screenshotData = webViewTab.webViewModel.screenshot;
-                Widget screenshotImage = Container(
-                  decoration: BoxDecoration(
-                      color:const Color(0xff171720),
-                      borderRadius: BorderRadius.circular(10)),
-                  width: double.infinity,
-                  child: screenshotData != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child:
-                              Image.memory(screenshotData, fit: BoxFit.cover))
-                      : null,
-                );
-                webViewTab.webViewModel.settings?.minimumFontSize = browserModel.fontSize.toInt();
-                var url = webViewTab.webViewModel.url;
-                setState(() {
-                  currentUrl = url.toString();
-                });
-                final faviconUrl = webViewTab.webViewModel.favicon != null
-                    ? webViewTab.webViewModel.favicon!.url
-                    : (url != null && ["http", "https"].contains(url.scheme)
-                        ? Uri.parse("${url.origin}/favicon.ico")
-                        : null);
+        child: Stack(
+          children: [
+             Positioned.fill(
+        child: themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ):Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+            Scaffold(
+              backgroundColor: Colors.transparent,
+                //backgroundColor: Color(0xff171720),
+                appBar:   const TabViewerAppBar(),
+                 body:
+                Column(
+                  children: [
+                //             _buildTabSearchField(),
+                //             Expanded(child:
+                    
+                //             browserModel.isGroupByDomain ? _buildAutoGroupingGridTabsViewer()  : browserModel.tabViewMode == TabViewMode.grid
+                // ? _buildGroupingTabsViewer() // _buildGridTabsViewer()   //_buildGridTabsViewer() //_buildGridTabViewer(browserModel, appLocaleProvider, vpnStatusProvider)
+                // : _buildListTabsViewer() )
+            
+            
+              //   Row(
+              //   mainAxisAlignment:
+              //       MainAxisAlignment.center,
+              //   children: [
+            
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         provider.changeViewMode(
+              //           ViewMode.all,
+              //         );
+              //       },
+            
+              //       style: ElevatedButton.styleFrom(
+              //         backgroundColor:
+              //             provider.currentMode ==
+              //                     ViewMode.all
+              //                 ? Colors.blue
+              //                 : Colors.grey,
+              //       ),
+            
+              //       child: const Text(
+              //         "All Items",
+              //       ),
+              //     ),
+            
+              //     const SizedBox(width: 16),
+            
+              //     ElevatedButton(
+              //       onPressed: () {
+              //         provider.changeViewMode(
+              //           ViewMode.groupsOnly,
+              //         );
+              //       },
+            
+              //       style: ElevatedButton.styleFrom(
+              //         backgroundColor:
+              //             provider.currentMode ==
+              //                     ViewMode.groupsOnly
+              //                 ? Colors.green
+              //                 : Colors.grey,
+              //       ),
+            
+              //       child: const Text(
+              //         "Groups",
+              //       ),
+              //     ),
+              //   ],
+              // ),
+            
+              const SizedBox(height: 16),
+            
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchTabsScreen()));
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  height: 50,decoration: BoxDecoration(
+                    border: Border.all(color:themeProvider.darkTheme ? Color(0xff444444): Color(0xffD4D4D4)),
+                    color:themeProvider.darkTheme ? Colors.black26 : Colors.transparent //(0xffFFFFFF)
+                    ),
+                child: Container(
+  height: 40,
+  padding: const EdgeInsets.symmetric(horizontal: 8),
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      SvgPicture.asset(
+        'assets/images/ai-icons/new/search_tab_white.svg',
+        width: 18,
+        height: 18,
+      ),
 
-                var isCurrentTab = browserModel.getCurrentTabIndex() ==
-                    webViewTab.webViewModel.tabIndex;
+      const SizedBox(width: 8),
+        Text(
+        loc.searchYourTabs,
+        style: TextStyle(
+          fontSize: 14,
+         // color: Colors.white,
+        ),
+      ),
+    ],
+  ),
+)
                 
-                return Container(
-                  height: 100,
-                  padding:const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                  //margin: EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                      color: themeProvider.darkTheme
-                          ?const Color(0xff282836)
-                          :const Color(0xffF3F3F3),
-                      border: Border.all(
-                          color: isCurrentTab
-                              ? Color(0xff00B134)
-                              : Colors.transparent),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    children: [
-                      Container(
-                        // color: Colors.yellow,
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SizedBox(
-                              width: 25,
-                              child: IconButton(
-                                icon:const Icon(
-                                  Icons.close,
-                                  size: 20,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    if (webViewTab.webViewModel.tabIndex !=
-                                        null) {
-                                         // clearCookie();
-                                      browserModel.closeTab(
-                                          webViewTab.webViewModel.tabIndex!);
-                                      if (browserModel.webViewTabs.isEmpty) {
-                                        browserModel.showTabScroller = false;
-                                      }
-                                    }
-                                  });
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                          child: Container(
-                        margin:const EdgeInsets.only(top: 5),
-                        decoration: BoxDecoration(
-                            //color: Color(0xff171720),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: screenshotImage,
-                      )),
-                    ],
+                // TextField(
+                //   enabled: false,
+                //   decoration: InputDecoration(
+                //     icon: Padding(
+                //       padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                //       child: SvgPicture.asset('assets/images/ai-icons/new/search_tab_white.svg'),
+                //     ),
+                //     hintText:loc.searchYourTabs,border: InputBorder.none,
+                //     hintStyle: TextStyle(fontSize: 14)
+                //     ),
+                // ),
+                ),
+              ),
+            
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(16),
+            
+                  child: provider.currentMode == ViewMode.groupsOnly
+            
+            ? ListView.separated(
+                itemCount: widgets.length,
+                separatorBuilder: (_, __) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (_, index) {
+                 // print('GROUPS ONLY IN LIST VIEW');
+                  return widgets[index];
+                },
+              )
+            
+            : 
+                  GridView.builder(
+                    itemCount: widgets.length,
+            
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      // childAspectRatio: 170 / 190,
+                    ),
+            
+                    itemBuilder: (_, index) {
+                      return widgets[index];
+                    },
                   ),
-                );
-              }).toList(),
-              onTap: (index) async {
-                vpnStatusProvider.updateFAB(false);
-                browserModel.showTabScroller = false;
-                // ttsProvider.updateTTSDisplayStatus(false);
-                browserModel.showTab(index);
-               await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString()),
-                headers: {
-            "Accept-Language": appLocaleProvider.fullLocaleId,
-          },
-               ));
-               // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
-              },
-            )));
+                ),
+              ),
+                  ],
+                ),
+             //   bottomNavigationBar: TabBottomBar()
+             
+             
+             
+              //   body: TabViewer(
+              //     currentIndex: browserModel.getCurrentTabIndex(),
+              //     children: browserModel.webViewTabs.map((webViewTab) {
+              //       webViewTabStateKey.currentState?.pause();
+              //       var screenshotData = webViewTab.webViewModel.screenshot;
+              //       Widget screenshotImage = Container(
+              //         decoration: BoxDecoration(
+              //             color:const Color(0xff171720),
+              //             borderRadius: BorderRadius.circular(10)),
+              //         width: double.infinity,
+              //         child: screenshotData != null
+              //             ? ClipRRect(
+              //                 borderRadius: BorderRadius.circular(10),
+              //                 child:
+              //                     Image.memory(screenshotData, fit: BoxFit.cover))
+              //             : null,
+              //       );
+              //       webViewTab.webViewModel.settings?.minimumFontSize = browserModel.fontSize.toInt();
+              //       var url = webViewTab.webViewModel.url;
+              //       setState(() {
+              //         currentUrl = url.toString();
+              //       });
+              //       final faviconUrl = webViewTab.webViewModel.favicon != null
+              //           ? webViewTab.webViewModel.favicon!.url
+              //           : (url != null && ["http", "https"].contains(url.scheme)
+              //               ? Uri.parse("${url.origin}/favicon.ico")
+              //               : null);
+            
+              //       var isCurrentTab = browserModel.getCurrentTabIndex() ==
+              //           webViewTab.webViewModel.tabIndex;
+                    
+              //       return Container(
+              //         height: 100,
+              //         padding:const EdgeInsets.only(bottom: 8, left: 8, right: 8),
+              //         //margin: EdgeInsets.symmetric(horizontal: 8),
+              //         decoration: BoxDecoration(
+              //             color: themeProvider.darkTheme
+              //                 ?const Color(0xff282836)
+              //                 :const Color(0xffF3F3F3),
+              //             border: Border.all(
+              //                 color: isCurrentTab
+              //                     ? Color(0xff00B134)
+              //                     : Colors.transparent),
+              //             borderRadius: BorderRadius.circular(10)),
+              //         child: Column(
+              //           children: [
+              //             Container(
+              //               // color: Colors.yellow,
+              //               height: 30,
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.end,
+              //                 children: [
+              //                   SizedBox(
+              //                     width: 25,
+              //                     child: IconButton(
+              //                       icon:const Icon(
+              //                         Icons.close,
+              //                         size: 20,
+              //                       ),
+              //                       onPressed: () {
+              //                         setState(() {
+              //                           if (webViewTab.webViewModel.tabIndex !=
+              //                               null) {
+              //                                // clearCookie();
+              //                             browserModel.closeTab(
+              //                                 webViewTab.webViewModel.tabIndex!);
+              //                             if (browserModel.webViewTabs.isEmpty) {
+              //                               browserModel.showTabScroller = false;
+              //                             }
+              //                           }
+              //                         });
+              //                       },
+              //                     ),
+              //                   )
+              //                 ],
+              //               ),
+              //             ),
+              //             Expanded(
+              //                 child: Container(
+              //               margin:const EdgeInsets.only(top: 5),
+              //               decoration: BoxDecoration(
+              //                   //color: Color(0xff171720),
+              //                   borderRadius: BorderRadius.circular(10)),
+              //               child: screenshotImage,
+              //             )),
+              //           ],
+              //         ),
+              //       );
+              //     }).toList(),
+              //     onTap: (index) async {
+              //       vpnStatusProvider.updateFAB(false);
+              //       browserModel.showTabScroller = false;
+              //       // ttsProvider.updateTTSDisplayStatus(false);
+              //       browserModel.showTab(index);
+              //      await webviewController?.loadUrl(urlRequest: URLRequest(url: WebUri(webviewmodel!.url.toString()),
+              //       headers: {
+              //   "Accept-Language": appLocaleProvider.fullLocaleId,
+              // },
+              //      ));
+              //      // await webviewController?.reload(); // to Refresh the current tab page to orevent render issue
+              //     },
+              //   ),
+                ),
+          ],
+        ),
+            );
   }
 }

@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
 import 'package:beldex_browser/src/browser/webview_tab.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 
 class ScrollableTab extends StatefulWidget {
@@ -148,6 +150,7 @@ class _TabViewerState extends State<TabViewer>
  void addNewTab({WebUri? url}) {
     var browserModel = Provider.of<BrowserModel>(context, listen: false);
      final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+     //final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context,listen: false);
      vpnStatusProvider.updateCanShowHomeScreen(false);
     var settings = browserModel.getSettings();
 
@@ -156,12 +159,12 @@ class _TabViewerState extends State<TabViewer>
     //     ? WebUri(settings.customUrlHomePage)
     //     : 
         WebUri(settings.searchEngine.url);
-
+    //bottomNavigationProvider.changeView(HomeView.home);
     browserModel.showTabScroller = false;
 
     browserModel.addTab(WebViewTab(
       key: GlobalKey(),
-      webViewModel: WebViewModel(url: url),
+      webViewModel: WebViewModel(uuid: Uuid().v4(),url: url),
     ));
   }
 

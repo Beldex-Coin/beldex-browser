@@ -163,8 +163,8 @@
   "thispageAlreadySavedOffline": "Šī lapa jau ir saglabāta bezsaistē",
   "pageSavedOffline": "Lapa ir saglabāta bezsaistē!",
   "unabledToSave": "Neizdevās saglabāt",
-  "basic": "Basic",
-  "advanced" :"Advanced",
+  "basic": "Pamata",
+  "advanced" :"Papildu",
   "downloadCompelete": "Lejupielāde pabeigta",
   "screensecurityCurrentlyEnabled": "Ekrāna drošība pašlaik ir iespējota. Lūdzu, pārliecinieties, ka tā ir atspējota iestatījumu ekrānā",
   "openSettings": "Atvērt iestatījumus",
@@ -184,6 +184,101 @@
   "searchEngineAdded": "Meklētājprogramma veiksmīgi pievienota!",
   "searchEngineUpdated": "Meklētājprogramma veiksmīgi atjaunināta!",
 
+
+
+
+"searchusing": "Meklēt, izmantojot",
+  "addTabToNewGroup": "Pievienot cilni jaunai grupai",
+  "invitePeople": "Uzaicināt personas",
+  "uploadFromGallery": "Augšupielādēt no galerijas",
+  "noQRCodeFound": "attēlā netika atrasts QR kods",
+  "searchBarPosition": "Meklēšanas joslas novietojums",
+  "choosethePosition": "Izvēlieties meklēšanas joslas novietojumu",
+  "iPAddress": "IP adrese,",
+   "vpnIP": "VPN IP",
+   "myIP": "Mans IP",
+   "marketUpdate": "Tirgus atjauninājums",
+   "searchYourTabs": "Meklēt savās cilnēs",
+   "newTabGroup": "Jauna ciļņu grupa",
+   "selectTab": "Atlasīt cilni",
+   "selectTabs": "Atlasīt cilnes",
+   "closeAllTabs": "Aizvērt visas cilnes",
+   "deleteTabGroup": "Dzēst ciļņu grupu",
+   "rename": "Pārdēvēt",
+   "renameGroup": "Pārdēvēt grupu",
+   "ungroupTab": "Atgrupēt cilni",
+   "deleteGroup": "Dzēst grupu",
+   "addToTabGroup": "Pievienot ciļņu grupai",
+   "editGroupName": "Rediģēt grupas nosaukumu",
+   "editGroupColor": "Rediģēt grupas krāsu",
+   "closeTab": "Aizvērt cilni",
+   "doYouWantToUngroup": "Vai tiešām vēlaties atgrupēt šo ciļņu grupu?",
+   "ungroupTabGroup": "Atgrupēt ciļņu grupu",
+   "ungroup": "Atgrupēt",
+   "deleteGroup": "Dzēst grupu",
+   "deletetabGroup": "Dzēst ciļņu grupu",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Pievienot",
+   "tabs": "Cilnes",
+   "done": "Gatavs",
+   "create": "Izveidot",
+   "groupColor": "Grupas krāsa",
+   "groupName": "Grupas nosaukums",
+   "newTabGroup": "Jauna ciļņu grupa",
+   "addtoNewTabGroup": "Pievienot jaunai ciļņu grupai",
+   "tabGroups": "Ciļņu grupas",
+   "tabGroup": "Ciļņu grupa",
+   "tabsSelected": "Atlasītās cilnes",
+   "privateResearch": "piem., Privāta izpēte",
+   "deselectAll": "Atcelt visu atlasi",
+   "selected": "Atlasīts",
+
+
+   "close": "Aizvērt",
+   "top": "augšā",
+   "bottom": "apakšā",
+
+
+
+  "closeAllTabsConfirmation": "Šī darbība neatgriezeniski aizvērs visas {tabCount} cilnes grupā “{tabGroupName}”. Šo darbību nevar atsaukt.",
+"@closeAllTabsConfirmation": {
+  "description": "Apstiprinājuma ziņojums, aizverot visas cilnes ciļņu grupā",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "Mainīt mezglu..",
+"freeenameWebDomain" : "FreeName Web3 domēns",
+"enableFreeNameWeb" : "Iespējot FreeName Web3 domēna atbalstu",
+"couldnotDownloadBootstrap" : "Neizdevās lejupielādēt Belnet sāknēšanas failu. Lūdzu, pārbaudiet savienojumu un mēģiniet vēlreiz",
+"couldNotEstablishConnection" : "Neizdevās izveidot Belnet savienojumu. Lūdzu, mēģiniet vēlreiz",
+"theBelnetServiceNotStarted": "Belnet pakalpojumu neizdevās palaist. Lūdzu, mēģiniet vēlreiz",
+"exitNodeUnreachable" : "Izejas mezgls nav sasniedzams, notiek atkārtota savienošana",
+
+
+
+"tab": "Cilne",
+"ungroupTabs": "Atgrupēt cilnes",
+"closeGroup": "Aizvērt grupu",
+"ungroupSelectedTabs": "Vai tiešām vēlaties atgrupēt atlasītās cilnes no ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Apstiprinājuma ziņojums, atgrupējot atlasītās cilnes no ciļņu grupas",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
 
 
 "beldexIsAnEcosystem": "Beldex ir decentralizētu un konfidencialitāti saglabājošu lietotņu ekosistēma. Beldex pārlūkprogramma ir viena no šīs ekosistēmas lietotnēm, kas ietver arī BChat, BelNet un Beldex protokolu. Beldex pārlūkprogramma nodrošina vienkāršu un konfidenciālu tiešsaistes pieredzi, kur jūsu dati pieder tikai jums. Uz stabilas blokķēdes infrastruktūras balstītā Beldex pārlūkprogramma nodrošina konfidencialitāti un anonimitāti saviem lietotājiem.",

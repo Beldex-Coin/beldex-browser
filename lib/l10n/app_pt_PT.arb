@@ -185,6 +185,103 @@
 
 
 
+
+
+ "searchusing": "Pesquisar por",
+  "addTabToNewGroup": "Adicionar separador a um novo grupo",
+  "invitePeople": "Convidar pessoas",
+  "uploadFromGallery": "Carregar da galeria",
+  "noQRCodeFound": "Não foi encontrado nenhum código QR na imagem",
+  "searchBarPosition": "Posição da barra de pesquisa",
+  "choosethePosition": "Escolha a posição da barra de pesquisa",
+  "iPAddress": "Endereço IP",
+   "vpnIP": "IP da VPN",
+   "myIP": "O meu IP",
+   "marketUpdate": "Atualização do mercado",
+   "searchYourTabs": "Pesquisar os seus separadores",
+   "newTabGroup": "Novo grupo de separadores",
+   "selectTab": "Selecionar separador",
+   "selectTabs": "Selecionar separadores",
+   "closeAllTabs": "Fechar todos os separadores",
+   "deleteTabGroup": "Eliminar grupo de separadores",
+   "rename": "Mudar o nome",
+   "renameGroup": "Mudar o nome do grupo",
+   "ungroupTab": "Desagrupar separador",
+   "deleteGroup": "Eliminar grupo",
+   "addToTabGroup": "Adicionar ao grupo de separadores",
+   "editGroupName": "Editar nome do grupo",
+   "editGroupColor": "Editar cor do grupo",
+   "closeTab": "Fechar separador",
+   "doYouWantToUngroup": "Tem a certeza de que pretende desagrupar este grupo de separadores?",
+   "ungroupTabGroup": "Desagrupar grupo de separadores",
+   "ungroup": "Desagrupar",
+   "deleteGroup": "Eliminar grupo",
+   "deletetabGroup": "Eliminar grupo de separadores",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Adicionar a",
+   "tabs": "Separadores",
+   "done": "Concluído",
+   "create": "Criar",
+   "groupColor": "Cor do grupo",
+   "groupName": "Nome do grupo",
+   "newTabGroup": "Novo grupo de separadores",
+   "addtoNewTabGroup": "Adicionar a um novo grupo de separadores",
+   "tabGroups": "Grupos de separadores",
+   "tabGroup": "Grupo de separadores",
+   "tabsSelected": "Separadores selecionados",
+   "privateResearch": "ex.: Pesquisa privada",
+   "deselectAll": "Desselecionar tudo",
+   "selected": "Selecionado",
+
+
+   "close": "Fechar",
+   "top": "em cima",
+   "bottom": "em baixo",
+
+
+
+  "closeAllTabsConfirmation": "Esta ação irá fechar permanentemente todos os {tabCount} separadores dentro de “{tabGroupName}”. Esta ação não pode ser anulada.",
+"@closeAllTabsConfirmation": {
+  "description": "Mensagem de confirmação ao fechar todos os separadores de um grupo de separadores",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "A alterar o nó",
+"freeenameWebDomain" : "Domínio FreeName Web3",
+"enableFreeNameWeb" : "Ativar o suporte para o domínio FreeName Web3",
+"couldnotDownloadBootstrap" : "Não foi possível descarregar o ficheiro de arranque do Belnet. Verifique a sua ligação e tente novamente",
+"couldNotEstablishConnection" : "Não foi possível estabelecer a ligação com o Belnet. Tente novamente",
+"theBelnetServiceNotStarted": "O serviço Belnet não pôde ser iniciado. Tente novamente",
+"exitNodeUnreachable" : "Nó de saída inacessível, voltando a ligar",
+
+"tab": "Separador",
+"ungroupTabs": "Desagrupar separadores",
+"closeGroup": "Fechar grupo",
+"ungroupSelectedTabs": "Tem a certeza de que pretende desagrupar os separadores selecionados de ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Mensagem de confirmação ao desagrupar separadores selecionados de um grupo de separadores",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 "beldexIsAnEcosystem": "A Beldex é um ecossistema de aplicações descentralizadas focadas na preservação da confidencialidade. A aplicação Beldex Browser é uma das componentes deste ecossistema, que inclui também aplicações como o BChat, o BelNet e o protocolo Beldex. O Beldex Browser é a sua porta de entrada para uma experiência online fluida e confidencial, onde os seus dados permanecem exclusivamente seus. Construído sobre uma infraestrutura de blockchain robusta, o Beldex Browser garante confidencialidade e anonimato aos seus utilizadores.",
 "atBeldex": " \n Na Beldex, acreditamos em capacitar os indivíduos com o direito fundamental de controlar a sua pegada digital. O Beldex Browser foi concebido para fornecer um ambiente online seguro e confidencial, permitindo aos utilizadores comunicar e interagir com o mundo digital.",
 "titlebns": "\nBNS",

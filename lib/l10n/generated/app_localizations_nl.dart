@@ -531,6 +531,187 @@ class AppLocalizationsNl extends AppLocalizations {
   String get searchEngineUpdated => 'Zoekmachine succesvol bijgewerkt!';
 
   @override
+  String get searchusing => 'Zoeken met';
+
+  @override
+  String get addTabToNewGroup => 'Tabblad toevoegen aan nieuwe groep';
+
+  @override
+  String get invitePeople => 'Mensen uitnodigen';
+
+  @override
+  String get uploadFromGallery => 'Uploaden vanuit galerij';
+
+  @override
+  String get noQRCodeFound => 'Geen QR-code gevonden in afbeelding';
+
+  @override
+  String get searchBarPosition => 'Positie van de zoekbalk';
+
+  @override
+  String get choosethePosition => 'Kies de positie van de zoekbalk';
+
+  @override
+  String get iPAddress => 'IP-adres';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'Mijn IP';
+
+  @override
+  String get marketUpdate => 'Marktupdate';
+
+  @override
+  String get searchYourTabs => 'Zoek in je tabbladen';
+
+  @override
+  String get newTabGroup => 'Nieuwe tabbladgroep';
+
+  @override
+  String get selectTab => 'Tabblad selecteren';
+
+  @override
+  String get selectTabs => 'Tabbladen selecteren';
+
+  @override
+  String get deleteTabGroup => 'Tabbladgroep verwijderen';
+
+  @override
+  String get rename => 'Hernoemen';
+
+  @override
+  String get renameGroup => 'Groep hernoemen';
+
+  @override
+  String get ungroupTab => 'Tabblad uit groep halen';
+
+  @override
+  String get deleteGroup => 'Groep verwijderen';
+
+  @override
+  String get addToTabGroup => 'Toevoegen aan tabbladgroep';
+
+  @override
+  String get editGroupName => 'Groepsnaam bewerken';
+
+  @override
+  String get editGroupColor => 'Groepskleur bewerken';
+
+  @override
+  String get closeTab => 'Tabblad sluiten';
+
+  @override
+  String get doYouWantToUngroup => 'Weet je zeker dat je deze tabbladgroep wilt opheffen?';
+
+  @override
+  String get ungroupTabGroup => 'Tabbladgroep opheffen';
+
+  @override
+  String get ungroup => 'Opheffen';
+
+  @override
+  String get deletetabGroup => 'Tabbladgroep verwijderen';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Toevoegen aan';
+
+  @override
+  String get tabs => 'Tabbladen';
+
+  @override
+  String get done => 'Gereed';
+
+  @override
+  String get create => 'Maken';
+
+  @override
+  String get groupColor => 'Groepskleur';
+
+  @override
+  String get groupName => 'Groepsnaam';
+
+  @override
+  String get addtoNewTabGroup => 'Toevoegen aan nieuwe tabbladgroep';
+
+  @override
+  String get tabGroups => 'Tabbladgroepen';
+
+  @override
+  String get tabGroup => 'Tabbladgroep';
+
+  @override
+  String get tabsSelected => 'Geselecteerde tabbladen';
+
+  @override
+  String get privateResearch => 'bijv. Privéonderzoek';
+
+  @override
+  String get deselectAll => 'Alles deselecteren';
+
+  @override
+  String get selected => 'Geselecteerd';
+
+  @override
+  String get close => 'Sluiten';
+
+  @override
+  String get top => 'boven';
+
+  @override
+  String get bottom => 'onder';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Deze actie sluit permanent alle $tabCount tabbladen in “$tabGroupName”. Dit kan niet ongedaan worden gemaakt';
+  }
+
+  @override
+  String get changingNode => 'Node wijzigen..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3-domein';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3-domeinondersteuning inschakelen';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Het Belnet-bootstrapbestand kon niet worden gedownload. Controleer uw verbinding en probeer het opnieuw';
+
+  @override
+  String get couldNotEstablishConnection => 'Er kon geen Belnet-verbinding tot stand worden gebracht. Probeer het opnieuw.';
+
+  @override
+  String get theBelnetServiceNotStarted => 'De Belnet-service kon niet worden gestart. Probeer het opnieuw';
+
+  @override
+  String get exitNodeUnreachable => 'Uitgangsknooppunt onbereikbaar, opnieuw verbinden';
+
+  @override
+  String get tab => 'Tabblad';
+
+  @override
+  String get ungroupTabs => 'Tabbladen uit groep halen';
+
+  @override
+  String get closeGroup => 'Groep sluiten';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Weet je zeker dat je de geselecteerde tabbladen uit \$$tabGroupName wilt halen?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex is een ecosysteem van gedecentraliseerde en vertrouwelijkheidsbehoudende applicaties. De Beldex Browser-app is één van de toepassingen binnen dit ecosysteem, dat ook apps bevat zoals BChat, BelNet en het Beldex-protocol. De Beldex Browser is uw toegangspoort tot een naadloze en vertrouwelijke online ervaring, waarbij uw gegevens uitsluitend van u blijven. Gebouwd op een robuuste blockchaininfrastructuur garandeert de Beldex Browser vertrouwelijkheid en anonimiteit voor zijn gebruikers.';
 
   @override

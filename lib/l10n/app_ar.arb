@@ -185,6 +185,108 @@
   "searchEngineAdded": "تم إضافة محرك البحث بنجاح!",
   "searchEngineUpdated": "تم تحديث محرك البحث بنجاح!",
 
+
+
+  "searchusing": "البحث باستخدام",
+  "addTabToNewGroup": "إضافة علامة تبويب إلى مجموعة جديدة",
+  "invitePeople": "دعوة أشخاص",
+  "uploadFromGallery": "تحميل من المعرض",
+  "noQRCodeFound": "لم يتم العثور على رمز الاستجابة السريعة في الصورة",
+  "searchBarPosition": "موضع شريط البحث",
+  "choosethePosition": "اختر موضع شريط البحث.",
+  "iPAddress": "عنوان IP",
+   "vpnIP": "عنوان IP الخاص بشبكة VPN",
+   "myIP": "عنوان IP الخاص بي",
+   "marketUpdate": "تحديث السوق",
+   "searchYourTabs": "ابحث في علامات التبويب الخاصة بك",
+   "newTabGroup": "مجموعة علامات تبويب جديدة",
+   "selectTab": "تحديد علامة التبويب",
+   "selectTabs": "تحديد علامات التبويب",
+   "closeAllTabs": "إغلاق جميع علامات التبويب",
+   "deleteTabGroup": "حذف مجموعة علامات التبويب",
+   "rename": "إعادة تسمية",
+   "renameGroup": "إعادة تسمية المجموعة",
+   "ungroupTab": "فك تجميع علامات التبويب",
+   "deleteGroup": "حذف المجموعة",
+   "addToTabGroup": "إضافة إلى مجموعة علامات التبويب",
+   "editGroupName": "تعديل اسم المجموعة",
+   "editGroupColor": "تعديل لون المجموعة",
+   "closeTab": "إغلاق علامة التبويب",
+   "doYouWantToUngroup": "هل أنت متأكد من رغبتك في فك تجميع مجموعة علامات التبويب هذه؟",
+   "ungroupTabGroup": "فك تجميع مجموعة علامات التبويب",
+   "ungroup": "فك التجميع",
+   "deleteGroup": "حذف المجموعة",
+   "deletetabGroup": "حذف مجموعة علامات التبويب",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "إضافة إلى",
+   "tabs": "علامات التبويب",
+   "done": "تم",
+   "create": "إنشاء",
+   "groupColor": "لون المجموعة",
+   "groupName": "اسم المجموعة",
+   "newTabGroup": "مجموعة علامات تبويب جديدة",
+   "addtoNewTabGroup": "إضافة إلى مجموعة علامات تبويب جديدة",
+   "tabGroups": "مجموعات علامات التبويب",
+   "tabGroup": "مجموعة علامات التبويب",
+   "tabsSelected": "علامات التبويب المحددة",
+   "privateResearch": "مثال: بحث خاص",
+   "deselectAll": "إلغاء تحديد الكل",
+   "selected": "تم التحديد",
+
+   "close": "إغلاق",
+
+
+"top": "أعلى",
+"bottom": "أسفل",
+
+
+
+ "closeAllTabsConfirmation": "سيؤدي هذا الإجراء إلى إغلاق جميع علامات التبويب {tabCount} داخل \"{tabGroupName}\" نهائيًا. لا يمكن التراجع عن هذا الإجراء.",
+"@closeAllTabsConfirmation": {
+  "description": "رسالة تأكيد عند إغلاق جميع علامات التبويب في مجموعة علامات تبويب",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "تغيير العقدة",
+"freeenameWebDomain": "نطاق FreeName Web3",
+"enableFreeNameWeb": "تفعيل دعم نطاق FreeName Web3",
+"couldnotDownloadBootstrap" : "تعذر تنزيل ملف تهيئة Belnet. يرجى التحقق من اتصالك والمحاولة مرة أخرى",
+"couldNotEstablishConnection" : "تعذر إنشاء اتصال Belnet. يرجى المحاولة مرة أخرى",
+"theBelnetServiceNotStarted": "تعذر بدء خدمة Belnet. يرجى المحاولة مرة أخرى",
+"exitNodeUnreachable" : "الخروج العقدة غير متاحة، جارٍ إعادة الاتصال",
+
+"tab": "علامة تبويب",
+"ungroupTabs": "إلغاء تجميع علامات التبويب",
+"closeGroup": "إغلاق المجموعة",
+"ungroupSelectedTabs": "هل تريد بالتأكيد إلغاء تجميع علامات التبويب المحددة من ${tabGroupName}؟",
+"@ungroupSelectedTabs": {
+  "description": "رسالة تأكيد عند إلغاء تجميع علامات التبويب المحددة من مجموعة علامات تبويب",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
+
+
+
 "beldexIsAnEcosystem":"Beldex هو نظام بيئي من التطبيقات اللامركزية والمحافظة على الخصوصية. تطبيق متصفح Beldex هو جزء من هذا النظام البيئي الذي يشمل أيضًا تطبيقات مثل BChat و BelNet وبروتوكول Beldex. متصفح Beldex هو بوابتك لتجربة إنترنت سلسة وسرية، حيث تظل بياناتك ملكًا لك وحدك. وبفضل بنية تحتية قوية للبلوك تشين، يضمن متصفح Beldex السرية وإخفاء الهوية لمستخدميه.",
 "atBeldex": "في Beldex، نؤمن بتمكين الأفراد من الحق الأساسي في التحكم في بصمتهم الرقمية. تم تصميم متصفح Beldex لتوفير بيئة آمنة وسرية على الإنترنت للمستخدمين للتواصل والتفاعل مع العالم الرقمي.",
 "titlebns": "\nBNS",

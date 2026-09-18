@@ -531,6 +531,187 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchEngineUpdated => '検索エンジンが正常に更新されました！';
 
   @override
+  String get searchusing => '検索方法';
+
+  @override
+  String get addTabToNewGroup => '新しいグループにタブを追加';
+
+  @override
+  String get invitePeople => 'ユーザーを招待';
+
+  @override
+  String get uploadFromGallery => 'ギャラリーからアップロード';
+
+  @override
+  String get noQRCodeFound => '画像にQRコードが見つかりません';
+
+  @override
+  String get searchBarPosition => '検索バーの位置';
+
+  @override
+  String get choosethePosition => '検索バーの位置を選択します。';
+
+  @override
+  String get iPAddress => 'IPアドレス';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'マイIP';
+
+  @override
+  String get marketUpdate => 'マーケットアップデート';
+
+  @override
+  String get searchYourTabs => 'タブを検索';
+
+  @override
+  String get newTabGroup => '新しいタブグループ';
+
+  @override
+  String get selectTab => 'タブを選択';
+
+  @override
+  String get selectTabs => 'タブを選択';
+
+  @override
+  String get deleteTabGroup => 'タブグループを削除';
+
+  @override
+  String get rename => '名前を変更';
+
+  @override
+  String get renameGroup => 'グループ名を変更';
+
+  @override
+  String get ungroupTab => 'タブのグループ化を解除';
+
+  @override
+  String get deleteGroup => 'グループの削除';
+
+  @override
+  String get addToTabGroup => 'タブグループに追加';
+
+  @override
+  String get editGroupName => 'グループ名を編集';
+
+  @override
+  String get editGroupColor => 'グループの色を編集';
+
+  @override
+  String get closeTab => 'タブを閉じる';
+
+  @override
+  String get doYouWantToUngroup => 'このタブグループのグループを解除しますか？';
+
+  @override
+  String get ungroupTabGroup => 'タブグループのグループ解除';
+
+  @override
+  String get ungroup => 'グループ解除';
+
+  @override
+  String get deletetabGroup => 'タブグループの削除';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => '追加先';
+
+  @override
+  String get tabs => 'タブ';
+
+  @override
+  String get done => '完了';
+
+  @override
+  String get create => '作成';
+
+  @override
+  String get groupColor => 'グループの色';
+
+  @override
+  String get groupName => 'グループ名';
+
+  @override
+  String get addtoNewTabGroup => '新しいタブグループに追加';
+
+  @override
+  String get tabGroups => 'タブグループ一覧';
+
+  @override
+  String get tabGroup => 'タブグループ';
+
+  @override
+  String get tabsSelected => '選択済みのタブ';
+
+  @override
+  String get privateResearch => '例：プライベートリサーチ';
+
+  @override
+  String get deselectAll => 'すべて選択解除';
+
+  @override
+  String get selected => '選択済み';
+
+  @override
+  String get close => '閉じる';
+
+  @override
+  String get top => '上';
+
+  @override
+  String get bottom => '下';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'この操作を行うと、「$tabGroupName」内の$tabCount個のタブがすべて完全に閉じられます。この操作は元に戻せません。';
+  }
+
+  @override
+  String get changingNode => 'ノードの変更..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3ドメイン';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3ドメインのサポートを有効にする';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Belnetブートストラップファイルをダウンロードできませんでした。接続を確認して、もう一度お試しください';
+
+  @override
+  String get couldNotEstablishConnection => 'Belnetへの接続を確立できませんでした。もう一度お試しください';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnetサービスを開始できませんでした。もう一度お試しください';
+
+  @override
+  String get exitNodeUnreachable => '終了ノードに到達できません。再接続します';
+
+  @override
+  String get tab => 'タブ';
+
+  @override
+  String get ungroupTabs => 'タブのグループ化を解除';
+
+  @override
+  String get closeGroup => 'グループを閉じる';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '\$$tabGroupName から選択したタブのグループ化を解除してもよろしいですか？';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex は、分散型でプライバシーを保護するアプリケーションのエコシステムです。Beldex ブラウザアプリは、このエコシステムの一部であり、BChat、BelNet、Beldex プロトコルなどのアプリも含まれています。Beldex ブラウザは、シームレスでプライベートなオンライン体験へのゲートウェイであり、あなたのデータはあなただけのものとして保護されます。堅牢なブロックチェーンインフラ上に構築された Beldex ブラウザは、ユーザーのプライバシーと匿名性を保証します。';
 
   @override

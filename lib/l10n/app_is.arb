@@ -185,6 +185,100 @@
 
 
 
+  "searchusing": "Leita með",
+  "addTabToNewGroup": "Bæta flipa við nýjan hóp",
+  "invitePeople": "Bjóða fólki",
+  "uploadFromGallery": "Hlaða upp úr myndasafni",
+  "noQRCodeFound": "Enginn QR-kóði fannst á myndinni",
+  "searchBarPosition": "Staðsetning leitarstiku",
+  "choosethePosition": "Veldu staðsetningu leitarstikunnar",
+  "iPAddress": "IP-vistfang",
+   "vpnIP": " VPN-IP",
+   "myIP": "Mitt IP",
+   "marketUpdate": "Markaðsuppfærsla",
+   "searchYourTabs": "Leita í flipunum þínum",
+   "newTabGroup": "Nýr flipahópur",
+   "selectTab": "Velja flip",
+   "selectTabs": "Velja flipa",
+   "closeAllTabs": "Loka öllum flipum",
+   "deleteTabGroup": "Eyða flipahópi",
+   "rename": "Endurnefna",
+   "renameGroup": "Endurnefna hóp",
+   "ungroupTab": "Taka flipa úr hópi",
+   "deleteGroup": "Eyða hópi",
+   "addToTabGroup": "Bæta við flipahóp",
+   "editGroupName": "Breyta heiti hóps",
+   "editGroupColor": "Breyta lit hóps",
+   "closeTab": "Loka flip",
+   "doYouWantToUngroup": "Viltu örugglega taka þennan flipahóp úr hópi?",
+   "ungroupTabGroup": "Taka flipahóp úr hópi",
+   "ungroup": "Taka úr hópi",
+   "deleteGroup": "Eyða hópi",
+   "deletetabGroup": "Eyða flipahópi",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Bæta við",
+   "tabs": "Flipar",
+   "done": "Lokið",
+   "create": "Búa til",
+   "groupColor": "Litur hóps",
+   "groupName": "Heiti hóps",
+   "newTabGroup": "Nýr flipahópur",
+   "addtoNewTabGroup": "Bæta við nýjan flipahóp",
+   "tabGroups": "Flipahópar",
+   "tabGroup": "Flipahópur",
+   "tabsSelected": "Valdir flipar",
+   "privateResearch": "t.d. Einkarannsókn",
+   "deselectAll": "Afvelja allt",
+   "selected": "Valið",
+
+
+   "close": "Loka",
+   "top": "efst",
+   "bottom": "neðst",
+
+
+
+  "closeAllTabsConfirmation": "Þessi aðgerð mun loka öllum {tabCount} flipunum í „{tabGroupName}“ varanlega. Ekki er hægt að afturkalla þessa aðgerð.",
+"@closeAllTabsConfirmation": {
+  "description": "Staðfestingarskilaboð þegar öllum flipum í flipahópi er lokað",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Breyta hnút..",
+"freeenameWebDomain" : "FreeName Web3 lén",
+"enableFreeNameWeb" : "Virkja stuðning við FreeName Web3 lén",
+"couldnotDownloadBootstrap" : "Ekki tókst að hlaða niður ræsiskrá Belnet. Athugaðu tenginguna þína og reyndu aftur",
+"couldNotEstablishConnection" : "Ekki tókst að koma á Belnet-tengingu. Reyndu aftur",
+"theBelnetServiceNotStarted": "Ekki tókst að ræsa Belnet-þjónustuna. Reyndu aftur",
+"exitNodeUnreachable" : "Útgönguhnúturinn er óaðgengilegur, tengist aftur",
+
+
+"tab": "Flipi",
+"ungroupTabs": "Taka flipa úr hópi",
+"closeGroup": "Loka hópi",
+"ungroupSelectedTabs": "Ertu viss um að þú viljir taka valda flipa úr ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Staðfestingarskilaboð þegar valdir flipar eru teknir úr flipahópi",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex er vistkerfi af dreifðum og trúnaðarskyldum forritum. Beldex Browser appið er eitt þeirra forrita og einnig eru í vistkerfinu forrit eins og BChat, BelNet og Beldex protocol. Beldex Browser er þín hlið inn í hnökralausa og trúnaðarfulla netupplifun þar sem gögnin þín eru eingöngu þín. Byggður á traustu blockchain-innviði, tryggir Beldex Browser trúnað og nafnleynd notenda.",
 "atBeldex": " \n Hjá Beldex trúum við á að veita einstaklingum grundvallarrétt til að stjórna stafrænu fótsporinu sínu. Beldex Browser er hannaður til að veita öruggt og trúnaðarfullt netumhverfi þar sem notendur geta átt samskipti og haft samskipti við stafræna heiminn.",
 "titlebns": "\nBNS",

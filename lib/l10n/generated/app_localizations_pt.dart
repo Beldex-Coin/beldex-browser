@@ -363,7 +363,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get closeTabs => 'Fechar abas';
 
   @override
-  String get closeAllTabs => 'Fechar todas as abas';
+  String get closeAllTabs => 'Fechar todas as guias';
 
   @override
   String get copy => 'Copiar';
@@ -529,6 +529,187 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Mecanismo de busca atualizado com sucesso!';
+
+  @override
+  String get searchusing => 'Pesquisar usando';
+
+  @override
+  String get addTabToNewGroup => 'Adicionar guia a um novo grupo';
+
+  @override
+  String get invitePeople => 'Convidar pessoas';
+
+  @override
+  String get uploadFromGallery => 'Carregar da galeria';
+
+  @override
+  String get noQRCodeFound => 'Nenhum código QR encontrado na imagem';
+
+  @override
+  String get searchBarPosition => 'Posição da barra de pesquisa';
+
+  @override
+  String get choosethePosition => 'Escolha a posição da barra de pesquisa';
+
+  @override
+  String get iPAddress => 'Endereço IP';
+
+  @override
+  String get vpnIP => 'IP da VPN';
+
+  @override
+  String get myIP => 'Meu IP';
+
+  @override
+  String get marketUpdate => 'Atualização do mercado';
+
+  @override
+  String get searchYourTabs => 'Pesquisar suas guias';
+
+  @override
+  String get newTabGroup => 'Novo grupo de guias';
+
+  @override
+  String get selectTab => 'Selecionar guia';
+
+  @override
+  String get selectTabs => 'Selecionar guias';
+
+  @override
+  String get deleteTabGroup => 'Excluir grupo de guias';
+
+  @override
+  String get rename => 'Renomear';
+
+  @override
+  String get renameGroup => 'Renomear grupo';
+
+  @override
+  String get ungroupTab => 'Desagrupar guia';
+
+  @override
+  String get deleteGroup => 'Excluir grupo';
+
+  @override
+  String get addToTabGroup => 'Adicionar ao grupo de guias';
+
+  @override
+  String get editGroupName => 'Editar nome do grupo';
+
+  @override
+  String get editGroupColor => 'Editar cor do grupo';
+
+  @override
+  String get closeTab => 'Fechar guia';
+
+  @override
+  String get doYouWantToUngroup => 'Tem certeza de que deseja desagrupar este grupo de guias?';
+
+  @override
+  String get ungroupTabGroup => 'Desagrupar grupo de guias';
+
+  @override
+  String get ungroup => 'Desagrupar';
+
+  @override
+  String get deletetabGroup => 'xcluir grupo de guias';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Adicionar a';
+
+  @override
+  String get tabs => 'Guias';
+
+  @override
+  String get done => 'Concluído';
+
+  @override
+  String get create => 'Criar';
+
+  @override
+  String get groupColor => 'Cor do grupo';
+
+  @override
+  String get groupName => 'Nome do grupo';
+
+  @override
+  String get addtoNewTabGroup => 'Adicionar ao novo grupo de guias';
+
+  @override
+  String get tabGroups => 'Grupos de guias';
+
+  @override
+  String get tabGroup => 'Grupo de guias';
+
+  @override
+  String get tabsSelected => 'Guias selecionadas';
+
+  @override
+  String get privateResearch => 'Ex.: Pesquisa Privada';
+
+  @override
+  String get deselectAll => 'Desmarcar todas';
+
+  @override
+  String get selected => 'Selecionadas';
+
+  @override
+  String get close => 'Fechar';
+
+  @override
+  String get top => 'superior';
+
+  @override
+  String get bottom => 'inferior';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Esta ação fechará permanentemente todas as $tabCount guias dentro de “$tabGroupName”. Esta ação não pode ser desfeita.';
+  }
+
+  @override
+  String get changingNode => 'Alterar nó';
+
+  @override
+  String get freeenameWebDomain => 'Domínio FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Ativar suporte para domínio FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Não foi possível baixar o arquivo de inicialização do Belnet. Verifique sua conexão e tente novamente';
+
+  @override
+  String get couldNotEstablishConnection => 'Não foi possível estabelecer a conexão com o Belnet. Tente novamente';
+
+  @override
+  String get theBelnetServiceNotStarted => 'O serviço Belnet não pôde ser iniciado. Tente novamente';
+
+  @override
+  String get exitNodeUnreachable => 'Nó de saída inacessível, reconectando';
+
+  @override
+  String get tab => 'Aba';
+
+  @override
+  String get ungroupTabs => 'Desagrupar abas';
+
+  @override
+  String get closeGroup => 'Fechar grupo';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Tem certeza de que deseja desagrupar as abas selecionadas de \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex é um ecossistema de aplicações descentralizadas que preservam a confidencialidade. O aplicativo Beldex Browser é parte desse ecossistema, que também inclui apps como BChat, BelNet e o protocolo Beldex. O Beldex Browser é sua porta de entrada para uma experiência online segura e confidencial, onde seus dados permanecem exclusivamente seus. Construído sobre uma infraestrutura robusta de blockchain, o Beldex Browser garante confidencialidade e anonimato aos seus usuários.';
@@ -1356,6 +1537,187 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
 
   @override
   String get searchEngineUpdated => 'Motor de pesquisa atualizado com sucesso!';
+
+  @override
+  String get searchusing => 'Pesquisar por';
+
+  @override
+  String get addTabToNewGroup => 'Adicionar separador a um novo grupo';
+
+  @override
+  String get invitePeople => 'Convidar pessoas';
+
+  @override
+  String get uploadFromGallery => 'Carregar da galeria';
+
+  @override
+  String get noQRCodeFound => 'Não foi encontrado nenhum código QR na imagem';
+
+  @override
+  String get searchBarPosition => 'Posição da barra de pesquisa';
+
+  @override
+  String get choosethePosition => 'Escolha a posição da barra de pesquisa';
+
+  @override
+  String get iPAddress => 'Endereço IP';
+
+  @override
+  String get vpnIP => 'IP da VPN';
+
+  @override
+  String get myIP => 'O meu IP';
+
+  @override
+  String get marketUpdate => 'Atualização do mercado';
+
+  @override
+  String get searchYourTabs => 'Pesquisar os seus separadores';
+
+  @override
+  String get newTabGroup => 'Novo grupo de separadores';
+
+  @override
+  String get selectTab => 'Selecionar separador';
+
+  @override
+  String get selectTabs => 'Selecionar separadores';
+
+  @override
+  String get deleteTabGroup => 'Eliminar grupo de separadores';
+
+  @override
+  String get rename => 'Mudar o nome';
+
+  @override
+  String get renameGroup => 'Mudar o nome do grupo';
+
+  @override
+  String get ungroupTab => 'Desagrupar separador';
+
+  @override
+  String get deleteGroup => 'Eliminar grupo';
+
+  @override
+  String get addToTabGroup => 'Adicionar ao grupo de separadores';
+
+  @override
+  String get editGroupName => 'Editar nome do grupo';
+
+  @override
+  String get editGroupColor => 'Editar cor do grupo';
+
+  @override
+  String get closeTab => 'Fechar separador';
+
+  @override
+  String get doYouWantToUngroup => 'Tem a certeza de que pretende desagrupar este grupo de separadores?';
+
+  @override
+  String get ungroupTabGroup => 'Desagrupar grupo de separadores';
+
+  @override
+  String get ungroup => 'Desagrupar';
+
+  @override
+  String get deletetabGroup => 'Eliminar grupo de separadores';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Adicionar a';
+
+  @override
+  String get tabs => 'Separadores';
+
+  @override
+  String get done => 'Concluído';
+
+  @override
+  String get create => 'Criar';
+
+  @override
+  String get groupColor => 'Cor do grupo';
+
+  @override
+  String get groupName => 'Nome do grupo';
+
+  @override
+  String get addtoNewTabGroup => 'Adicionar a um novo grupo de separadores';
+
+  @override
+  String get tabGroups => 'Grupos de separadores';
+
+  @override
+  String get tabGroup => 'Grupo de separadores';
+
+  @override
+  String get tabsSelected => 'Separadores selecionados';
+
+  @override
+  String get privateResearch => 'ex.: Pesquisa privada';
+
+  @override
+  String get deselectAll => 'Desselecionar tudo';
+
+  @override
+  String get selected => 'Selecionado';
+
+  @override
+  String get close => 'Fechar';
+
+  @override
+  String get top => 'em cima';
+
+  @override
+  String get bottom => 'em baixo';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Esta ação irá fechar permanentemente todos os $tabCount separadores dentro de “$tabGroupName”. Esta ação não pode ser anulada.';
+  }
+
+  @override
+  String get changingNode => 'A alterar o nó';
+
+  @override
+  String get freeenameWebDomain => 'Domínio FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Ativar o suporte para o domínio FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Não foi possível descarregar o ficheiro de arranque do Belnet. Verifique a sua ligação e tente novamente';
+
+  @override
+  String get couldNotEstablishConnection => 'Não foi possível estabelecer a ligação com o Belnet. Tente novamente';
+
+  @override
+  String get theBelnetServiceNotStarted => 'O serviço Belnet não pôde ser iniciado. Tente novamente';
+
+  @override
+  String get exitNodeUnreachable => 'Nó de saída inacessível, voltando a ligar';
+
+  @override
+  String get tab => 'Separador';
+
+  @override
+  String get ungroupTabs => 'Desagrupar separadores';
+
+  @override
+  String get closeGroup => 'Fechar grupo';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Tem a certeza de que pretende desagrupar os separadores selecionados de \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'A Beldex é um ecossistema de aplicações descentralizadas focadas na preservação da confidencialidade. A aplicação Beldex Browser é uma das componentes deste ecossistema, que inclui também aplicações como o BChat, o BelNet e o protocolo Beldex. O Beldex Browser é a sua porta de entrada para uma experiência online fluida e confidencial, onde os seus dados permanecem exclusivamente seus. Construído sobre uma infraestrutura de blockchain robusta, o Beldex Browser garante confidencialidade e anonimato aos seus utilizadores.';

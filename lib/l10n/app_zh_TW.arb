@@ -184,6 +184,97 @@
   "searchEngineUpdated": "搜尋引擎更新成功！",
 
 
+ "searchusing": "搜尋方式",
+  "addTabToNewGroup": "將分頁新增至新群組",
+  "invitePeople": "邀請他人",
+  "uploadFromGallery": "從相簿上傳",
+  "noQRCodeFound": "圖片中找不到 QR 碼",
+  "searchBarPosition": "搜尋列位置",
+  "choosethePosition": "選擇搜尋列的位置",
+  "iPAddress": "IP 位址",
+   "vpnIP": "VPN IP",
+   "myIP": "我的 IP",
+   "marketUpdate": "市場更新",
+   "searchYourTabs": "搜尋您的分頁",
+   "newTabGroup": "新增分頁群組",
+   "selectTab": "選取分頁",
+   "selectTabs": "選取分頁",
+   "closeAllTabs": "關閉所有分頁",
+   "deleteTabGroup": "刪除分頁群組",
+   "rename": "重新命名",
+   "renameGroup": "重新命名群組",
+   "ungroupTab": "取消分組分頁",
+   "deleteGroup": "刪除群組",
+   "addToTabGroup": "新增至分頁群組",
+   "editGroupName": "編輯群組名稱",
+   "editGroupColor": "編輯群組顏色",
+   "closeTab": "關閉分頁",
+   "doYouWantToUngroup": " 您確定要取消此分頁群組的分組嗎？",
+   "ungroupTabGroup": "取消分組分頁群組",
+   "ungroup": "取消分組",
+   "deleteGroup": "刪除群組",
+   "deletetabGroup": "刪除分頁群組",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "新增至",
+   "tabs": "分頁",
+   "done": "完成",
+   "create": "建立",
+   "groupColor": "群組顏色",
+   "groupName": "群組名稱",
+   "newTabGroup": "新增分頁群組",
+   "addtoNewTabGroup": "新增至新的分頁群組",
+   "tabGroups": "分頁群組",
+   "tabGroup": "分頁群組",
+   "tabsSelected": "已選取分頁",
+   "privateResearch": "例如：私人研究",
+   "deselectAll": "取消全選",
+   "selected": "已選取",
+
+
+   "close": "關閉",
+   "top": "上方",
+   "bottom": "下方",
+
+
+
+  "closeAllTabsConfirmation": "此操作將永久關閉「{tabGroupName}」中的所有 {tabCount} 個分頁。此操作無法復原。",
+"@closeAllTabsConfirmation": {
+  "description": "關閉分頁群組中的所有分頁時顯示的確認訊息",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "正在變更節點",
+"freeenameWebDomain" : "FreeName Web3 網域",
+"enableFreeNameWeb" : "啟用 FreeName Web3 網域支援",
+"couldnotDownloadBootstrap" : "無法下載 Belnet 引導檔。請檢查您的網路連線並重試",
+"couldNotEstablishConnection" : "無法建立 Belnet 連線。請重試",
+"theBelnetServiceNotStarted": "Belnet 服務無法啟動。請重試",
+"exitNodeUnreachable" : "退出節點不可達，正在重新連線",
+
+"tab": "分頁",
+"ungroupTabs": "取消分頁群組",
+"closeGroup": "關閉群組",
+"ungroupSelectedTabs": "確定要取消將選取的分頁從 ${tabGroupName} 中分組嗎？",
+"@ungroupSelectedTabs": {
+  "description": "從分頁群組中取消選取分頁群組時顯示的確認訊息",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
 
 "beldexIsAnEcosystem": "Beldex 是一個由去中心化且重視隱私的應用程式所組成的生態系統。Beldex 瀏覽器應用程式是此生態系統的一部分，還包含 BChat、BelNet 與 Beldex 協議等應用。Beldex 瀏覽器是您通往流暢且保密的線上體驗之門，在此您的資料完全屬於您自己。基於穩固的區塊鏈基礎架構，Beldex 瀏覽器為使用者提供隱私與匿名性保障。",
 "atBeldex": " \n 在 Beldex，我們相信賦予個人掌控自身數位足跡的基本權利。Beldex 瀏覽器旨在提供一個安全且保密的線上環境，讓使用者能與數位世界進行溝通與互動。",

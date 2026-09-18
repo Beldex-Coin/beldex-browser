@@ -531,6 +531,187 @@ class AppLocalizationsHu extends AppLocalizations {
   String get searchEngineUpdated => 'A keresőmotor frissítve!';
 
   @override
+  String get searchusing => 'Keresés ezzel';
+
+  @override
+  String get addTabToNewGroup => 'Lap hozzáadása új csoporthoz';
+
+  @override
+  String get invitePeople => 'Emberek meghívása';
+
+  @override
+  String get uploadFromGallery => 'Feltöltés a galériából,';
+
+  @override
+  String get noQRCodeFound => 'nem található QR-kód a képen';
+
+  @override
+  String get searchBarPosition => 'Keresősáv pozíciója';
+
+  @override
+  String get choosethePosition => 'Válassza ki a keresősáv pozícióját';
+
+  @override
+  String get iPAddress => 'IP-cím';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Saját IP-cím';
+
+  @override
+  String get marketUpdate => 'Piaci frissítés';
+
+  @override
+  String get searchYourTabs => 'Lapok keresése';
+
+  @override
+  String get newTabGroup => 'Új lapcsoport';
+
+  @override
+  String get selectTab => 'Lap kiválasztása';
+
+  @override
+  String get selectTabs => 'Lapok kiválasztása';
+
+  @override
+  String get deleteTabGroup => 'Lapcsoport törlése';
+
+  @override
+  String get rename => 'Átnevezés';
+
+  @override
+  String get renameGroup => 'Csoport átnevezése';
+
+  @override
+  String get ungroupTab => 'Lap csoportbontása';
+
+  @override
+  String get deleteGroup => 'Csoport törlése';
+
+  @override
+  String get addToTabGroup => 'Hozzáadás a lapcsoporthoz';
+
+  @override
+  String get editGroupName => 'Csoport nevének szerkesztése';
+
+  @override
+  String get editGroupColor => 'Csoport színének szerkesztése';
+
+  @override
+  String get closeTab => 'Lap bezárása';
+
+  @override
+  String get doYouWantToUngroup => 'Biztosan meg szeretné szüntetni ennek a lapcsoportnak a csoportosítását?';
+
+  @override
+  String get ungroupTabGroup => 'Lapcsoport csoportbontása';
+
+  @override
+  String get ungroup => 'Csoportbontás';
+
+  @override
+  String get deletetabGroup => 'Lapcsoport törlése';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Hozzáadás ehhez';
+
+  @override
+  String get tabs => 'Lapok';
+
+  @override
+  String get done => 'Kész';
+
+  @override
+  String get create => 'Létrehozás';
+
+  @override
+  String get groupColor => 'Csoport színe';
+
+  @override
+  String get groupName => 'Csoport neve';
+
+  @override
+  String get addtoNewTabGroup => 'Hozzáadás új lapcsoporthoz';
+
+  @override
+  String get tabGroups => 'Lapcsoportok';
+
+  @override
+  String get tabGroup => 'Lapcsoport';
+
+  @override
+  String get tabsSelected => 'Kiválasztott lapok';
+
+  @override
+  String get privateResearch => 'pl. Privát kutatás';
+
+  @override
+  String get deselectAll => 'Összes kijelölés megszüntetése';
+
+  @override
+  String get selected => 'Kiválasztva';
+
+  @override
+  String get close => 'Bezárás';
+
+  @override
+  String get top => 'felül';
+
+  @override
+  String get bottom => 'alul';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Ez a művelet véglegesen bezárja a „$tabGroupName” csoportban található mind a $tabCount lapot. Ez nem vonható vissza.';
+  }
+
+  @override
+  String get changingNode => 'Csomópont módosítása';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domain';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3 domain támogatásának engedélyezése';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nem sikerült letölteni a Belnet rendszerindító fájlját. Ellenőrizze a kapcsolatot, majd próbálja újra';
+
+  @override
+  String get couldNotEstablishConnection => 'Nem sikerült létrehozni a Belnet-kapcsolatot. Próbálja újra';
+
+  @override
+  String get theBelnetServiceNotStarted => 'A Belnet szolgáltatást nem sikerült elindítani. Próbálja újra';
+
+  @override
+  String get exitNodeUnreachable => 'A kilépési csomópont nem érhető el, újracsatlakozás folyamatban';
+
+  @override
+  String get tab => 'Lap';
+
+  @override
+  String get ungroupTabs => 'Lapok csoportosításának megszüntetése';
+
+  @override
+  String get closeGroup => 'Csoport bezárása';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Biztosan megszünteti a kiválasztott lapok csoportosítását a(z) \$$tabGroupName csoportból?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'A Beldex egy decentralizált és adatvédelmet biztosító alkalmazásokból álló ökoszisztéma. A Beldex Browser alkalmazás ennek az ökoszisztémának az egyik eleme, amely olyan alkalmazásokat is tartalmaz, mint a BChat, a BelNet és a Beldex protokoll. A Beldex böngésző kaput nyit egy zökkenőmentes és bizalmas online élményhez, ahol az adatai kizárólag az Önéi maradnak. A robusztus blokklánc-infrastruktúrára épített Beldex böngésző biztosítja a felhasználók adatvédelmét és anonimitását.';
 
   @override

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 
 class ProjectInfoPopup extends StatefulWidget {
@@ -58,6 +59,7 @@ class _ProjectInfoPopupState extends State<ProjectInfoPopup> {
           browserModel.addTab(WebViewTab(
             key: GlobalKey(),
             webViewModel: WebViewModel(
+              uuid: Uuid().v4(),
                 url: WebUri(
                     "https://github.com/beldex-coin")),
           ));
@@ -90,6 +92,7 @@ class _ProjectInfoPopupState extends State<ProjectInfoPopup> {
           browserModel.addTab(WebViewTab(
             key: GlobalKey(),
             webViewModel: WebViewModel(
+              uuid: Uuid().v4(),
                 url: WebUri(
                     "https://github.com/beldex-coin")),
           ));

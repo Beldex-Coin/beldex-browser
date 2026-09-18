@@ -531,6 +531,187 @@ class AppLocalizationsZh extends AppLocalizations {
   String get searchEngineUpdated => '搜索引擎更新成功！';
 
   @override
+  String get searchusing => '使用以下方式搜索';
+
+  @override
+  String get addTabToNewGroup => '添加标签页到新分组';
+
+  @override
+  String get invitePeople => '邀请他人';
+
+  @override
+  String get uploadFromGallery => '从相册上传';
+
+  @override
+  String get noQRCodeFound => '图片中未找到二维码';
+
+  @override
+  String get searchBarPosition => '搜索栏位置';
+
+  @override
+  String get choosethePosition => '选择搜索栏的位置';
+
+  @override
+  String get iPAddress => 'IP 地址';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => '我的 IP';
+
+  @override
+  String get marketUpdate => '市场更新';
+
+  @override
+  String get searchYourTabs => '搜索您的标签页';
+
+  @override
+  String get newTabGroup => '新建标签页分组';
+
+  @override
+  String get selectTab => '选择标签页';
+
+  @override
+  String get selectTabs => '选择标签页';
+
+  @override
+  String get deleteTabGroup => '删除标签页分组';
+
+  @override
+  String get rename => '重命名';
+
+  @override
+  String get renameGroup => '重命名分组';
+
+  @override
+  String get ungroupTab => '取消标签页分组';
+
+  @override
+  String get deleteGroup => '删除分组';
+
+  @override
+  String get addToTabGroup => '添加到标签页分组';
+
+  @override
+  String get editGroupName => '编辑分组名称';
+
+  @override
+  String get editGroupColor => '编辑分组颜色';
+
+  @override
+  String get closeTab => '关闭标签页';
+
+  @override
+  String get doYouWantToUngroup => '确定要取消此标签页分组吗？';
+
+  @override
+  String get ungroupTabGroup => '取消标签页分组';
+
+  @override
+  String get ungroup => '取消分组';
+
+  @override
+  String get deletetabGroup => '删除标签页分组';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => '添加到';
+
+  @override
+  String get tabs => '标签页';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get create => '创建';
+
+  @override
+  String get groupColor => '分组颜色';
+
+  @override
+  String get groupName => '分组名称';
+
+  @override
+  String get addtoNewTabGroup => '添加到新标签页分组';
+
+  @override
+  String get tabGroups => '标签页分组';
+
+  @override
+  String get tabGroup => '标签页分组';
+
+  @override
+  String get tabsSelected => '已选择的标签页';
+
+  @override
+  String get privateResearch => '例如：私人研究';
+
+  @override
+  String get deselectAll => '取消全选';
+
+  @override
+  String get selected => '已选择';
+
+  @override
+  String get close => '关闭';
+
+  @override
+  String get top => '顶部';
+
+  @override
+  String get bottom => '底部';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return '此操作将永久关闭“$tabGroupName”中的全部 $tabCount 个标签页，且无法撤销。';
+  }
+
+  @override
+  String get changingNode => '正在切换节点';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 域名';
+
+  @override
+  String get enableFreeNameWeb => '启用 FreeName Web3 域名支持';
+
+  @override
+  String get couldnotDownloadBootstrap => '无法下载 Belnet 引导文件。请检查您的网络连接，然后重试';
+
+  @override
+  String get couldNotEstablishConnection => '无法建立 Belnet 连接。请重试';
+
+  @override
+  String get theBelnetServiceNotStarted => '无法启动 Belnet 服务。请重试';
+
+  @override
+  String get exitNodeUnreachable => '无法访问出口节点，正在重新连接';
+
+  @override
+  String get tab => '标签页';
+
+  @override
+  String get ungroupTabs => '取消标签页分组';
+
+  @override
+  String get closeGroup => '关闭群组';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '确定要取消 \$$tabGroupName 中所选标签页的分组吗？';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex 是一个去中心化且注重保密性的应用生态系统。Beldex 浏览器应用是该生态系统中的一部分，该生态系统还包括 BChat、BelNet 和 Beldex 协议等应用。Beldex 浏览器是您通往无缝且保密的在线体验的入口，让您的数据始终只属于您自己。基于强大的区块链基础设施，Beldex 浏览器为用户提供保密性和匿名性。';
 
   @override
@@ -1358,6 +1539,187 @@ class AppLocalizationsZhHk extends AppLocalizationsZh {
   String get searchEngineUpdated => '搜尋引擎已成功更新!';
 
   @override
+  String get searchusing => '搜尋方式';
+
+  @override
+  String get addTabToNewGroup => '將分頁新增至新群組';
+
+  @override
+  String get invitePeople => '邀請其他人';
+
+  @override
+  String get uploadFromGallery => '從相簿上載';
+
+  @override
+  String get noQRCodeFound => '圖片中找不到 QR 碼';
+
+  @override
+  String get searchBarPosition => '搜尋列位置';
+
+  @override
+  String get choosethePosition => '選擇搜尋列的位置';
+
+  @override
+  String get iPAddress => 'IP 位址';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => '我的 IP';
+
+  @override
+  String get marketUpdate => '市場更新';
+
+  @override
+  String get searchYourTabs => '搜尋您的分頁';
+
+  @override
+  String get newTabGroup => '新增分頁群組';
+
+  @override
+  String get selectTab => '選取分頁';
+
+  @override
+  String get selectTabs => '選取分頁';
+
+  @override
+  String get deleteTabGroup => '刪除分頁群組';
+
+  @override
+  String get rename => '重新命名';
+
+  @override
+  String get renameGroup => '重新命名群組';
+
+  @override
+  String get ungroupTab => '取消分組分頁';
+
+  @override
+  String get deleteGroup => '刪除群組';
+
+  @override
+  String get addToTabGroup => '新增至分頁群組';
+
+  @override
+  String get editGroupName => '編輯群組名稱';
+
+  @override
+  String get editGroupColor => '編輯群組顏色';
+
+  @override
+  String get closeTab => '關閉分頁';
+
+  @override
+  String get doYouWantToUngroup => '您確定要取消此分頁群組的分組嗎？';
+
+  @override
+  String get ungroupTabGroup => '取消分組分頁群組';
+
+  @override
+  String get ungroup => '取消分組';
+
+  @override
+  String get deletetabGroup => '刪除分頁群組';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => '新增至';
+
+  @override
+  String get tabs => '分頁';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get create => '建立';
+
+  @override
+  String get groupColor => '群組顏色';
+
+  @override
+  String get groupName => '群組名稱';
+
+  @override
+  String get addtoNewTabGroup => '新增至新分頁群組';
+
+  @override
+  String get tabGroups => '分頁群組';
+
+  @override
+  String get tabGroup => '分頁群組';
+
+  @override
+  String get tabsSelected => '已選取分頁';
+
+  @override
+  String get privateResearch => '例如：私人研究';
+
+  @override
+  String get deselectAll => '取消全部選取';
+
+  @override
+  String get selected => '已選取';
+
+  @override
+  String get close => '關閉';
+
+  @override
+  String get top => '上方';
+
+  @override
+  String get bottom => '下方';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return '此操作將永久關閉「$tabGroupName」內的全部 $tabCount 個分頁。此操作無法復原。';
+  }
+
+  @override
+  String get changingNode => '正在切換節點';
+
+  @override
+  String get freeenameWebDomain => 'Freename Web3 網域';
+
+  @override
+  String get enableFreeNameWeb => '啟用 Freename Web3 網域支援';
+
+  @override
+  String get couldnotDownloadBootstrap => '無法下載 Belnet 啟動檔案。請檢查您的網絡連線，然後再試一次';
+
+  @override
+  String get couldNotEstablishConnection => '無法建立 Belnet 連線。請再試一次';
+
+  @override
+  String get theBelnetServiceNotStarted => '無法啟動 Belnet 服務。請再試一次';
+
+  @override
+  String get exitNodeUnreachable => '出口節點無法連線，正在重新連接';
+
+  @override
+  String get tab => '分頁';
+
+  @override
+  String get ungroupTabs => '取消分頁群組';
+
+  @override
+  String get closeGroup => '關閉群組';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '確定要將選取的分頁從 \$$tabGroupName 中取消群組嗎？';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex 是一個由去中心化及重視私隱的應用程式所組成的生態系統。Beldex 瀏覽器應用程式是此生態系統的一部分，當中亦包括 BChat、BelNet 及 Beldex 協議等應用。Beldex 瀏覽器是你通往流暢及保密的網上體驗之門，讓你的資料始終只屬於你自己。基於穩健的區塊鏈基礎架構，Beldex 瀏覽器為用戶提供高度的私隱保護及匿名性。';
 
   @override
@@ -2183,6 +2545,187 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchEngineUpdated => '搜尋引擎更新成功！';
+
+  @override
+  String get searchusing => '搜尋方式';
+
+  @override
+  String get addTabToNewGroup => '將分頁新增至新群組';
+
+  @override
+  String get invitePeople => '邀請他人';
+
+  @override
+  String get uploadFromGallery => '從相簿上傳';
+
+  @override
+  String get noQRCodeFound => '圖片中找不到 QR 碼';
+
+  @override
+  String get searchBarPosition => '搜尋列位置';
+
+  @override
+  String get choosethePosition => '選擇搜尋列的位置';
+
+  @override
+  String get iPAddress => 'IP 位址';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => '我的 IP';
+
+  @override
+  String get marketUpdate => '市場更新';
+
+  @override
+  String get searchYourTabs => '搜尋您的分頁';
+
+  @override
+  String get newTabGroup => '新增分頁群組';
+
+  @override
+  String get selectTab => '選取分頁';
+
+  @override
+  String get selectTabs => '選取分頁';
+
+  @override
+  String get deleteTabGroup => '刪除分頁群組';
+
+  @override
+  String get rename => '重新命名';
+
+  @override
+  String get renameGroup => '重新命名群組';
+
+  @override
+  String get ungroupTab => '取消分組分頁';
+
+  @override
+  String get deleteGroup => '刪除群組';
+
+  @override
+  String get addToTabGroup => '新增至分頁群組';
+
+  @override
+  String get editGroupName => '編輯群組名稱';
+
+  @override
+  String get editGroupColor => '編輯群組顏色';
+
+  @override
+  String get closeTab => '關閉分頁';
+
+  @override
+  String get doYouWantToUngroup => ' 您確定要取消此分頁群組的分組嗎？';
+
+  @override
+  String get ungroupTabGroup => '取消分組分頁群組';
+
+  @override
+  String get ungroup => '取消分組';
+
+  @override
+  String get deletetabGroup => '刪除分頁群組';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => '新增至';
+
+  @override
+  String get tabs => '分頁';
+
+  @override
+  String get done => '完成';
+
+  @override
+  String get create => '建立';
+
+  @override
+  String get groupColor => '群組顏色';
+
+  @override
+  String get groupName => '群組名稱';
+
+  @override
+  String get addtoNewTabGroup => '新增至新的分頁群組';
+
+  @override
+  String get tabGroups => '分頁群組';
+
+  @override
+  String get tabGroup => '分頁群組';
+
+  @override
+  String get tabsSelected => '已選取分頁';
+
+  @override
+  String get privateResearch => '例如：私人研究';
+
+  @override
+  String get deselectAll => '取消全選';
+
+  @override
+  String get selected => '已選取';
+
+  @override
+  String get close => '關閉';
+
+  @override
+  String get top => '上方';
+
+  @override
+  String get bottom => '下方';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return '此操作將永久關閉「$tabGroupName」中的所有 $tabCount 個分頁。此操作無法復原。';
+  }
+
+  @override
+  String get changingNode => '正在變更節點';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 網域';
+
+  @override
+  String get enableFreeNameWeb => '啟用 FreeName Web3 網域支援';
+
+  @override
+  String get couldnotDownloadBootstrap => '無法下載 Belnet 引導檔。請檢查您的網路連線並重試';
+
+  @override
+  String get couldNotEstablishConnection => '無法建立 Belnet 連線。請重試';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet 服務無法啟動。請重試';
+
+  @override
+  String get exitNodeUnreachable => '退出節點不可達，正在重新連線';
+
+  @override
+  String get tab => '分頁';
+
+  @override
+  String get ungroupTabs => '取消分頁群組';
+
+  @override
+  String get closeGroup => '關閉群組';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '確定要取消將選取的分頁從 \$$tabGroupName 中分組嗎？';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex 是一個由去中心化且重視隱私的應用程式所組成的生態系統。Beldex 瀏覽器應用程式是此生態系統的一部分，還包含 BChat、BelNet 與 Beldex 協議等應用。Beldex 瀏覽器是您通往流暢且保密的線上體驗之門，在此您的資料完全屬於您自己。基於穩固的區塊鏈基礎架構，Beldex 瀏覽器為使用者提供隱私與匿名性保障。';

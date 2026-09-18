@@ -9,7 +9,11 @@ import 'package:beldex_browser/main.dart';
 import 'package:beldex_browser/src/browser/empty_tab.dart';
 import 'package:beldex_browser/src/browser/models/search_engine_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/change_node_screen.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/node_dropdown_list_page.dart';
 import 'package:beldex_browser/src/providers.dart';
@@ -26,6 +30,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 import 'javascript_console_result.dart';
 import 'long_press_alert_dialog.dart';
@@ -213,7 +218,13 @@ Future<String> getConnectedExitnode()async{
 }
 
 String getBackgroundColor(DarkThemeProvider themeProvider){
-  return themeProvider.darkTheme ? '#282836'  : '#F3F3F3';
+  return themeProvider.darkTheme ? '#1A1A1AE5'  : '#F3F3F3';
+}
+String getbuttonColor(DarkThemeProvider themeProvider){
+  return themeProvider.darkTheme ? '#EBEBEB' : '#0B0B0B';
+}
+String getbuttonTextColor(DarkThemeProvider themeProvider){
+  return themeProvider.darkTheme ? '#0B0B0B' : '#EBEBEB';
 }
 
 String getTextColor(DarkThemeProvider themeProvider){
@@ -299,6 +310,8 @@ bool checkSearchEngineInUrl(
   final appLocaleProvider = Provider.of<LocaleProvider>(context);
    final addEngineProvider =
         Provider.of<AddSearchEngineProvider>(context, listen: true);
+    final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context);
+    final bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context);
 
     final selectedSessionEngines =
         addEngineProvider.selectedSessionEngines;
@@ -377,16 +390,21 @@ bool checkSearchEngineInUrl(
       callback: (args) {
         print("JS called Flutter changeNode handler");
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(
+          if(appBarPositionProvider.selectedPosition == AppBarPosition.bottom){
+           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NodeDropdownListPage(
+              builder: (context) => ChangeNodePage(
                 exitData: [],
                 canChangeNode: true,
                 webViewController: _webViewController,
               ),
             ),
           );
+          }else{
+            bottomNavigationProvider.changeIndex(1);
+          }
+          
         });
       },
     );
@@ -405,7 +423,7 @@ bool checkSearchEngineInUrl(
       onLoadStart: (controller, url) async {
         widget.webViewModel.isSecure = Util.urlIsSecure(url!);
         widget.webViewModel.url = url;
-
+        browserModel.updateUserInput(url.toString());
     print('RESOLVE IN WEB3 in start load ${browserModel.isWeb3Domain} --- ${url}');
 
 if(browserModel.isWeb3Domain == true && !(url.toString().startsWith('https://') && checkSearchEngineInUrl(SearchEngines, selectedSessionEngines, url))){
@@ -443,7 +461,7 @@ if(browserModel.isWeb3Domain == true && !(url.toString().startsWith('https://') 
         widget.webViewModel.url = url;
         widget.webViewModel.favicon = null;
         widget.webViewModel.loaded = true;
-       
+        browserModel.updateUserInput(widget.webViewModel.url.toString());
         var sslCertificateFuture = _webViewController?.getCertificate();
         var titleFuture = _webViewController?.getTitle();
         var faviconsFuture = _webViewController?.getFavicons();
@@ -593,6 +611,7 @@ await _webViewController!.evaluateJavascript(source: """
           if (requestFocusNodeHrefResult != null) {
             showDialog(
               context: context,
+              barrierColor:themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8),
               builder: (context) {
                 return LongPressAlertDialog(
                   webViewModel: widget.webViewModel,
@@ -646,7 +665,7 @@ await _webViewController!.evaluateJavascript(source: """
       print("Flutter received console message");
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => NodeDropdownListPage(
+        MaterialPageRoute(builder: (_) => ChangeNodePage(
           exitData: [],
           canChangeNode: true,
           webViewController: controller,
@@ -958,20 +977,23 @@ p {
 
 .footer {
     background-color: ${getBackgroundColor(themeProvider)} ; /* #282836 : #F3F3F3; */
+    blur: 12;
     padding: 20px;
-    /*height:31vh; */
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
+    /*height:31vh; */ 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); /* Safari support */
+   /* border-top-right-radius: 10px;
+    border-top-left-radius: 10px; */
     color: ${getTextColor(themeProvider)};
     text-align: center;
 }
 
 .change-button {
-    background-color: #00BD40;
-    color: white;
+    background-color: ${getbuttonColor(themeProvider)}; /*#00BD40; */
+    color: ${getbuttonTextColor(themeProvider)}; /* white; */
     padding: 15px 20px;
     border: none;
-    border-radius: 10px;
+   /* border-radius: 10px;*/
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
@@ -1103,6 +1125,7 @@ Future.delayed(const Duration(seconds: 3),(){
         var webViewTab = WebViewTab(
           key: GlobalKey(),
           webViewModel: WebViewModel(
+            uuid: Uuid().v4(),
               url: WebUri("about:blank"),
               windowId: createWindowRequest.windowId),
         );
@@ -1755,92 +1778,104 @@ String getDownloadFile(String name){
         final loc = AppLocalizations.of(context)!;
     return showDialog<bool>(
       context: context,
+      barrierColor:  themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8),
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor:
-              themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffFFFFFF),
-          insetPadding: EdgeInsets.all(15),
-          child: Container(
-            width: width,
-            // height: 200,
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: themeProvider.darkTheme
-                    ?const Color(0xff282836)
-                    :const Color(0xffFFFFFF),
-                borderRadius: BorderRadius.circular(8)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(loc.download,
-                    //'Download',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+         insetPadding: EdgeInsets.all(18),
+            backgroundColor: Colors.transparent,
+          child: GlassSettingPanel(
+           color: themeProvider.darkTheme ? Color(0xff1A1A1A).withOpacity(0.8) : Color(0xffEBEBEB),
+            child: Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4))),
+              // width: width,
+              // // height: 200,
+              // padding: EdgeInsets.all(15),
+              // decoration: BoxDecoration(
+              //     color: themeProvider.darkTheme
+              //         ?const Color(0xff282836)
+              //         :const Color(0xffFFFFFF),
+              //     borderRadius: BorderRadius.circular(8)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(loc.download,
+                      //'Download',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,fontFamily: 'Inter'),
+                    ),
                   ),
-                ),
-                Text( 
-                  '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10.0,
-                        ),
-                        child: MaterialButton(
+                  Text( 
+                    '${loc.youAreAboutToDownload} ${getDownloadFile(url.suggestedFilename)}. ${loc.areYouSure}',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: TextStyle(fontFamily: 'Roboto',color: themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff444444)),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                          ),
+                          child: MaterialButton(
                           elevation: 0,
-                          color: themeProvider.darkTheme
-                              ? Color(0xff42425F)
-                              : Color(0xffF3F3F3),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: Text(loc.cancel, style: TextStyle(fontSize: 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                            color: themeProvider.darkTheme
+                                ? Color(0xff333333)
+                                : Color(0xffF3F3F3),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                            child: Text(loc.cancel, style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600, fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff444444))),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(
+                            //       10.0), // Adjust the radius as needed
+                            // ),
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop(false);
-                          },
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: MaterialButton(
-                          color: Color(0xff00B134),
-                          disabledColor: Color(0xff2C2C3B),
-                          minWidth: double.maxFinite,
-                          height: 50,
-                          child: Text(loc.download,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 18)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the radius as needed
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: MaterialButton(
+                            color:  themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B),// Color(0xff00B134),
+                            disabledColor: Color(0xff2C2C3B),
+                            minWidth: double.maxFinite,
+                            height: 50,
+                            shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+  ),
+                            child: Text(loc.download,
+                              style: TextStyle(fontSize: 16,fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xff0B0B0B) : Color(0xffEBEBEB),fontWeight: FontWeight.w600)),
+                            // shape: RoundedRectangleBorder(
+                            //   borderRadius: BorderRadius.circular(
+                            //       10.0), // Adjust the radius as needed
+                            // ),
+                            onPressed: () async {
+                              Navigator.of(context).pop(true);
+                            },
                           ),
-                          onPressed: () async {
-                            Navigator.of(context).pop(true);
-                          },
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         );

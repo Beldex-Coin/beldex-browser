@@ -531,6 +531,187 @@ class AppLocalizationsLt extends AppLocalizations {
   String get searchEngineUpdated => 'Paieškos variklis sėkmingai atnaujintas!';
 
   @override
+  String get searchusing => 'Ieškoti naudojant';
+
+  @override
+  String get addTabToNewGroup => 'Pridėti skirtuką prie naujos grupės';
+
+  @override
+  String get invitePeople => 'Pakviesti žmones';
+
+  @override
+  String get uploadFromGallery => 'Įkelti iš galerijos';
+
+  @override
+  String get noQRCodeFound => 'Paveikslėlyje QR kodas nerastas';
+
+  @override
+  String get searchBarPosition => 'Paieškos juostos vieta';
+
+  @override
+  String get choosethePosition => 'Pasirinkite paieškos juostos vietą';
+
+  @override
+  String get iPAddress => 'IP adresas';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Mano IP';
+
+  @override
+  String get marketUpdate => 'Rinkos atnaujinimas';
+
+  @override
+  String get searchYourTabs => 'Ieškoti savo skirtukuose';
+
+  @override
+  String get newTabGroup => 'Nauja skirtukų grupė';
+
+  @override
+  String get selectTab => 'Pasirinkti skirtuką';
+
+  @override
+  String get selectTabs => 'Pasirinkti skirtukus';
+
+  @override
+  String get deleteTabGroup => 'Ištrinti skirtukų grupę';
+
+  @override
+  String get rename => 'Pervadinti';
+
+  @override
+  String get renameGroup => 'Pervadinti grupę';
+
+  @override
+  String get ungroupTab => 'Pašalinti skirtuką iš grupės';
+
+  @override
+  String get deleteGroup => 'Ištrinti grupę';
+
+  @override
+  String get addToTabGroup => 'Pridėti prie skirtukų grupės';
+
+  @override
+  String get editGroupName => 'Redaguoti grupės pavadinimą';
+
+  @override
+  String get editGroupColor => 'Redaguoti grupės spalvą';
+
+  @override
+  String get closeTab => 'Uždaryti skirtuką';
+
+  @override
+  String get doYouWantToUngroup => 'Ar tikrai norite išgrupuoti šią skirtukų grupę?';
+
+  @override
+  String get ungroupTabGroup => 'Pridėti prie skirtukų grupės';
+
+  @override
+  String get ungroup => 'Išgrupuoti';
+
+  @override
+  String get deletetabGroup => 'Ištrinti skirtukų grupę';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Pridėti prie';
+
+  @override
+  String get tabs => 'Skirtukai';
+
+  @override
+  String get done => 'Atlikta';
+
+  @override
+  String get create => 'Sukurti';
+
+  @override
+  String get groupColor => 'Grupės spalva';
+
+  @override
+  String get groupName => 'Grupės pavadinimas';
+
+  @override
+  String get addtoNewTabGroup => 'Pridėti prie naujos skirtukų grupės';
+
+  @override
+  String get tabGroups => 'Skirtukų grupės';
+
+  @override
+  String get tabGroup => 'Skirtukų grupė';
+
+  @override
+  String get tabsSelected => 'Pasirinkti skirtukai';
+
+  @override
+  String get privateResearch => 'pvz., Privatus tyrimas';
+
+  @override
+  String get deselectAll => 'Panaikinti visų pasirinkimą';
+
+  @override
+  String get selected => 'Pasirinkta';
+
+  @override
+  String get close => 'Uždaryti';
+
+  @override
+  String get top => 'viršuje';
+
+  @override
+  String get bottom => 'apačioje';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Šis veiksmas visam laikui uždarys visus $tabCount skirtukus, esančius „$tabGroupName“. Šio veiksmo anuliuoti negalima';
+  }
+
+  @override
+  String get changingNode => 'Keičiamas mazgas..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domenas';
+
+  @override
+  String get enableFreeNameWeb => 'Įjungti FreeName Web3 domeno palaikymą';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nepavyko atsisiųsti Belnet paleidimo failo. Patikrinkite ryšį ir bandykite dar kartą';
+
+  @override
+  String get couldNotEstablishConnection => 'Nepavyko užmegzti Belnet ryšio. Bandykite dar kartą';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Nepavyko paleisti Belnet paslaugos. Bandykite dar kartą';
+
+  @override
+  String get exitNodeUnreachable => 'Išėjimo mazgas nepasiekiamas, jungiamasi iš naujo';
+
+  @override
+  String get tab => 'Skirtukas';
+
+  @override
+  String get ungroupTabs => 'Išgrupuoti skirtukus';
+
+  @override
+  String get closeGroup => 'Uždaryti grupę';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Ar tikrai norite išgrupuoti pasirinktus skirtukus iš \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex yra decentralizuotų ir konfidencialumą išsaugančių programų ekosistema. Beldex Browser programa yra viena iš šios ekosistemos dalių, kuri taip pat apima tokias programas kaip BChat, BelNet ir Beldex protokolas. Beldex Browser yra jūsų vartai į sklandžią ir konfidencialią naršymo patirtį, kurioje jūsų duomenys lieka tik jūsų. Sukurta ant tvirtos blokų grandinės infrastruktūros, Beldex Browser užtikrina vartotojų konfidencialumą ir anonimiškumą.';
 
   @override

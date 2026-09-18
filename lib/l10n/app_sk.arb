@@ -74,7 +74,7 @@
   "switchingNode": "Prepínanie uzla",
   "nodes": "Uzly",
   "exitNodeSwitched": "Výstupný uzol bol úspešne prepnutý",
-  "thisNodeAlreadySelected": "ento uzol je už vybraný. Vyberte iný zo zoznamu",
+  "thisNodeAlreadySelected": "Tento uzol je už vybraný. Vyberte iný zo zoznamu",
   "doYouWantToSwitch": "Chcete prepnúť na vybraný uzol?",
   "noRecentDownloads": "Žiadne nedávne stiahnutia",
   "clearDownloads": "Vymazať sťahovania",
@@ -184,6 +184,106 @@
   "searchEngineAlreadyExist": "Tento vyhľadávací nástroj už existuje",
   "searchEngineAdded": "Vyhľadávací nástroj bol úspešne pridaný!",
   "searchEngineUpdated": "Vyhľadávací nástroj bol úspešne aktualizovaný!",
+
+
+
+
+  "searchusing": "Hľadať pomocou",
+  "addTabToNewGroup": "Pridať kartu do novej skupiny",
+  "invitePeople": "Pozvať ľudí",
+  "uploadFromGallery": "Nahrať z galérie",
+  "noQRCodeFound": "na obrázku sa nenašiel žiadny QR kód",
+  "searchBarPosition": "Pozícia vyhľadávacieho panela",
+  "choosethePosition": "Vyberte pozíciu vyhľadávacieho panela",
+  "iPAddress": "IP adresa",
+   "vpnIP": "VPN IP",
+   "myIP": "Moja IP",
+   "marketUpdate": "Aktualizácia trhu",
+   "searchYourTabs": "Hľadať v kartách",
+   "newTabGroup": "Nová skupina kariet",
+   "selectTab": "Vybrať kartu",
+   "selectTabs": "Vybrať karty",
+   "closeAllTabs": "Zavrieť všetky karty",
+   "deleteTabGroup": "Odstrániť skupinu kariet",
+   "rename": "Premenovať",
+   "renameGroup": "Premenovať skupinu",
+   "ungroupTab": "Zrušiť zoskupenie karty",
+   "deleteGroup": "Odstrániť skupinu",
+   "addToTabGroup": "Pridať do skupiny kariet",
+   "editGroupName": "Upraviť názov skupiny",
+   "editGroupColor": "Upraviť farbu skupiny",
+   "closeTab": "Zavrieť kartu",
+   "doYouWantToUngroup": "Naozaj chcete zrušiť zoskupenie tejto skupiny kariet?",
+   "ungroupTabGroup": "Zrušiť zoskupenie skupiny kariet",
+   "ungroup": "rušiť zoskupenie",
+   "deleteGroup": "Odstrániť skupinu",
+   "deletetabGroup": "Odstrániť skupinu kariet",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Pridať do",
+   "tabs": "Karty",
+   "done": "Hotovo",
+   "create": "Vytvoriť",
+   "groupColor": "Farba skupiny",
+   "groupName": "Názov skupiny",
+   "newTabGroup": "Nová skupina kariet",
+   "addtoNewTabGroup": "Pridať do novej skupiny kariet",
+   "tabGroups": "Skupiny kariet",
+   "tabGroup": "Skupina kariet",
+   "tabsSelected": "Vybrané karty",
+   "privateResearch": "napr. Súkromný výskum",
+   "deselectAll": "Zrušiť výber všetkého",
+   "selected": "Vybrané",
+
+
+   "close": "Zavrieť",
+   "top": "hore",
+   "bottom": "dole",
+
+
+
+  "closeAllTabsConfirmation": "Táto akcia natrvalo zatvorí všetky {tabCount} karty v skupine „{tabGroupName}“. Túto akciu nie je možné vrátiť späť.",
+"@closeAllTabsConfirmation": {
+  "description": "Potvrdzovacia správa pri zatváraní všetkých kariet v skupine kariet",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "Zmena uzla..",
+"freeenameWebDomain" : "Doména Web3 FreeName",
+"enableFreeNameWeb" : "Povoliť podporu domény Web3 FreeName",
+"couldnotDownloadBootstrap" : "Nepodarilo sa stiahnuť zavádzací súbor Belnet. Skontrolujte svoje pripojenie a skúste to znova",
+"couldNotEstablishConnection" : "Nepodarilo sa nadviazať pripojenie k Belnetu. Skúste to znova",
+"theBelnetServiceNotStarted": "Službu Belnet sa nepodarilo spustiť. Skúste to znova",
+"exitNodeUnreachable" : "Výstupný uzol nie je dostupný, prebieha opätovné pripájanie",
+
+
+
+"tab": "Karta",
+"ungroupTabs": "Zrušiť zoskupenie kariet",
+"closeGroup": "Zavrieť skupinu",
+"ungroupSelectedTabs": "Naozaj chcete zrušiť zoskupenie vybraných kariet zo skupiny ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Potvrdzovacia správa pri zrušení zoskupenia vybraných kariet zo skupiny kariet",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 
 
 

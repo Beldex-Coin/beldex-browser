@@ -168,7 +168,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Lerrokatu QR kodea markoaren erdian';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'AI ongietorri pantaila: Beldex AI-k Beldex Nabigatzailea hobetzen du funtzio adimendunekin, web esperientzia leun eta jarraitua eskaintzeko. Orrialdeko edukia laburbiltzen du irakurketa azkarrerako. Trafikoa masternode eta irteera-nodoen bidez modu eraginkorrean bideratuz, konfidentzialtasuna eta nabigazio azkarragoa bermatzen ditu. Harpidetza-oinarritutako ereduek ez bezala, Beldex AI doan erabil daiteke, funtzionalitate aurreratua eskainiz eta erabiltzailearen erosotasuna eta konfidentzialtasunean oinarritutako internet esperientzia lehenetsiz. Arakatu nabigazio adimentsuago eta azkarragoa Beldex AI-rekin.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI-k Beldex Nabigatzailea hobetzen du funtzio adimendunekin, web esperientzia leun eta jarraitua eskaintzeko. Orrialdeko edukia laburbiltzen du irakurketa azkarrerako. Trafikoa masternode eta irteera-nodoen bidez modu eraginkorrean bideratuz, konfidentzialtasuna eta nabigazio azkarragoa bermatzen ditu. Harpidetza-oinarritutako ereduek ez bezala, Beldex AI doan erabil daiteke, funtzionalitate aurreratua eskainiz eta erabiltzailearen erosotasuna eta konfidentzialtasunean oinarritutako internet esperientzia lehenetsiz. Arakatu nabigazio adimentsuago eta azkarragoa Beldex AI-rekin.';
 
   @override
   String get needHelpWithThisSite => 'Laguntza behar duzu gune honekin?';
@@ -529,6 +529,187 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Bilaketa-motorra behar bezala eguneratu da!';
+
+  @override
+  String get searchusing => 'Bilatu honen bidez';
+
+  @override
+  String get addTabToNewGroup => 'Gehitu fitxa talde berriari';
+
+  @override
+  String get invitePeople => 'Gonbidatu pertsonak';
+
+  @override
+  String get uploadFromGallery => 'Kargatu galeriatik';
+
+  @override
+  String get noQRCodeFound => 'ez da QR koderik aurkitu irudian';
+
+  @override
+  String get searchBarPosition => 'Bilaketa-barraren kokapena';
+
+  @override
+  String get choosethePosition => 'Aukeratu bilaketa-barraren kokapena';
+
+  @override
+  String get iPAddress => 'IP helbidea';
+
+  @override
+  String get vpnIP => 'VPN IPa';
+
+  @override
+  String get myIP => 'Nire IPa';
+
+  @override
+  String get marketUpdate => 'Merkatuaren eguneraketa';
+
+  @override
+  String get searchYourTabs => 'Bilatu zure fitxetan';
+
+  @override
+  String get newTabGroup => 'Fitxa-talde berria';
+
+  @override
+  String get selectTab => 'Hautatu fitxa';
+
+  @override
+  String get selectTabs => 'Hautatu fitxak';
+
+  @override
+  String get deleteTabGroup => 'Ezabatu fitxa-taldea';
+
+  @override
+  String get rename => 'Aldatu izena';
+
+  @override
+  String get renameGroup => 'Aldatu taldearen izena';
+
+  @override
+  String get ungroupTab => 'Kendu fitxa taldetik';
+
+  @override
+  String get deleteGroup => 'Ezabatu taldea';
+
+  @override
+  String get addToTabGroup => 'Gehitu fitxa-taldera';
+
+  @override
+  String get editGroupName => 'Editatu taldearen izena';
+
+  @override
+  String get editGroupColor => 'Editatu taldearen kolorea';
+
+  @override
+  String get closeTab => 'Itxi fitxa';
+
+  @override
+  String get doYouWantToUngroup => 'Hautatutako nodora aldatu nahi duzu?';
+
+  @override
+  String get ungroupTabGroup => 'Kendu fitxa-taldea';
+
+  @override
+  String get ungroup => 'Kendu taldetik';
+
+  @override
+  String get deletetabGroup => 'Ezabatu fitxa-taldea';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Gehitu hona';
+
+  @override
+  String get tabs => 'Fitxak';
+
+  @override
+  String get done => 'Eginda';
+
+  @override
+  String get create => 'Sortu';
+
+  @override
+  String get groupColor => 'Taldearen kolorea';
+
+  @override
+  String get groupName => 'Taldearen izena';
+
+  @override
+  String get addtoNewTabGroup => 'Gehitu fitxa-talde berriari';
+
+  @override
+  String get tabGroups => 'Fitxa-taldeak';
+
+  @override
+  String get tabGroup => 'Fitxa-taldea';
+
+  @override
+  String get tabsSelected => 'Hautatutako fitxak';
+
+  @override
+  String get privateResearch => 'adib., Ikerketa pribatua';
+
+  @override
+  String get deselectAll => 'Kendu hautaketa guztia';
+
+  @override
+  String get selected => 'Hautatuta';
+
+  @override
+  String get close => 'Itxi';
+
+  @override
+  String get top => 'goian';
+
+  @override
+  String get bottom => 'behean';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Ekintza honek behin betiko itxiko ditu “$tabGroupName” taldeko $tabCount fitxak. Ezin da ekintza hau desegin.';
+  }
+
+  @override
+  String get changingNode => 'Changing Node';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domeinua';
+
+  @override
+  String get enableFreeNameWeb => 'Gaitu FreeName Web3 domeinuaren euskarria';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Ezin izan da Belnet abio-fitxategia deskargatu. Egiaztatu konexioa eta saiatu berriro';
+
+  @override
+  String get couldNotEstablishConnection => 'Ezin izan da Belnet konexioa ezarri. Saiatu berriro';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Ezin izan da Belnet zerbitzua abiarazi. Saiatu berriro';
+
+  @override
+  String get exitNodeUnreachable => 'Irteera-nodoa ez dago erabilgarri, berriro konektatzen';
+
+  @override
+  String get tab => 'Fitxa';
+
+  @override
+  String get ungroupTabs => 'Fitxak taldetik kendu';
+
+  @override
+  String get closeGroup => 'Itxi taldea';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Ziur zaude hautatutako fitxak \$$tabGroupName taldetik kendu nahi dituzula?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex aplikazio deszentralizatu eta konfidentzialtasuna zaintzen duten aplikazioen ekosistema bat da. Beldex Nabigatzailearen aplikazioa ekosistema honetako bat da; besteak beste, BChat, BelNet eta Beldex protokoloa ere barne hartzen ditu. Beldex Nabigatzailea zure atea da lineako esperientzia leun eta konfidentzial batera, non zure datuak zureak bakarrik diren. Blockchain azpiegitura sendo batean eraikia, Beldex Nabigatzaileak konfidentzialtasuna eta anonimotasuna bermatzen dizkie erabiltzaileei.';

@@ -6,6 +6,8 @@ import 'package:beldex_browser/src/browser/pages/search_engine/add_searchEnging_
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/searchengine_icon_placeholder.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/widget/text_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -135,369 +137,443 @@ final sessionEngines = addEngineProvider.sessionSearchEngines;
 final browserModel = Provider.of<BrowserModel>(context);
 final settings = browserModel.getSettings();
 
-    return Scaffold(
-        appBar: normalAppBar(context, loc.manageSearchShortcuts, themeProvider),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(loc.engineVisibleOnSearchMenu,
-                  //'Engine visible on the search menu',
-                  style: TextStyle(
-                      color: const Color(0xff00BD40),
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500),
+    return Stack(
+      children: [
+        Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
+        ),
+      ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+            appBar: normalAppBar(context, loc.manageSearchShortcuts, themeProvider,()=>Navigator.pop(context)),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(vertical:  8.0,horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(loc.engineVisibleOnSearchMenu,
+                      //'Engine visible on the search menu',
+                      style: TextStyle(
+                          color:themeProvider.darkTheme ? const Color(0xffACACAC) : Color(0xff444444),
+                          fontSize: 14,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  Expanded(
+                    child: GlassCommonPanel(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)),
+                            //borderRadius: BorderRadius.circular(15.0),
+                           // color: 
+                            // themeProvider.darkTheme
+                            //     ?const Color(0xff292937)
+                            //     : const Color(0xffF3F3F3)
+                            ),
+                        padding:const EdgeInsets.only(
+                            left: 15.0,
+                            right: 15,
+                            bottom: 20),
+                        child: SingleChildScrollView(
+                          child: Container(
+                            child: 
+                            ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount:
+                                browserModel.items.length + sessionEngines.length + 1,
+                                itemBuilder: (context, index) {
+                              
+                              /// ---------------- ADD SEARCH ENGINE BUTTON (LAST) ----------------
+                              if (index ==
+                                  browserModel.items.length + sessionEngines.length) {
+                                return 
+                                
+                                InkWell(
+              onTap: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context)=> AddSearchEngineScreen()));
+                // your action to open "Add search engine" screen
+                print("Add Search Engine Clicked");
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 10.0),
+                    //   child: Icon(Icons.image,size: 22,color: Colors.transparent,
+                        
+                    //   ),
+                    // ),
+                    Icon(Icons.add,size: 15, color: Color(0xff00BD40)),
+                    SizedBox(width: 3),
+                    Text( loc.addSearchEngine,
+                      //"Add Search Engine",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        fontFamily: 'Inter',
+                        color: themeProvider.darkTheme ? Color(0xffEBEBEB): Color(0xff0B0B0B),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
+            );
+                              }
+                              
+                              /// ---------------- FIRST LIST ----------------
+                              if (index < browserModel.items.length) {
+                                final item = browserModel.items[index];
+                              
+                                if (item.name == 'This time Search in' ||
+                                    item.name == 'Search setting' ||
+                                    item.name == 'Beldex Search Engine') {
+                                  return const SizedBox();
+                                }
+                              
+                                final actualIndex = index + (index >= 13 ? 2 : 0);
+                              
+                                return ListTile(
+                                  contentPadding: EdgeInsets.zero,//symmetric(horizontal: ),
+                                  leading: Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      border: Border.all(
+                                        color: browserModel.selectedItems.contains(index)
+                        ? const Color(0xff00B134)
+                        : themeProvider.darkTheme
+                            ? Colors.white
+                            : Colors.black,
+                                      ),
+                                    ),
+                                    child: browserModel.selectedItems.contains(index)
+                                        ? SvgPicture.asset(
+                        'assets/images/tick.svg',
+                        fit: BoxFit.cover,
+                      )
+                                        : const SizedBox(),
+                                  ),
+                                  minLeadingWidth: 15,
+                                  onTap: () => browserModel.toggleItem(index),
+                                  title: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: SvgPicture.asset(
+                      item.imageUrl,
+                      height: item.imageUrl ==
+                              'assets/images/youtube.svg'
+                          ? 18
+                          : 22,
+                      width: item.imageUrl ==
+                              'assets/images/youtube.svg'
+                          ? 18
+                          : 22,
+                      color: (actualIndex >= 10 &&
+                              actualIndex <= 13)
+                          ? themeProvider.darkTheme
+                              ? Colors.white
+                              : Colors.black
+                          : null,
+                                        ),
+                                      ),
+                                      Text(
+                                        item.name,
+                                        style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Inter',
                       color: themeProvider.darkTheme
-                          ?const Color(0xff292937)
-                          : const Color(0xffF3F3F3)),
-                  padding:const EdgeInsets.only(
-                      left: 15.0,
-                      right: 15,
-                      bottom: 20),
-                  child: SingleChildScrollView(
+                          ? Colors.white
+                          : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              
+                              /// ---------------- SECOND LIST (SESSION ENGINES) ----------------
+                              final engineIndex = index - browserModel.items.length;
+                              final engine = sessionEngines[engineIndex];
+                              
+                              return ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                  leading: Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      border: Border.all(
+                                        color: addEngineProvider.selectedSessionEngines.contains(engine)
+                        ? const Color(0xff00B134)
+                        : themeProvider.darkTheme
+                            ? Colors.white
+                            : Colors.black,
+                                      ),
+                                    ),
+                                    child: addEngineProvider.selectedSessionEngines.contains(engine)
+                                        ? SvgPicture.asset(
+                        'assets/images/tick.svg',
+                        fit: BoxFit.cover,
+                      )
+                                        : const SizedBox(),
+                                  ),
+                                  minLeadingWidth: 15,
+                                  onTap: ()=> addEngineProvider.toggleSessionEngine(engine),// => provider.toggleItem(index),
+                                  title: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 10),
+                                        child: CachedNetworkImage(
+                                  imageUrl: engine.assetIcon,
+                                  width: 20,
+                                  height: 20,
+                                  errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:engine.name,size: 20,),
+                                )// Icon(Icons.public, size: 18)
+                                        // SvgPicture.asset(
+                                        //   item.imageUrl,
+                                        //   height: item.imageUrl ==
+                                        //           'assets/images/youtube.svg'
+                                        //       ? 18
+                                        //       : 22,
+                                        //   width: item.imageUrl ==
+                                        //           'assets/images/youtube.svg'
+                                        //       ? 18
+                                        //       : 22,
+                                        //   color: (actualIndex >= 10 &&
+                                        //           actualIndex <= 13)
+                                        //       ? themeProvider.darkTheme
+                                        //           ? Colors.white
+                                        //           : Colors.black
+                                        //       : null,
+                                        // ),
+                                      ),
+                                      Text(
+                                        engine.name,
+                                        style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Inter',
+                      color: themeProvider.darkTheme
+                          ? Colors.white
+                          : Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: PopupMenuButton<String>(
+                                         menuPadding: EdgeInsets.zero,
+                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :  Color(0xffEBEBEB).withOpacity(0.9),
+  elevation: 0,
+  shadowColor: Colors.transparent,
+  surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) : Color(0xffEBEBEB).withOpacity(0.9),
+       // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+        constraints: BoxConstraints(
+                  maxWidth: 220,
+                 ),
+             // icon: SvgPicture.asset('assets/images/ai-icons/new/threedot.svg',color:themeProvider.darkTheme ? Colors.white : Colors.black),// Icon(Icons.more_horiz,
+                  //color: themeProvider.darkTheme ? Colors.white : Colors.black),
+        //onSelected: _popupMenuChoiceAction,
+        offset: Offset(0, 47),
+        shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+    side: BorderSide(
+      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+      width: 1,
+    ),
+  ),
+                                      onSelected: (value) {
+                                        // final engine =
+                                        //     addSearchEngineProvider.allEngines[index];
+                                      
+                                        if (value == 'edit') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              AddSearchEngineScreen(editEngine: engine),
+                        ),
+                      );
+                                        }
+                                      
+                                        if (value == 'delete') {
+                                         addEngineProvider.removeSessionEngineIfSelected(engine);
+                      addEngineProvider.removeSearchEngine(engine,settings,browserModel);
+                                      
+                      /// If deleted engine was selected → reset to Google
+                      if (engine.name == settings.searchEngine.name) {
+                        settings.searchEngine = GoogleSearchEngine;
+                        browserModel.updateSettings(settings);
+                        browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
+                      }
+                                        }
+                                      },
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                  value: 'edit',
+                  height: 35,
+                  padding: EdgeInsets.zero,
+                  child: GlassSettingPanel(
+                  color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
                     child: Container(
+                      height: 35,
+                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                       child: 
-                      ListView.builder(
-  padding: EdgeInsets.zero,
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-  itemCount:
-      browserModel.items.length + sessionEngines.length + 1,
-  itemBuilder: (context, index) {
-
-    /// ---------------- ADD SEARCH ENGINE BUTTON (LAST) ----------------
-    if (index ==
-        browserModel.items.length + sessionEngines.length) {
-      return ListTile(
-        onTap: () {
-          
-              Navigator.push(context,MaterialPageRoute(builder: (context)=> AddSearchEngineScreen()));
-              // your action to open "Add search engine" screen
-              print("Add Search Engine Clicked");
-            
-          // open add search engine screen
-        },
-        leading: const Icon(Icons.add,
-            size: 18, color: Color(0xff00B134)),
-        title: Text(
-          loc.addSearchEngine,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-            color: Color(0xff00B134)
-          ),
-        ),
-      );
-    }
-
-    /// ---------------- FIRST LIST ----------------
-    if (index < browserModel.items.length) {
-      final item = browserModel.items[index];
-
-      if (item.name == 'This time Search in' ||
-          item.name == 'Search setting' ||
-          item.name == 'Beldex Search Engine') {
-        return const SizedBox();
-      }
-
-      final actualIndex = index + (index >= 13 ? 2 : 0);
-
-      return ListTile(
-        leading: Container(
-          height: 15,
-          width: 15,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            border: Border.all(
-              color: browserModel.selectedItems.contains(index)
-                  ? const Color(0xff00B134)
-                  : themeProvider.darkTheme
-                      ? Colors.white
-                      : Colors.black,
-            ),
-          ),
-          child: browserModel.selectedItems.contains(index)
-              ? SvgPicture.asset(
-                  'assets/images/tick.svg',
-                  fit: BoxFit.cover,
-                )
-              : const SizedBox(),
-        ),
-        minLeadingWidth: 15,
-        onTap: () => browserModel.toggleItem(index),
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: SvgPicture.asset(
-                item.imageUrl,
-                height: item.imageUrl ==
-                        'assets/images/youtube.svg'
-                    ? 18
-                    : 22,
-                width: item.imageUrl ==
-                        'assets/images/youtube.svg'
-                    ? 18
-                    : 22,
-                color: (actualIndex >= 10 &&
-                        actualIndex <= 13)
-                    ? themeProvider.darkTheme
-                        ? Colors.white
-                        : Colors.black
-                    : null,
-              ),
-            ),
-            Text(
-              item.name,
-              style: TextStyle(
-                fontSize: 17,
-                color: themeProvider.darkTheme
-                    ? Colors.white
-                    : Colors.black,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    /// ---------------- SECOND LIST (SESSION ENGINES) ----------------
-    final engineIndex = index - browserModel.items.length;
-    final engine = sessionEngines[engineIndex];
-
-return ListTile(
-        leading: Container(
-          height: 15,
-          width: 15,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            border: Border.all(
-              color: addEngineProvider.selectedSessionEngines.contains(engine)
-                  ? const Color(0xff00B134)
-                  : themeProvider.darkTheme
-                      ? Colors.white
-                      : Colors.black,
-            ),
-          ),
-          child: addEngineProvider.selectedSessionEngines.contains(engine)
-              ? SvgPicture.asset(
-                  'assets/images/tick.svg',
-                  fit: BoxFit.cover,
-                )
-              : const SizedBox(),
-        ),
-        minLeadingWidth: 15,
-        onTap: ()=> addEngineProvider.toggleSessionEngine(engine),// => provider.toggleItem(index),
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: CachedNetworkImage(
-                            imageUrl: engine.assetIcon,
-                            width: 20,
-                            height: 20,
-                            errorWidget: (_, __, ___) => SearchEnginePlaceholder(name:engine.name,size: 20,),
-                          )// Icon(Icons.public, size: 18)
-              // SvgPicture.asset(
-              //   item.imageUrl,
-              //   height: item.imageUrl ==
-              //           'assets/images/youtube.svg'
-              //       ? 18
-              //       : 22,
-              //   width: item.imageUrl ==
-              //           'assets/images/youtube.svg'
-              //       ? 18
-              //       : 22,
-              //   color: (actualIndex >= 10 &&
-              //           actualIndex <= 13)
-              //       ? themeProvider.darkTheme
-              //           ? Colors.white
-              //           : Colors.black
-              //       : null,
-              // ),
-            ),
-            Text(
-              engine.name,
-              style: TextStyle(
-                fontSize: 17,
-                color: themeProvider.darkTheme
-                    ? Colors.white
-                    : Colors.black,
-              ),
-            ),
-          ],
-        ),
-        trailing: PopupMenuButton<String>(
-               color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
-                  surfaceTintColor:
-            themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
-                  elevation: 14,
-            onSelected: (value) {
-              // final engine =
-              //     addSearchEngineProvider.allEngines[index];
-            
-              if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) =>
-                        AddSearchEngineScreen(editEngine: engine),
-                  ),
-                );
-              }
-            
-              if (value == 'delete') {
-               addEngineProvider.removeSessionEngineIfSelected(engine);
-                addEngineProvider.removeSearchEngine(engine,settings,browserModel);
-            
-                /// If deleted engine was selected → reset to Google
-                if (engine.name == settings.searchEngine.name) {
-                  settings.searchEngine = GoogleSearchEngine;
-                  browserModel.updateSettings(settings);
-                  browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
-                }
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  children: [
-                    Icon(Icons.edit, size: 18),
-                    SizedBox(width: 8),
-                    Text(loc.edit),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete, size: 18,),
-                    SizedBox(width: 8),
-                    Text(loc.delete),
-                  ],
-                ),
-              ),
-            ],
-                    ),
-      );
-
-
-
-    
-  },
-),
-                      // ListView.builder(
-                      //   padding: EdgeInsets.zero,
-                      //   shrinkWrap: true,
-                      //   physics: NeverScrollableScrollPhysics(),
-                      //   itemCount: provider.items.length - 1, // Exclude two items
-                      //   //itemExtent: 43,
-                      //   itemBuilder: (context, index) {
-                      //     final item = provider.items[index];
-                      //     if (item.name != 'This time Search in' &&
-                      //         item.name != 'Search setting' &&
-                      //         item.name != 'Beldex Search Engine') {
-                      //       final actualIndex = index +
-                      //           (index >= 13
-                      //               ? 2
-                      //               : 0); // Adjust index if skipping items
-                      //       return ListTile(
-                      //         leading: Container(
-                                    
-                      //           height: 15,
-                      //           width: 15,
-                      //           decoration: BoxDecoration(
-                      //             //color: provider.selectedItems.contains(index) ? const Color(0xff00B134): Colors.transparent,
-                      //             borderRadius: BorderRadius.circular(2),
-                      //             border: Border.all(color:provider.selectedItems.contains(index) ? const Color(0xff00B134): themeProvider.darkTheme ? Colors.white: Colors.black),
-                      //           ),
-                      //           child: provider.selectedItems.contains(index)
-                      //               ? SvgPicture.asset(
-                      //                   'assets/images/tick.svg',
-                      //                   fit: BoxFit.cover,
-                      //                 )
-                      //               : SizedBox(),
-                      //         ),
-                      //         minLeadingWidth: 15,
-                      //         onTap: () {
-                      //           provider.toggleItem(index);
-                      //         },
-                      //         title: Container(
-                      //           child: Row(
-                      //             children: [
-                      //               Padding(
-                      //                 padding: const EdgeInsets.only(right: 10.0),
-                      //                 child: SvgPicture.asset(
-                      //                   item.imageUrl,
-                      //                   height: item.imageUrl ==
-                      //                           'assets/images/youtube.svg'
-                      //                       ? 18
-                      //                       : 22,
-                      //                   width: item.imageUrl ==
-                      //                           'assets/images/youtube.svg'
-                      //                       ? 18
-                      //                       : 22,
-                      //                   color:
-                      //                       (actualIndex >= 10 && actualIndex <= 13)
-                      //                           ? themeProvider.darkTheme
-                      //                               ? Colors.white
-                      //                               : Colors.black
-                      //                           : null,
-                      //                 ),
-                      //               ),
-                      //               Text(
-                      //                 item.name,
-                      //                 style: TextStyle(
-                      //                   color: themeProvider.darkTheme
-                      //                       ? Colors.white
-                      //                       : Colors.black,
-                      //                   fontSize: 17,
-                      //                   fontWeight: FontWeight.normal,
-                      //                 ),
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       );
-                      //     } else {
-                      //       return SizedBox(); // Return an empty SizedBox for excluded items
-                      //     }
-                      //   },
-                      // ),
+                      Row(
+                        children: [
+                          //Icon(Icons.edit,color: Colors.transparent,),
+                          SizedBox(width: 8),
+                          Text(loc.edit,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                PopupMenuItem(
+                  value: 'delete',
+                  height: 35,
+                  padding: EdgeInsets.zero,
+                  child: GlassSettingPanel(
+                   color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+                    child: Container(
+                      height: 35,
+                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                      child: Row(
+                        children: [
+                         // Icon(Icons.delete,color: Colors.transparent,),
+                          SizedBox(width: 8),
+                          Text(loc.delete,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                                      ],
+                          ),
+                                );
+                              
+                              
+                              
+                              
+                                },
+                              ),
+                            // ListView.builder(
+                            //   padding: EdgeInsets.zero,
+                            //   shrinkWrap: true,
+                            //   physics: NeverScrollableScrollPhysics(),
+                            //   itemCount: provider.items.length - 1, // Exclude two items
+                            //   //itemExtent: 43,
+                            //   itemBuilder: (context, index) {
+                            //     final item = provider.items[index];
+                            //     if (item.name != 'This time Search in' &&
+                            //         item.name != 'Search setting' &&
+                            //         item.name != 'Beldex Search Engine') {
+                            //       final actualIndex = index +
+                            //           (index >= 13
+                            //               ? 2
+                            //               : 0); // Adjust index if skipping items
+                            //       return ListTile(
+                            //         leading: Container(
+                                          
+                            //           height: 15,
+                            //           width: 15,
+                            //           decoration: BoxDecoration(
+                            //             //color: provider.selectedItems.contains(index) ? const Color(0xff00B134): Colors.transparent,
+                            //             borderRadius: BorderRadius.circular(2),
+                            //             border: Border.all(color:provider.selectedItems.contains(index) ? const Color(0xff00B134): themeProvider.darkTheme ? Colors.white: Colors.black),
+                            //           ),
+                            //           child: provider.selectedItems.contains(index)
+                            //               ? SvgPicture.asset(
+                            //                   'assets/images/tick.svg',
+                            //                   fit: BoxFit.cover,
+                            //                 )
+                            //               : SizedBox(),
+                            //         ),
+                            //         minLeadingWidth: 15,
+                            //         onTap: () {
+                            //           provider.toggleItem(index);
+                            //         },
+                            //         title: Container(
+                            //           child: Row(
+                            //             children: [
+                            //               Padding(
+                            //                 padding: const EdgeInsets.only(right: 10.0),
+                            //                 child: SvgPicture.asset(
+                            //                   item.imageUrl,
+                            //                   height: item.imageUrl ==
+                            //                           'assets/images/youtube.svg'
+                            //                       ? 18
+                            //                       : 22,
+                            //                   width: item.imageUrl ==
+                            //                           'assets/images/youtube.svg'
+                            //                       ? 18
+                            //                       : 22,
+                            //                   color:
+                            //                       (actualIndex >= 10 && actualIndex <= 13)
+                            //                           ? themeProvider.darkTheme
+                            //                               ? Colors.white
+                            //                               : Colors.black
+                            //                           : null,
+                            //                 ),
+                            //               ),
+                            //               Text(
+                            //                 item.name,
+                            //                 style: TextStyle(
+                            //                   color: themeProvider.darkTheme
+                            //                       ? Colors.white
+                            //                       : Colors.black,
+                            //                   fontSize: 17,
+                            //                   fontWeight: FontWeight.normal,
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       );
+                            //     } else {
+                            //       return SizedBox(); // Return an empty SizedBox for excluded items
+                            //     }
+                            //   },
+                            // ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )
-        );
-  }
-
-  AppBar normalAppBar(
-      BuildContext context, String title, DarkThemeProvider themeProvider) {
-    return AppBar(
-      centerTitle: true,
-      leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: SvgPicture.asset(
-            'assets/images/back.svg',
-            color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
-            height: 30,
-          )),
-      title: TextWidget(text:title, style: Theme.of(context).textTheme.bodyLarge),
+            )
+            ),
+      ],
     );
   }
+
+  // AppBar normalAppBar(
+  //     BuildContext context, String title, DarkThemeProvider themeProvider) {
+  //   return AppBar(
+  //     centerTitle: true,
+  //     leading: IconButton(
+  //         onPressed: () => Navigator.pop(context),
+  //         icon: SvgPicture.asset(
+  //           'assets/images/back.svg',
+  //           color: themeProvider.darkTheme ? Colors.white :const Color(0xff282836),
+  //           height: 30,
+  //         )),
+  //     title: TextWidget(text:title, style: Theme.of(context).textTheme.bodyLarge),
+  //   );
+  // }
 }
 
 class SearchSettingsPopupList extends StatefulWidget {
@@ -537,15 +613,30 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
     final selectedSessionEngines =
         addEngineProvider.selectedSessionEngines;
 
+        
+
     return PopupMenuButton<List<int>>(
       constraints: BoxConstraints(
         minWidth: 210, maxWidth: 220
       ),
-      offset: Offset(0, 47),
-      color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
-      surfaceTintColor:
-          themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
-      elevation: 14,
+      offset:// Offset(8, -70) ,
+       Offset(0, 47),
+      menuPadding: EdgeInsets.zero,
+                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.7) : Color(0xffEBEBEB).withOpacity(0.7),
+  elevation: 0,
+  shadowColor: Colors.transparent,
+  surfaceTintColor: themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.7) :  Color(0xffEBEBEB).withOpacity(0.7),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.zero,
+    side: BorderSide(
+      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+      width: 1,
+    ),
+  ),
+      // color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
+      // surfaceTintColor:
+      //     themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
+      // elevation: 14,
       onOpened: () async {
         await webViewController?.evaluateJavascript(
             source:"document.activeElement.blur();"); //close the search engine keyboard while opening menu list to prevent overlap
@@ -559,9 +650,10 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
         height: 33,
         width: 33,
         decoration: BoxDecoration(
-            color:
-                themeProvider.darkTheme ?const Color(0xff39394B) :const Color(0xffffffff),
-            borderRadius: BorderRadius.circular(5)),
+            color:Colors.transparent
+                //themeProvider.darkTheme ?const Color(0xff39394B) :const Color(0xffffffff),
+            //borderRadius: BorderRadius.circular(5)
+            ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -604,10 +696,10 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           ],
         ),
       ),
-      shape:const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all( Radius.circular(15.0),
-        ),
-      ),
+      // shape:const RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.all( Radius.circular(15.0),
+      //   ),
+      // ),
       onSelected: _searchListActions,
             itemBuilder: (BuildContext context) {
         final List<PopupMenuEntry<List<int>>> menuItems = [];
@@ -623,40 +715,68 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
             PopupMenuItem<List<int>>(
               value: [index],
               height: 35,
+              padding: EdgeInsets.zero,
               child: index == 0
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text('${loc.thistimeSearchIn}:',
-                        style: Theme.of(context).textTheme.bodySmall,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    )
-                  : Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          child: SvgPicture.asset(
-                            browserModel.items[index].imageUrl,
-                            color: (index >= 10 && index <= 13)
-                                ? themeProvider.darkTheme
-                                    ? Colors.white
-                                    : Colors.black
-                                : null,
+                  ? GlassGroupPanel(
+                    color:themeProvider.darkTheme ? Color(0xff222222) : Color(0xffEBEBEB),
+                    child: Container(
+                      height: 35,
+                      // constraints: BoxConstraints(
+                      //   minWidth: 210, maxWidth: 220
+                      // ),
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 10,left: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text('${loc.thistimeSearchIn}:',
+                                  style: TextStyle(fontFamily: 'Inter', fontSize: 12,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            browserModel.items[index].name,
-                            style:
-                                Theme.of(context).textTheme.bodySmall,
-                                overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                          ),
-                        ),
-                      ],
                     ),
+                  )
+                  : GlassGroupPanel(
+                    color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffEBEBEB),
+                    child: Container(
+                      height: 35,
+                      // constraints: BoxConstraints(
+                      //   minWidth: 210, maxWidth: 220
+                      // ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Row(
+                            children: [
+                              SizedBox(
+                                width: 30,
+                                child: SvgPicture.asset(
+                                  browserModel.items[index].imageUrl,
+                                  color: (index >= 10 && index <= 13)
+                                      ? themeProvider.darkTheme
+                                          ? Colors.white
+                                          : Colors.black
+                                      : null,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  browserModel.items[index].name,
+                                  style:
+                                      TextStyle(fontFamily: 'Inter', fontSize: 12,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                      overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ),
+                    ),
+                  ),
             ),
           );
         }
@@ -669,30 +789,40 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
             PopupMenuItem<List<int>>(
               value: [-1000 - i], // ✅ UNIQUE NEGATIVE VALUE
               height: 35,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 30,
-                    child: CachedNetworkImage(
-                      imageUrl: engine.assetIcon,
-                      width: 20,
-                      height: 20,
-                      errorWidget: (c, u, e) =>
-                          SearchEnginePlaceholder(
-                              name: engine.name, size: 20),
+              padding: EdgeInsets.zero,
+              child: GlassGroupPanel(
+                color:themeProvider.darkTheme ? Color(0xff222222) : Color(0xffEBEBEB),
+                child: Container(
+                  height: 35,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: CachedNetworkImage(
+                            imageUrl: engine.assetIcon,
+                            width: 20,
+                            height: 20,
+                            errorWidget: (c, u, e) =>
+                                SearchEnginePlaceholder(
+                                    name: engine.name, size: 20),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            engine.name,
+                            style:
+                                TextStyle(fontFamily: 'Inter', fontSize: 12,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      engine.name,
-                      style:
-                          Theme.of(context).textTheme.bodySmall,
-                          overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           );
@@ -704,24 +834,34 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
             PopupMenuItem<List<int>>(
               value: [searchSettingIndex],
               height: 35,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 30,
-                    child: SvgPicture.asset(
-                        browserModel.items[searchSettingIndex].imageUrl,color: themeProvider.darkTheme ? Colors.white : Colors.black,),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(loc.searchSettings,
-                     // provider.items[searchSettingIndex].name,
-                      style:
-                          Theme.of(context).textTheme.bodySmall,
-                          overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+              padding: EdgeInsets.zero,
+              child: GlassGroupPanel(
+                color:themeProvider.darkTheme ? Color(0xff222222) : Color(0xffEBEBEB),
+                child: Container(
+                  height: 35,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10,bottom: 10),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 30,
+                          child: SvgPicture.asset(
+                              browserModel.items[searchSettingIndex].imageUrl,color: themeProvider.darkTheme ? Colors.white : Colors.black,),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(loc.searchSettings,
+                           // provider.items[searchSettingIndex].name,
+                            style:
+                                TextStyle(fontFamily: 'Inter', fontSize: 12,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),
+                                overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           );
@@ -789,6 +929,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
 
    void _searchListActions(List<int> choice) {
     final browserModel = context.read<BrowserModel>();
+    final bottomNavigationProvider = context.read<BottomNavigationProvider>(); 
    // final provider = context.read<SelectedItemsProvider>();
     final addEngineProvider =
         context.read<AddSearchEngineProvider>();
@@ -836,6 +977,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
           widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/DuckDuckGo 2.svg');
         });
@@ -846,6 +988,8 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
+          widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/Yahoo 1.svg');
         });
         break;
@@ -855,6 +999,8 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
+          widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/Bing 1.svg');
         });
         break;
@@ -864,6 +1010,8 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
+          widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/Ecosia.svg');
         });
         break;
@@ -873,6 +1021,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
           widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/Baidu.svg');
         });
@@ -883,6 +1032,7 @@ class _SearchSettingsPopupListState extends State<SearchSettingsPopupList> {
           widget.browserModel.updateSettings(settings);
           WebUri? url;
           url ??= WebUri(settings.searchEngine.url);
+          bottomNavigationProvider.changeView(HomeView.home);
           widget.browserModel.showTabScroller = false;
           browserModel.updateIconValue('assets/images/Yandex.svg');
         });

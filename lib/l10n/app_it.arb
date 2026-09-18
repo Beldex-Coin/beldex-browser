@@ -185,6 +185,102 @@
   "searchEngineUpdated": "Motore di ricerca aggiornato con successo!",
 
 
+ 
+  "searchusing": "Cerca usando",
+  "addTabToNewGroup": "Aggiungi la scheda a un nuovo gruppo",
+  "invitePeople": "Invita persone",
+  "uploadFromGallery": "Carica dalla galleria",
+  "noQRCodeFound": "Nessun codice QR trovato nell'immagine",
+  "searchBarPosition": "Posizione della barra di ricerca",
+  "choosethePosition": "Scegli la posizione della barra di ricerca",
+  "iPAddress": "Indirizzo IP",
+   "vpnIP": "IP VPN",
+   "myIP": "Il mio IP",
+   "marketUpdate": "Aggiornamento del mercato",
+   "searchYourTabs": "Cerca tra le tue schede",
+   "newTabGroup": "Nuovo gruppo di schede",
+   "selectTab": "Seleziona scheda",
+   "selectTabs": "Seleziona schede",
+   "closeAllTabs": "Chiudi tutte le schede",
+   "deleteTabGroup": "Elimina gruppo di schede",
+   "rename": "Rinomina",
+   "renameGroup": "Rinomina gruppo",
+   "ungroupTab": "Rimuovi la scheda dal gruppo",
+   "deleteGroup": "Elimina gruppo",
+   "addToTabGroup": "Aggiungi al gruppo di schede",
+   "editGroupName": "Modifica nome del gruppo",
+   "editGroupColor": "Modifica colore del gruppo",
+   "closeTab": "Chiudi scheda",
+   "doYouWantToUngroup": "Vuoi davvero separare questo gruppo di schede?",
+   "ungroupTabGroup": "Separa gruppo di schede",
+   "ungroup": "Separa",
+   "deleteGroup": "Elimina gruppo",
+   "deletetabGroup": "Elimina gruppo di schede",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Aggiungi a",
+   "tabs": "Schede",
+   "done": "Fatto",
+   "create": "Crea",
+   "groupColor": "Colore del gruppo",
+   "groupName": "Nome del gruppo",
+   "newTabGroup": "Nuovo gruppo di schede",
+   "addtoNewTabGroup": "Aggiungi a un nuovo gruppo di schede",
+   "tabGroups": "Gruppi di schede",
+   "tabGroup": "Gruppo di schede",
+   "tabsSelected": "Schede selezionate",
+   "privateResearch": "Es. Ricerca privata",
+   "deselectAll": "Deseleziona tutto",
+   "selected": "Selezionato",
+
+
+   "close": "Chiudi",
+   "top": "in alto",
+   "bottom": "in basso",
+
+
+
+ "closeAllTabsConfirmation": "Questa azione chiuderà definitivamente tutte le {tabCount} schede all'interno di “{tabGroupName}”. Questa azione non può essere annullata.",
+"@closeAllTabsConfirmation": {
+  "description": "Messaggio di conferma durante la chiusura di tutte le schede in un gruppo di schede",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Cambio nodo..",
+"freeenameWebDomain" : "Dominio FreeName Web3",
+"enableFreeNameWeb" : "Abilita il supporto per il dominio FreeName Web3",
+"couldnotDownloadBootstrap" : "Impossibile scaricare il file bootstrap di Belnet. Verifica la connessione e riprova",
+"couldNotEstablishConnection" : "Impossibile stabilire la connessione a Belnet. Riprova",
+"theBelnetServiceNotStarted": "Impossibile avviare il servizio Belnet. Riprova",
+"exitNodeUnreachable" : "Uscita: nodo irraggiungibile, riconnessione in corso",
+
+
+"tab": "Scheda",
+"ungroupTabs": "Rimuovi schede dal gruppo",
+"closeGroup": "Chiudi gruppo",
+"ungroupSelectedTabs": "Vuoi davvero rimuovere le schede selezionate da ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Messaggio di conferma quando si rimuovono le schede selezionate da un gruppo di schede",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex è un ecosistema di applicazioni decentralizzate e orientate alla privacy. L’app Browser Beldex è una delle applicazioni di questo ecosistema, che comprende anche app come BChat, BelNet e il protocollo Beldex. Il Browser Beldex è la tua porta d’accesso a un’esperienza online fluida e riservata, dove i tuoi dati rimangono esclusivamente tuoi. Costruito su un’infrastruttura blockchain robusta, il browser Beldex garantisce riservatezza e anonimato agli utenti.",
 "atBeldex": " \n In Beldex crediamo nell’empowerment degli individui, fornendo loro il diritto fondamentale di controllare la propria impronta digitale. Il Browser Beldex è progettato per offrire un ambiente online sicuro e riservato, in cui gli utenti possono comunicare e interagire con il mondo digitale.",
 "titlebns": "\nBNS",

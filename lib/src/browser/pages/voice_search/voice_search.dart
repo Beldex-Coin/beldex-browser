@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/search_screen.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/language_picker.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -235,25 +236,42 @@ void setCurrentLocale(String selectedLocale){
 
 Future<String> pickBestLocale(String appSelectedLocale) async {
   final normalized = normalizeLocale(appSelectedLocale);
+
   print('THE SELECTED LOCALE TO ID --- $normalized');
-  // Use the values from your languageList map (locale IDs)
+
   final availableIds =
       languageIdList.values.map((id) => normalizeLocale(id)).toList();
 
-  //  If the exact locale is available → use it
+  // Exact match
   if (availableIds.contains(normalized)) {
     _currentLocaleId = normalized;
     return normalized;
   }
 
-  // If language-only match is available (e.g. "en" → "en-US")
+  // Special mappings
+  switch (normalized) {
+    case "zh-HK":
+      _currentLocaleId = "en-US";
+      return "en-US";
+    case "zh":
+    case "zh-CN":
+      _currentLocaleId = "cmn-CN";
+      return "cmn-CN";
+
+    case "pt-PT":
+      _currentLocaleId = "en-US";
+      return "en-US";
+  }
+
   final langCode = normalized.split('-').first;
-  // If only "en" is provided → ALWAYS choose "en-US
-   if (langCode == "en") {
+
+  // English fallback
+  if (langCode == "en") {
     _currentLocaleId = "en-US";
     return "en-US";
   }
 
+  // Generic language fallback
   final match = availableIds.firstWhere(
     (id) => id.startsWith(langCode),
     orElse: () => "",
@@ -264,10 +282,48 @@ Future<String> pickBestLocale(String appSelectedLocale) async {
     return match;
   }
 
-  //  Fallback to English
   _currentLocaleId = "en-US";
   return "en-US";
 }
+
+
+
+
+// Future<String> pickBestLocale(String appSelectedLocale) async {
+//   final normalized = normalizeLocale(appSelectedLocale);
+//   print('THE SELECTED LOCALE TO ID --- $normalized');
+//   // Use the values from your languageList map (locale IDs)
+//   final availableIds =
+//       languageIdList.values.map((id) => normalizeLocale(id)).toList();
+
+//   //  If the exact locale is available → use it
+//   if (availableIds.contains(normalized)) {
+//     _currentLocaleId = normalized;
+//     return normalized;
+//   }
+
+//   // If language-only match is available (e.g. "en" → "en-US")
+//   final langCode = normalized.split('-').first;
+//   // If only "en" is provided → ALWAYS choose "en-US
+//    if (langCode == "en") {
+//     _currentLocaleId = "en-US";
+//     return "en-US";
+//   }
+
+//   final match = availableIds.firstWhere(
+//     (id) => id.startsWith(langCode),
+//     orElse: () => "",
+//   );
+
+//   if (match.isNotEmpty) {
+//     _currentLocaleId = match;
+//     return match;
+//   }
+
+//   //  Fallback to English
+//   _currentLocaleId = "en-US";
+//   return "en-US";
+// }
 
 
 
@@ -324,6 +380,7 @@ final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
   showDialog(
     context: context,
     barrierDismissible: true,
+    barrierColor:themeProvider.darkTheme ? Colors.black54 : Color(0xffFFFFFFE).withOpacity(0.8) ,
     builder: (dialogContext) {
       return StatefulBuilder(
         builder: (context,setstate) {
@@ -422,293 +479,297 @@ if (!isDialogClosed && ttsProvider.hasVoiceResult //hasResult
               // }
           
               return Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-                backgroundColor: themeProvider.darkTheme
-                    ? const Color(0xff282836)
-                    : const Color(0xffFFFFFF),
+                // shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(16)),
+                backgroundColor: Colors.transparent,
                 insetPadding: const EdgeInsets.only( left:20,right:20,top:20),
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  width: MediaQuery.of(context).size.width,
-                  height: 315,
-                  //scolor: Colors.amber,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Header buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () async {
-            // // Temporarily stop listening while user picks language
-            // speech.stopListening();
-          
-            // final selectedLocale = await pickLanguage(context, themeProvider);
-          
-            // // If user selects a language, restart with that
-            // if (selectedLocale != null) {
-            //   hasResult = false;
-            //   isError = false;
-            //   message = getLocalizedMessage(selectedLocale,'speak'); //"Speak to search";
-            //   print('Selected Locale is $selectedLocale -----> $message');
-            //   speech.restartListening(selectedLocale);
-              
-            // } else {
-            //   speech.stopSpeech();
-            //   // If no language chosen, just resume listening normally
-            //   speech.startListening();
-            // }
-          
-            // // Refresh dialog UI
-            // (context as Element).markNeedsBuild();
-          
-          
-            //sspeech.stopListening();
-           // await Future.delayed(const Duration(milliseconds: 100)); // small delay
-          
-
-
-
-
-
-
-
-
-
-
-            // final selectedLocale = await pickLanguage(context, themeProvider);
-            //   hasResult = false;
-            //                 isError = false;
-            //                 message = getLocalizedMessage(speech.currentLocale,'speak'); //"Speak to search";
-            //                 speech.startListening();
-            //                 (context as Element).markNeedsBuild();
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-// await speech.stopSpeech();
-
-//   //  Store a top-level valid context BEFORE closing the dialog
-//   final rootContext = Navigator.of(context, rootNavigator: true).context;
-
-//   //  Now close the dialog safely
-//   if (context.mounted && Navigator.canPop(context)) {
-//     Navigator.pop(context);
-//   }
-
-//   //  Give a short delay to allow route to pop cleanly
-//   await Future.delayed(const Duration(milliseconds: 200));
-
-//   //  Open the bottom sheet using the rootContext (not dialog context)
-//   final selectedLocale = await pickLanguage(rootContext, themeProvider);
-   
-//   //  If a language was chosen, update speech and reopen dialog
-//   // if (selectedLocale != null) {
-//   //   speech.setCurrentLocale(selectedLocale);
-
-//     await Future.delayed(const Duration(milliseconds: 200));
-
-//     showVoiceDialog(rootContext, themeProvider, onResult: onResult);
-  //}
-
-//////////////////////////////////////////////////////////////////////////////////////////
-
-
-
- // Check if SearchScreen is active
- // Always check against the root navigator’s context
-  final rootContext = Navigator.of(context, rootNavigator: true).context;
-
-  // Check if the background (root) screen is SearchScreen
-  if (!SearchScreen.isActive) {
-    debugPrint("Voice dialog disabled — SearchScreen not active in background");
-    return;
-  }
-
-  await speech.stopSpeech();
-
-  // Close the dialog if open
-  if (context.mounted && Navigator.canPop(context)) {
-    Navigator.pop(context);
-  }
-
-  await Future.delayed(const Duration(milliseconds: 200));
-
-  // Double-check again before showing picker
-  if (!SearchScreen.isActive) return;
-   if(!ttsProvider.hasVoiceResult)
-  final selectedLocale = await pickLanguage(rootContext, themeProvider);
-
-  // if (selectedLocale != null) {
-  //   speech.setCurrentLocale(selectedLocale);
-
-    //  Ensure still on SearchScreen before reopening
-    if (SearchScreen.isActive && !ttsProvider.hasVoiceResult) {
-      await Future.delayed(const Duration(milliseconds: 200));
-      showVoiceDialog(rootContext, themeProvider,ttsProvider,false, onResult: onResult);
-    }
-  //}
-            
-            // // hasResult = false;
-            // isError = false;
-          
-            // if (selectedLocale != null) {
-            //   message = getLocalizedMessage(selectedLocale, 'speak');
-            //   speech.restartListening(selectedLocale);
-            // } else {
-            //   message = getLocalizedMessage(speech.currentLocale, 'speak');
-            //   speech.startListening();
-            // }
-          
-            //(context as Element).markNeedsBuild();
-          
-          
-          
-          
-          
-          
-                                // final selectedLocale =
-                                //     await pickLanguage(context, themeProvider);
-                                // if (selectedLocale != null) {
-                                //   hasResult = false;
-                                //   isError = false;
-                                //   message = "Speak to search";
-                                //   speech.restartListening(selectedLocale);
-                                //   (context as Element).markNeedsBuild();
-                                // }
-                              },
-                              child: SvgPicture.asset(
-                                'assets/images/ai-icons/language_speech (1).svg',
-                                color: themeProvider.darkTheme
-                                    ? Colors.white
-                                    : Colors.black,
+                child: GlassSettingPanel(
+                  color: themeProvider.darkTheme ? const Color(0xFF222222).withOpacity(0.5) : Color(0xffFFFFFF).withOpacity(0.3),
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    width: MediaQuery.of(context).size.width,
+                    height: 315,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: themeProvider.darkTheme ? Colors.transparent : Color(0xffD4D4D4))
+                    ),
+                    //scolor: Colors.amber,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Header buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () async {
+                              // // Temporarily stop listening while user picks language
+                              // speech.stopListening();
+                            
+                              // final selectedLocale = await pickLanguage(context, themeProvider);
+                            
+                              // // If user selects a language, restart with that
+                              // if (selectedLocale != null) {
+                              //   hasResult = false;
+                              //   isError = false;
+                              //   message = getLocalizedMessage(selectedLocale,'speak'); //"Speak to search";
+                              //   print('Selected Locale is $selectedLocale -----> $message');
+                              //   speech.restartListening(selectedLocale);
+                                
+                              // } else {
+                              //   speech.stopSpeech();
+                              //   // If no language chosen, just resume listening normally
+                              //   speech.startListening();
+                              // }
+                            
+                              // // Refresh dialog UI
+                              // (context as Element).markNeedsBuild();
+                            
+                            
+                              //sspeech.stopListening();
+                             // await Future.delayed(const Duration(milliseconds: 100)); // small delay
+                            
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                              // final selectedLocale = await pickLanguage(context, themeProvider);
+                              //   hasResult = false;
+                              //                 isError = false;
+                              //                 message = getLocalizedMessage(speech.currentLocale,'speak'); //"Speak to search";
+                              //                 speech.startListening();
+                              //                 (context as Element).markNeedsBuild();
+                  
+                  
+                  /////////////////////////////////////////////////////////////////////////////////////////////////
+                  
+                  // await speech.stopSpeech();
+                  
+                  //   //  Store a top-level valid context BEFORE closing the dialog
+                  //   final rootContext = Navigator.of(context, rootNavigator: true).context;
+                  
+                  //   //  Now close the dialog safely
+                  //   if (context.mounted && Navigator.canPop(context)) {
+                  //     Navigator.pop(context);
+                  //   }
+                  
+                  //   //  Give a short delay to allow route to pop cleanly
+                  //   await Future.delayed(const Duration(milliseconds: 200));
+                  
+                  //   //  Open the bottom sheet using the rootContext (not dialog context)
+                  //   final selectedLocale = await pickLanguage(rootContext, themeProvider);
+                     
+                  //   //  If a language was chosen, update speech and reopen dialog
+                  //   // if (selectedLocale != null) {
+                  //   //   speech.setCurrentLocale(selectedLocale);
+                  
+                  //     await Future.delayed(const Duration(milliseconds: 200));
+                  
+                  //     showVoiceDialog(rootContext, themeProvider, onResult: onResult);
+                    //}
+                  
+                  //////////////////////////////////////////////////////////////////////////////////////////
+                  
+                  
+                  
+                   // Check if SearchScreen is active
+                   // Always check against the root navigator’s context
+                    final rootContext = Navigator.of(context, rootNavigator: true).context;
+                  
+                    // Check if the background (root) screen is SearchScreen
+                    if (!SearchScreen.isActive) {
+                      debugPrint("Voice dialog disabled — SearchScreen not active in background");
+                      return;
+                    }
+                  
+                    await speech.stopSpeech();
+                  
+                    // Close the dialog if open
+                    if (context.mounted && Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
+                  
+                    await Future.delayed(const Duration(milliseconds: 200));
+                  
+                    // Double-check again before showing picker
+                    if (!SearchScreen.isActive) return;
+                     if(!ttsProvider.hasVoiceResult)
+                    final selectedLocale = await pickLanguage(rootContext, themeProvider);
+                  
+                    // if (selectedLocale != null) {
+                    //   speech.setCurrentLocale(selectedLocale);
+                  
+                      //  Ensure still on SearchScreen before reopening
+                      if (SearchScreen.isActive && !ttsProvider.hasVoiceResult) {
+                        await Future.delayed(const Duration(milliseconds: 200));
+                        showVoiceDialog(rootContext, themeProvider,ttsProvider,false, onResult: onResult);
+                      }
+                    //}
+                              
+                              // // hasResult = false;
+                              // isError = false;
+                            
+                              // if (selectedLocale != null) {
+                              //   message = getLocalizedMessage(selectedLocale, 'speak');
+                              //   speech.restartListening(selectedLocale);
+                              // } else {
+                              //   message = getLocalizedMessage(speech.currentLocale, 'speak');
+                              //   speech.startListening();
+                              // }
+                            
+                              //(context as Element).markNeedsBuild();
+                            
+                            
+                            
+                            
+                            
+                            
+                                  // final selectedLocale =
+                                  //     await pickLanguage(context, themeProvider);
+                                  // if (selectedLocale != null) {
+                                  //   hasResult = false;
+                                  //   isError = false;
+                                  //   message = "Speak to search";
+                                  //   speech.restartListening(selectedLocale);
+                                  //   (context as Element).markNeedsBuild();
+                                  // }
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/images/ai-icons/language_speech (1).svg',
+                                  color: themeProvider.darkTheme
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: ()async{
-                               await speech.stopSpeech();
-                                Navigator.pop(context);
-                              },
-                              child:SvgPicture.asset('assets/images/ai-icons/clear.svg', color: themeProvider.darkTheme ? Colors.white : Colors.black,) //const Icon(Icons.close),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: ()async{
+                                 await speech.stopSpeech();
+                                  Navigator.pop(context);
+                                },
+                                child:SvgPicture.asset('assets/images/ai-icons/clear.svg', color: themeProvider.darkTheme ? Colors.white : Colors.black,) //const Icon(Icons.close),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Spacer(
-                        flex: 1,
-                      ),
-                      // Mic animation
-                      isError
-                          ? GestureDetector(
-                            onTap: (){
-                              ttsProvider.updateHasResult(false);
-                              hasResult = false;
-                            isError = false;
-                            message = getLocalizedMessage(speech.currentLocale,'speak'); //"Speak to search";
-                            speech.startListening();
-                            (context as Element).markNeedsBuild();
-                            },
-                            child: Lottie.asset(
-                                'assets/images/ai-icons/Red_mic.json',
+                          ],
+                        ),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        // Mic animation
+                        isError
+                            ? GestureDetector(
+                              onTap: (){
+                                ttsProvider.updateHasResult(false);
+                                hasResult = false;
+                              isError = false;
+                              message = getLocalizedMessage(speech.currentLocale,'speak'); //"Speak to search";
+                              speech.startListening();
+                              (context as Element).markNeedsBuild();
+                              },
+                              child: Lottie.asset(
+                                  'assets/images/ai-icons/Red_mic.json',
+                                  height: 150,
+                                ),
+                            )
+                            : Lottie.asset(
+                                'assets/images/ai-icons/Mic.json',
                                 height: 150,
                               ),
-                          )
-                          : Lottie.asset(
-                              'assets/images/ai-icons/Mic.json',
-                              height: 150,
+                            
+                        // Message text
+                        // Text(
+                        //   message,
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     color: themeProvider.darkTheme
+                        //         ? Colors.white
+                        //         : Colors.black,
+                        //   ),
+                        // ),
+                      Spacer(flex: 1,),
+                        //const SizedBox(height: 10),
+                            
+                        // Retry button
+                        // if (isError)
+                        //   ElevatedButton.icon(
+                        //     style: ElevatedButton.styleFrom(
+                        //       backgroundColor: Colors.redAccent,
+                        //       shape: RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(12),
+                        //       ),
+                        //     ),
+                        //     onPressed: () {
+                        //       hasResult = false;
+                        //       isError = false;
+                        //       message = "Speak to search";
+                        //       speech.startListening();
+                        //       (context as Element).markNeedsBuild();
+                        //     },
+                        //     icon: const Icon(Icons.refresh, color: Colors.white),
+                        //     label: const Text(
+                        //       "Retry",
+                        //       style: TextStyle(color: Colors.white),
+                        //     ),
+                        //   ),
+                            
+                        //const SizedBox(height: 10),
+                            
+                        // Recognized text display
+                        Flexible(
+                          flex: 2,
+                          child: Container(
+                            height: 65,
+                            margin: EdgeInsets.only(left: 20,right:20,bottom: 5),
+                            //color: Colors.yellow,
+                            child: StreamBuilder<String>(
+                              stream: speech.resultStream,
+                              builder: (context, snap) {
+                                String recognized = snap.data ?? "";
+                               print("Speech VALUE inside $recognized");
+                            
+                                  if (recognized.isNotEmpty) {
+                                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                                      if (!ttsProvider.hasVoiceResult) {
+                                        ttsProvider.updateHasResult(true);
+                                      }
+                                      onResult(recognized);
+                                    });
+                                  }
+                                // if (recognized.isNotEmpty) {
+                                //  ttsProvider.updateHasResult(true);
+                                //   hasResult = true;
+                                //   print("Speech VALUE inside hasvalue ${ttsProvider.hasVoiceResult}");
+                                //   Future.microtask(() => onResult(recognized));
+                                //   //recognized = "";
+                                // }
+                                      
+                                return Text(
+                                 snap.data == null || snap.data!.isEmpty ? message : _getTrimmedText(snap.data ?? ""),
+                                  //recognized,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 15,fontFamily: 'Inter',fontWeight: FontWeight.w600),
+                                );
+                              },
                             ),
-          
-                      // Message text
-                      // Text(
-                      //   message,
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //     fontSize: 18,
-                      //     color: themeProvider.darkTheme
-                      //         ? Colors.white
-                      //         : Colors.black,
-                      //   ),
-                      // ),
-                    Spacer(flex: 1,),
-                      //const SizedBox(height: 10),
-          
-                      // Retry button
-                      // if (isError)
-                      //   ElevatedButton.icon(
-                      //     style: ElevatedButton.styleFrom(
-                      //       backgroundColor: Colors.redAccent,
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(12),
-                      //       ),
-                      //     ),
-                      //     onPressed: () {
-                      //       hasResult = false;
-                      //       isError = false;
-                      //       message = "Speak to search";
-                      //       speech.startListening();
-                      //       (context as Element).markNeedsBuild();
-                      //     },
-                      //     icon: const Icon(Icons.refresh, color: Colors.white),
-                      //     label: const Text(
-                      //       "Retry",
-                      //       style: TextStyle(color: Colors.white),
-                      //     ),
-                      //   ),
-          
-                      //const SizedBox(height: 10),
-          
-                      // Recognized text display
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          height: 65,
-                          margin: EdgeInsets.only(left: 20,right:20,bottom: 5),
-                          //color: Colors.yellow,
-                          child: StreamBuilder<String>(
-                            stream: speech.resultStream,
-                            builder: (context, snap) {
-                              String recognized = snap.data ?? "";
-                             print("Speech VALUE inside $recognized");
-                          
-                                if (recognized.isNotEmpty) {
-                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    if (!ttsProvider.hasVoiceResult) {
-                                      ttsProvider.updateHasResult(true);
-                                    }
-                                    onResult(recognized);
-                                  });
-                                }
-                              // if (recognized.isNotEmpty) {
-                              //  ttsProvider.updateHasResult(true);
-                              //   hasResult = true;
-                              //   print("Speech VALUE inside hasvalue ${ttsProvider.hasVoiceResult}");
-                              //   Future.microtask(() => onResult(recognized));
-                              //   //recognized = "";
-                              // }
-                                    
-                              return Text(
-                               snap.data == null || snap.data!.isEmpty ? message : _getTrimmedText(snap.data ?? ""),
-                                //recognized,
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 15),
-                              );
-                            },
                           ),
                         ),
-                      ),
-                      
-                      //SizedBox(height: 10,)
-                      //Spacer(flex: )
-                    ],
+                        
+                        //SizedBox(height: 10,)
+                        //Spacer(flex: )
+                      ],
+                    ),
                   ),
                 ),
               );

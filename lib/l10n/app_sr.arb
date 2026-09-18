@@ -187,6 +187,104 @@
 
 
 
+
+  "searchusing": "Pretraži pomoću",
+  "addTabToNewGroup": "Dodaj karticu u novu grupu",
+  "invitePeople": "Pozovi ljude",
+  "uploadFromGallery": "Otpremi iz galerije",
+  "noQRCodeFound": "QR kod nije pronađen na slici",
+  "searchBarPosition": "Položaj trake za pretragu",
+  "choosethePosition": "Izaberite položaj trake za pretragu",
+  "iPAddress": "IP adresa",
+   "vpnIP": "VPN IP",
+   "myIP": "Moj IP",
+   "marketUpdate": "Ažuriranje tržišta",
+   "searchYourTabs": "Pretraži svoje kartice",
+   "newTabGroup": "Nova grupa kartica",
+   "selectTab": "Izaberi karticu",
+   "selectTabs": "Izaberi kartice",
+   "closeAllTabs": "Zatvori sve kartice",
+   "deleteTabGroup": "Obriši grupu kartica",
+   "rename": "Preimenuj",
+   "renameGroup": "Preimenuj grupu",
+   "ungroupTab": "Razgrupiši karticu",
+   "deleteGroup": "Obriši grupu",
+   "addToTabGroup": "Dodaj u grupu kartica",
+   "editGroupName": "Izmeni naziv grupe",
+   "editGroupColor": "Izmeni boju grupe",
+   "closeTab": "Zatvori karticu",
+   "doYouWantToUngroup": "Da li zaista želite da razgrupišete ovu grupu kartica?",
+   "ungroupTabGroup": "Razgrupiši grupu kartica",
+   "ungroup": "Razgrupiši",
+   "deleteGroup": "Obriši grupu",
+   "deletetabGroup": "Obriši grupu kartica",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Dodaj u",
+   "tabs": "Kartice",
+   "done": "Gotovo",
+   "create": "Kreiraj",
+   "groupColor": "Boja grupe",
+   "groupName": "Naziv grupe",
+   "newTabGroup": "Nova grupa kartica",
+   "addtoNewTabGroup": "Dodaj u novu grupu kartica",
+   "tabGroups": "Grupe kartica",
+   "tabGroup": "Grupa kartica",
+   "tabsSelected": "Izabrane kartice",
+   "privateResearch": "npr. Privatno istraživanje",
+   "deselectAll": "Poništi odabir svega",
+   "selected": "Izabrano",
+
+
+   "close": "Zatvori",
+   "top": "gore",
+   "bottom": "dole",
+
+
+
+  "closeAllTabsConfirmation": "Ova radnja će trajno zatvoriti svih {tabCount} kartica unutar „{tabGroupName}“. Ova radnja se ne može poništiti.",
+"@closeAllTabsConfirmation": {
+  "description": "Poruka potvrde prilikom zatvaranja svih kartica u grupi kartica",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "Promena čvora..",
+"freeenameWebDomain" : "FreeName Web3 domen",
+"enableFreeNameWeb" : "Omogući podršku za FreeName Web3 domen",
+"couldnotDownloadBootstrap" : "Nije moguće preuzeti Belnet datoteku za pokretanje. Proverite svoju vezu i pokušajte ponovo",
+"couldNotEstablishConnection" : "Nije moguće uspostaviti Belnet vezu. Pokušajte ponovo",
+"theBelnetServiceNotStarted": "Belnet usluga nije mogla da se pokrene. Pokušajte ponovo",
+"exitNodeUnreachable" : "Izlazni čvor nije dostupan, ponovno povezivanje",
+
+
+
+
+
+"tab": "Kartica",
+"ungroupTabs": "Razgrupiši kartice",
+"closeGroup": "Zatvori grupu",
+"ungroupSelectedTabs": "Da li zaista želite da razgrupišete izabrane kartice iz grupe ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Poruka za potvrdu prilikom razgrupisavanja izabranih kartica iz grupe kartica",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex je ekosistem decentralizovanih aplikacija koje čuvaju poverljivost. Aplikacija Beldex pregledač je jedna od aplikacija u ovom ekosistemu, koji takođe obuhvata aplikacije kao što su BChat, BelNet i Beldex protokol. Beldex pregledač je vaša kapija ka besprekornom i poverljivom onlajn iskustvu, gde vaši podaci ostaju isključivo vaši. Izgrađen na robusnoj blokčejn infrastrukturi, Beldex pregledač obezbeđuje poverljivost i anonimnost korisnicima.",
 "atBeldex": " \n U Beldexu verujemo u osnaživanje pojedinaca osnovnim pravom da kontrolišu svoj digitalni otisak. Beldex pregledač je dizajniran da obezbedi bezbedno i poverljivo onlajn okruženje za komunikaciju i interakciju sa digitalnim svetom.",
 "titlebns": "\nBNS",

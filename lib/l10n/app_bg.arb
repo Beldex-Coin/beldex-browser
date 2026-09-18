@@ -185,6 +185,101 @@
 
 
 
+  "searchusing": "Търсене чрез",
+  "addTabToNewGroup": "Добавяне на раздел към нова група",
+  "invitePeople": "Поканете хора",
+  "uploadFromGallery": "Качване от галерията",
+  "noQRCodeFound": "В изображението не е намерен QR код",
+  "searchBarPosition": "Позиция на лентата за търсене",
+  "choosethePosition": "Изберете позицията на лентата за търсене",
+  "iPAddress": "IP адрес",
+   "vpnIP": "VPN IP",
+   "myIP": "Моето IP",
+   "marketUpdate": "Актуализация на пазара",
+   "searchYourTabs": "Търсене във вашите раздели",
+   "newTabGroup": "Нова група раздели",
+   "selectTab": "Избиране на раздел",
+   "selectTabs": "Избиране на раздели",
+   "closeAllTabs": "Затваряне на всички раздели",
+   "deleteTabGroup": "Изтриване на групата раздели",
+   "rename": "Преименуване",
+   "renameGroup": "Преименуване на групата",
+   "ungroupTab": "Разгрупиране на раздела",
+   "deleteGroup": "Изтриване на групата",
+   "addToTabGroup": "Добавяне към група раздели",
+   "editGroupName": "Редактиране на името на групата",
+   "editGroupColor": "Редактиране на цвета на групата",
+   "closeTab": "Затваряне на раздел",
+   "doYouWantToUngroup": "Наистина ли искате да разгрупирате тази група раздели?",
+   "ungroupTabGroup": "Разгрупиране на групата раздели",
+   "ungroup": "Разгрупиране",
+   "deleteGroup": "Изтриване на групата",
+   "deletetabGroup": "Изтриване на групата раздели",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Добавяне към",
+   "tabs": "Раздели",
+   "done": "Готово",
+   "create": "Създаване",
+   "groupColor": "Цвят на групата",
+   "groupName": "Име на групата",
+   "newTabGroup": "Нова група раздели",
+   "addtoNewTabGroup": "Добавяне към нова група раздели",
+   "tabGroups": "Групи раздели",
+   "tabGroup": "Група раздели",
+   "tabsSelected": "Избрани раздели",
+   "privateResearch": "напр. Частно проучване",
+   "deselectAll": "Премахване на избора на всички",
+   "selected": "Избрано",
+
+
+   "close": "Затваряне",
+   "top": "отгоре",
+   "bottom": "отдолу",
+
+
+
+ "closeAllTabsConfirmation": "Това действие ще затвори завинаги всички {tabCount} раздела в „{tabGroupName}“. Това действие не може да бъде отменено.",
+"@closeAllTabsConfirmation": {
+  "description": "Съобщение за потвърждение при затваряне на всички раздели в група раздели",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Промяна на възел..",
+"freeenameWebDomain" : "Домейн FreeName Web3",
+"enableFreeNameWeb" : "Активиране на поддръжката на домейн FreeName Web3",
+"couldnotDownloadBootstrap" : "Неуспешно изтегляне на началния файл на Belnet. Проверете връзката си и опитайте отново",
+"couldNotEstablishConnection" : "Неуспешно установяване на връзка с Belnet. Опитайте отново",
+"theBelnetServiceNotStarted": "Услугата Belnet не може да бъде стартирана. Опитайте отново",
+"exitNodeUnreachable" : "Изходният възел е недостъпен, повторно свързване",
+
+"tab": "Раздел",
+"ungroupTabs": "Премахване на разделите от групата",
+"closeGroup": "Затваряне на групата",
+"ungroupSelectedTabs": "Наистина ли искате да премахнете избраните раздели от ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Съобщение за потвърждение при премахване на избрани раздели от група раздели",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 "beldexIsAnEcosystem": "Beldex е екосистема от децентрализирани приложения, съхраняващи поверителността. Приложението Beldex Browser е част от тази екосистема, която включва също приложения като BChat, BelNet и протокола Beldex. Браузърът Beldex е вашата врата към безпроблемно и поверително онлайн изживяване, при което вашите данни остават само ваши. Изграден върху стабилна блокчейн инфраструктура, браузърът Beldex гарантира поверителност и анонимност за своите потребители.",
 "atBeldex": " \n В Beldex вярваме в овластяването на хората с фундаменталното право да контролират своя дигитален отпечатък. Браузърът Beldex е създаден, за да осигури сигурна и поверителна онлайн среда за потребителите да комуникират и взаимодействат с дигиталния свят.",
 "titlebns": "\nBNS",

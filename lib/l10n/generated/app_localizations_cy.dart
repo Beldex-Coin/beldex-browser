@@ -531,6 +531,187 @@ class AppLocalizationsCy extends AppLocalizations {
   String get searchEngineUpdated => 'Peiriant chwilio wedi’i ddiweddaru’n llwyddiannus!';
 
   @override
+  String get searchusing => 'Chwilio gan ddefnyddio';
+
+  @override
+  String get addTabToNewGroup => 'Ychwanegu tab at grŵp newydd';
+
+  @override
+  String get invitePeople => 'Gwahodd pobl';
+
+  @override
+  String get uploadFromGallery => 'Uwchlwytho o\'r oriel';
+
+  @override
+  String get noQRCodeFound => 'Ni chanfuwyd cod QR yn y ddelwedd';
+
+  @override
+  String get searchBarPosition => 'Safle\'r bar chwilio';
+
+  @override
+  String get choosethePosition => 'Dewiswch safle\'r bar chwilio';
+
+  @override
+  String get iPAddress => 'Cyfeiriad IP,';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'Fy IP';
+
+  @override
+  String get marketUpdate => 'Diweddariad y farchnad';
+
+  @override
+  String get searchYourTabs => 'Chwiliwch eich tabiau';
+
+  @override
+  String get newTabGroup => 'Grŵp tabiau newydd';
+
+  @override
+  String get selectTab => 'Dewis tab';
+
+  @override
+  String get selectTabs => 'Dewis tabiau';
+
+  @override
+  String get deleteTabGroup => 'Dileu grŵp tabiau';
+
+  @override
+  String get rename => 'Ailenwi';
+
+  @override
+  String get renameGroup => 'Ailenwi\'r grŵp';
+
+  @override
+  String get ungroupTab => 'Dad-grwpio\'r tab';
+
+  @override
+  String get deleteGroup => 'Dileu\'r grŵp';
+
+  @override
+  String get addToTabGroup => 'Ychwanegu at grŵp tabiau';
+
+  @override
+  String get editGroupName => 'Golygu enw\'r grŵp';
+
+  @override
+  String get editGroupColor => 'Golygu lliw\'r grŵp';
+
+  @override
+  String get closeTab => 'Cau tab';
+
+  @override
+  String get doYouWantToUngroup => 'Ydych chi wir am ddad-grwpio\'r grŵp tabiau hwn?';
+
+  @override
+  String get ungroupTabGroup => 'Dad-grwpio grŵp tabiau';
+
+  @override
+  String get ungroup => 'Dad-grwpio';
+
+  @override
+  String get deletetabGroup => 'Dileu grŵp tabiau';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Ychwanegu at';
+
+  @override
+  String get tabs => 'Tabiau';
+
+  @override
+  String get done => 'Wedi gorffen';
+
+  @override
+  String get create => 'Creu';
+
+  @override
+  String get groupColor => 'Lliw\'r grŵp';
+
+  @override
+  String get groupName => 'Enw\'r grŵp';
+
+  @override
+  String get addtoNewTabGroup => 'Ychwanegu at grŵp tabiau newydd';
+
+  @override
+  String get tabGroups => 'Grwpiau tabiau';
+
+  @override
+  String get tabGroup => 'Grŵp tabiau';
+
+  @override
+  String get tabsSelected => 'Tabiau wedi\'u dewis';
+
+  @override
+  String get privateResearch => 'e.e. Ymchwil Breifat';
+
+  @override
+  String get deselectAll => 'Dad-ddewis pob un';
+
+  @override
+  String get selected => 'Wedi\'i ddewis';
+
+  @override
+  String get close => 'Cau';
+
+  @override
+  String get top => 'brig';
+
+  @override
+  String get bottom => 'gwaelod';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Bydd y weithred hon yn cau pob un o\'r $tabCount tab yn “$tabGroupName” yn barhaol. Ni ellir dadwneud hyn.';
+  }
+
+  @override
+  String get changingNode => 'Newid Nôde..';
+
+  @override
+  String get freeenameWebDomain => 'Parth FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Galluogi cefnogaeth i barth FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Methwyd lawrlwytho\'r ffeil cychwyn Belnet. Gwiriwch eich cysylltiad a cheisiwch eto';
+
+  @override
+  String get couldNotEstablishConnection => 'Methwyd sefydlu cysylltiad Belnet. Ceisiwch eto';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Methwyd cychwyn y gwasanaeth Belnet. Ceisiwch eto';
+
+  @override
+  String get exitNodeUnreachable => 'Ni ellir cyrraedd y nod ymadael, yn ailgysylltu';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Dadgrwpio tabiau';
+
+  @override
+  String get closeGroup => 'Cau\'r grŵp';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Ydych chi\'n siŵr eich bod am ddadgrwpio\'r tabiau a ddewiswyd o \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Mae Beldex yn ecosystem o gymwysiadau datganoledig sy’n cadw cyfrinachedd. Mae ap Porwr Beldex yn un o’r ecosystem hon, sydd hefyd yn cynnwys apiau fel BChat, BelNet, a phrotocol Beldex. Porwr Beldex yw eich porth i brofiad ar-lein di-dor a chyfrinachol, lle mae eich data’n aros yn eiddo i chi’n unig. Wedi’i adeiladu ar seilwaith blockchain cadarn, mae porwr Beldex yn sicrhau cyfrinachedd ac anhysbysrwydd i’w ddefnyddwyr.';
 
   @override

@@ -4,6 +4,8 @@ import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/browser/util.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
@@ -32,36 +34,36 @@ class _AndroidSettingsState extends State<AndroidSettings> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final browserModel = Provider.of<BrowserModel>(context);
-   // var currentWebViewModel = Provider.of<WebViewModel>(context, listen: true);
-    //final selectedItemProvider = Provider.of<SelectedItemsProvider>(context, listen: true);
     double fontvalue =  browserModel.fontSize; 
-    // double fontSizePercentage =
-    //     ((currentWebViewModel.settings?.textZoom) ?? 100.0).toDouble();
     var vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
     return LayoutBuilder(builder: (context, constraints) {
-      return Container(
-        margin: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: themeProvider.darkTheme
-                ? const Color(0xff292937)
-                : const Color(0xffF3F3F3),
-            borderRadius: BorderRadius.circular(15)),
-        // padding: EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
-        child: RawScrollbar(
-          padding: const EdgeInsets.only(right: 5, top: 5),
-          thickness: 1.8,
+      return Padding(
+                padding: const EdgeInsets.all(10.0),
+        child: GlassCommonPanel(
           child: Container(
-            padding:
-                const EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    children: _buildAndroidWebViewTabSettings(
-                        themeProvider, fontvalue, constraints,vpnStatusProvider),
-                  ),
+            //margin: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                color: Colors.transparent,
+                                border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444): Color(0xffD4D4D4))
                 ),
-              ],
+            // padding: EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
+            child: RawScrollbar(
+              padding: const EdgeInsets.only(right: 5, top: 5),
+              thickness: 1.8,
+              child: Container(
+                padding:
+                    const EdgeInsets.only(left: 20, right: 15, top: 15, bottom: 20),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView(
+                        children: _buildAndroidWebViewTabSettings(
+                            themeProvider, fontvalue, constraints,vpnStatusProvider),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -79,7 +81,7 @@ Widget _buildSliderOption(double currentValue,
     return SliderTheme(
       data: SliderThemeData(
                 trackHeight: 3,
-                inactiveTrackColor:themeProvider.darkTheme ? Color(0xff363645) : Color(0xffDADADA)
+                inactiveTrackColor:themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)
               ),
       child: Slider(
         padding: EdgeInsets.all(10),
@@ -118,6 +120,7 @@ String getPercentage(double value) {
     final basicProvider = Provider.of<BasicProvider>(context);
     final loc = AppLocalizations.of(context)!;
     final width = MediaQuery.of(context).size.width;
+    final groupProvider = Provider.of<GroupProvider>(context);
     final appLocaleProvider = Provider.of<LocaleProvider>(context);
     var widgets = <Widget>[
       Column(
@@ -133,7 +136,7 @@ String getPercentage(double value) {
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!
-                        .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                        .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                 Row(
                   children: [
                     Expanded(
@@ -142,7 +145,7 @@ String getPercentage(double value) {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
-                                .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2))),
+                                .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D)))),
                     SizedBox(width: 20,),
                     TextWidget(
                       text:'${getPercentage(fontvalue)}',
@@ -211,6 +214,78 @@ String getPercentage(double value) {
         ],
       ),
       Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: SizedBox(
+          //height: constraints.maxHeight/8.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    TextWidget(text:loc.freeenameWebDomain, //"Auto Connect",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
+                        // TextStyle(
+                        //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
+                        //     fontWeight: FontWeight.w600,
+                        //     color: themeProvider.darkTheme
+                        //         ? Colors.white
+                        //         : Colors.black),
+                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: TextWidget(
+                          text:loc.enableFreeNameWeb, //'Enable Free name web3 support', //"Automatically connect when the app launches",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
+                          // TextStyle(
+                          //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
+                          //   fontWeight: FontWeight
+                          //       .w400, //color: themeProvider.darkTheme ? Colors.white : Color(0xff3D3D44AC)
+                          // )
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+             const SizedBox(
+                width: 30,
+              ),
+              FlutterSwitch(
+                 // disabled: browserModel.webViewTabs.isEmpty,
+                  inactiveColor: themeProvider.darkTheme
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
+                  inactiveToggleColor: themeProvider.darkTheme
+                      ? const Color(0xff8D8D8D)
+                      : const Color(0xffC5C5C5),
+                  activeColor: themeProvider.darkTheme
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
+                  width: widget.widthInDp, //width / 8.0, //50,
+                  height: widget.heightInDp, //width / 14.8, //29,
+                  toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
+                  padding: 2.0,
+                  activeToggleColor: Color(0xff00BD40),
+                  value: vpnStatusProvider.isEnabledFreeName, //currentWebViewModel.settings?.supportZoom ?? true,
+                  onToggle: (value) async {
+                    vpnStatusProvider.updateIsEnableFreeName(value);
+                      setState(() {
+                       print('AUTO CONNECT VALUE --------> ${basicProvider.autoConnect}');
+                      });
+                  }),
+            ],
+          ),
+        ),
+      ),
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SizedBox(
           child: Row(
@@ -225,7 +300,7 @@ String getPercentage(double value) {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         // fontWeight: FontWeight.w600),
                         ),
@@ -234,7 +309,7 @@ String getPercentage(double value) {
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
-                            .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                            .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                         // TextStyle(
                         //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                         //   fontWeight: FontWeight.w400,
@@ -249,14 +324,14 @@ String getPercentage(double value) {
               FlutterSwitch(
                   value: basicProvider.adblock, //isSwitched,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                     width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -344,7 +419,7 @@ String getPercentage(double value) {
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(
                         //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         //     fontWeight: FontWeight.w600,
@@ -359,7 +434,7 @@ String getPercentage(double value) {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                           // TextStyle(
                           //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                           //   fontWeight: FontWeight
@@ -376,14 +451,14 @@ String getPercentage(double value) {
               FlutterSwitch(
                  // disabled: browserModel.webViewTabs.isEmpty,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: widget.widthInDp, //width / 8.0, //50,
                   height: widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -418,7 +493,7 @@ Padding(
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         // TextStyle(
                         //     fontSize:15,// dynamicTextSizeWidget.dynamicFontSize(15, context),
                         //     fontWeight: FontWeight.w600,
@@ -433,7 +508,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                           // TextStyle(
                           //   fontSize:12,// dynamicTextSizeWidget.dynamicFontSize(12, context),
                           //   fontWeight: FontWeight
@@ -450,14 +525,14 @@ Padding(
               FlutterSwitch(
                  // disabled: browserModel.webViewTabs.isEmpty,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: widget.widthInDp, //width / 8.0, //50,
                   height: widget.heightInDp, //width / 14.8, //29,
                   toggleSize:widget.toggleSizeInDp, //width / 17.2, //20
@@ -490,7 +565,7 @@ Padding(
                         style: Theme.of(context)
                             .textTheme
                             .bodyLarge!
-                            .copyWith(fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)
+                            .copyWith(fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)
                         
                         ),
                     Padding(
@@ -500,7 +575,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))
                         
                           ),
                     ),
@@ -512,14 +587,14 @@ Padding(
                   value:vpnStatusProvider.clearSessionCache,
                       //currentWebViewModel.settings?.clearSessionCache ?? false,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                  width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -557,7 +632,7 @@ Padding(
                   children: [
                     TextWidget(text:loc.builtinZoomControls, //"Built In Zoom Controls",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                            fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
@@ -565,7 +640,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                     ),
                   ],
                 ),
@@ -574,19 +649,19 @@ Padding(
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled:groupProvider.totalOpenTabsCount == 0,
                   value: vpnStatusProvider.builtinZoomControl,
                   // currentWebViewModel.settings?.builtInZoomControls ??
                   //     false,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width: width / 8.0, //50,
                   height: width / 14.8, //29,
                   toggleSize: width / 17.2, //20
@@ -623,7 +698,7 @@ Padding(
                   children: [
                     TextWidget(text:loc.displayZoomControls, //"Display Zoom Controls",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                            fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
@@ -631,7 +706,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                     ),
                   ],
                 ),
@@ -640,16 +715,16 @@ Padding(
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled: groupProvider.totalOpenTabsCount == 0,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -689,7 +764,7 @@ Padding(
                   children: [
                     TextWidget(text:loc.thirdpartCookiesEnabled, //"Third Party Cookies Enabled",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                            fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
@@ -697,7 +772,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                     ),
                   ],
                 ),
@@ -706,16 +781,16 @@ Padding(
                 width: 30,
               ),
               FlutterSwitch(
-                  disabled: browserModel.webViewTabs.isEmpty,
+                  disabled: groupProvider.totalOpenTabsCount == 0,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -756,7 +831,7 @@ Padding(
                   children: [
                     TextWidget(text:loc.debuggingEnabled, //"Debugging Enabled",
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: widget.fontSizeInDp1, fontWeight: FontWeight.w600)),
+                            fontSize: 14,fontFamily: 'Inter',color: themeProvider.darkTheme ?  Color(0xffEBEBEB) : Color(0xff0B0B0B), fontWeight: FontWeight.w600)),
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: TextWidget(
@@ -764,7 +839,7 @@ Padding(
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w300,fontSize: widget.fontSizeInDp2)),
+                              .copyWith(fontFamily: 'Roboto', fontSize: 10,color: themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff8D8D8D))),
                     ),
                   ],
                 ),
@@ -775,14 +850,14 @@ Padding(
               FlutterSwitch(
                   value: settings.debuggingEnabled,
                   inactiveColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   inactiveToggleColor: themeProvider.darkTheme
-                      ? const Color(0xff9595B5)
+                      ? const Color(0xff8D8D8D)
                       : const Color(0xffC5C5C5),
                   activeColor: themeProvider.darkTheme
-                      ? const Color(0xff363645)
-                      : const Color(0xffFFFFFF),
+                      ? const Color(0xff333333)
+                      : const Color(0xffEBEBEB),
                   width:widget.widthInDp,
                     height: widget.heightInDp,
                   toggleSize: widget.toggleSizeInDp,
@@ -792,7 +867,7 @@ Padding(
                     setState(() {
                       settings.debuggingEnabled = value;
                       browserModel.updateSettings(settings);
-                      if (browserModel.webViewTabs.isNotEmpty) {
+                      if (groupProvider.totalOpenTabsCount != 0) {
                         var webViewModel =
                             browserModel.getCurrentTab()?.webViewModel;
                         if (Util.isAndroid()) {

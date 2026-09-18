@@ -163,7 +163,7 @@
   "pageSavedOffline": "Stranica je spremljena offline!",
   "unabledToSave": "Ne mogu spremiti",
   "basic": "Osnovno",
-  "advanced" :"Advanced",
+  "advanced" :"Napredno",
   "downloadCompelete": "Preuzimanje završeno",
   "screensecurityCurrentlyEnabled": "Sigurnost ekrana je trenutno omogućena. Provjerite jeste li je onemogućili u postavkama",
   "openSettings": "Otvori postavke",
@@ -183,6 +183,101 @@
   "searchEngineAdded": "Tražilica je uspješno dodana!",
   "searchEngineUpdated": "Tražilica je uspješno ažurirana!",
 
+
+
+
+  "searchusing": "Pretraživanje pomoću",
+  "addTabToNewGroup": "Dodaj karticu u novu grupu",
+  "invitePeople": "Pozovi osobe",
+  "uploadFromGallery": "Prenesi iz galerije",
+  "noQRCodeFound": "QR kôd nije pronađen na slici",
+  "searchBarPosition": "Položaj trake za pretraživanje",
+  "choosethePosition": "Odaberite položaj trake za pretraživanje",
+  "iPAddress": "IP adresa",
+   "vpnIP": "VPN IP",
+   "myIP": "Moj IP",
+   "marketUpdate": "Ažuriranje tržišta",
+   "searchYourTabs": "Pretražite svoje kartice",
+   "newTabGroup": "Nova grupa kartica",
+   "selectTab": "Odaberi karticu",
+   "selectTabs": "Odaberi kartice",
+   "closeAllTabs": "Zatvori sve kartice",
+   "deleteTabGroup": "Izbriši grupu kartica",
+   "rename": "Preimenuj",
+   "renameGroup": "Preimenuj grupu",
+   "ungroupTab": "Razgrupiraj karticu",
+   "deleteGroup": "Izbriši grupu",
+   "addToTabGroup": "Dodaj u grupu kartica",
+   "editGroupName": "Uredi naziv grupe",
+   "editGroupColor": "Uredi boju grupe",
+   "closeTab": "Zatvori karticu",
+   "doYouWantToUngroup": "Želite li doista razgrupirati ovu grupu kartica?",
+   "ungroupTabGroup": "Razgrupiraj grupu kartica",
+   "ungroup": "Razgrupiraj",
+   "deleteGroup": "Izbriši grupu",
+   "deletetabGroup": "Izbriši grupu kartica",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Dodaj u",
+   "tabs": "Kartice",
+   "done": "Gotovo",
+   "create": "Stvori",
+   "groupColor": "Boja grupe",
+   "groupName": "Naziv grupe",
+   "newTabGroup": "Nova grupa kartica",
+   "addtoNewTabGroup": "Dodaj u novu grupu kartica",
+   "tabGroups": "Grupe kartica",
+   "tabGroup": "Grupa kartica",
+   "tabsSelected": "Odabrane kartice",
+   "privateResearch": "npr. Privatno istraživanje",
+   "deselectAll": "Poništi odabir svih",
+   "selected": "Odabrano",
+
+
+   "close": "Zatvori",
+   "top": "gore",
+   "bottom": "dolje",
+
+
+
+  "closeAllTabsConfirmation": "Ova će radnja trajno zatvoriti sve {tabCount} kartice unutar „{tabGroupName}“. Ovo se ne može poništiti.",
+"@closeAllTabsConfirmation": {
+  "description": "Poruka potvrde pri zatvaranju svih kartica u grupi kartica",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Promjena čvora..",
+"freeenameWebDomain" : "FreeName Web3 domena",
+"enableFreeNameWeb" : "Omogući podršku za FreeName Web3 domenu",
+"couldnotDownloadBootstrap" : "Nije moguće preuzeti Belnet datoteku za pokretanje. Provjerite svoju vezu i pokušajte ponovno",
+"couldNotEstablishConnection" : "Nije moguće uspostaviti vezu s Belnetom. Pokušajte ponovno",
+"theBelnetServiceNotStarted": "Usluga Belnet nije se mogla pokrenuti. Pokušajte ponovno",
+"exitNodeUnreachable" : "Izlazni čvor nije dostupan, ponovno povezivanje",
+
+
+"tab": "Kartica",
+"ungroupTabs": "Razgrupiraj kartice",
+"closeGroup": "Zatvori grupu",
+"ungroupSelectedTabs": "Želite li zaista razgrupirati odabrane kartice iz grupe ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Poruka potvrde prilikom razgrupiranja odabranih kartica iz grupe kartica",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
 
 
 "beldexIsAnEcosystem": "Beldex je ekosustav decentraliziranih aplikacija koje čuvaju povjerljivost. Aplikacija Beldex Browser jedna je od ovih aplikacija, koja također uključuje BChat, BelNet i Beldex protokol. Beldex Browser je vaš ulaz u besprijekorno i povjerljivo online iskustvo, gdje vaši podaci ostaju isključivo vaši. Izgrađen na robusnoj blockchain infrastrukturi, Beldex preglednik osigurava povjerljivost i anonimnost korisnicima.",

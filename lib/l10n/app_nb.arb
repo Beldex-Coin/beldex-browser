@@ -185,6 +185,103 @@
 
 
 
+
+
+ "searchusing": "Søk med",
+  "addTabToNewGroup": "Legg til fane i ny gruppe",
+  "invitePeople": "Inviter personer",
+  "uploadFromGallery": "Last opp fra galleri",
+  "noQRCodeFound": "Ingen QR-kode funnet i bildet",
+  "searchBarPosition": "Plassering av søkefelt",
+  "choosethePosition": "Velg plasseringen til søkefeltet",
+  "iPAddress": "IP-adresse",
+   "vpnIP": "VPN-IP",
+   "myIP": "Min IP",
+   "marketUpdate": "Markedsoppdatering",
+   "searchYourTabs": "Søk i fanene dine",
+   "newTabGroup": "Ny fanegruppe",
+   "selectTab": "Velg fane",
+   "selectTabs": "Velg faner",
+   "closeAllTabs": "Lukk alle faner",
+   "deleteTabGroup": "Slett fanegruppe",
+   "rename": "Gi nytt navn",
+   "renameGroup": "Gi gruppen nytt navn",
+   "ungroupTab": "Fjern fane fra gruppen",
+   "deleteGroup": "Slett gruppe",
+   "addToTabGroup": "Legg til i fanegruppe",
+   "editGroupName": "Rediger gruppenavn",
+   "editGroupColor": "Rediger gruppefarge",
+   "closeTab": "Lukk fane",
+   "doYouWantToUngroup": "Vil du virkelig oppheve grupperingen av denne fanegruppen?",
+   "ungroupTabGroup": "Opphev gruppering av fanegruppe",
+   "ungroup": "Opphev gruppering",
+   "deleteGroup": "Slett gruppe",
+   "deletetabGroup": "Slett fanegruppe",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Legg til i",
+   "tabs": "Faner",
+   "done": "Ferdig",
+   "create": "Opprett",
+   "groupColor": "Gruppefarge",
+   "groupName": "Gruppenavn",
+   "newTabGroup": "Ny fanegruppe",
+   "addtoNewTabGroup": "Legg til i ny fanegruppe",
+   "tabGroups": "Fanegrupper",
+   "tabGroup": "Fanegruppe",
+   "tabsSelected": "Valgte faner",
+   "privateResearch": "f.eks. Privat forskning",
+   "deselectAll": "Fjern alle valg",
+   "selected": "Valgt",
+
+
+   "close": "Lukk",
+   "top": "øverst",
+   "bottom": "nederst",
+
+
+
+  "closeAllTabsConfirmation": "Denne handlingen vil permanent lukke alle {tabCount} fanene i «{tabGroupName}». Dette kan ikke angres", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Bytter node..",
+"freeenameWebDomain" : "FreeName Web3-domene",
+"enableFreeNameWeb" : "Aktiver støtte for FreeName Web3-domene",
+"couldnotDownloadBootstrap" : "Kunne ikke laste ned Belnet-oppstartsfilen. Kontroller tilkoblingen din og prøv igjen",
+"couldNotEstablishConnection" : "Kunne ikke opprette Belnet-tilkobling. Prøv igjen",
+"theBelnetServiceNotStarted": "Belnet-tjenesten kunne ikke startes. Prøv igjen",
+"exitNodeUnreachable" : "Utgangsnoden kan ikke nås, kobler til på nytt",
+
+
+"tab": "Fane",
+"ungroupTabs": "Fjern faner fra gruppen",
+"closeGroup": "Lukk gruppe",
+"ungroupSelectedTabs": "Vil du virkelig fjerne de valgte fanene fra ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Bekreftelsesmelding når valgte faner fjernes fra en fanegruppe",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex er et økosystem av desentraliserte og konfidensialitetsbevarende applikasjoner. Beldex Browser-appen er én del av dette økosystemet, som også består av apper som BChat, BelNet og Beldex-protokollen. Beldex Browser er din inngangsport til en sømløs og konfidensiell nettopplevelse, der dataene dine forblir dine alene. Bygget på en robust blokkjedeinfrastruktur sikrer Beldex Browser konfidensialitet og anonymitet for brukerne.",
 "atBeldex": " \n Hos Beldex tror vi på å styrke enkeltpersoner med den grunnleggende retten til å kontrollere sitt digitale fotavtrykk. Beldex Browser er utviklet for å tilby et sikkert og konfidensielt nettmiljø der brukere kan kommunisere og samhandle med den digitale verden.",
 "titlebns": "\nBNS",

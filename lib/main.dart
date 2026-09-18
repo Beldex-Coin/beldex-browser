@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:beldex_browser/fetch_price.dart';
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/locale_provider.dart';
@@ -17,12 +16,19 @@ import 'package:beldex_browser/src/browser/models/webview_model.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/lang_provider.dart';
 import 'package:beldex_browser/src/browser/pages/reading_mode/reader_provider.dart';
 import 'package:beldex_browser/src/browser/pages/search_engine/add_searchengine_provider.dart';
+import 'package:beldex_browser/src/browser/pages/splash_screen.dart';
+import 'package:beldex_browser/src/browser/providers/appbar_position_provider.dart';
+import 'package:beldex_browser/src/browser/providers/bottom_nav_bar_provider.dart';
+import 'package:beldex_browser/src/browser/providers/ip_provider.dart';
+import 'package:beldex_browser/src/browser/providers/node_provider.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/speech_text_provider.dart';
 //import 'package:beldex_browser/src/browser/pages/reading_mode/translating_provider.dart';
 import 'package:beldex_browser/src/connect_vpn_home.dart';
 import 'package:beldex_browser/src/providers.dart';
 //import 'package:beldex_browser/src/translation_provider.dart';
 import 'package:beldex_browser/src/tts_provider.dart';
+import 'package:beldex_browser/src/tunnel_health_provider.dart';
 import 'package:beldex_browser/src/utils/screen_secure_provider.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
@@ -30,6 +36,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
 import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -190,15 +197,19 @@ NetworkReinitializer.start();
   // await Permission.camera.request();
   // await Permission.microphone.request();
   // await Permission.storage.request();
+
+
   setUpLocator(); // For AI
+
+  checkRealIP();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => WebViewModel(),
+          create: (context) => WebViewModel(uuid:''),
         ),
         ChangeNotifierProvider(
-            create: (context) => VpnStatusProvider()..loadSavedValue()),
+            create: (context) => VpnStatusProvider()..loadFreenameStatusPrefs()),
         ChangeNotifierProvider(create: ((context) => SearchEngineProvider())),
         ChangeNotifierProvider(
             create: ((context) => LoadingtickValueProvider())),
@@ -228,8 +239,27 @@ NetworkReinitializer.start();
          //ChangeNotifierProvider(create: (_)=> TranslatingProvider()),
          //ChangeNotifierProvider(create: (_)=> TextToSpeechProvider('')),
          ChangeNotifierProvider(create: (_)=> ReaderProvider('')),
-         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider())
-        
+         ChangeNotifierProvider(create: (_)=> AddSearchEngineProvider()),
+         ChangeNotifierProvider<IpProvider>(create: (_)=> IpProvider()),
+         //ChangeNotifierProvider<NodeProvider>(create: (_)=> NodeProvider()..getNodes()),
+         ChangeNotifierProxyProvider<BrowserModel, GroupProvider>(
+
+  create: (_) => GroupProvider(),
+
+  update: (_, browserModel, groupProvider) {
+
+    groupProvider ??= GroupProvider();
+
+    groupProvider.browserProvider =
+        browserModel;
+
+    return groupProvider;
+  },
+),
+
+ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
+ChangeNotifierProvider(create: (_)=> AppBarPositionProvider()..loadPreference()),
+ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
       ],
       child:
       // MaterialApp(
@@ -260,6 +290,11 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   bool _isUpdating = false;
 
 
+  late Connectivity _connectivity;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  bool _isConnected = true;
+
+StreamSubscription? _disconnectEventSubscription;
 
   @override
   void initState() {
@@ -272,19 +307,78 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
            setVPNStatus(context,Provider.of<VpnStatusNotifier>(context,listen: false).isConnected,Provider.of<VpnStatusNotifier>(context,listen: false));
 
         } 
-        //setState(() {
-              //print('is belnet app connected ? $isConnected')
-             // setVPNStatus(context, isConnected);
-          //  })
             );
+
+_connectivity = Connectivity();
+
+    // Check connectivity immediately when the screen launches
+  _checkInitialConnectivity();
+
+  // Listen for future connectivity changes
+  _connectivitySubscription =
+      _connectivity.onConnectivityChanged.listen((event) {
+    _updateConnectivity(event);
+  });
+
+
     getCurrentAppTheme();
      Provider.of<BasicProvider>(context, listen: false).loadFromPrefs();
       loadSwitchState(context);
-   
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+    final vpnStatusNotifier = Provider.of<VpnStatusNotifier>(context,listen: false);
+   _disconnectEventSubscription = BelnetLib.disconnectEventChannel.receiveBroadcastStream().listen((event){
+        print('User is clicked disconnect');
+   if (event == "notification_disconnect") {
+      print("User clicked disconnect from notification");
+      // Handle your logic
+ if(vpnStatusProvider.isNetConnected && vpnStatusProvider.value == 'Connecting...'){
+    try{
+       exit(0);
+      //AwesomeNotifications().cancelAll();
+      }catch(e){
+
+      }
+ }
+      
+          }
+  },
+   onError: (error) {
+    debugPrint("Notification disconnect stream error: $error");
+  }
+  
+  ); 
    
   }
 
  
+Future<void> _checkInitialConnectivity() async {
+  final result = await _connectivity.checkConnectivity();
+
+  if (!mounted) return;
+
+  _updateConnectivity(result);
+}
+
+void _updateConnectivity(List<ConnectivityResult> result)async {
+    final vpnStatusProvider = Provider.of<VpnStatusProvider>(context,listen: false);
+   // final loadingtickValueProvider = Provider.of<LoadingtickValueProvider>(context,listen: false);
+  final isConnected =
+      result.contains(ConnectivityResult.wifi) ||
+      result.contains(ConnectivityResult.mobile);
+
+  if (vpnStatusProvider.isNetConnected != isConnected) {
+    vpnStatusProvider.updateNetStatus(isConnected);
+    // setState(() {
+    //   _isConnected = isConnected;
+    // });
+  }
+
+}
+
+
+
+
+
 // Future<void> checkAppUpdate(context) async {
 //     print('this function is calling for update');
 //     InAppUpdate.checkForUpdate().then((info) {
@@ -328,7 +422,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
         Future.delayed(Duration(milliseconds: 300), () {
           if (isConnected == false) {
             print('belnet vpn is disconnected');
-            SystemNavigator.pop();
+         // SystemNavigator.pop();
           }
         });
       }else if(vpnStatusProvider.value == 'Connecting...'&& vpnStatusProvider.isChangeNode == false){
@@ -340,7 +434,9 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           }
           if(vpnStatusNotifier.count == 1){
             if(vpnStatusNotifier.isRunning == false){
-              SystemNavigator.pop();
+             // exit(0);
+             // await BelnetLib.disconnectFromBelnet();
+              //SystemNavigator.pop();
             }
           }
           //  if (running == true) {
@@ -410,6 +506,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   void dispose() {
         WidgetsBinding.instance.removeObserver(this);
          _isConnectedEventSubscription!.cancel();
+         _disconnectEventSubscription!.cancel();
     super.dispose();
    
 
@@ -419,17 +516,6 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
   Widget build(BuildContext context) {
         final localeProvider = Provider.of<LocaleProvider>(context);
 
-    //final themProvider = Provider.of<DarkThemeProvider>(context);
-// return MaterialApp(
-//              scaffoldMessengerKey: scaffoldMessengerKey,
-//         title: 'Beldex Browser',
-//         debugShowCheckedModeBanner: false,
-//         theme: Styles.themeData(true, context),
-// home:Scaffold(
-//         body: Center(
-//         child:  TextField()
-//         ), ),
-// );
  return ChangeNotifierProvider(create: (_) {
       return themeChangeProvider;
     }, child: Consumer<DarkThemeProvider>(
@@ -444,7 +530,7 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),
           initialRoute: '/',
           routes: {
-            '/': (context) => const ConnectVpnHome() //Browser(),
+            '/': (context) => const SplashScreens() //ConnectVpnHome() //Browser(),
           },
            builder: (context, child) {
           final l10n = AppLocalizations.of(context);
@@ -452,6 +538,13 @@ class _BeldexBrowserAppState extends State<BeldexBrowserApp> with WidgetsBinding
           if (l10n != null) {
             context.read<DownloadProvider>().setLocalizationObject(l10n);
           }
+
+          SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: themeChangeProvider.darkTheme ? Brightness.light : Brightness.dark
+      )
+    );
 
           return child!;
         },

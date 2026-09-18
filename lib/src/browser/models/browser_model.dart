@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 import 'search_engine_model.dart';
 import 'package:collection/collection.dart';
 
@@ -76,8 +77,14 @@ class BrowserModel extends ChangeNotifier {
   BrowserSettings _settings = BrowserSettings();
   late WebViewModel _currentWebViewModel;
 
+String _userInput = '';
 
+String get userInput => _userInput;
 
+void updateUserInput(String input){
+  _userInput = input;
+  notifyListeners();
+}
 
 
   List<int> _selectedItems = [];
@@ -438,7 +445,7 @@ setAdblocker() async {
 
 
   BrowserModel() {
-    _currentWebViewModel = WebViewModel();
+    _currentWebViewModel = WebViewModel(uuid: Uuid().v4());
     initializeSelectedItems();
     updateIconWhenNotSerchEngine();
     setAdblocker();
@@ -492,7 +499,7 @@ setAdblocker() async {
       _currentWebViewModel
           .updateWithValue(_webViewTabs[_currentTabIndex].webViewModel);
     } else {
-      _currentWebViewModel.updateWithValue(WebViewModel());
+      _currentWebViewModel.updateWithValue(WebViewModel(uuid: Uuid().v4()));
     }
 
     notifyListeners();
@@ -514,7 +521,7 @@ setAdblocker() async {
     // }
     _webViewTabs.clear();
     _currentTabIndex = -1;
-    _currentWebViewModel.updateWithValue(WebViewModel());
+    _currentWebViewModel.updateWithValue(WebViewModel(uuid: Uuid().v4()));
 
     notifyListeners();
   }
@@ -676,8 +683,8 @@ setAdblocker() async {
         // webViewTabs.sort((a, b) =>
         //     a.webViewModel.tabIndex!.compareTo(b.webViewModel.tabIndex!));
 
-        addFavorites(favorites);
-        addWebArchives(webArchives);
+       // addFavorites(favorites);
+        //addWebArchives(webArchives);
         updateSettings(settings);
        if( settings.homePageEnabled && settings.customUrlHomePage.isNotEmpty){
         //   List<WebViewTab> webViewTabs =[
@@ -777,7 +784,7 @@ if (shouldResolveWeb3) {
 
       addTab(
         WebViewTab(
-          webViewModel: WebViewModel(
+          webViewModel: WebViewModel(uuid: Uuid().v4(),
             url: WebUri(finalUrl),
           ),
         ),
@@ -808,7 +815,7 @@ print('Browser model calling -2 $finalUrl');
 
       addTab(
         WebViewTab(
-          webViewModel: WebViewModel(
+          webViewModel: WebViewModel(uuid: Uuid().v4(),
             url: WebUri(trimmedValue),
           ),
         ),
@@ -821,7 +828,7 @@ print('Browser model calling -2 $finalUrl');
     /// fallback
     addTab(
       WebViewTab(
-        webViewModel: WebViewModel(
+        webViewModel: WebViewModel(uuid: Uuid().v4(),
           url: WebUri(trimmedValue),
         ),
       ),
@@ -832,7 +839,7 @@ print('Browser model calling -2 $finalUrl');
   print('Browser model calling 2 $trimmedValue');
   addTab(
     WebViewTab(
-      webViewModel: WebViewModel(
+      webViewModel: WebViewModel(uuid: Uuid().v4(),
         url: WebUri(trimmedValue),
       ),
     ),

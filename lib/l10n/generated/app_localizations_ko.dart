@@ -531,6 +531,187 @@ class AppLocalizationsKo extends AppLocalizations {
   String get searchEngineUpdated => '검색 엔진이 성공적으로 업데이트되었습니다!';
 
   @override
+  String get searchusing => '검색 방법';
+
+  @override
+  String get addTabToNewGroup => '새 그룹에 탭 추가';
+
+  @override
+  String get invitePeople => '사람 초대';
+
+  @override
+  String get uploadFromGallery => '갤러리에서 업로드';
+
+  @override
+  String get noQRCodeFound => '이미지에서 QR 코드를 찾을 수 없습니다';
+
+  @override
+  String get searchBarPosition => '검색창 위치';
+
+  @override
+  String get choosethePosition => '검색창의 위치를 선택하세요';
+
+  @override
+  String get iPAddress => 'IP 주소';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => '내 IP';
+
+  @override
+  String get marketUpdate => '시장 업데이트';
+
+  @override
+  String get searchYourTabs => '탭 검색';
+
+  @override
+  String get newTabGroup => '새 탭 그룹';
+
+  @override
+  String get selectTab => '탭 선택';
+
+  @override
+  String get selectTabs => '탭 선택';
+
+  @override
+  String get deleteTabGroup => '탭 그룹 삭제';
+
+  @override
+  String get rename => '이름 변경';
+
+  @override
+  String get renameGroup => '그룹 이름 변경';
+
+  @override
+  String get ungroupTab => '탭 그룹 해제';
+
+  @override
+  String get deleteGroup => '그룹 삭제';
+
+  @override
+  String get addToTabGroup => '탭 그룹에 추가';
+
+  @override
+  String get editGroupName => '그룹 이름 편집';
+
+  @override
+  String get editGroupColor => '그룹 색상 편집';
+
+  @override
+  String get closeTab => '탭 닫기';
+
+  @override
+  String get doYouWantToUngroup => '이 탭 그룹을 정말 해제하시겠습니까?';
+
+  @override
+  String get ungroupTabGroup => '탭 그룹 해제';
+
+  @override
+  String get ungroup => '해제';
+
+  @override
+  String get deletetabGroup => '탭 그룹 삭제';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => '추가 대상';
+
+  @override
+  String get tabs => '탭';
+
+  @override
+  String get done => '완료';
+
+  @override
+  String get create => '만들기';
+
+  @override
+  String get groupColor => '그룹 색상';
+
+  @override
+  String get groupName => '그룹 이름';
+
+  @override
+  String get addtoNewTabGroup => '새 탭 그룹에 추가';
+
+  @override
+  String get tabGroups => '탭 그룹';
+
+  @override
+  String get tabGroup => '탭 그룹';
+
+  @override
+  String get tabsSelected => '선택된 탭';
+
+  @override
+  String get privateResearch => '예: 비공개 리서치';
+
+  @override
+  String get deselectAll => '전체 선택 해제';
+
+  @override
+  String get selected => '선택됨';
+
+  @override
+  String get close => '닫기';
+
+  @override
+  String get top => '상단';
+
+  @override
+  String get bottom => '하단';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return '이 작업을 수행하면 “$tabGroupName” 안의 $tabCount개 탭이 모두 영구적으로 닫히며 되돌릴 수 없습니다.';
+  }
+
+  @override
+  String get changingNode => '노드 변경 중..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 도메인';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3 도메인 지원 활성화';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Belnet 부트스트랩 파일을 다운로드할 수 없습니다. 연결 상태를 확인한 후 다시 시도해 주세요';
+
+  @override
+  String get couldNotEstablishConnection => 'Belnet 연결을 설정할 수 없습니다. 다시 시도해 주세요';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet 서비스를 시작할 수 없습니다. 다시 시도해 주세요';
+
+  @override
+  String get exitNodeUnreachable => '출구 노드에 연결할 수 없습니다. 다시 연결하는 중입니다';
+
+  @override
+  String get tab => '탭';
+
+  @override
+  String get ungroupTabs => '탭 그룹 해제';
+
+  @override
+  String get closeGroup => '그룹 닫기';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '\$$tabGroupName에서 선택한 탭의 그룹을 해제하시겠습니까?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex는 분산형 및 개인정보 보호 애플리케이션으로 구성된 생태계입니다. Beldex 브라우저 앱은 BChat, BelNet, Beldex 프로토콜 등 다양한 앱과 함께 이 생태계의 일부입니다. Beldex 브라우저는 사용자의 데이터를 오직 사용자만 소유하는 안전하고 매끄러운 온라인 경험으로 안내하는 관문입니다. 견고한 블록체인 인프라 위에 구축되어, Beldex 브라우저는 사용자에게 프라이버시와 익명성을 보장합니다.';
 
   @override

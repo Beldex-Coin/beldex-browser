@@ -531,6 +531,187 @@ class AppLocalizationsEl extends AppLocalizations {
   String get searchEngineUpdated => 'Η μηχανή αναζήτησης ενημερώθηκε με επιτυχία!';
 
   @override
+  String get searchusing => 'Αναζήτηση με χρήση';
+
+  @override
+  String get addTabToNewGroup => 'Προσθήκη καρτέλας σε νέα ομάδα';
+
+  @override
+  String get invitePeople => 'Πρόσκληση ατόμων';
+
+  @override
+  String get uploadFromGallery => 'Μεταφόρτωση από τη συλλογή';
+
+  @override
+  String get noQRCodeFound => 'Δεν βρέθηκε κωδικός QR στην εικόνα';
+
+  @override
+  String get searchBarPosition => 'Θέση γραμμής αναζήτησης';
+
+  @override
+  String get choosethePosition => 'Επιλέξτε τη θέση της γραμμής αναζήτησης';
+
+  @override
+  String get iPAddress => 'Διεύθυνση IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'Η IP μου';
+
+  @override
+  String get marketUpdate => 'Ενημέρωση αγοράς';
+
+  @override
+  String get searchYourTabs => 'Αναζήτηση στις καρτέλες σας';
+
+  @override
+  String get newTabGroup => 'Νέα ομάδα καρτελών';
+
+  @override
+  String get selectTab => 'Επιλογή καρτέλας';
+
+  @override
+  String get selectTabs => 'Επιλογή καρτελών';
+
+  @override
+  String get deleteTabGroup => 'Διαγραφή ομάδας καρτελών';
+
+  @override
+  String get rename => 'Μετονομασία';
+
+  @override
+  String get renameGroup => 'Μετονομασία ομάδας';
+
+  @override
+  String get ungroupTab => 'Αφαίρεση καρτέλας από την ομάδα';
+
+  @override
+  String get deleteGroup => 'Διαγραφή ομάδας';
+
+  @override
+  String get addToTabGroup => 'Προσθήκη στην ομάδα καρτελών';
+
+  @override
+  String get editGroupName => 'Επεξεργασία ονόματος ομάδας';
+
+  @override
+  String get editGroupColor => 'Επεξεργασία χρώματος ομάδας';
+
+  @override
+  String get closeTab => 'Κλείσιμο καρτέλας';
+
+  @override
+  String get doYouWantToUngroup => 'Θέλετε πραγματικά να καταργήσετε την ομαδοποίηση αυτής της ομάδας καρτελών;';
+
+  @override
+  String get ungroupTabGroup => 'Κατάργηση ομαδοποίησης ομάδας καρτελών';
+
+  @override
+  String get ungroup => 'Κατάργηση ομαδοποίησης';
+
+  @override
+  String get deletetabGroup => 'Διαγραφή ομάδας καρτελών';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Προσθήκη σε';
+
+  @override
+  String get tabs => 'Καρτέλες';
+
+  @override
+  String get done => 'Τέλος';
+
+  @override
+  String get create => 'Δημιουργία';
+
+  @override
+  String get groupColor => 'Χρώμα ομάδας';
+
+  @override
+  String get groupName => 'Όνομα ομάδας';
+
+  @override
+  String get addtoNewTabGroup => 'Προσθήκη σε νέα ομάδα καρτελών';
+
+  @override
+  String get tabGroups => 'Ομάδες καρτελών';
+
+  @override
+  String get tabGroup => 'Ομάδα καρτελών';
+
+  @override
+  String get tabsSelected => 'Επιλεγμένες καρτέλες';
+
+  @override
+  String get privateResearch => 'π.χ. Ιδιωτική έρευνα';
+
+  @override
+  String get deselectAll => 'Αποεπιλογή όλων';
+
+  @override
+  String get selected => 'Επιλεγμένο';
+
+  @override
+  String get close => 'Κλείσιμο';
+
+  @override
+  String get top => ' επάνω';
+
+  @override
+  String get bottom => 'κάτω';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Αυτή η ενέργεια θα κλείσει οριστικά και τις $tabCount καρτέλες που βρίσκονται στην «$tabGroupName». Αυτή η ενέργεια δεν μπορεί να αναιρεθεί';
+  }
+
+  @override
+  String get changingNode => 'Αλλαγή κόμβου..';
+
+  @override
+  String get freeenameWebDomain => 'Τομέας Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Ενεργοποίηση υποστήριξης τομέα Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Δεν ήταν δυνατή η λήψη του αρχείου εκκίνησης του Belnet. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά';
+
+  @override
+  String get couldNotEstablishConnection => 'Δεν ήταν δυνατή η δημιουργία σύνδεσης με το Belnet. Δοκιμάστε ξανά';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Δεν ήταν δυνατή η εκκίνηση της υπηρεσίας Belnet. Δοκιμάστε ξανά';
+
+  @override
+  String get exitNodeUnreachable => 'Ο κόμβος εξόδου δεν είναι προσβάσιμος, γίνεται επανασύνδεση';
+
+  @override
+  String get tab => 'Καρτέλα';
+
+  @override
+  String get ungroupTabs => 'Κατάργηση ομαδοποίησης καρτελών';
+
+  @override
+  String get closeGroup => 'Κλείσιμο ομάδας';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Θέλετε σίγουρα να καταργήσετε την ομαδοποίηση των επιλεγμένων καρτελών από την \$$tabGroupName;';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Το Beldex είναι ένα οικοσύστημα αποκεντρωμένων εφαρμογών που διατηρούν την ιδιωτικότητα. Η εφαρμογή του Προγράμματος περιήγησης Beldex είναι ένα από τα στοιχεία αυτού του οικοσυστήματος, το οποίο περιλαμβάνει επίσης εφαρμογές όπως το BChat, το BelNet και το πρωτόκολλο Beldex. Το Πρόγραμμα περιήγησης Beldex είναι η πύλη σας σε μια απρόσκοπτη και ιδιωτική εμπειρία στο διαδίκτυο, όπου τα δεδομένα σας παραμένουν αποκλειστικά δικά σας. Χτισμένο πάνω σε μια ισχυρή υποδομή blockchain, το πρόγραμμα περιήγησης Beldex διασφαλίζει ιδιωτικότητα και ανωνυμία για τους χρήστες του.';
 
   @override
