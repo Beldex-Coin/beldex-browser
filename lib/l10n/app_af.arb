@@ -184,6 +184,102 @@
   "searchEngineUpdated": "Soekenjin suksesvol opgedateer!",
 
 
+
+"searchusing": "Soek met",
+  "addTabToNewGroup": "Voeg oortjie by nuwe groep",
+  "invitePeople": "Nooi mense",
+  "uploadFromGallery": "Laai vanaf galery op",
+  "noQRCodeFound": "Geen QR-kode in prent gevind nie",
+  "searchBarPosition": "Soekbalkposisie",
+  "choosethePosition": "Kies die posisie van die soekbalk",
+  "iPAddress": "IP-adres",
+   "vpnIP": "VPN-IP",
+   "myIP": "My IP",
+   "marketUpdate": "Markopdatering",
+   "searchYourTabs": "Soek jou oortjies",
+   "newTabGroup": "Nuwe oortjiegroep",
+   "selectTab": "Kies oortjies",
+   "selectTabs": "Kies oortjies",
+   "closeAllTabs": "Sluit alle oortjies",
+   "deleteTabGroup": "Verwyder oortjiegroep",
+   "rename": "Hernoem",
+   "renameGroup": "Hernoem groep",
+   "ungroupTab": "Ontbondel oortjie",
+   "deleteGroup": "Verwyder groep",
+   "addToTabGroup": "Voeg by oortjiegroep",
+   "editGroupName": "Wysig groepnaam",
+   "editGroupColor": "Wysig groepkleur",
+   "closeTab": "Sluit oortjies",
+   "doYouWantToUngroup": "Wil jy werklik hierdie oortjiegroep ontbondel?",
+   "ungroupTabGroup": "Ontbondel oortjiegroep",
+   "ungroup": "Ontbondel",
+   "deleteGroup": " Verwyder groep",
+   "deletetabGroup": "Verwyder oortjiegroep",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Voeg by",
+   "tabs": "Oortjies",
+   "done": "Klaar",
+   "create": "Skep",
+   "groupColor": "Groepkleur",
+   "groupName": "Groepnaam",
+   "newTabGroup": "Nuwe oortjiegroep",
+   "addtoNewTabGroup": "Voeg by nuwe oortjiegroep",
+   "tabGroups": "Oortjiegroepe",
+   "tabGroup": "Oortjiegroep",
+   "tabsSelected": "Oortjies gekies",
+   "privateResearch": "bv. Privaat navorsing",
+   "deselectAll": "Ontkies alles",
+   "selected": "Gekies",
+
+
+   "close": "Sluit",
+   "top": " bo",
+   "bottom": "onder",
+
+
+
+  "closeAllTabsConfirmation":"Hierdie handeling sal al {tabCount} oortjies binne “{tabGroupName}” permanent sluit. Dit kan nie ongedaan gemaak word nie", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Besig om nodus te verander",
+"freeenameWebDomain" : "Freename Web3-domein",
+"enableFreeNameWeb" : "Aktiveer FreeName Web3-domeinondersteuning",
+"couldnotDownloadBootstrap" : "Kon nie die Belnet-opstartlêer aflaai nie. Kontroleer asseblief u verbinding en probeer weer",
+"couldNotEstablishConnection" : "Kon nie Belnet-verbinding tot stand bring nie. Probeer asseblief weer",
+"theBelnetServiceNotStarted": "Die Belnet-diens kon nie begin word nie. Probeer asseblief weer",
+"exitNodeUnreachable" : "Uitgangsknoop onbereikbaar, herverbind",
+
+
+
+"tab": "Oortjie",
+"ungroupTabs": "Ontgroepeer oortjies",
+"closeGroup": "Maak groep toe",
+"ungroupSelectedTabs": "Wil jy regtig die geselekteerde oortjies uit ${tabGroupName} ontgroepeer?",
+"@ungroupSelectedTabs": {
+  "description": "Bevestigingsboodskap wanneer geselekteerde oortjies uit 'n oortjiegroep ontgroepeer word",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex is ’n ekosisteem van gedesentraliseerde en vertroulikheid-bewarende toepassings. Die Beldex Browser-toepassing is een van hierdie ekosisteem, wat ook toepassings soos BChat, BelNet en die Beldex-protokol insluit. Die Beldex Browser is jou toegangspoort tot ’n naatlose en vertroulike aanlyn ervaring, waar jou data uitsluitlik joune bly. Gebou op ’n robuuste blokkettinginfrastruktuur, verseker die Beldex Browser vertroulikheid en anonimiteit vir sy gebruikers.",
 "atBeldex": " \n By Beldex glo ons daarin om individue te bemagtig met die fundamentele reg om hul digitale voetspoor te beheer. Die Beldex Browser is ontwerp om ’n veilige en vertroulike aanlyn omgewing te bied waar gebruikers met die digitale wêreld kan kommunikeer en interaksie hê.",
 "titlebns": "\nBNS",
@@ -192,7 +288,7 @@
 "asTheBrowser": "Omdat die blaaier self BelNet as ’n bykomende vertroulikheidskenmerk ondersteun, kan gebruikers maklik toegang kry tot MNApps wat op die .bdx-domeinadrese gehuisves word.",
 "titleCrossplatformAccess": "\nKruisplatformtoegang",
 "theBeldexBrowserIsCrossplatform": "Die Beldex Browser is kruisplatform, aangesien dit vir beide mobiele en lessenaar-toestelle ontwikkel word.",
-"titleKeyFeature": "\nKey Features",
+"titleKeyFeature": "\nBelangrike kenmerke",
 "followingAreTheFeatures": "\nHieronder volg die kenmerke wat beskikbaar is in die Beta-weergawe van die Beldex-blaaiertoepassing. Meer kenmerke sal by die alfa-weergawe gevoeg word.\n",
 "blockJavascript": "Blokkeer JavaScript: Die Beldex Browser prioritiseer gebruikersveiligheid deur JavaScript te blokkeer, wat die risiko van kwaadwillige skrifte verminder wat gebruikers se vertroulikheid en sekuriteit kan benadeel. Dit verseker ’n veilige blaai-ervaring en beskerm gebruikers teen bedreigings wat JavaScript-kwesbaarhede behels.",
 "blockcookies": "Blokkeer koekies: Koekies versamel ’n gebruiker se persoonlike inligting wat help om hul gedrag- en gebruikspatrone te bepaal. Dit help weer webwerwe om relevante advertensies te wys, aktiewe sessies te bestuur en grootdata-analises te verskaf.",

@@ -531,6 +531,187 @@ class AppLocalizationsCa extends AppLocalizations {
   String get searchEngineUpdated => 'Motor de cerca actualitzat correctament!';
 
   @override
+  String get searchusing => 'Cerca amb';
+
+  @override
+  String get addTabToNewGroup => 'Afegeix una pestanya a un grup nou';
+
+  @override
+  String get invitePeople => 'Convida persones';
+
+  @override
+  String get uploadFromGallery => 'Penja des de la galeria';
+
+  @override
+  String get noQRCodeFound => 'no s\'ha trobat cap codi QR a la imatge';
+
+  @override
+  String get searchBarPosition => 'Posició de la barra de cerca';
+
+  @override
+  String get choosethePosition => 'Tria la posició de la barra de cerca';
+
+  @override
+  String get iPAddress => 'Adreça IP';
+
+  @override
+  String get vpnIP => 'IP de la VPN';
+
+  @override
+  String get myIP => 'La meva IP';
+
+  @override
+  String get marketUpdate => 'Actualització del mercat';
+
+  @override
+  String get searchYourTabs => 'Cerca les teves pestanyes';
+
+  @override
+  String get newTabGroup => 'Grup de pestanyes nou';
+
+  @override
+  String get selectTab => 'Selecciona pestanya';
+
+  @override
+  String get selectTabs => 'Selecciona pestanyes';
+
+  @override
+  String get deleteTabGroup => 'Suprimeix el grup de pestanyes';
+
+  @override
+  String get rename => 'Canvia el nom';
+
+  @override
+  String get renameGroup => 'Canvia el nom del grup';
+
+  @override
+  String get ungroupTab => 'Desagrupa la pestanya';
+
+  @override
+  String get deleteGroup => 'Suprimeix el grup';
+
+  @override
+  String get addToTabGroup => 'Afegeix al grup de pestanyes';
+
+  @override
+  String get editGroupName => 'Edita el nom del grup';
+
+  @override
+  String get editGroupColor => 'Edita el color del grup';
+
+  @override
+  String get closeTab => 'Tanca les pestanya';
+
+  @override
+  String get doYouWantToUngroup => 'Realment vols desagrupar aquest grup de pestanyes?';
+
+  @override
+  String get ungroupTabGroup => 'Desagrupa el grup de pestanyes';
+
+  @override
+  String get ungroup => 'Desagrupa';
+
+  @override
+  String get deletetabGroup => 'Suprimeix el grup de pestanyes';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Afegeix a';
+
+  @override
+  String get tabs => 'Pestanyes';
+
+  @override
+  String get done => 'Fet';
+
+  @override
+  String get create => 'Crea';
+
+  @override
+  String get groupColor => 'Color del grup';
+
+  @override
+  String get groupName => 'Nom del grup';
+
+  @override
+  String get addtoNewTabGroup => 'Afegeix a un grup de pestanyes nou';
+
+  @override
+  String get tabGroups => 'Grups de pestanyes';
+
+  @override
+  String get tabGroup => 'Grup de pestanyes';
+
+  @override
+  String get tabsSelected => 'Pestanyes seleccionades';
+
+  @override
+  String get privateResearch => 'p. ex., Investigació privada';
+
+  @override
+  String get deselectAll => 'Desselecciona-ho tot';
+
+  @override
+  String get selected => 'Seleccionat';
+
+  @override
+  String get close => 'Tanca';
+
+  @override
+  String get top => 'a dalt';
+
+  @override
+  String get bottom => 'a baix';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Aquesta acció tancarà permanentment les $tabCount pestanyes de «$tabGroupName». Aquesta acció no es pot desfer.';
+  }
+
+  @override
+  String get changingNode => 'Canvi de node..';
+
+  @override
+  String get freeenameWebDomain => 'Domini Web3 de FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Activa la compatibilitat amb el domini Web3 de FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'No s\'ha pogut descarregar el fitxer d\'arrencada de Belnet. Comprova la connexió i torna-ho a provar';
+
+  @override
+  String get couldNotEstablishConnection => 'No s\'ha pogut establir la connexió amb Belnet. Torna-ho a provar';
+
+  @override
+  String get theBelnetServiceNotStarted => 'No s\'ha pogut iniciar el servei de Belnet. Torna-ho a provar';
+
+  @override
+  String get exitNodeUnreachable => 'El node de sortida no és accessible, s\'està tornant a connectar';
+
+  @override
+  String get tab => 'Pestanya';
+
+  @override
+  String get ungroupTabs => 'Desagrupar pestanyes';
+
+  @override
+  String get closeGroup => 'Tancar grup';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Segur que vols desagrupar les pestanyes seleccionades de \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex és un ecosistema d’aplicacions descentralitzades i de preservació de la confidencialitat. L’aplicació Beldex Browser és una part d’aquest ecosistema, que també inclou aplicacions com BChat, BelNet i el protocol Beldex. El Beldex Browser és la teva porta d’entrada a una experiència en línia fluida i confidencial, on les teves dades només són teves. Construït sobre una infraestructura blockchain robusta, el navegador Beldex garanteix confidencialitat i anonimat als seus usuaris.';
 
   @override

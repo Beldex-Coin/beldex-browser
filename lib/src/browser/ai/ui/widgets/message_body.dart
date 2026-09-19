@@ -219,8 +219,8 @@ setNewModel(AIModelProvider aiModelProvider)async{
                   SvgPicture.asset('assets/images/ai-icons/errors.svg'),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Text(widget.message.text,style: TextStyle(fontSize: 13,color:themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC),
-                    fontFamily: 'Poppins'),),
+                    child: Text(widget.message.text,style: TextStyle(fontSize: 13,color:themeProvider.darkTheme ? Color(0xff8D8D8D) : Color(0xff737373),
+                    fontFamily: 'Inter'),),
                   )
                 ],
               ),
@@ -231,12 +231,13 @@ setNewModel(AIModelProvider aiModelProvider)async{
                            data:widget.message.text,
                            shrinkWrap: true,
                            padding: EdgeInsets.zero,
+                           //selectable: true,
                            physics: NeverScrollableScrollPhysics(),
                            styleSheet: md.MarkdownStyleSheet.fromTheme(
                 Theme.of(context).copyWith(
                 textTheme: TextTheme(bodyMedium: TextStyle(//color: themeProvider.darkTheme ? Colors.white : Colors.black, // Colors.yellow,
                   fontSize: 14,
-                  fontFamily: 'Poppins'
+                  fontFamily: 'Inter'
                   //fontWeight: FontWeight.w400,
                   )),
                            ),
@@ -281,20 +282,26 @@ setNewModel(AIModelProvider aiModelProvider)async{
                 height: 2,
                 child: Divider(
                   
-                  color: themeProvider.darkTheme ? Color(0xff42425F) : Color(0xffDADADA)),
+                  color: themeProvider.darkTheme ? Color(0xff333333) : Color(0xffD4D4D4)),
               ),
                 Padding(
                   padding: const EdgeInsets.only(top:13.0),
-                  child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                            SvgPicture.asset('assets/images/ai-icons/retry.svg',color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC),),
-                             Padding(
-                               padding: const EdgeInsets.only(left:5.0),
-                               child: Text(loc.retry,style: TextStyle(fontFamily: 'Poppins', color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC)),),
-                             ),
-                           ],
-                         ),
+                  child: Container(
+                    decoration: BoxDecoration(color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffFFFFFF)),
+                    padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+                    child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                             children: [
+                              
+                               Padding(
+                                 padding: const EdgeInsets.only(right:5.0),
+                                 child: Text(loc.retry,style: TextStyle(fontFamily: 'Inter', color: widget.message.isRetry ? Color(0xff00B134) : themeProvider.darkTheme ? Color(0xff56566B) : Color(0xffACACAC)),),
+                               ),
+                               SvgPicture.asset('assets/images/ai-icons/retry.svg',color: widget.message.isRetry ? Color(0xff00B134) :  themeProvider.darkTheme ? Color(0xff00B134) : Color(0xff00B134).withOpacity(0.3),),
+                             ],
+                           ),
+                  ),
                 ),
                     ],
                   )
@@ -365,16 +372,19 @@ setNewModel(AIModelProvider aiModelProvider)async{
                    padding: const EdgeInsets.symmetric(vertical: 9.0,horizontal: 12.0),
                   // width: 127,
                    decoration: BoxDecoration(
-                    color: themeProvider.darkTheme ? Color(0xff282836) : Color(0xffF3F3F3),
-                    borderRadius: BorderRadius.circular(12)
+                    color:// themeProvider.darkTheme ? Color(0xff282836) : 
+                    Color(0xff222222),
+                    //borderRadius: BorderRadius.circular(12)
                    ),
                      child: Row(
                        mainAxisSize: MainAxisSize.min,
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                        children: [
+                         Text(loc.regenerate,style: TextStyle(fontFamily: 'Inter',color: Color(0xffEBEBEB)),),
+                         SizedBox(width: 5,),
                         SvgPicture.asset('assets/images/ai-icons/Vector.svg'),
-                        SizedBox(width: 5,),
-                         Text(loc.regenerate,style: TextStyle(fontFamily: 'Poppins'),),
+                        
+                        
                        ],
                      ),
                 ),

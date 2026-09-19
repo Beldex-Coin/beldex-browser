@@ -185,6 +185,117 @@
 
 
 
+
+
+
+  "searchusing": "Hledat pomocí",
+  "addTabToNewGroup": "Přidat kartu do nové skupiny",
+  "invitePeople": "Pozvat lidi",
+  "uploadFromGallery": "Nahrát z galerie",
+  "noQRCodeFound": "Na obrázku nebyl nalezen žádný QR kód",
+  "searchBarPosition": "Pozice vyhledávacího panelu",
+  "choosethePosition": "Vyberte pozici vyhledávacího panelu",
+  "iPAddress": "IP adresa",
+   "vpnIP": "IP adresa VPN",
+   "myIP": "Moje IP",
+   "marketUpdate": "Aktualizace trhu",
+   "searchYourTabs": "Hledat v kartách",
+   "newTabGroup": "Nová skupina karet",
+   "selectTab": "Vybrat kartu",
+   "selectTabs": "Vybrat karty",
+   "closeAllTabs": "Zavřít všechny karty",
+   "deleteTabGroup": "Smazat skupinu karet",
+   "rename": "Přejmenovat",
+   "renameGroup": "Přejmenovat skupinu",
+   "ungroupTab": "Zrušit seskupení karty",
+   "deleteGroup": "Smazat skupinu",
+   "addToTabGroup": "Přidat do skupiny karet",
+   "editGroupName": "Upravit název skupiny",
+   "editGroupColor": "Upravit barvu skupiny",
+   "closeTab": "Zavřít kartu",
+   "doYouWantToUngroup": "Opravdu chcete zrušit seskupení této skupiny karet?",
+   "ungroupTabGroup": "Zrušit seskupení karet",
+   "ungroup": "Zrušit seskupení",
+   "deleteGroup": "Smazat skupinu",
+   "deletetabGroup": "Smazat skupinu karet",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Přidat do",
+   "tabs": "Karty",
+   "done": "Hotovo",
+   "create": "Vytvořit",
+   "groupColor": "Barva skupiny",
+   "groupName": "Název skupiny",
+   "newTabGroup": "Nová skupina karet",
+   "addtoNewTabGroup": "Přidat do nové skupiny karet",
+   "tabGroups": "Skupiny karet",
+   "tabGroup": "Skupina karet",
+   "tabsSelected": "Vybrané karty",
+   "privateResearch": "např. Soukromý výzkum",
+   "deselectAll": "Zrušit výběr všeho",
+   "selected": "Vybráno",
+
+
+   "close": "Zavřít",
+   "top": "nahoře",
+   "bottom": "dole",
+
+
+
+  "closeAllTabsConfirmation": "Tato akce trvale zavře všechny {tabCount} karty ve skupině karet „{tabGroupName}“. Tuto akci nelze vrátit zpět.",
+"@closeAllTabsConfirmation": {
+  "description": "Potvrzovací zpráva při zavírání všech karet ve skupině karet",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Probíhá změna uzlu",
+"freeenameWebDomain" : "Doména Web3 FreeName",
+"enableFreeNameWeb" : "Povolit podporu domény Web3 FreeName",
+"couldnotDownloadBootstrap" : "Nepodařilo se stáhnout spouštěcí soubor Belnet. Zkontrolujte připojení a zkuste to znovu",
+"couldNotEstablishConnection" : "Nepodařilo se navázat připojení k Belnet. Zkuste to znovu",
+"theBelnetServiceNotStarted": "Službu Belnet se nepodařilo spustit. Zkuste to znovu",
+"exitNodeUnreachable" : "Výstupní uzel není dostupný, probíhá opětovné připojení",
+
+
+
+
+
+
+
+
+
+
+"tab": "Karta",
+"ungroupTabs": "Zrušit seskupení karet",
+"closeGroup": "Zavřít skupinu",
+"ungroupSelectedTabs": "Opravdu chcete zrušit seskupení vybraných karet ze skupiny ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Potvrzovací zpráva při rušení seskupení vybraných karet ze skupiny karet",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
+
+
+
 "beldexIsAnEcosystem": "Beldex je ekosystém decentralizovaných aplikací zaměřených na ochranu soukromí. Aplikace Beldex Browser je jednou z těchto aplikací a ekosystém dále zahrnuje aplikace jako BChat, BelNet a protokol Beldex. Prohlížeč Beldex je vaší branou k plynulému a důvěrnému online prostředí, kde vaše data zůstávají pouze vaše. Je postaven na robustní blockchainové infrastruktuře a zajišťuje důvěrnost a anonymitu svým uživatelům.",
 "atBeldex": " \n V Beldexu věříme v posílení jednotlivců základním právem kontrolovat svou digitální stopu. Prohlížeč Beldex je navržen tak, aby uživatelům poskytoval bezpečné a důvěrné online prostředí pro komunikaci a interakci s digitálním světem.",
 "titlebns": "\nBNS",

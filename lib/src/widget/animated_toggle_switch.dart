@@ -1,6 +1,7 @@
 import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
+import 'package:beldex_browser/src/browser/providers/tab_provider.dart';
 import 'package:beldex_browser/src/providers.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:beldex_browser/src/web2_domain_list.dart';
@@ -34,8 +35,8 @@ class _AnimatedToggleSwitchState extends State<AnimatedToggleSwitch> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             color: themeProvider.darkTheme
-                ? const Color(0xff363645)
-                : const Color(0xffFFFFFF)),
+                ? const Color(0xff333333)
+                : const Color(0xffD4D4D4)),
         child: Stack(
           children: [
             AnimatedPositioned(
@@ -157,13 +158,13 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
     final browserModel = Provider.of<BrowserModel>(context,listen: false);
     final appLocaleProvider = Provider.of<LocaleProvider>(context,listen: false);
         final webViewModel = Provider.of<WebViewModel>(context,listen: false);
-
+      final groupProvider = Provider.of<GroupProvider>(context);
     checkLoading(vpnStatusProvider);
     return SizedBox(
         width: 25.0,
         child: IconButton(
             padding: const EdgeInsets.all(0.0),
-            icon: SvgPicture.asset(isLoading && browserModel.webViewTabs.isNotEmpty ? 'assets/images/stop_white_theme.svg' : 'assets/images/refresh.svg',
+            icon: SvgPicture.asset(isLoading && groupProvider.totalOpenTabsCount != 0 ? 'assets/images/stop_white_theme.svg' : 'assets/images/refresh.svg',
                 color:
                 themeProvider.darkTheme
                     ?const Color(0xffFFFFFF)
@@ -176,8 +177,8 @@ class _PageLoadingContainerState extends State<PageLoadingContainer> {
                 Navigator.pop(widget.popupMenuContext);
                 if (widget.webViewController != null &&
                     widget.searchController != null) {
-
-String trimmedValue = widget.searchController!.text.trim();
+ if(vpnStatusProvider.isEnabledFreeName){
+             String trimmedValue = browserModel.userInput;
 if (trimmedValue.isEmpty) return;
 
 //widget.webViewModel.setResolveData(trimmedValue);
@@ -237,7 +238,7 @@ bool isPotentialWeb3Domain =
 
                   
 
-
+print('THE WEBVIEW 1 ${widget.searchController!.text.trim()}');
 
 if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain)) {
   try {
@@ -271,7 +272,7 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
       final domainName =
           res.data?["data"]?["asciiName"] ?? trimmedValue;
 
-      // ✅ CLEAR + STORE immediately
+      // CLEAR + STORE immediately
       //widget.webViewModel.clearResolvedData();
 
      // widget.webViewModel.setActiveDomain(domainName);
@@ -295,6 +296,8 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
         //     url: WebUri(finalUrl),
         //   ),
         // );
+
+        print('THE WEBVIEW 2 ----- ${widget.searchController!.text.trim()}');
       } 
       // else {
       //   addNewTab(url: WebUri(finalUrl));
@@ -314,7 +317,7 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
 
 
 
-
+print('THE WEBVIEW CONTROLLER 3---> ${widget.webViewController} ----- ${widget.searchController!.text.trim()}');
 
 
       // Navigator.pop(context, WebUri(finalUrl));
@@ -325,6 +328,7 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
    // return;
   }
 }else{
+  print('THE WEBVIEW CONTROLLER ELSE STATEMENT ---> ${widget.searchController!.text}');
    await widget.webViewController!.loadUrl(
                       urlRequest: URLRequest(
                           url: WebUri(widget.searchController!.text),
@@ -332,9 +336,18 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
             "Accept-Language": appLocaleProvider.fullLocaleId,
           },
                           ));
+
 }
 
-
+ }else{
+           await widget.webViewController!.loadUrl(
+                      urlRequest: URLRequest(
+                          url: WebUri(browserModel.userInput.trim()),
+                          headers: {
+            "Accept-Language": appLocaleProvider.fullLocaleId,
+          }
+                          ));
+ }
 
 
 
@@ -349,10 +362,14 @@ if (!isPlainText && !isWeb2Domain && (isFullResolverUrl || isPotentialWeb3Domain
                   vpnStatusProvider.updateFAB(true);
                 }
               } else {
+                print('THE WEBVIEW CONTROLLER ---> ${widget.webViewController} ----- ${widget.searchController!.text.trim()}');
+
                 setState(() {
                   isLoading = false;
                 });
                 if (widget.webViewController != null) {
+                  print('THE WEBVIEW CONTROLLER ---> ${widget.webViewController} ----- ${widget.searchController!.text.trim()}');
+
                   if (await widget.webViewController!.isLoading()) {
                     await widget.webViewController!.stopLoading();
                     

@@ -186,6 +186,102 @@
   "searchEngineUpdated": "Matagumpay na na-update ang search engine!",
 
 
+
+
+
+  "searchusing": "Maghanap gamit ang",
+  "addTabToNewGroup": "Magdagdag ng Tab sa bagong grupo",
+  "invitePeople": "Mag-imbita ng mga tao",
+  "uploadFromGallery": "Mag-upload mula sa gallery,",
+  "noQRCodeFound": "Walang QR code na nakita sa larawan",
+  "searchBarPosition": "Posisyon ng search bar",
+  "choosethePosition": "Piliin ang posisyon ng search bar",
+  "iPAddress": "IP Address",
+   "vpnIP": "VPN IP",
+   "myIP": "Aking IP",
+   "marketUpdate": "Update sa merkado",
+   "searchYourTabs": "Hanapin ang iyong mga tab",
+   "newTabGroup": "Bagong grupo ng tab",
+   "selectTab": "Pumili ng tab",
+   "selectTabs": "Pumili ng mga tab",
+   "closeAllTabs": "Isara ang lahat ng tab",
+   "deleteTabGroup": "Tanggalin ang grupo ng tab",
+   "rename": "Palitan ang pangalan",
+   "renameGroup": "Palitan ang pangalan ng grupo",
+   "ungroupTab": "Alisin ang tab sa grupo",
+   "deleteGroup": "Tanggalin ang grupo",
+   "addToTabGroup": "Idagdag sa grupo ng tab",
+   "editGroupName": "I-edit ang pangalan ng grupo",
+   "editGroupColor": "I-edit ang kulay ng grupo",
+   "closeTab": "Isara ang tab",
+   "doYouWantToUngroup": "Sigurado ka bang gusto mong alisin ang grupo ng tab na ito?",
+   "ungroupTabGroup": "Alisin ang grupo ng tab",
+   "ungroup": "Alisin ang grupo",
+   "deleteGroup": "anggalin ang grupo",
+   "deletetabGroup": "Tanggalin ang grupo ng tab",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Idagdag sa",
+   "tabs": "Mga tab",
+   "done": "Tapos na",
+   "create": "Lumikha",
+   "groupColor": "Kulay ng grupo",
+   "groupName": "Pangalan ng grupo",
+   "newTabGroup": "Bagong grupo ng tab",
+   "addtoNewTabGroup": "Idagdag sa bagong grupo ng tab",
+   "tabGroups": "Mga grupo ng tab",
+   "tabGroup": "Grupo ng tab",
+   "tabsSelected": "Mga napiling tab",
+   "privateResearch": "e.g. Private Research",
+   "deselectAll": "Isara ang lahat ng tab",
+   "selected": "Napili",
+
+
+   "close": "Isara",
+   "top": "itaas",
+   "bottom": "ibaba",
+
+
+
+  "closeAllTabsConfirmation": "Permanenteng isasara ng pagkilos na ito ang lahat ng {tabCount} na tab sa loob ng “{tabGroupName}”. Hindi na ito maaaring i-undo",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Binabago ang Node",
+"freeenameWebDomain" : "FreeName Web3 domain",
+"enableFreeNameWeb" : "Paganahin ang suporta sa FreeName Web3 domain",
+"couldnotDownloadBootstrap" : "Hindi ma-download ang Belnet bootstrap file. Pakisuri ang iyong koneksyon at subukang muli",
+"couldNotEstablishConnection" : "Hindi maitatag ang koneksyon sa Belnet. Pakisubukang muli",
+"theBelnetServiceNotStarted": "Hindi masimulan ang serbisyo ng Belnet. Pakisubukang muli",
+"exitNodeUnreachable" : "Hindi maabot ang node, muling kumonekta",
+
+"tab": "Tab",
+"ungroupTabs": "Alisin sa grupo ang mga tab",
+"closeGroup": "Isara ang grupo",
+"ungroupSelectedTabs": "Sigurado ka bang gusto mong alisin sa ${tabGroupName} ang mga napiling tab?",
+"@ungroupSelectedTabs": {
+  "description": "Mensahe ng kumpirmasyon kapag inaalis ang mga napiling tab mula sa isang grupo ng tab",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Ang Beldex ay isang ecosystem ng mga desentralisado at privacy-preserving na mga aplikasyon. Ang Beldex Browser app ay isa sa mga ito, kasama ang BChat, BelNet, at ang Beldex protocol. Ang Beldex Browser ang iyong daan patungo sa isang tuluy-tuloy at pribadong online na karanasan, kung saan ang iyong data ay nananatiling iyo lamang. Ito ay binuo sa isang matatag na imprastraktura ng blockchain na nagsisiguro ng privacy at anonymity para sa mga gumagamit.",
 "atBeldex": " \n Sa Beldex, naniniwala kami sa pagbibigay kapangyarihan sa mga indibidwal na kontrolin ang kanilang digital na bakas. Ang Beldex Browser ay dinisenyo upang magbigay ng isang ligtas at pribadong online na kapaligiran kung saan maaaring makipag-ugnayan at makipag-usap ang mga gumagamit sa digital na mundo.",
 "titlebns": "\nBNS",

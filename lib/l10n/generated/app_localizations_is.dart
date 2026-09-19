@@ -531,6 +531,187 @@ class AppLocalizationsIs extends AppLocalizations {
   String get searchEngineUpdated => 'Leitarvél uppfærð með góðum árangri!';
 
   @override
+  String get searchusing => 'Leita með';
+
+  @override
+  String get addTabToNewGroup => 'Bæta flipa við nýjan hóp';
+
+  @override
+  String get invitePeople => 'Bjóða fólki';
+
+  @override
+  String get uploadFromGallery => 'Hlaða upp úr myndasafni';
+
+  @override
+  String get noQRCodeFound => 'Enginn QR-kóði fannst á myndinni';
+
+  @override
+  String get searchBarPosition => 'Staðsetning leitarstiku';
+
+  @override
+  String get choosethePosition => 'Veldu staðsetningu leitarstikunnar';
+
+  @override
+  String get iPAddress => 'IP-vistfang';
+
+  @override
+  String get vpnIP => ' VPN-IP';
+
+  @override
+  String get myIP => 'Mitt IP';
+
+  @override
+  String get marketUpdate => 'Markaðsuppfærsla';
+
+  @override
+  String get searchYourTabs => 'Leita í flipunum þínum';
+
+  @override
+  String get newTabGroup => 'Nýr flipahópur';
+
+  @override
+  String get selectTab => 'Velja flip';
+
+  @override
+  String get selectTabs => 'Velja flipa';
+
+  @override
+  String get deleteTabGroup => 'Eyða flipahópi';
+
+  @override
+  String get rename => 'Endurnefna';
+
+  @override
+  String get renameGroup => 'Endurnefna hóp';
+
+  @override
+  String get ungroupTab => 'Taka flipa úr hópi';
+
+  @override
+  String get deleteGroup => 'Eyða hópi';
+
+  @override
+  String get addToTabGroup => 'Bæta við flipahóp';
+
+  @override
+  String get editGroupName => 'Breyta heiti hóps';
+
+  @override
+  String get editGroupColor => 'Breyta lit hóps';
+
+  @override
+  String get closeTab => 'Loka flip';
+
+  @override
+  String get doYouWantToUngroup => 'Viltu örugglega taka þennan flipahóp úr hópi?';
+
+  @override
+  String get ungroupTabGroup => 'Taka flipahóp úr hópi';
+
+  @override
+  String get ungroup => 'Taka úr hópi';
+
+  @override
+  String get deletetabGroup => 'Eyða flipahópi';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Bæta við';
+
+  @override
+  String get tabs => 'Flipar';
+
+  @override
+  String get done => 'Lokið';
+
+  @override
+  String get create => 'Búa til';
+
+  @override
+  String get groupColor => 'Litur hóps';
+
+  @override
+  String get groupName => 'Heiti hóps';
+
+  @override
+  String get addtoNewTabGroup => 'Bæta við nýjan flipahóp';
+
+  @override
+  String get tabGroups => 'Flipahópar';
+
+  @override
+  String get tabGroup => 'Flipahópur';
+
+  @override
+  String get tabsSelected => 'Valdir flipar';
+
+  @override
+  String get privateResearch => 't.d. Einkarannsókn';
+
+  @override
+  String get deselectAll => 'Afvelja allt';
+
+  @override
+  String get selected => 'Valið';
+
+  @override
+  String get close => 'Loka';
+
+  @override
+  String get top => 'efst';
+
+  @override
+  String get bottom => 'neðst';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Þessi aðgerð mun loka öllum $tabCount flipunum í „$tabGroupName“ varanlega. Ekki er hægt að afturkalla þessa aðgerð.';
+  }
+
+  @override
+  String get changingNode => 'Breyta hnút..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 lén';
+
+  @override
+  String get enableFreeNameWeb => 'Virkja stuðning við FreeName Web3 lén';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Ekki tókst að hlaða niður ræsiskrá Belnet. Athugaðu tenginguna þína og reyndu aftur';
+
+  @override
+  String get couldNotEstablishConnection => 'Ekki tókst að koma á Belnet-tengingu. Reyndu aftur';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Ekki tókst að ræsa Belnet-þjónustuna. Reyndu aftur';
+
+  @override
+  String get exitNodeUnreachable => 'Útgönguhnúturinn er óaðgengilegur, tengist aftur';
+
+  @override
+  String get tab => 'Flipi';
+
+  @override
+  String get ungroupTabs => 'Taka flipa úr hópi';
+
+  @override
+  String get closeGroup => 'Loka hópi';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Ertu viss um að þú viljir taka valda flipa úr \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex er vistkerfi af dreifðum og trúnaðarskyldum forritum. Beldex Browser appið er eitt þeirra forrita og einnig eru í vistkerfinu forrit eins og BChat, BelNet og Beldex protocol. Beldex Browser er þín hlið inn í hnökralausa og trúnaðarfulla netupplifun þar sem gögnin þín eru eingöngu þín. Byggður á traustu blockchain-innviði, tryggir Beldex Browser trúnað og nafnleynd notenda.';
 
   @override

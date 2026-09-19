@@ -186,6 +186,102 @@
 
 
 
+  "searchusing": "Cerca amb",
+  "addTabToNewGroup": "Afegeix una pestanya a un grup nou",
+  "invitePeople": "Convida persones",
+  "uploadFromGallery": "Penja des de la galeria",
+  "noQRCodeFound": "no s'ha trobat cap codi QR a la imatge",
+  "searchBarPosition": "Posició de la barra de cerca",
+  "choosethePosition": "Tria la posició de la barra de cerca",
+  "iPAddress": "Adreça IP",
+   "vpnIP": "IP de la VPN",
+   "myIP": "La meva IP",
+   "marketUpdate": "Actualització del mercat",
+   "searchYourTabs": "Cerca les teves pestanyes",
+   "newTabGroup": "Grup de pestanyes nou",
+   "selectTab": "Selecciona pestanya",
+   "selectTabs": "Selecciona pestanyes",
+   "closeAllTabs": "Tanca totes les pestanyes",
+   "deleteTabGroup": "Suprimeix el grup de pestanyes",
+   "rename": "Canvia el nom",
+   "renameGroup": "Canvia el nom del grup",
+   "ungroupTab": "Desagrupa la pestanya",
+   "deleteGroup": "Suprimeix el grup",
+   "addToTabGroup": "Afegeix al grup de pestanyes",
+   "editGroupName": "Edita el nom del grup",
+   "editGroupColor": "Edita el color del grup",
+   "closeTab": "Tanca les pestanya",
+   "doYouWantToUngroup": "Realment vols desagrupar aquest grup de pestanyes?",
+   "ungroupTabGroup": "Desagrupa el grup de pestanyes",
+   "ungroup": "Desagrupa",
+   "deleteGroup": "Suprimeix el grup",
+   "deletetabGroup": "Suprimeix el grup de pestanyes",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Afegeix a",
+   "tabs": "Pestanyes",
+   "done": "Fet",
+   "create": "Crea",
+   "groupColor": "Color del grup",
+   "groupName": "Nom del grup",
+   "newTabGroup": "Grup de pestanyes nou",
+   "addtoNewTabGroup": "Afegeix a un grup de pestanyes nou",
+   "tabGroups": "Grups de pestanyes",
+   "tabGroup": "Grup de pestanyes",
+   "tabsSelected": "Pestanyes seleccionades",
+   "privateResearch": "p. ex., Investigació privada",
+   "deselectAll": "Desselecciona-ho tot",
+   "selected": "Seleccionat",
+
+
+   "close": "Tanca",
+   "top": "a dalt",
+   "bottom": "a baix",
+
+
+
+  "closeAllTabsConfirmation": "Aquesta acció tancarà permanentment les {tabCount} pestanyes de «{tabGroupName}». Aquesta acció no es pot desfer.",
+"@closeAllTabsConfirmation": {
+  "description": "Missatge de confirmació en tancar totes les pestanyes d'un grup de pestanyes",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Canvi de node..",
+"freeenameWebDomain" : "Domini Web3 de FreeName",
+"enableFreeNameWeb" : "Activa la compatibilitat amb el domini Web3 de FreeName",
+"couldnotDownloadBootstrap" : "No s'ha pogut descarregar el fitxer d'arrencada de Belnet. Comprova la connexió i torna-ho a provar",
+"couldNotEstablishConnection" : "No s'ha pogut establir la connexió amb Belnet. Torna-ho a provar",
+"theBelnetServiceNotStarted": "No s'ha pogut iniciar el servei de Belnet. Torna-ho a provar",
+"exitNodeUnreachable" : "El node de sortida no és accessible, s'està tornant a connectar",
+
+
+
+"tab": "Pestanya",
+"ungroupTabs": "Desagrupar pestanyes",
+"closeGroup": "Tancar grup",
+"ungroupSelectedTabs": "Segur que vols desagrupar les pestanyes seleccionades de ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Missatge de confirmació en desagrupar les pestanyes seleccionades d'un grup de pestanyes",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
 "beldexIsAnEcosystem": "Beldex és un ecosistema d’aplicacions descentralitzades i de preservació de la confidencialitat. L’aplicació Beldex Browser és una part d’aquest ecosistema, que també inclou aplicacions com BChat, BelNet i el protocol Beldex. El Beldex Browser és la teva porta d’entrada a una experiència en línia fluida i confidencial, on les teves dades només són teves. Construït sobre una infraestructura blockchain robusta, el navegador Beldex garanteix confidencialitat i anonimat als seus usuaris.",
 "atBeldex": " \n A Beldex, creiem en capacitar els individus amb el dret fonamental de controlar la seva empremta digital. El Beldex Browser està dissenyat per oferir un entorn segur i confidencial perquè els usuaris puguin comunicar-se i interactuar amb el món digital.",
 "titlebns": "\nBNS",

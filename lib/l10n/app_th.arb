@@ -187,6 +187,101 @@
   "searchEngineUpdated": "อัปเดตเครื่องมือค้นหาเรียบร้อยแล้ว!",
 
 
+
+  "searchusing": "ค้นหาโดยใช้",
+  "addTabToNewGroup": "เพิ่มแท็บไปยังกลุ่มใหม่",
+  "invitePeople": "เชิญผู้คน",
+  "uploadFromGallery": "อัปโหลดจากแกลเลอรี",
+  "noQRCodeFound": "ไม่พบรหัส QR ในรูปภาพ",
+  "searchBarPosition": "ตำแหน่งแถบค้นหา",
+  "choosethePosition": "เลือกตำแหน่งของแถบค้นหา",
+  "iPAddress": "ที่อยู่ IP",
+   "vpnIP": "IP ของ VPN",
+   "myIP": "IP ของฉัน",
+   "marketUpdate": "อัปเดตตลาด",
+   "searchYourTabs": "ค้นหาแท็บของคุณ",
+   "newTabGroup": "กลุ่มแท็บใหม่",
+   "selectTab": "เลือกแท็บ",
+   "selectTabs": "เลือกแท็บ",
+   "closeAllTabs": "ปิดแท็บทั้งหมด",
+   "deleteTabGroup": "ลบกลุ่มแท็บ",
+   "rename": "เปลี่ยนชื่อ",
+   "renameGroup": "เปลี่ยนชื่อกลุ่ม",
+   "ungroupTab": "ยกเลิกการจัดกลุ่มแท็บ",
+   "deleteGroup": "ลบกลุ่ม",
+   "addToTabGroup": "เพิ่มไปยังกลุ่มแท็บ",
+   "editGroupName": "แก้ไขชื่อกลุ่ม",
+   "editGroupColor": "แก้ไขสีของกลุ่ม",
+   "closeTab": "ปิดแท็บ",
+   "doYouWantToUngroup": "คุณต้องการยกเลิกการจัดกลุ่มแท็บนี้จริงหรือไม่?",
+   "ungroupTabGroup": "ยกเลิกการจัดกลุ่มแท็บ",
+   "ungroup": "ยกเลิกการจัดกลุ่ม",
+   "deleteGroup": "ลบกลุ่ม",
+   "deletetabGroup": "ลบกลุ่มแท็บ",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "เพิ่มไปยัง",
+   "tabs": "แท็บ",
+   "done": "เสร็จสิ้น",
+   "create": "สร้าง",
+   "groupColor": "สีของกลุ่ม",
+   "groupName": "ชื่อกลุ่ม",
+   "newTabGroup": "กลุ่มแท็บใหม่",
+   "addtoNewTabGroup": "เพิ่มไปยังกลุ่มแท็บใหม่",
+   "tabGroups": "กลุ่มแท็บต่าง ๆ",
+   "tabGroup": "กลุ่มแท็บ",
+   "tabsSelected": "เลือกแท็บแล้ว",
+   "privateResearch": "เช่น การวิจัยส่วนตัว",
+   "deselectAll": "ยกเลิกการเลือกทั้งหมด",
+   "selected": "เลือกแล้ว",
+
+
+   "close": "ปิด",
+   "top": "ด้านบน",
+   "bottom": "ด้านล่าง",
+
+
+
+  "closeAllTabsConfirmation":"การดำเนินการนี้จะปิดแท็บทั้ง {tabCount} แท็บภายใน “{tabGroupName}” อย่างถาวร และไม่สามารถยกเลิกการดำเนินการนี้ได้", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "กำลังเปลี่ยนโหนด",
+"freeenameWebDomain" : "โดเมน Freename Web3",
+"enableFreeNameWeb" : "เปิดใช้งานการสนับสนุนโดเมน FreeName Web3",
+"couldnotDownloadBootstrap" : "ไม่สามารถดาวน์โหลดไฟล์บูตสแตรป Belnet ได้ โปรดตรวจสอบการเชื่อมต่อของคุณแล้วลองอีกครั้ง",
+"couldNotEstablishConnection" : "ไม่สามารถสร้างการเชื่อมต่อ Belnet ได้ โปรดลองอีกครั้ง",
+"theBelnetServiceNotStarted": "ไม่สามารถเริ่มต้นบริการ Belnet ได้ โปรดลองอีกครั้ง",
+"exitNodeUnreachable" : "ไม่สามารถเข้าถึงโหนดทางออกได้ กำลังเชื่อมต่อใหม่",
+
+
+"tab": "แท็บ",
+"ungroupTabs": "ยกเลิกการจัดกลุ่มแท็บ",
+"closeGroup": "ปิดกลุ่ม",
+"ungroupSelectedTabs": "คุณต้องการยกเลิกการจัดกลุ่มแท็บที่เลือกจาก ${tabGroupName} จริงหรือไม่?",
+"@ungroupSelectedTabs": {
+  "description": "ข้อความยืนยันเมื่อยกเลิกการจัดกลุ่มแท็บที่เลือกจากกลุ่มแท็บ",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex เป็นระบบนิเวศของแอปพลิเคชันแบบกระจายศูนย์ที่เน้นการรักษาความเป็นส่วนตัว แอป Beldex Browser เป็นหนึ่งในระบบนิเวศนี้ ซึ่งยังรวมถึงแอปอย่าง BChat, BelNet และโปรโตคอล Beldex. Beldex Browser คือประตูสู่ประสบการณ์ออนไลน์ที่ราบรื่นและเป็นส่วนตัว ซึ่งข้อมูลของคุณยังคงเป็นของคุณเพียงผู้เดียว สร้างขึ้นบนโครงสร้างบล็อกเชนที่แข็งแกร่ง Beldex Browser รับประกันความเป็นส่วนตัวและความไม่เปิดเผยตัวตนให้กับผู้ใช้.",
 "atBeldex": " \n ที่ Beldex เราเชื่อในการเสริมพลังให้ผู้คนมีสิทธิขั้นพื้นฐานในการควบคุมร่องรอยดิจิทัลของตนเอง Beldex Browser ถูกออกแบบมาเพื่อมอบสภาพแวดล้อมออนไลน์ที่ปลอดภัยและเป็นส่วนตัวสำหรับผู้ใช้ในการสื่อสารและโต้ตอบกับโลกดิจิทัล.",
 "titlebns": "\nBNS",

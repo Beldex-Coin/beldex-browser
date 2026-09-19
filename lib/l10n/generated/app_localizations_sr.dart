@@ -531,6 +531,187 @@ class AppLocalizationsSr extends AppLocalizations {
   String get searchEngineUpdated => 'Pretraživač je uspešno ažuriran!';
 
   @override
+  String get searchusing => 'Pretraži pomoću';
+
+  @override
+  String get addTabToNewGroup => 'Dodaj karticu u novu grupu';
+
+  @override
+  String get invitePeople => 'Pozovi ljude';
+
+  @override
+  String get uploadFromGallery => 'Otpremi iz galerije';
+
+  @override
+  String get noQRCodeFound => 'QR kod nije pronađen na slici';
+
+  @override
+  String get searchBarPosition => 'Položaj trake za pretragu';
+
+  @override
+  String get choosethePosition => 'Izaberite položaj trake za pretragu';
+
+  @override
+  String get iPAddress => 'IP adresa';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Moj IP';
+
+  @override
+  String get marketUpdate => 'Ažuriranje tržišta';
+
+  @override
+  String get searchYourTabs => 'Pretraži svoje kartice';
+
+  @override
+  String get newTabGroup => 'Nova grupa kartica';
+
+  @override
+  String get selectTab => 'Izaberi karticu';
+
+  @override
+  String get selectTabs => 'Izaberi kartice';
+
+  @override
+  String get deleteTabGroup => 'Obriši grupu kartica';
+
+  @override
+  String get rename => 'Preimenuj';
+
+  @override
+  String get renameGroup => 'Preimenuj grupu';
+
+  @override
+  String get ungroupTab => 'Razgrupiši karticu';
+
+  @override
+  String get deleteGroup => 'Obriši grupu';
+
+  @override
+  String get addToTabGroup => 'Dodaj u grupu kartica';
+
+  @override
+  String get editGroupName => 'Izmeni naziv grupe';
+
+  @override
+  String get editGroupColor => 'Izmeni boju grupe';
+
+  @override
+  String get closeTab => 'Zatvori karticu';
+
+  @override
+  String get doYouWantToUngroup => 'Da li zaista želite da razgrupišete ovu grupu kartica?';
+
+  @override
+  String get ungroupTabGroup => 'Razgrupiši grupu kartica';
+
+  @override
+  String get ungroup => 'Razgrupiši';
+
+  @override
+  String get deletetabGroup => 'Obriši grupu kartica';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Dodaj u';
+
+  @override
+  String get tabs => 'Kartice';
+
+  @override
+  String get done => 'Gotovo';
+
+  @override
+  String get create => 'Kreiraj';
+
+  @override
+  String get groupColor => 'Boja grupe';
+
+  @override
+  String get groupName => 'Naziv grupe';
+
+  @override
+  String get addtoNewTabGroup => 'Dodaj u novu grupu kartica';
+
+  @override
+  String get tabGroups => 'Grupe kartica';
+
+  @override
+  String get tabGroup => 'Grupa kartica';
+
+  @override
+  String get tabsSelected => 'Izabrane kartice';
+
+  @override
+  String get privateResearch => 'npr. Privatno istraživanje';
+
+  @override
+  String get deselectAll => 'Poništi odabir svega';
+
+  @override
+  String get selected => 'Izabrano';
+
+  @override
+  String get close => 'Zatvori';
+
+  @override
+  String get top => 'gore';
+
+  @override
+  String get bottom => 'dole';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Ova radnja će trajno zatvoriti svih $tabCount kartica unutar „$tabGroupName“. Ova radnja se ne može poništiti.';
+  }
+
+  @override
+  String get changingNode => 'Promena čvora..';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 domen';
+
+  @override
+  String get enableFreeNameWeb => 'Omogući podršku za FreeName Web3 domen';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Nije moguće preuzeti Belnet datoteku za pokretanje. Proverite svoju vezu i pokušajte ponovo';
+
+  @override
+  String get couldNotEstablishConnection => 'Nije moguće uspostaviti Belnet vezu. Pokušajte ponovo';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet usluga nije mogla da se pokrene. Pokušajte ponovo';
+
+  @override
+  String get exitNodeUnreachable => 'Izlazni čvor nije dostupan, ponovno povezivanje';
+
+  @override
+  String get tab => 'Kartica';
+
+  @override
+  String get ungroupTabs => 'Razgrupiši kartice';
+
+  @override
+  String get closeGroup => 'Zatvori grupu';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Da li zaista želite da razgrupišete izabrane kartice iz grupe \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex je ekosistem decentralizovanih aplikacija koje čuvaju poverljivost. Aplikacija Beldex pregledač je jedna od aplikacija u ovom ekosistemu, koji takođe obuhvata aplikacije kao što su BChat, BelNet i Beldex protokol. Beldex pregledač je vaša kapija ka besprekornom i poverljivom onlajn iskustvu, gde vaši podaci ostaju isključivo vaši. Izgrađen na robusnoj blokčejn infrastrukturi, Beldex pregledač obezbeđuje poverljivost i anonimnost korisnicima.';
 
   @override

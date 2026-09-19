@@ -13,6 +13,8 @@ class PopupMenuActions {
   static const String BELDEX_AI= "Beldex AI";
   // ignore: constant_identifier_names
   static const String SHARE = "Share";
+
+  static const String INVITE_PEOPLE ="Invite people";
   // ignore: constant_identifier_names
   static const String FIND_ON_PAGE = "Find on page";
   // ignore: constant_identifier_names
@@ -55,6 +57,7 @@ static const String REPORT_AN_ISSUE = "Report an Issue";
     WEB_ARCHIVES,
     FIND_ON_PAGE,
     DOWNLOADS,
+    INVITE_PEOPLE,
     DESKTOP_MODE,
     DIVIDER,
     SETTINGS,

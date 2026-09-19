@@ -189,6 +189,97 @@
 
 
 
+  "searchusing": "Искать с помощью",
+  "addTabToNewGroup": "Добавить вкладку в новую группу",
+  "invitePeople": "Пригласить пользователей",
+  "uploadFromGallery": "Загрузить из галереи",
+  "noQRCodeFound": "QR-код на изображении не найден",
+  "searchBarPosition": "Положение строки поиска",
+  "choosethePosition": "выберите положение строки поиска",
+  "iPAddress": "IP-адрес",
+   "vpnIP": "VPN IP",
+   "myIP": "Мой IP",
+   "marketUpdate": "Обновление рынка",
+   "searchYourTabs": "Поиск по вкладкам",
+   "newTabGroup": "Новая группа вкладок",
+   "selectTab": "Выбрать вкладку",
+   "selectTabs": "Выбрать вкладки",
+   "closeAllTabs": "Закрыть все вкладки",
+   "deleteTabGroup": "Удалить группу вкладок",
+   "rename": "Переименовать",
+   "renameGroup": "Переименовать группу",
+   "ungroupTab": "Разгруппировать вкладку",
+   "deleteGroup": "Удалить группу",
+   "addToTabGroup": "Добавить в группу вкладок",
+   "editGroupName": "Изменить название группы",
+   "editGroupColor": "Изменить цвет группы",
+   "closeTab": "Закрыть вкладку",
+   "doYouWantToUngroup": "Вы действительно хотите разгруппировать эту группу вкладок?",
+   "ungroupTabGroup": "Разгруппировать группу вкладок",
+   "ungroup": "Разгруппировать",
+   "deleteGroup": "Удалить группу",
+   "deletetabGroup": "Удалить группу вкладок",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Добавить в",
+   "tabs": "Вкладки",
+   "done": "Отмена",
+   "create": "Создать",
+   "groupColor": "Цвет группы",
+   "groupName": "Название группы",
+   "newTabGroup": "Новая группа вкладок",
+   "addtoNewTabGroup": "Добавить в новую группу вкладок",
+   "tabGroups": "Группы вкладок",
+   "tabGroup": "Группа вкладок",
+   "tabsSelected": "Выбранные вкладки",
+   "privateResearch": "Например: Частное исследование",
+   "deselectAll": "Снять выделение со всех",
+   "selected": "Выбрано",
+
+
+   "close": "Закрыть",
+   "top": "сверху",
+   "bottom": "снизу",
+
+
+"closeAllTabsConfirmation": "Это действие навсегда закроет все {tabCount} вкладки в группе «{tabGroupName}». Это действие нельзя отменить.",
+"@closeAllTabsConfirmation": {
+  "description": "Сообщение с подтверждением при закрытии всех вкладок в группе вкладок",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+   "changingNode": "Смена узла..",
+"freeenameWebDomain" : "Домен Web3 FreeName",
+"enableFreeNameWeb" : "Включить поддержку доменов Web3 FreeName",
+"couldnotDownloadBootstrap" : "Не удалось загрузить файл начальной загрузки Belnet. Проверьте подключение и повторите попытку",
+"couldNotEstablishConnection" : "Не удалось установить соединение с Belnet. Повторите попытку",
+"theBelnetServiceNotStarted": "Не удалось запустить службу Belnet. Повторите попытку.",
+"exitNodeUnreachable" : "Узел выхода недоступен, выполняется повторное подключение",
+
+
+"tab": "Вкладка",
+"ungroupTabs": "Разгруппировать вкладки",
+"closeGroup": "Закрыть группу",
+"ungroupSelectedTabs": "Вы действительно хотите разгруппировать выбранные вкладки из ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Сообщение подтверждения при разгруппировке выбранных вкладок из группы вкладок",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex – это экосистема децентрализованных приложений, обеспечивающих сохранение конфиденциальности. Приложение Beldex Browser является частью этой экосистемы, которая также включает приложения, такие как BChat, BelNet и протокол Beldex. Браузер Beldex открывает доступ к беспрепятственному и конфиденциальному онлайн-опыту, где ваши данные принадлежат только вам. Построенный на надежной блокчейн-инфраструктуре, браузер Beldex обеспечивает конфиденциальность и анонимность пользователей.",
 "atBeldex": " \n В Beldex мы верим в предоставление каждому права контролировать свой цифровой след. Браузер Beldex создан для обеспечения безопасной и конфиденциальной онлайн-среды, где пользователи могут общаться и взаимодействовать с цифровым миром.",
 "titlebns": "\nBNS",

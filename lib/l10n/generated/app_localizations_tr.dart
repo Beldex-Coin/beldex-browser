@@ -531,6 +531,187 @@ class AppLocalizationsTr extends AppLocalizations {
   String get searchEngineUpdated => 'Arama motoru başarıyla güncellendi!';
 
   @override
+  String get searchusing => 'Arama yap';
+
+  @override
+  String get addTabToNewGroup => 'Yeni gruba sekme ekle';
+
+  @override
+  String get invitePeople => 'Kişileri davet et';
+
+  @override
+  String get uploadFromGallery => 'Galeriden yükle';
+
+  @override
+  String get noQRCodeFound => 'Görselde QR kodu bulunamadı';
+
+  @override
+  String get searchBarPosition => 'Arama çubuğu konumu';
+
+  @override
+  String get choosethePosition => 'Arama çubuğunun konumunu seçin';
+
+  @override
+  String get iPAddress => 'IP Adresi';
+
+  @override
+  String get vpnIP => 'VPN IP\'si';
+
+  @override
+  String get myIP => 'IP Adresim';
+
+  @override
+  String get marketUpdate => 'Piyasa güncellemeleri';
+
+  @override
+  String get searchYourTabs => 'Sekmelerinizde arayın';
+
+  @override
+  String get newTabGroup => 'Yeni Sekme Grubu';
+
+  @override
+  String get selectTab => 'Sekmeyi seç';
+
+  @override
+  String get selectTabs => 'Sekmeleri seç';
+
+  @override
+  String get deleteTabGroup => 'Sekme grubunu sil';
+
+  @override
+  String get rename => 'Yeniden adlandır';
+
+  @override
+  String get renameGroup => 'Grubu yeniden adlandır';
+
+  @override
+  String get ungroupTab => 'Sekmeyi gruptan çıkar';
+
+  @override
+  String get deleteGroup => 'Grubu Sil';
+
+  @override
+  String get addToTabGroup => 'Sekme grubuna ekle';
+
+  @override
+  String get editGroupName => 'Grup adını düzenle';
+
+  @override
+  String get editGroupColor => 'Grup rengini düzenle';
+
+  @override
+  String get closeTab => 'Sekmeyi kapat';
+
+  @override
+  String get doYouWantToUngroup => 'Bu sekme grubunu çözmek istediğinizden emin misiniz?';
+
+  @override
+  String get ungroupTabGroup => 'Sekme Grubunu Çöz';
+
+  @override
+  String get ungroup => 'Çöz';
+
+  @override
+  String get deletetabGroup => 'Sekme grubunu sil';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Şuraya ekle';
+
+  @override
+  String get tabs => 'Sekmeler';
+
+  @override
+  String get done => 'Tamam';
+
+  @override
+  String get create => 'Oluştur';
+
+  @override
+  String get groupColor => 'Grup rengi';
+
+  @override
+  String get groupName => 'Grup adı';
+
+  @override
+  String get addtoNewTabGroup => 'Yeni sekme grubuna ekle';
+
+  @override
+  String get tabGroups => 'Sekme Grupları';
+
+  @override
+  String get tabGroup => 'Sekme Grubu';
+
+  @override
+  String get tabsSelected => 'Seçilen sekmeler';
+
+  @override
+  String get privateResearch => 'Örn. Özel Araştırma';
+
+  @override
+  String get deselectAll => 'Tüm seçimleri kaldır';
+
+  @override
+  String get selected => 'Seçildi';
+
+  @override
+  String get close => 'Kapat';
+
+  @override
+  String get top => 'üst';
+
+  @override
+  String get bottom => 'alt';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Bu işlem, “$tabGroupName” içindeki $tabCount sekmenin tamamını kalıcı olarak kapatacaktır. Bu işlem geri alınamaz.';
+  }
+
+  @override
+  String get changingNode => 'Düğüm (Node) değiştiriliyor';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3 alan adı';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3 alan adı desteğini etkinleştir';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Belnet başlangıç dosyası indirilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin';
+
+  @override
+  String get couldNotEstablishConnection => 'Belnet bağlantısı kurulamadı. Lütfen tekrar deneyin';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Belnet hizmeti başlatılamadı. Lütfen tekrar deneyin';
+
+  @override
+  String get exitNodeUnreachable => 'Çıkış düğümüne ulaşılamıyor, yeniden bağlanılıyor';
+
+  @override
+  String get tab => 'Sekme';
+
+  @override
+  String get ungroupTabs => 'Sekmelerin grubunu kaldır';
+
+  @override
+  String get closeGroup => 'Grubu kapat';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return '\$$tabGroupName grubundaki seçili sekmelerin grubunu kaldırmak istediğinizden emin misiniz?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex, merkeziyetsiz ve gizlilik koruyucu uygulamalardan oluşan bir ekosistemdir. Beldex Tarayıcısı uygulaması, BChat, BelNet ve Beldex protokolü gibi uygulamaları da içeren bu ekosistemin bir parçasıdır.Beldex Tarayıcısı, verilerinizin yalnızca size ait olduğu kesintisiz ve gizli bir çevrimiçi deneyimin kapısını açar. Sağlam bir blockchain altyapısı üzerinde geliştirilen Beldex Tarayıcısı, kullanıcılara gizlilik ve anonimlik sağlar.';
 
   @override

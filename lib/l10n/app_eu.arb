@@ -54,7 +54,7 @@
   "chooseLanguage": "Hautatu hizkuntza",
   "scanQR": "Eskaneatu QR",
   "alignQRInCenterOFFrame": "Lerrokatu QR kodea markoaren erdian",
-  "beldexAIEnhancesTheBeldexBrowser": "AI ongietorri pantaila: Beldex AI-k Beldex Nabigatzailea hobetzen du funtzio adimendunekin, web esperientzia leun eta jarraitua eskaintzeko. Orrialdeko edukia laburbiltzen du irakurketa azkarrerako. Trafikoa masternode eta irteera-nodoen bidez modu eraginkorrean bideratuz, konfidentzialtasuna eta nabigazio azkarragoa bermatzen ditu. Harpidetza-oinarritutako ereduek ez bezala, Beldex AI doan erabil daiteke, funtzionalitate aurreratua eskainiz eta erabiltzailearen erosotasuna eta konfidentzialtasunean oinarritutako internet esperientzia lehenetsiz. Arakatu nabigazio adimentsuago eta azkarragoa Beldex AI-rekin.",
+  "beldexAIEnhancesTheBeldexBrowser": "Beldex AI-k Beldex Nabigatzailea hobetzen du funtzio adimendunekin, web esperientzia leun eta jarraitua eskaintzeko. Orrialdeko edukia laburbiltzen du irakurketa azkarrerako. Trafikoa masternode eta irteera-nodoen bidez modu eraginkorrean bideratuz, konfidentzialtasuna eta nabigazio azkarragoa bermatzen ditu. Harpidetza-oinarritutako ereduek ez bezala, Beldex AI doan erabil daiteke, funtzionalitate aurreratua eskainiz eta erabiltzailearen erosotasuna eta konfidentzialtasunean oinarritutako internet esperientzia lehenetsiz. Arakatu nabigazio adimentsuago eta azkarragoa Beldex AI-rekin.",
   "needHelpWithThisSite": "Laguntza behar duzu gune honekin?",
   "beldexAICanHelpYou": "BeldexAI-k artikuluak laburbiltzen, gune bateko edukia zabaltzen eta askoz gehiago egiten lagun zaitzake.",
   "enterPromptHere": "Sartu galdera hemen..",
@@ -182,6 +182,106 @@
   "searchEngineAlreadyExist": "Bilaketa-motor hau dagoeneko existitzen da",
   "searchEngineAdded": "Bilaketa-motorra behar bezala gehitu da!",
   "searchEngineUpdated": "Bilaketa-motorra behar bezala eguneratu da!",
+
+
+
+
+"searchusing": "Bilatu honen bidez",
+  "addTabToNewGroup": "Gehitu fitxa talde berriari",
+  "invitePeople": "Gonbidatu pertsonak",
+  "uploadFromGallery": "Kargatu galeriatik",
+  "noQRCodeFound": "ez da QR koderik aurkitu irudian",
+  "searchBarPosition": "Bilaketa-barraren kokapena",
+  "choosethePosition": "Aukeratu bilaketa-barraren kokapena",
+  "iPAddress": "IP helbidea",
+   "vpnIP": "VPN IPa",
+   "myIP": "Nire IPa",
+   "marketUpdate": "Merkatuaren eguneraketa",
+   "searchYourTabs": "Bilatu zure fitxetan",
+   "newTabGroup": "Fitxa talde berria",
+   "selectTab": "Hautatu fitxa",
+   "selectTabs": "Hautatu fitxak",
+   "closeAllTabs": "Itxi fitxa guztiak",
+   "deleteTabGroup": "Ezabatu fitxa-taldea",
+   "rename": "Aldatu izena",
+   "renameGroup": "Aldatu taldearen izena",
+   "ungroupTab": "Kendu fitxa taldetik",
+   "deleteGroup": "Ezabatu taldea",
+   "addToTabGroup": "Gehitu fitxa-taldera",
+   "editGroupName": "Editatu taldearen izena",
+   "editGroupColor": "Editatu taldearen kolorea",
+   "closeTab": "Itxi fitxa",
+   "doYouWantToUngroup": "Hautatutako nodora aldatu nahi duzu?",
+   "ungroupTabGroup": "Kendu fitxa-taldea",
+   "ungroup": "Kendu taldetik",
+   "deleteGroup": "Ezabatu taldea",
+   "deletetabGroup": "Ezabatu fitxa-taldea",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Gehitu hona",
+   "tabs": "Fitxak",
+   "done": "Eginda",
+   "create": "Sortu",
+   "groupColor": "Taldearen kolorea",
+   "groupName": "Taldearen izena",
+   "newTabGroup": "Fitxa-talde berria",
+   "addtoNewTabGroup": "Gehitu fitxa-talde berriari",
+   "tabGroups": "Fitxa-taldeak",
+   "tabGroup": "Fitxa-taldea",
+   "tabsSelected": "Hautatutako fitxak",
+   "privateResearch": "adib., Ikerketa pribatua",
+   "deselectAll": "Kendu hautaketa guztia",
+   "selected": "Hautatuta",
+
+
+   "close": "Itxi",
+   "top": "goian",
+   "bottom": "behean",
+
+
+
+  "closeAllTabsConfirmation": "Ekintza honek behin betiko itxiko ditu “{tabGroupName}” taldeko {tabCount} fitxak. Ezin da ekintza hau desegin.",
+"@closeAllTabsConfirmation": {
+  "description": "Fitxa talde bateko fitxa guztiak ixtean agertzen den berrespen-mezua",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Changing Node",
+"freeenameWebDomain" : "FreeName Web3 domeinua",
+"enableFreeNameWeb" : "Gaitu FreeName Web3 domeinuaren euskarria",
+"couldnotDownloadBootstrap" : "Ezin izan da Belnet abio-fitxategia deskargatu. Egiaztatu konexioa eta saiatu berriro",
+"couldNotEstablishConnection" : "Ezin izan da Belnet konexioa ezarri. Saiatu berriro",
+"theBelnetServiceNotStarted": "Ezin izan da Belnet zerbitzua abiarazi. Saiatu berriro",
+"exitNodeUnreachable" : "Irteera-nodoa ez dago erabilgarri, berriro konektatzen",
+
+
+"tab": "Fitxa",
+"ungroupTabs": "Fitxak taldetik kendu",
+"closeGroup": "Itxi taldea",
+"ungroupSelectedTabs": "Ziur zaude hautatutako fitxak ${tabGroupName} taldetik kendu nahi dituzula?",
+"@ungroupSelectedTabs": {
+  "description": "Hautatutako fitxak fitxa-talde batetik kentzean agertzen den berrespen-mezua",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 
 
 

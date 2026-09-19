@@ -36,7 +36,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get connectingBelnetdVPN => 'Menyambung ke belnet dVPN';
 
   @override
-  String get prepareDaemonConnection => 'PMenyediakan sambungan Daemon';
+  String get prepareDaemonConnection => 'Menyediakan sambungan Daemon';
 
   @override
   String get searchOrEnterAddress => 'Cari atau masukkan alamat';
@@ -87,7 +87,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get thistimeSearchIn => 'Kali ini cari dalam';
 
   @override
-  String get searchSettings => 'Enjin Carian';
+  String get searchSettings => 'Tetapan carian';
 
   @override
   String get search => 'Cari';
@@ -168,7 +168,7 @@ class AppLocalizationsMs extends AppLocalizations {
   String get alignQRInCenterOFFrame => 'Selaraskan kod QR di tengah bingkai';
 
   @override
-  String get beldexAIEnhancesTheBeldexBrowser => 'AI Welcome screen: Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.';
+  String get beldexAIEnhancesTheBeldexBrowser => 'Beldex AI meningkatkan Beldex Browser dengan ciri pintar untuk pengalaman web yang lancar. Ia meringkaskan kandungan halaman untuk bacaan pantas. Dengan menghala trafik secara cekap melalui masternod dan nod keluar, ia memastikan kerahsiaan dan pelayaran lebih pantas. Tidak seperti model berlangganan, Beldex AI percuma digunakan sambil mengutamakan kemudahan pengguna dan pengalaman internet berfokuskan privasi. Terokai pelayaran yang lebih pintar dan pantas dengan Beldex AI.';
 
   @override
   String get needHelpWithThisSite => 'Perlukan bantuan dengan laman ini?';
@@ -529,6 +529,187 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'Enjin carian berjaya dikemas kini!';
+
+  @override
+  String get searchusing => 'Cari menggunakan';
+
+  @override
+  String get addTabToNewGroup => 'Tambah Tab ke kumpulan baharu';
+
+  @override
+  String get invitePeople => 'Jemput orang';
+
+  @override
+  String get uploadFromGallery => 'Muat naik dari galeri';
+
+  @override
+  String get noQRCodeFound => 'Tiada kod QR ditemui dalam imej';
+
+  @override
+  String get searchBarPosition => 'Kedudukan bar carian';
+
+  @override
+  String get choosethePosition => 'Pilih kedudukan bar carian';
+
+  @override
+  String get iPAddress => 'Alamat IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'IP Saya';
+
+  @override
+  String get marketUpdate => 'Kemas kini pasaran';
+
+  @override
+  String get searchYourTabs => 'Cari tab anda';
+
+  @override
+  String get newTabGroup => 'Kumpulan Tab Baharu';
+
+  @override
+  String get selectTab => 'Pilih tab';
+
+  @override
+  String get selectTabs => 'Pilih tab';
+
+  @override
+  String get deleteTabGroup => 'Padam kumpulan tab';
+
+  @override
+  String get rename => 'Namakan semula';
+
+  @override
+  String get renameGroup => 'Namakan Semula Kumpulan';
+
+  @override
+  String get ungroupTab => 'Nyahkumpulan tab';
+
+  @override
+  String get deleteGroup => 'Padam Kumpulan';
+
+  @override
+  String get addToTabGroup => 'Tambah ke kumpulan Tab';
+
+  @override
+  String get editGroupName => 'Edit nama kumpulan';
+
+  @override
+  String get editGroupColor => 'Edit warna kumpulan';
+
+  @override
+  String get closeTab => 'Tutup tab';
+
+  @override
+  String get doYouWantToUngroup => 'Adakah anda benar-benar mahu menyahkumpulan kumpulan tab ini?';
+
+  @override
+  String get ungroupTabGroup => 'Nyahkumpulan kumpulan tab';
+
+  @override
+  String get ungroup => 'Nyahkumpulan';
+
+  @override
+  String get deletetabGroup => 'Padam Kumpulan Tab';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Tambah Ke';
+
+  @override
+  String get tabs => 'Tab';
+
+  @override
+  String get done => 'Selesai';
+
+  @override
+  String get create => 'Cipta';
+
+  @override
+  String get groupColor => 'Warna kumpulan';
+
+  @override
+  String get groupName => 'Nama kumpulan';
+
+  @override
+  String get addtoNewTabGroup => 'Tambah ke kumpulan tab baharu';
+
+  @override
+  String get tabGroups => 'Kumpulan tab';
+
+  @override
+  String get tabGroup => 'Kumpulan Tab';
+
+  @override
+  String get tabsSelected => 'Tab yang dipilih';
+
+  @override
+  String get privateResearch => 'cth. Penyelidikan Peribadi';
+
+  @override
+  String get deselectAll => 'Nyahpilih semua';
+
+  @override
+  String get selected => 'Dipilih';
+
+  @override
+  String get close => 'Tutup';
+
+  @override
+  String get top => 'atas';
+
+  @override
+  String get bottom => 'bawah';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Tindakan ini akan menutup semua $tabCount tab di dalam “$tabGroupName” secara kekal. Tindakan ini tidak boleh dibuat asal';
+  }
+
+  @override
+  String get changingNode => 'Menukar Nod..';
+
+  @override
+  String get freeenameWebDomain => 'Domain Freename Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Dayakan sokongan domain FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Tidak dapat memuat turun fail bootstrap Belnet. Sila semak sambungan anda dan cuba lagi';
+
+  @override
+  String get couldNotEstablishConnection => 'Tidak dapat mewujudkan sambungan Belnet. Sila cuba lagi';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Perkhidmatan Belnet tidak dapat dimulakan. Sila cuba lagi';
+
+  @override
+  String get exitNodeUnreachable => 'Nod keluar tidak dapat dicapai, menyambung semula';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Nyahkumpulkan tab';
+
+  @override
+  String get closeGroup => 'Tutup kumpulan';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Adakah anda pasti mahu menyahkumpulkan tab yang dipilih daripada \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex ialah sebuah ekosistem aplikasi terdesentralisasi yang memelihara kerahsiaan. Aplikasi Pelayar Beldex ialah sebahagian daripada ekosistem ini yang turut merangkumi aplikasi seperti BChat, BelNet dan protokol Beldex. Pelayar Beldex ialah pintu masuk anda kepada pengalaman dalam talian yang lancar dan sulit, di mana data anda kekal milik anda sepenuhnya. Dibina di atas infrastruktur blockchain yang kukuh, Pelayar Beldex memastikan kerahsiaan dan anonimitas kepada penggunanya.';

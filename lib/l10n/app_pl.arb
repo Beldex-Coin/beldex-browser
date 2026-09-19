@@ -184,6 +184,105 @@
   "searchEngineUpdated": "Wyszukiwarka została zaktualizowana pomyślnie!",
 
 
+
+
+"searchusing": "Wyszukaj za pomocą",
+  "addTabToNewGroup": "Dodaj kartę do nowej grupy",
+  "invitePeople": "Zaproś osoby",
+  "uploadFromGallery": "Prześlij z galerii",
+  "noQRCodeFound": "Nie znaleziono kodu QR na obrazie",
+  "searchBarPosition": "Pozycja paska wyszukiwania",
+  "choosethePosition": "Wybierz pozycję paska wyszukiwania",
+  "iPAddress": "Adres IP",
+   "vpnIP": "IP VPN",
+   "myIP": "Moje IP",
+   "marketUpdate": "Aktualizacja rynku",
+   "searchYourTabs": "Wyszukaj swoje karty",
+   "newTabGroup": "Nowa grupa kart",
+   "selectTab": "Wybierz kartę",
+   "selectTabs": "Wybierz karty",
+   "closeAllTabs": "Zamknij wszystkie karty",
+   "deleteTabGroup": "Usuń grupę kart",
+   "rename": "Zmień nazwę",
+   "renameGroup": "Zmień nazwę grupy",
+   "ungroupTab": "Usuń kartę z grupy",
+   "deleteGroup": "Usuń grupę",
+   "addToTabGroup": "Dodaj do grupy kart",
+   "editGroupName": "Edytuj nazwę grupy",
+   "editGroupColor": "Edytuj kolor grupy",
+   "closeTab": "Zamknij kartę",
+   "doYouWantToUngroup": "Czy na pewno chcesz rozgrupować tę grupę kart?",
+   "ungroupTabGroup": "Rozgrupuj grupę kart",
+   "ungroup": "Rozgrupuj",
+   "deleteGroup": "Usuń grupę",
+   "deletetabGroup": "Usuń grupę kart",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Dodaj do",
+   "tabs": "Karty",
+   "done": "Gotowe",
+   "create": "Utwórz",
+   "groupColor": "Kolor grupy",
+   "groupName": "Nazwa grupy",
+   "newTabGroup": "Nowa grupa kart",
+   "addtoNewTabGroup": "Dodaj do nowej grupy kart",
+   "tabGroups": "Grupy kart",
+   "tabGroup": "Grupa kart",
+   "tabsSelected": "Tabs selected",
+   "privateResearch": "np. Prywatne badania",
+   "deselectAll": "Odznacz wszystko",
+   "selected": "Wybrano",
+
+
+   "close": "Zamknij",
+   "top": "góra",
+   "bottom": "dół",
+
+
+
+  "closeAllTabsConfirmation":"Ta czynność trwale zamknie wszystkie {tabCount} karty znajdujące się w „{tabGroupName}”. Tej czynności nie można cofnąć", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Zmiana węzła..",
+"freeenameWebDomain" : "Domena Web3 FreeName",
+"enableFreeNameWeb" : "Włącz obsługę domeny Web3 FreeName",
+"couldnotDownloadBootstrap" : "Nie można pobrać pliku rozruchowego Belnet. Sprawdź połączenie i spróbuj ponownie",
+"couldNotEstablishConnection" : "Nie można nawiązać połączenia z Belnet. Spróbuj ponownie",
+"theBelnetServiceNotStarted": "Nie można uruchomić usługi Belnet. Spróbuj ponownie",
+"exitNodeUnreachable" : "Węzeł wyjściowy jest niedostępny, ponowne łączenie",
+
+
+
+"tab": "Karta",
+"ungroupTabs": "Rozgrupuj karty",
+"closeGroup": "Zamknij grupę",
+"ungroupSelectedTabs": "Czy na pewno chcesz rozgrupować wybrane karty z ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Komunikat potwierdzający rozgrupowanie wybranych kart z grupy kart",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 "beldexIsAnEcosystem": "Beldex to ekosystem zdecentralizowanych aplikacji skoncentrowanych na ochronie poufności. Aplikacja Przeglądarki Beldex jest jednym z elementów tego ekosystemu, który obejmuje również takie aplikacje jak BChat, BelNet oraz protokół Beldex.Przeglądarka Beldex jest Twoją bramą do płynnego i poufnego korzystania z Internetu, w którym Twoje dane pozostają wyłącznie Twoją własnością. Zbudowana na solidnej infrastrukturze blockchain, Przeglądarka Beldex zapewnia swoim użytkownikom poufność i anonimowość.",
 "atBeldex": " \n W Beldex wierzymy w wzmacnianie pozycji jednostek poprzez fundamentalne prawo do kontroli własnego śladu cyfrowego. Przeglądarka Beldex została zaprojektowana tak, aby zapewnić użytkownikom bezpieczne i poufne środowisko online do komunikacji oraz interakcji z cyfrowym światem.",
 "titlebns": "\nBNS",
@@ -205,7 +304,7 @@
 "aboutAdblocker": "Blokowanie reklam: Blokuj nachalne reklamy, narzędzia śledzące oraz wyskakujące okna, aby cieszyć się czystym i wolnym od rozproszeń doświadczeniem przeglądania. Szybsze ładowanie stron i mniejsze zużycie danych pozwalają zachować pełną kontrolę nad aktywnością online.\n",
 "aboutBeldexAI": "Beldex AI: Uzyskaj natychmiastowe odpowiedzi na swoje pytania dzięki BeldexAI — inteligentnemu asystentowi, który odpowiada na zapytania na podstawie treści stron internetowych. Niezależnie od tego, czy szukasz konkretnych informacji, czy szybkich podsumowań, BeldexAI wzbogaca przeglądanie o kontekstowe i spersonalizowane odpowiedzi.\n",
 "thusbeldexbrowserOffers": "\nW ten sposób Przeglądarka Beldex stanowi proste i bezpieczne schronienie dla użytkowników poszukujących poufności w coraz bardziej połączonym świecie. Dołącz do nas w podróży ku bardziej poufnej i bezpiecznej przyszłości cyfrowej. Odkrywaj Internet, komunikuj się i eksploruj sieć bez kompromisów w zakresie poufności. Sieć Beldex – Tam, gdzie poufność spotyka się z innowacją.",
-"credits":"\nCredits: Beldex & BelNet.\n",
+"credits":"\nAutorzy: Beldex & BelNet.\n",
 
 
   "languageChineseSimplifiedChina": "Chiński (uproszczony, Chiny)",

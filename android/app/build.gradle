@@ -29,7 +29,7 @@ if (flutterVersionName == null) {
 // }
 
 android {
-    compileSdkVersion 35
+    compileSdkVersion 36
     namespace 'io.beldex.beldex_browser'
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -41,8 +41,8 @@ android {
 
     defaultConfig {
         applicationId "io.beldex.beldex_browser"
-        minSdkVersion 23
-        targetSdkVersion 35
+        minSdkVersion 24
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 

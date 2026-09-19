@@ -1,6 +1,8 @@
 
 
 
+import 'dart:async';
+
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
 import 'package:beldex_browser/src/browser/ai/repositories/openai_repository.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -19,6 +21,177 @@ bool _isChangeNode = false;
 
   String get value => _value;
   
+
+
+// Has internet 
+
+bool _isNetConnected = true;
+
+bool get isNetConnected => _isNetConnected;
+
+updateNetStatus(bool value){
+  _isNetConnected = value;
+  notifyListeners();
+}
+
+
+
+// bool _isNetConnect = true;
+
+// bool get isNetConnect => _isNetConnect;
+
+// void updateNetStatus(bool value){
+//   _isNetConnect = value;
+//   notifyListeners();
+// }
+
+  // -----------------------------------------------------------------------
+  // Ported from belnet-app commit df16d27 (audit F1): daemon-status polling.
+  // -----------------------------------------------------------------------
+  Timer? _pollTimer;
+  DateTime? _pollDeadline;
+  bool _pollBusy = false;
+
+  bool get isPolling => _pollTimer != null;
+
+  /// Polls the daemon status until the exit tunnel is actually ready,
+  /// replacing the old fixed 19-second delay.
+  ///
+  /// "Ready" means the daemon reports:
+  ///   isconnected == true  AND  an exit is mapped  AND  numPathsBuilt > 0.
+  ///
+  /// Calls [onConnected] as soon as that is true (typically 4-8 s), or
+  /// [onFailed] with the last observed daemon state if [timeout] elapses.
+  ///
+  /// [getStatus] is injected (defaults to [BelnetLib.getSpeedStatus] at the
+  /// call site) so the polling logic stays unit-testable, exactly as in
+  /// belnet-app.
+  void startStatusPolling({
+    required Future<Map<String, dynamic>?> Function() getStatus,
+    required void Function() onConnected,
+    required void Function(String reason) onFailed,
+    Duration interval = const Duration(milliseconds: 500),
+    Duration timeout = const Duration(seconds: 30),
+  }) {
+    cancelPolling();
+    _pollDeadline = DateTime.now().add(timeout);
+    String lastState = 'no status received from daemon';
+
+    _pollTimer = Timer.periodic(interval, (timer) async {
+      // Never let a slow platform call overlap the next tick.
+      if (_pollBusy) return;
+
+      if (_pollDeadline != null && DateTime.now().isAfter(_pollDeadline!)) {
+        cancelPolling();
+        onFailed(lastState);
+        return;
+      }
+
+      _pollBusy = true;
+      try {
+        final raw = await getStatus();
+        if (raw != null) {
+          lastState = _describeDaemonState(raw);
+          if (_statusIndicatesReady(raw)) {
+            cancelPolling();
+            onConnected();
+          }
+        }
+      } catch (_) {
+        // Keep polling; transient platform-channel errors are expected
+        // while the service is still binding.
+      } finally {
+        _pollBusy = false;
+      }
+    });
+  }
+
+  void cancelPolling() {
+    _pollTimer?.cancel();
+    _pollTimer = null;
+    _pollDeadline = null;
+    _pollBusy = false;
+  }
+
+  /// Readiness check: isconnected && exit mapped && numPathsBuilt > 0.
+  ///
+  /// Browser adaptation: belnet-app parses top-level keys
+  /// (isconnected / exitMap / numPathsBuilt) while the browser's own
+  /// isExitReady walks a nested `services` map — the two repos' audit
+  /// commits disagree on the daemon's status schema. This parser accepts
+  /// BOTH shapes so it is correct regardless of which one the loaded
+  /// daemon actually emits.
+  static bool _statusIndicatesReady(Map<String, dynamic> status) {
+    // Shape 1: belnet-app schema (top-level keys).
+    final isConnected = status['isconnected'];
+    if (isConnected is bool) {
+      final pathsBuilt = status['numPathsBuilt'];
+      final exitMap = status['exitMap'];
+      final exitMapped = exitMap is Map && exitMap.isNotEmpty;
+      final paths = pathsBuilt is num ? pathsBuilt.toInt() : 0;
+      if (isConnected && exitMapped && paths > 0) return true;
+      // Top-level schema present but not ready yet: also try shape 2 below
+      // in case only part of the document matches.
+    }
+
+    // Shape 2: nested `services` schema (browser isExitReady).
+    if (status['running'] == false) return false;
+    final services = status['services'];
+    if (services is Map) {
+      for (final svc in services.values) {
+        if (svc is Map) {
+          final exitMap = svc['exitMap'];
+          if (exitMap is Map && exitMap.isNotEmpty) {
+            // An exit is mapped; require built paths too when the service
+            // exposes the counter, matching belnet-app's stricter check.
+            final paths = svc['numPathsBuilt'];
+            if (paths is num) return paths.toInt() > 0;
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /// Human-readable summary of the daemon state for [onFailed] reasons,
+  /// e.g. "connected=true, exit mapped=false, paths built=0".
+  static String _describeDaemonState(Map<String, dynamic> status) {
+    bool? connected;
+    bool exitMapped = false;
+    int paths = 0;
+
+    final isConnected = status['isconnected'];
+    if (isConnected is bool) connected = isConnected;
+    final exitMap = status['exitMap'];
+    if (exitMap is Map && exitMap.isNotEmpty) exitMapped = true;
+    final pathsBuilt = status['numPathsBuilt'];
+    if (pathsBuilt is num) paths = pathsBuilt.toInt();
+
+    final services = status['services'];
+    if (services is Map) {
+      for (final svc in services.values) {
+        if (svc is Map) {
+          final svcExit = svc['exitMap'];
+          if (svcExit is Map && svcExit.isNotEmpty) exitMapped = true;
+          final svcPaths = svc['numPathsBuilt'];
+          if (svcPaths is num && svcPaths.toInt() > paths) {
+            paths = svcPaths.toInt();
+          }
+        }
+      }
+      connected ??= status['running'] != false;
+    }
+
+    return 'connected=${connected ?? 'unknown'}, '
+        'exit mapped=$exitMapped, paths built=$paths';
+  }
+
+  @override
+  void dispose() {
+    cancelPolling();
+    super.dispose();
+  }
 
  bool get isChangeNode => _isChangeNode;
 
@@ -232,6 +405,54 @@ void setInternetStatus(bool value){
  _isNoInternet = value;
  notifyListeners();
 }
+
+
+
+  // Freename support : by default it will be disabled
+
+   bool _isEnabledFreeName = false;
+
+   bool get isEnabledFreeName => _isEnabledFreeName;
+
+   void updateIsEnableFreeName(bool enable){
+    _isEnabledFreeName = enable;
+    notifyListeners();
+    saveFreenameStatusToPrefs();
+   }
+
+
+Future<void> saveFreenameStatusToPrefs()async{
+  SharedPreferences prefs =  await SharedPreferences.getInstance();
+    await prefs.setBool('freename', _isEnabledFreeName);
+
+}
+
+
+Future<void> loadFreenameStatusPrefs()async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+   _isEnabledFreeName = prefs.getBool('freename') ?? false;
+ 
+  notifyListeners();
+}
+
+
+
+bool _isSEDropdownOpened = false;
+
+bool get isSEDropdownOpened => _isSEDropdownOpened;
+
+void updateSEDrowpdownState(bool value){
+  _isSEDropdownOpened = value;
+}
+bool _isSearchbarDropdownOpened = false;
+
+bool get isSearchbarDropdownOpened => _isSearchbarDropdownOpened;
+
+void updateSearchbarDrowpdownState(bool value){
+  _isSearchbarDropdownOpened = value;
+}
+
 
   }
 

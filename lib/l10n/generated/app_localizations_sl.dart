@@ -531,6 +531,187 @@ class AppLocalizationsSl extends AppLocalizations {
   String get searchEngineUpdated => 'Iskalnik je bil uspešno posodobljen!';
 
   @override
+  String get searchusing => 'Iskanje z uporabo';
+
+  @override
+  String get addTabToNewGroup => 'Dodaj zavihek v novo skupino';
+
+  @override
+  String get invitePeople => 'Povabi osebe';
+
+  @override
+  String get uploadFromGallery => 'Naloži iz galerije';
+
+  @override
+  String get noQRCodeFound => 'na sliki ni najdene kode QR';
+
+  @override
+  String get searchBarPosition => 'Položaj iskalne vrstice';
+
+  @override
+  String get choosethePosition => 'Izberite položaj iskalne vrstice';
+
+  @override
+  String get iPAddress => 'IP naslov';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'Moj IP';
+
+  @override
+  String get marketUpdate => 'Posodobitev s trga';
+
+  @override
+  String get searchYourTabs => 'Išči po zavihkih';
+
+  @override
+  String get newTabGroup => 'Nova skupina zavihkov';
+
+  @override
+  String get selectTab => 'Izberi zavihek';
+
+  @override
+  String get selectTabs => 'Izberi zavihke';
+
+  @override
+  String get deleteTabGroup => 'Izbriši skupino zavihkov';
+
+  @override
+  String get rename => 'Preimenuj';
+
+  @override
+  String get renameGroup => 'Preimenuj skupino';
+
+  @override
+  String get ungroupTab => 'Razdruži zavihek';
+
+  @override
+  String get deleteGroup => 'Izbriši skupino';
+
+  @override
+  String get addToTabGroup => 'Dodaj v skupino zavihkov';
+
+  @override
+  String get editGroupName => 'Uredi ime skupine';
+
+  @override
+  String get editGroupColor => 'Uredi barvo skupine';
+
+  @override
+  String get closeTab => 'Zapri zavihek';
+
+  @override
+  String get doYouWantToUngroup => 'Ali res želite razdružiti to skupino zavihkov?';
+
+  @override
+  String get ungroupTabGroup => 'Razdruži skupino zavihkov';
+
+  @override
+  String get ungroup => 'Razdruži';
+
+  @override
+  String get deletetabGroup => 'Izbriši zavihek Skupina';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Dodaj v';
+
+  @override
+  String get tabs => 'Zavihki';
+
+  @override
+  String get done => 'Končano';
+
+  @override
+  String get create => 'Ustvari';
+
+  @override
+  String get groupColor => 'Barva skupine';
+
+  @override
+  String get groupName => 'Ime skupine';
+
+  @override
+  String get addtoNewTabGroup => 'Dodaj v novo skupino zavihkov';
+
+  @override
+  String get tabGroups => 'Skupine zavihkov';
+
+  @override
+  String get tabGroup => 'Skupina zavihkov';
+
+  @override
+  String get tabsSelected => 'Izbrane zavihke';
+
+  @override
+  String get privateResearch => 'npr. Zasebna raziskava';
+
+  @override
+  String get deselectAll => 'Prekliči izbor vseh';
+
+  @override
+  String get selected => 'Izbrano';
+
+  @override
+  String get close => 'Zapri';
+
+  @override
+  String get top => 'zgoraj';
+
+  @override
+  String get bottom => 'spodaj';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'To dejanje bo trajno zaprlo vse $tabCount zavihke znotraj »$tabGroupName«. Tega ni mogoče razveljaviti.';
+  }
+
+  @override
+  String get changingNode => 'Spreminjanje vozlišča';
+
+  @override
+  String get freeenameWebDomain => 'Domena Freename Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Omogoči podporo za domeno FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Zagonske datoteke Belnet ni bilo mogoče prenesti. Preverite povezavo in poskusite znova';
+
+  @override
+  String get couldNotEstablishConnection => 'Povezave Belnet ni bilo mogoče vzpostaviti. Poskusite znova';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Storitve Belnet ni bilo mogoče zagnati. Poskusite znova';
+
+  @override
+  String get exitNodeUnreachable => 'Izhodnega vozlišča ni mogoče doseči, ponovno se povezujem';
+
+  @override
+  String get tab => 'Zavihek';
+
+  @override
+  String get ungroupTabs => 'Razdruži zavihke';
+
+  @override
+  String get closeGroup => 'Zapri skupino';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Ali ste prepričani, da želite razdružiti izbrane zavihke iz skupine \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex je ekosistem decentraliziranih aplikacij, ki ohranjajo zaupnost. Aplikacija Beldex Browser je ena izmed aplikacij v tem ekosistemu, ki vključuje tudi aplikacije, kot so BChat, BelNet in protokol Beldex. Brskalnik Beldex je vaš prehod do brezhibne in zaupne spletne izkušnje, kjer vaši podatki ostanejo samo vaši. Zgrajen na robustni infrastrukturi veriženja blokov brskalnik Beldex svojim uporabnikom zagotavlja zaupnost in anonimnost.';
 
   @override

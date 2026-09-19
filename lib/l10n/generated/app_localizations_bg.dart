@@ -531,6 +531,187 @@ class AppLocalizationsBg extends AppLocalizations {
   String get searchEngineUpdated => 'Търсачката беше актуализирана успешно!';
 
   @override
+  String get searchusing => 'Търсене чрез';
+
+  @override
+  String get addTabToNewGroup => 'Добавяне на раздел към нова група';
+
+  @override
+  String get invitePeople => 'Поканете хора';
+
+  @override
+  String get uploadFromGallery => 'Качване от галерията';
+
+  @override
+  String get noQRCodeFound => 'В изображението не е намерен QR код';
+
+  @override
+  String get searchBarPosition => 'Позиция на лентата за търсене';
+
+  @override
+  String get choosethePosition => 'Изберете позицията на лентата за търсене';
+
+  @override
+  String get iPAddress => 'IP адрес';
+
+  @override
+  String get vpnIP => 'VPN IP';
+
+  @override
+  String get myIP => 'Моето IP';
+
+  @override
+  String get marketUpdate => 'Актуализация на пазара';
+
+  @override
+  String get searchYourTabs => 'Търсене във вашите раздели';
+
+  @override
+  String get newTabGroup => 'Нова група раздели';
+
+  @override
+  String get selectTab => 'Избиране на раздел';
+
+  @override
+  String get selectTabs => 'Избиране на раздели';
+
+  @override
+  String get deleteTabGroup => 'Изтриване на групата раздели';
+
+  @override
+  String get rename => 'Преименуване';
+
+  @override
+  String get renameGroup => 'Преименуване на групата';
+
+  @override
+  String get ungroupTab => 'Разгрупиране на раздела';
+
+  @override
+  String get deleteGroup => 'Изтриване на групата';
+
+  @override
+  String get addToTabGroup => 'Добавяне към група раздели';
+
+  @override
+  String get editGroupName => 'Редактиране на името на групата';
+
+  @override
+  String get editGroupColor => 'Редактиране на цвета на групата';
+
+  @override
+  String get closeTab => 'Затваряне на раздел';
+
+  @override
+  String get doYouWantToUngroup => 'Наистина ли искате да разгрупирате тази група раздели?';
+
+  @override
+  String get ungroupTabGroup => 'Разгрупиране на групата раздели';
+
+  @override
+  String get ungroup => 'Разгрупиране';
+
+  @override
+  String get deletetabGroup => 'Изтриване на групата раздели';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Добавяне към';
+
+  @override
+  String get tabs => 'Раздели';
+
+  @override
+  String get done => 'Готово';
+
+  @override
+  String get create => 'Създаване';
+
+  @override
+  String get groupColor => 'Цвят на групата';
+
+  @override
+  String get groupName => 'Име на групата';
+
+  @override
+  String get addtoNewTabGroup => 'Добавяне към нова група раздели';
+
+  @override
+  String get tabGroups => 'Групи раздели';
+
+  @override
+  String get tabGroup => 'Група раздели';
+
+  @override
+  String get tabsSelected => 'Избрани раздели';
+
+  @override
+  String get privateResearch => 'напр. Частно проучване';
+
+  @override
+  String get deselectAll => 'Премахване на избора на всички';
+
+  @override
+  String get selected => 'Избрано';
+
+  @override
+  String get close => 'Затваряне';
+
+  @override
+  String get top => 'отгоре';
+
+  @override
+  String get bottom => 'отдолу';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Това действие ще затвори завинаги всички $tabCount раздела в „$tabGroupName“. Това действие не може да бъде отменено.';
+  }
+
+  @override
+  String get changingNode => 'Промяна на възел..';
+
+  @override
+  String get freeenameWebDomain => 'Домейн FreeName Web3';
+
+  @override
+  String get enableFreeNameWeb => 'Активиране на поддръжката на домейн FreeName Web3';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Неуспешно изтегляне на началния файл на Belnet. Проверете връзката си и опитайте отново';
+
+  @override
+  String get couldNotEstablishConnection => 'Неуспешно установяване на връзка с Belnet. Опитайте отново';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Услугата Belnet не може да бъде стартирана. Опитайте отново';
+
+  @override
+  String get exitNodeUnreachable => 'Изходният възел е недостъпен, повторно свързване';
+
+  @override
+  String get tab => 'Раздел';
+
+  @override
+  String get ungroupTabs => 'Премахване на разделите от групата';
+
+  @override
+  String get closeGroup => 'Затваряне на групата';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Наистина ли искате да премахнете избраните раздели от \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex е екосистема от децентрализирани приложения, съхраняващи поверителността. Приложението Beldex Browser е част от тази екосистема, която включва също приложения като BChat, BelNet и протокола Beldex. Браузърът Beldex е вашата врата към безпроблемно и поверително онлайн изживяване, при което вашите данни остават само ваши. Изграден върху стабилна блокчейн инфраструктура, браузърът Beldex гарантира поверителност и анонимност за своите потребители.';
 
   @override

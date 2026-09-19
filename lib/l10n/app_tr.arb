@@ -192,6 +192,100 @@
 
 
 
+"searchusing": "Arama yap",
+  "addTabToNewGroup": "Yeni gruba sekme ekle",
+  "invitePeople": "Kişileri davet et",
+  "uploadFromGallery": "Galeriden yükle",
+  "noQRCodeFound": "Görselde QR kodu bulunamadı",
+  "searchBarPosition": "Arama çubuğu konumu",
+  "choosethePosition": "Arama çubuğunun konumunu seçin",
+  "iPAddress": "IP Adresi",
+   "vpnIP": "VPN IP'si",
+   "myIP": "IP Adresim",
+   "marketUpdate": "Piyasa güncellemeleri",
+   "searchYourTabs": "Sekmelerinizde arayın",
+   "newTabGroup": "Yeni sekme grubu",
+   "selectTab": "Sekmeyi seç",
+   "selectTabs": "Sekmeleri seç",
+   "closeAllTabs": "Tüm sekmeleri kapat",
+   "deleteTabGroup": "Sekme grubunu sil",
+   "rename": "Yeniden adlandır",
+   "renameGroup": "Grubu yeniden adlandır",
+   "ungroupTab": "Sekmeyi gruptan çıkar",
+   "deleteGroup": "Grubu sil",
+   "addToTabGroup": "Sekme grubuna ekle",
+   "editGroupName": "Grup adını düzenle",
+   "editGroupColor": "Grup rengini düzenle",
+   "closeTab": "Sekmeyi kapat",
+   "doYouWantToUngroup": "Bu sekme grubunu çözmek istediğinizden emin misiniz?",
+   "ungroupTabGroup": "Sekme Grubunu Çöz",
+   "ungroup": "Çöz",
+   "deleteGroup": "Grubu Sil",
+   "deletetabGroup": "Sekme grubunu sil",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Şuraya ekle",
+   "tabs": "Sekmeler",
+   "done": "Tamam",
+   "create": "Oluştur",
+   "groupColor": "Grup rengi",
+   "groupName": "Grup adı",
+   "newTabGroup": "Yeni Sekme Grubu",
+   "addtoNewTabGroup": "Yeni sekme grubuna ekle",
+   "tabGroups": "Sekme Grupları",
+   "tabGroup": "Sekme Grubu",
+   "tabsSelected": "Seçilen sekmeler",
+   "privateResearch": "Örn. Özel Araştırma",
+   "deselectAll": "Tüm seçimleri kaldır",
+   "selected": "Seçildi",
+
+   "close": "Kapat",
+
+   "top": "üst",
+   "bottom": "alt",
+
+
+
+  "closeAllTabsConfirmation": "Bu işlem, “{tabGroupName}” içindeki {tabCount} sekmenin tamamını kalıcı olarak kapatacaktır. Bu işlem geri alınamaz.",
+"@closeAllTabsConfirmation": {
+  "description": "Bir sekme grubundaki tüm sekmeleri kapatırken gösterilen onay mesajı",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Düğüm (Node) değiştiriliyor",
+"freeenameWebDomain" : "FreeName Web3 alan adı",
+"enableFreeNameWeb" : "FreeName Web3 alan adı desteğini etkinleştir",
+"couldnotDownloadBootstrap" : "Belnet başlangıç dosyası indirilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin",
+"couldNotEstablishConnection" : "Belnet bağlantısı kurulamadı. Lütfen tekrar deneyin",
+"theBelnetServiceNotStarted": "Belnet hizmeti başlatılamadı. Lütfen tekrar deneyin",
+"exitNodeUnreachable" : "Çıkış düğümüne ulaşılamıyor, yeniden bağlanılıyor",
+
+
+"tab": "Sekme",
+"ungroupTabs": "Sekmelerin grubunu kaldır",
+"closeGroup": "Grubu kapat",
+"ungroupSelectedTabs": "${tabGroupName} grubundaki seçili sekmelerin grubunu kaldırmak istediğinizden emin misiniz?",
+"@ungroupSelectedTabs": {
+  "description": "Seçili sekmeler bir sekme grubundan çıkarılırken gösterilen onay mesajı",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex, merkeziyetsiz ve gizlilik koruyucu uygulamalardan oluşan bir ekosistemdir. Beldex Tarayıcısı uygulaması, BChat, BelNet ve Beldex protokolü gibi uygulamaları da içeren bu ekosistemin bir parçasıdır.Beldex Tarayıcısı, verilerinizin yalnızca size ait olduğu kesintisiz ve gizli bir çevrimiçi deneyimin kapısını açar. Sağlam bir blockchain altyapısı üzerinde geliştirilen Beldex Tarayıcısı, kullanıcılara gizlilik ve anonimlik sağlar.",
 "atBeldex": " \n Beldex olarak, bireylerin dijital ayak izlerini kontrol etme temel hakkına sahip olması gerektiğine inanıyoruz. Beldex Tarayıcısı, kullanıcıların dijital dünya ile güvenli ve gizli bir ortamda iletişim kurmasını ve etkileşime girmesini sağlamak için tasarlanmıştır.",
 "titlebns": "\nBNS",

@@ -363,7 +363,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get closeTabs => 'סגור כרטיסיות';
 
   @override
-  String get closeAllTabs => 'סגור את כל הכרטיסיות';
+  String get closeAllTabs => 'סגירת כל הכרטיסיות';
 
   @override
   String get copy => 'העתק';
@@ -529,6 +529,187 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get searchEngineUpdated => 'מנוע החיפוש עודכן בהצלחה!';
+
+  @override
+  String get searchusing => 'חיפוש באמצעות';
+
+  @override
+  String get addTabToNewGroup => 'הוספת כרטיסייה לקבוצה חדשה';
+
+  @override
+  String get invitePeople => 'הזמנת אנשים';
+
+  @override
+  String get uploadFromGallery => 'העלאה מהגלריה';
+
+  @override
+  String get noQRCodeFound => 'לא נמצא קוד QR בתמונה';
+
+  @override
+  String get searchBarPosition => 'מיקום סרגל החיפוש';
+
+  @override
+  String get choosethePosition => 'בחרו את מיקום סרגל החיפוש.';
+
+  @override
+  String get iPAddress => 'כתובת IP';
+
+  @override
+  String get vpnIP => 'כתובת IP של VPN';
+
+  @override
+  String get myIP => 'כתובת ה-IP שלי';
+
+  @override
+  String get marketUpdate => 'עדכון שוק';
+
+  @override
+  String get searchYourTabs => 'חיפוש בכרטיסיות שלך';
+
+  @override
+  String get newTabGroup => 'קבוצת כרטיסיות חדשה';
+
+  @override
+  String get selectTab => 'בחירת כרטיסייה';
+
+  @override
+  String get selectTabs => 'בחירת כרטיסיות';
+
+  @override
+  String get deleteTabGroup => 'מחיקת קבוצת כרטיסיות';
+
+  @override
+  String get rename => 'שינוי שם';
+
+  @override
+  String get renameGroup => 'שינוי שם הקבוצה';
+
+  @override
+  String get ungroupTab => 'ביטול קיבוץ הכרטיסייה';
+
+  @override
+  String get deleteGroup => 'מחיקת קבוצה';
+
+  @override
+  String get addToTabGroup => 'הוספה לקבוצת כרטיסיות';
+
+  @override
+  String get editGroupName => 'עריכת שם הקבוצה';
+
+  @override
+  String get editGroupColor => 'עריכת צבע הקבוצה';
+
+  @override
+  String get closeTab => 'סגירת כרטיסייה';
+
+  @override
+  String get doYouWantToUngroup => 'האם אתה באמת רוצה לבטל את הקיבוץ של קבוצת כרטיסיות זו?';
+
+  @override
+  String get ungroupTabGroup => 'ביטול קיבוץ קבוצת כרטיסיות';
+
+  @override
+  String get ungroup => 'ביטול קיבוץ';
+
+  @override
+  String get deletetabGroup => 'מחיקת קבוצת כרטיסיות';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'הוספה אל';
+
+  @override
+  String get tabs => 'כרטיסיות';
+
+  @override
+  String get done => 'סיום';
+
+  @override
+  String get create => 'יצירה';
+
+  @override
+  String get groupColor => 'צבע הקבוצה';
+
+  @override
+  String get groupName => 'שם הקבוצה';
+
+  @override
+  String get addtoNewTabGroup => 'הוספה לקבוצת כרטיסיות חדשה';
+
+  @override
+  String get tabGroups => 'קבוצות כרטיסיות';
+
+  @override
+  String get tabGroup => 'קבוצת כרטיסיות';
+
+  @override
+  String get tabsSelected => 'כרטיסיות שנבחרו';
+
+  @override
+  String get privateResearch => 'לדוגמה, מחקר פרטי';
+
+  @override
+  String get deselectAll => 'ביטול בחירת הכול';
+
+  @override
+  String get selected => 'נבחר';
+
+  @override
+  String get close => 'סגירה';
+
+  @override
+  String get top => ' למעלה';
+
+  @override
+  String get bottom => 'למטה';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'פעולה זו תסגור לצמיתות את כל $tabCount הכרטיסיות בתוך \"$tabGroupName\". לא ניתן לבטל פעולה זו.';
+  }
+
+  @override
+  String get changingNode => 'שינוי צומת';
+
+  @override
+  String get freeenameWebDomain => 'דומיין Web3 של FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'הפעל תמיכה בדומיין Web3 של FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'לא ניתן להוריד את קובץ האתחול של Belnet. בדוק את החיבור שלך ונסה שוב';
+
+  @override
+  String get couldNotEstablishConnection => 'לא ניתן ליצור חיבור ל-Belnet. נסה שוב';
+
+  @override
+  String get theBelnetServiceNotStarted => 'לא ניתן להפעיל את שירות Belnet. נסה שוב';
+
+  @override
+  String get exitNodeUnreachable => 'צומת היציאה אינו נגיש, מתחבר מחדש';
+
+  @override
+  String get tab => 'כרטיסייה';
+
+  @override
+  String get ungroupTabs => 'ביטול קיבוץ כרטיסיות';
+
+  @override
+  String get closeGroup => 'סגירת קבוצה';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'האם אתה בטוח שברצונך לבטל את קיבוץ הכרטיסיות שנבחרו מתוך \$$tabGroupName?';
+  }
 
   @override
   String get beldexIsAnEcosystem => 'Beldex היא מערכת אקולוגית של יישומים מבוזרים ושומרי פרטיות. אפליקציית דפדפן Beldex היא אחת מהאפליקציות במערכת זו, הכוללת גם יישומים כגון BChat, BelNet ופרוטוקול Beldex. דפדפן Beldex הוא השער שלך לחוויית גלישה חלקה ודיסקרטית, שבה הנתונים שלך נשארים שלך בלבד. הדפדפן, הבנוי על תשתית בלוקצ׳יין חזקה, מבטיח פרטיות ואנונימיות למשתמשיו.';

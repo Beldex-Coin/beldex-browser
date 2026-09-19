@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WebViewModel extends ChangeNotifier {
+  late String _uuid;
   int? _tabIndex;
   WebUri? _url;
   String? _title;
@@ -25,9 +26,11 @@ class WebViewModel extends ChangeNotifier {
   Uint8List? screenshot;
   bool needsToCompleteInitialLoad;
   //final keepAlive = InAppWebViewKeepAlive();
-
+final String uuid;
   WebViewModel(
-      {int? tabIndex,
+      {
+        required this.uuid,
+        int? tabIndex,
         WebUri? url,
       String? title,
       Favicon? favicon,
@@ -45,6 +48,7 @@ class WebViewModel extends ChangeNotifier {
         this.pullToRefreshController,
         this.findInteractionController,
       this.needsToCompleteInitialLoad = true}) {
+        _uuid = uuid;
     _tabIndex = tabIndex;
     _url = url;
     _favicon = favicon;
@@ -227,12 +231,14 @@ class WebViewModel extends ChangeNotifier {
                 map["javaScriptConsoleHistory"]?.cast<String>(),
             isSecure: map["isSecure"],
             settings: InAppWebViewSettings.fromMap(map["settings"]),
+            uuid: map["uuid"],
           )
         : null;
   }
 
   Map<String, dynamic> toMap() {
     return {
+      "uuid": _uuid,
       "tabIndex": _tabIndex,
       "url": _url?.toString(),
       "title": _title,

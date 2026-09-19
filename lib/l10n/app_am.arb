@@ -187,6 +187,104 @@
 
 
 
+
+  "searchusing": "በመጠቀም ይፈልጉ",
+  "addTabToNewGroup": "ትርን ወደ አዲስ ቡድን ያክሉ",
+  "invitePeople": "ሰዎችን ይጋብዙ",
+  "uploadFromGallery": "ከጋለሪ ይስቀሉ።",
+  "noQRCodeFound": "በምስሉ ውስጥ QR ኮድ አልተገኘም።",
+  "searchBarPosition": "የፍለጋ አሞሌ ቦታ፦",
+  "choosethePosition": "የፍለጋ አሞሌውን ቦታ ይምረጡ።",
+  "iPAddress": "IP አድራሻ፣",
+   "vpnIP": "VPN IP፣",
+   "myIP": "የእኔ IP፣",
+   "marketUpdate": "የገበያ ማሻሻያ",
+   "searchYourTabs": "ትሮችዎን ይፈልጉ",
+   "newTabGroup": "አዲስ የትር ቡድን",
+   "selectTab": "ትርን ይምረጡ",
+   "selectTabs": "ትሮችን ይምረጡ",
+   "closeAllTabs": "ሁሉንም ትሮች ይዝጉ",
+   "deleteTabGroup": "የትር ቡድንን ይሰርዙ",
+   "rename": "እንደገና ሰይም",
+   "renameGroup": "የቡድኑን ስም ቀይር",
+   "ungroupTab": "ትሩን ከቡድኑ ነጠል",
+   "deleteGroup": "ቡድኑን ሰርዝ",
+   "addToTabGroup": "ወደ ትር ቡድን አክል",
+   "editGroupName": "የቡድኑን ስም አርትዕ",
+   "editGroupColor": "የቡድኑን ቀለም አርትዕ",
+   "closeTab": "ትርን ዝጋ",
+   "doYouWantToUngroup": "ቡድን ከቡድኑ ለመለየት በእርግጥ ይፈልጋሉ?",
+   "ungroupTabGroup": "የትር ቡድንን ነጠል",
+   "ungroup": "ነጠል",
+   "deleteGroup": "ቡድንን ሰርዝ",
+   "deletetabGroup": "የትር ቡድንን ሰርዝ",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "ወደ ያክሉ",
+   "tabs": "ትሮች",
+   "done": "ተከናውኗል",
+   "create": "ፍጠር",
+   "groupColor": "የቡድን ቀለም",
+   "groupName": "የቡድን ስም",
+   "newTabGroup": "አዲስ የትር ቡድን",
+   "addtoNewTabGroup": "ወደ አዲስ የትር ቡድን አክል",
+   "tabGroups": "የትር ቡድኖች",
+   "tabGroup": "የትር ቡድን",
+   "tabsSelected": "የተመረጡ ትሮች",
+   "privateResearch": "ለምሳሌ፦ የግል ምርምር",
+   "deselectAll": "ሁሉንም ምርጫ ይሰርዙ",
+   "selected": "ተመርጧል",
+
+
+   "close": "ዝጋ",
+   "top": "ላይ",
+   "bottom": "ታች",
+
+
+
+ "closeAllTabsConfirmation": "ይህ እርምጃ በ“{tabGroupName}” ውስጥ ያሉትን ሁሉንም {tabCount} ትሮች በቋሚነት ይዘጋል። ይህ ሊቀለበስ አይችልም።",
+"@closeAllTabsConfirmation": {
+  "description": "በትር ቡድን ውስጥ ያሉትን ሁሉንም ትሮች ሲዘጉ የሚታየው የማረጋገጫ መልዕክት",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "ኖድ በመቀየር ላይ..",
+"freeenameWebDomain" : "የፍሪናም ዌብ3 ጎራ",
+"enableFreeNameWeb" : "የፍሪናም ዌብ3 ጎራ ድጋፍን አንቃ",
+"couldnotDownloadBootstrap" : "የቤልኔት ቡትስትራፕ ፋይል ማውረድ አልተቻለም። እባክዎ ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።",
+"couldNotEstablishConnection" : "የቤልኔት ግንኙነትን መመስረት አልተቻለም። እባክዎ እንደገና ይሞክሩ።",
+"theBelnetServiceNotStarted": "የቤልኔት አገልግሎት ሊጀመር አልቻለም። እባክዎ እንደገና ይሞክሩ።",
+"exitNodeUnreachable" : "የውጪ ኖድ ሊደረስበት አይችልም፣ እንደገና እየተገናኘ ነው",
+
+
+
+"tab": "ትር",
+"ungroupTabs": "ትሮችን ከቡድን አስወግድ",
+"closeGroup": "ቡድኑን ዝጋ",
+"ungroupSelectedTabs": "የተመረጡትን ትሮች ከ${tabGroupName} ማስወገድ እርግጠኛ ነዎት?",
+"@ungroupSelectedTabs": {
+  "description": "የተመረጡ ትሮችን ከትር ቡድን ሲያስወግዱ የሚታይ የማረጋገጫ መልዕክት",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
 "beldexIsAnEcosystem": "Beldex የዲሴንትራላይዝድ እና ግላዊነትን የሚጠብቁ መተግበሪያዎችን ያካተተ ኢኮሲስተም ነው። የBeldex ብራውዘር መተግበሪያ ይህ ኢኮሲስተም ከሚያካትታቸው BChat፣ BelNet እና የBeldex ፕሮቶኮል ጋር አንዱ ነው። የBeldex ብራውዘር ያለ መቋረጥና ግላዊ የመስመር ላይ ልምድ ወደሚያቀርብልዎ መግቢያ ነው፤ የእርስዎ ውሂብ የእርስዎ ብቻ ይቆያል። በጠንካራ የብሎክቼን መሠረት ላይ ተገንብቶ፣ የBeldex ብራውዘር ለተጠቃሚዎቹ ግላዊነትና ስውርነትን ያረጋግጣል።.",
 "atBeldex": " \n በBeldex፣ ሰዎች የዲጂታል እግር አሻራቸውን መቆጣጠር መብታቸው መሆኑን እናምናለን። የBeldex ብራውዘር ተጠቃሚዎች ከዲጂታል ዓለም ጋር እንዲገናኙ እና እንዲግኙ ደህንነታማና ግላዊ የመስመር ላይ አካባቢ ለመፍጠር ተነድፏል።.",
 "titlebns": "\nBNS",

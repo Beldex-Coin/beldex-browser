@@ -3,6 +3,7 @@ import 'package:beldex_browser/locale_provider.dart';
 import 'package:beldex_browser/src/browser/pages/settings/search_settings_page.dart';
 import 'package:beldex_browser/src/browser/pages/voice_search/voice_search.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -69,180 +70,208 @@ void _filterLanguages(String query) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
      final theme = Theme.of(context);
      final localeProvider = Provider.of<LocaleProvider>(context);
-    return Scaffold(
-        appBar:normalAppBar(context,loc.chooseLanguage,themeProvider),
-        body: Container(
-          child: Column(
-            children: [
-              Container(
-  height: 50,
-  width: double.infinity,
-  margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 8),
-  decoration: BoxDecoration(
-    color: themeProvider.darkTheme
-        ? const Color(0xff282836)
-        : const Color(0xffF3F3F3),
-    borderRadius: BorderRadius.circular(7),
-  ),
-  child: TextField(
-    controller: _searchController,
-    keyboardType: TextInputType.url,
-    magnifierConfiguration: TextMagnifierConfiguration.disabled,
-    onChanged: _filterLanguages,
-
-    /// THIS FIXES THE ISSUE
-    textAlignVertical: TextAlignVertical.center,
-
-    decoration: InputDecoration(
-      border: InputBorder.none,
-
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-
-      hintText: loc.searchLanguage,
-      hintStyle: const TextStyle(
-        color: Color(0xff6D6D81),
-        fontSize: 14,
-      ),
-
-      prefixIcon: Padding(
-        padding: const EdgeInsets.all(14), // equal padding
-        child: SvgPicture.asset(
-          'assets/images/ai-icons/Search_suggestion.svg',
-          height: 18,
-          color: themeProvider.darkTheme ? Color(0xff6D6D81) : Color(0xff6D6D81),
+     final downloadProvider = Provider.of<DownloadProvider>(context);
+    return Stack(
+      children: [
+         Positioned.fill(
+        child:themeProvider.darkTheme ? Image.asset(
+          'assets/images/ai-icons/new/background_map.gif',
+          fit: BoxFit.cover,
+        ): Image.asset(
+          'assets/images/ai-icons/new/BG_wht_theme.gif',
+          fit: BoxFit.cover,
         ),
       ),
-      suffixIcon: _searchController.text.isNotEmpty
-          ? IconButton(
-              icon: const Icon(
-                Icons.close,
-                size: 18,
-              ),
-              onPressed: () {
-                _searchController.clear();
-                _filterLanguages('');
-                setState(() {});
-              },
-            )
-          : null,
-    ),
-    style: theme.textTheme.bodyMedium,
-  ),
-),
-            //   Container(
-            //      height: 50,
-            // width: double.infinity,
-            // margin:
-            //     const EdgeInsets.only(top:10, left: 10, right: 10, bottom: 8),
-            // decoration: BoxDecoration(
-            //     color: themeProvider.darkTheme
-            //         ? const Color(0xff282836)
-            //         : const Color(0xffF3F3F3),
-            //     borderRadius: BorderRadius.circular(7)),
-            //     child: TextField(
-            //                                         onSubmitted: (value) {
-                                                    
-            //                                         },
-            //                                         keyboardType:
-            //                                             TextInputType.url,
-            //                                         decoration: InputDecoration(
-            //                                            contentPadding: const EdgeInsets.only(left:10,
-            //                 top: 10.0, right: 10.0, bottom: 10.0),
-            //             border: InputBorder.none,
-            //             hintText:loc.searchLanguage,
-            //             prefixIcon: Padding(
-            //               padding:EdgeInsets.only(top: 13,bottom: 13,left: 13), //EdgeInsetsDirectional.only(start: 20.0),
-            //               child: SvgPicture.asset('assets/images/ai-icons/Search_suggestion.svg',height: 10,),
-            //             ),
-                        
-            //            // prefix: 
-            //             hintStyle: TextStyle(
-            //                 color: const Color(0xff6D6D81),
-            //                 fontSize: 14.0,
-            //                 fontWeight: FontWeight.normal),
-            //                 ),
-            //         style: theme.textTheme.bodyMedium,
-                                                     
-                                                    
-            //                                         controller:
-            //                                             _searchController,
-            //                                             magnifierConfiguration:TextMagnifierConfiguration.disabled,
-            //                                      onChanged: _filterLanguages,
-                                                    
-            //                                       ),
-            //   ),
-              Expanded(
-  child: ListView.builder(
-    itemCount: _filteredLanguages.length,
-itemBuilder: (c, i) {
-  final language = _filteredLanguages[i];
-    // itemCount: localeProvider.languages.length,
-    // itemBuilder: (c, i) {
-    //     final language =
-    //               localeProvider.languages.keys.elementAt(i);
-   
-      return InkWell(
-        onTap: () {
-          //setState(() {});
-          localeProvider.setLocale(localeProvider.languages[language]!);
-          print('THE SELECTED APP LANGUAGE _____----____$language ${localeProvider.selectedLanguage}');
-          //speech.setCurrentLocale(normalizeLocale(localeId));
-          Navigator.pop(context);
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+            appBar:normalAppBar(context,loc.chooseLanguage,themeProvider,()=> Navigator.pop(context)),
+            body: Container(
+              child: Column(
+                children: [
+                  Container(
+          height: 50,
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 8),
           decoration: BoxDecoration(
-            //borderRadius: BorderRadius.circular(10),
-            // color:// speech.currentLocale == normalizeLocale(localeId) &&
-            //         !themeProvider.darkTheme
-            //     ? const Color(0xffF3F3F3)
-            //     : Colors.transparent,
-            border: Border(bottom: BorderSide(color:i != localeProvider.languages.length ?  themeProvider.darkTheme
-                  ? const Color(0xff39394B)
-                  : Color(0xffDADADA): Colors.transparent ) )
-            
-            //  Border. all(
-            //   color: //speech.currentLocale == normalizeLocale(localeId) &&
-            //           themeProvider.darkTheme
-            //       ? const Color(0xff39394B)
-            //       : Colors.transparent,
-            // ),
+        color: themeProvider.darkTheme
+            ? const Color(0xff111111)
+            : const Color(0xffFFFFFF),
+            border: Border.all(color: themeProvider.darkTheme ? Color(0xff444444) : Color(0xffD4D4D4)),
+       // borderRadius: BorderRadius.circular(7),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      language,
-                      style: const TextStyle(fontFamily: 'Poppins'),
+          child: TextField(
+        controller: _searchController,
+        keyboardType: TextInputType.url,
+        magnifierConfiguration: TextMagnifierConfiguration.disabled,
+        onChanged: _filterLanguages,
+        
+        /// THIS FIXES THE ISSUE
+        textAlignVertical: TextAlignVertical.center,
+        
+        decoration: InputDecoration(
+          border: InputBorder.none,
+        
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+        
+          hintText: loc.searchLanguage,
+          hintStyle:  TextStyle(
+            color: Color(0xff737373),
+            fontFamily: 'Inter',
+            fontSize: 14,
+          ),
+        
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(14), // equal padding
+            child: SvgPicture.asset(
+              'assets/images/ai-icons/Search_suggestion.svg',
+              height: 18,
+              color: Color(0xff737373),
+            ),
+          ),
+          suffixIcon: _searchController.text.isNotEmpty
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    size: 18,
+                  ),
+                  onPressed: () {
+                    _searchController.clear();
+                    _filterLanguages('');
+                    setState(() {});
+                  },
+                )
+              : null,
+        ),
+        style: theme.textTheme.bodyMedium!.copyWith(fontFamily: 'Inter'),
+          ),
+        ),
+                //   Container(
+                //      height: 50,
+                // width: double.infinity,
+                // margin:
+                //     const EdgeInsets.only(top:10, left: 10, right: 10, bottom: 8),
+                // decoration: BoxDecoration(
+                //     color: themeProvider.darkTheme
+                //         ? const Color(0xff282836)
+                //         : const Color(0xffF3F3F3),
+                //     borderRadius: BorderRadius.circular(7)),
+                //     child: TextField(
+                //                                         onSubmitted: (value) {
+                                                        
+                //                                         },
+                //                                         keyboardType:
+                //                                             TextInputType.url,
+                //                                         decoration: InputDecoration(
+                //                                            contentPadding: const EdgeInsets.only(left:10,
+                //                 top: 10.0, right: 10.0, bottom: 10.0),
+                //             border: InputBorder.none,
+                //             hintText:loc.searchLanguage,
+                //             prefixIcon: Padding(
+                //               padding:EdgeInsets.only(top: 13,bottom: 13,left: 13), //EdgeInsetsDirectional.only(start: 20.0),
+                //               child: SvgPicture.asset('assets/images/ai-icons/Search_suggestion.svg',height: 10,),
+                //             ),
+                            
+                //            // prefix: 
+                //             hintStyle: TextStyle(
+                //                 color: const Color(0xff6D6D81),
+                //                 fontSize: 14.0,
+                //                 fontWeight: FontWeight.normal),
+                //                 ),
+                //         style: theme.textTheme.bodyMedium,
+                                                         
+                                                        
+                //                                         controller:
+                //                                             _searchController,
+                //                                             magnifierConfiguration:TextMagnifierConfiguration.disabled,
+                //                                      onChanged: _filterLanguages,
+                                                        
+                //                                       ),
+                //   ),
+                  Expanded(
+          child: ListView.builder(
+        itemCount: _filteredLanguages.length,
+        itemBuilder: (c, i) {
+          final language = _filteredLanguages[i];
+        // itemCount: localeProvider.languages.length,
+        // itemBuilder: (c, i) {
+        //     final language =
+        //               localeProvider.languages.keys.elementAt(i);
+           
+          return InkWell(
+            onTap: () {
+              //setState(() {});
+              localeProvider.setLocale(localeProvider.languages[language]!);
+              print('THE SELECTED APP LANGUAGE _____----____$language ${localeProvider.selectedLanguage}');
+
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+  context.read<DownloadProvider>()
+      .setLocalizationObject(AppLocalizations.of(context)!);
+});
+           //  downloadProvider.setLocalizationObject(AppLocalizations.of(context)!);
+              //speech.setCurrentLocale(normalizeLocale(localeId));
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                //borderRadius: BorderRadius.circular(10),
+                // color:// speech.currentLocale == normalizeLocale(localeId) &&
+                //         !themeProvider.darkTheme
+                //     ? const Color(0xffF3F3F3)
+                //     : Colors.transparent,
+               
+               
+               
+                border: Border(bottom: BorderSide(color:i != localeProvider.languages.length ?  themeProvider.darkTheme
+                      ?  Color(0xff444444)
+                      : Color(0xffD4D4D4): Colors.transparent,width: 0.4) )
+                
+               
+                //  Border. all(
+                //   color: //speech.currentLocale == normalizeLocale(localeId) &&
+                //           themeProvider.darkTheme
+                //       ? const Color(0xff39394B)
+                //       : Colors.transparent,
+                // ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          language,
+                          style: TextStyle(fontFamily: 'Inter',color: themeProvider.darkTheme ? Color(0xffFFFFFF) : Color(0xff0B0B0B) ),
+                        ),
+                        Text(localeProvider.getLocalizedLanguageName(context,language),style: TextStyle(fontFamily: 'Roboto', fontSize:10,color: themeProvider.darkTheme ? Color(0xffACACAC) : Color(0xff737373)),)
+                      ],
                     ),
-                    Text(localeProvider.getLocalizedLanguageName(context,language),style: TextStyle(fontFamily: 'Poppins', fontSize:10,color: themeProvider.darkTheme ? Color(0xffB9B9BE) : Color(0xff78787D)),)
-                  ],
-                ),
+                  ),
+                  Visibility(
+                    visible:language== localeProvider.selectedLanguage,   // speech.currentLocale == normalizeLocale(localeId),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: SvgPicture.asset('assets/images/tick.svg',height: 20,),
+                    ),
+                  ),
+                ],
               ),
-              Visibility(
-                visible:language== localeProvider.selectedLanguage,   // speech.currentLocale == normalizeLocale(localeId),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: SvgPicture.asset('assets/images/tick.svg',height: 20,),
-                ),
+            ),
+          );
+        },
+          ),
+        )
+                ],
               ),
-            ],
-          ),
+            ),
         ),
-      );
-    },
-  ),
-)
-            ],
-          ),
-        ),
+      ],
     );
   }
 } 

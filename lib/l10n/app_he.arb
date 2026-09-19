@@ -185,6 +185,102 @@
 
 
 
+
+
+"searchusing": "חיפוש באמצעות",
+  "addTabToNewGroup": "הוספת כרטיסייה לקבוצה חדשה",
+  "invitePeople": "הזמנת אנשים",
+  "uploadFromGallery": "העלאה מהגלריה",
+  "noQRCodeFound": "לא נמצא קוד QR בתמונה",
+  "searchBarPosition": "מיקום סרגל החיפוש",
+  "choosethePosition": "בחרו את מיקום סרגל החיפוש.",
+  "iPAddress": "כתובת IP",
+   "vpnIP": "כתובת IP של VPN",
+   "myIP": "כתובת ה-IP שלי",
+   "marketUpdate": "עדכון שוק",
+   "searchYourTabs": "חיפוש בכרטיסיות שלך",
+   "newTabGroup": "קבוצת כרטיסיות חדשה",
+   "selectTab": "בחירת כרטיסייה",
+   "selectTabs": "בחירת כרטיסיות",
+   "closeAllTabs": "סגירת כל הכרטיסיות",
+   "deleteTabGroup": "מחיקת קבוצת כרטיסיות",
+   "rename": "שינוי שם",
+   "renameGroup": "שינוי שם הקבוצה",
+   "ungroupTab": "ביטול קיבוץ הכרטיסייה",
+   "deleteGroup": "מחיקת הקבוצה",
+   "addToTabGroup": "הוספה לקבוצת כרטיסיות",
+   "editGroupName": "עריכת שם הקבוצה",
+   "editGroupColor": "עריכת צבע הקבוצה",
+   "closeTab": "סגירת כרטיסייה",
+   "doYouWantToUngroup": "האם אתה באמת רוצה לבטל את הקיבוץ של קבוצת כרטיסיות זו?",
+   "ungroupTabGroup": "ביטול קיבוץ קבוצת כרטיסיות",
+   "ungroup": "ביטול קיבוץ",
+   "deleteGroup": "מחיקת קבוצה",
+   "deletetabGroup": "מחיקת קבוצת כרטיסיות",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "הוספה אל",
+   "tabs": "כרטיסיות",
+   "done": "סיום",
+   "create": "יצירה",
+   "groupColor": "צבע הקבוצה",
+   "groupName": "שם הקבוצה",
+   "newTabGroup": "קבוצת כרטיסיות חדשה",
+   "addtoNewTabGroup": "הוספה לקבוצת כרטיסיות חדשה",
+   "tabGroups": "קבוצות כרטיסיות",
+   "tabGroup": "קבוצת כרטיסיות",
+   "tabsSelected": "כרטיסיות שנבחרו",
+   "privateResearch": "לדוגמה, מחקר פרטי",
+   "deselectAll": "ביטול בחירת הכול",
+   "selected": "נבחר",
+
+
+   "close": "סגירה",
+   "top": " למעלה",
+   "bottom": "למטה",
+
+
+
+  "closeAllTabsConfirmation": "פעולה זו תסגור לצמיתות את כל {tabCount} הכרטיסיות בתוך \"{tabGroupName}\". לא ניתן לבטל פעולה זו.",
+"@closeAllTabsConfirmation": {
+  "description": "הודעת אישור בעת סגירת כל הכרטיסיות בקבוצת כרטיסיות",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "שינוי צומת",
+"freeenameWebDomain" : "דומיין Web3 של FreeName",
+"enableFreeNameWeb" : "הפעל תמיכה בדומיין Web3 של FreeName",
+"couldnotDownloadBootstrap" : "לא ניתן להוריד את קובץ האתחול של Belnet. בדוק את החיבור שלך ונסה שוב",
+"couldNotEstablishConnection" : "לא ניתן ליצור חיבור ל-Belnet. נסה שוב",
+"theBelnetServiceNotStarted": "לא ניתן להפעיל את שירות Belnet. נסה שוב",
+"exitNodeUnreachable" : "צומת היציאה אינו נגיש, מתחבר מחדש",
+
+
+"tab": "כרטיסייה",
+"ungroupTabs": "ביטול קיבוץ כרטיסיות",
+"closeGroup": "סגירת קבוצה",
+"ungroupSelectedTabs": "האם אתה בטוח שברצונך לבטל את קיבוץ הכרטיסיות שנבחרו מתוך ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "הודעת אישור בעת ביטול קיבוץ של כרטיסיות שנבחרו מקבוצת כרטיסיות",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Beldex היא מערכת אקולוגית של יישומים מבוזרים ושומרי פרטיות. אפליקציית דפדפן Beldex היא אחת מהאפליקציות במערכת זו, הכוללת גם יישומים כגון BChat, BelNet ופרוטוקול Beldex. דפדפן Beldex הוא השער שלך לחוויית גלישה חלקה ודיסקרטית, שבה הנתונים שלך נשארים שלך בלבד. הדפדפן, הבנוי על תשתית בלוקצ׳יין חזקה, מבטיח פרטיות ואנונימיות למשתמשיו.",
 "atBeldex": " \n ב-Beldex אנו מאמינים בהעצמת אנשים באמצעות הזכות הבסיסית לשלוט בטביעת הרגל הדיגיטלית שלהם. דפדפן Beldex תוכנן לספק סביבה מקוונת מאובטחת ודיסקרטית לתקשורת ולאינטראקציה עם העולם הדיגיטלי.",
 "titlebns": "\nBNS",

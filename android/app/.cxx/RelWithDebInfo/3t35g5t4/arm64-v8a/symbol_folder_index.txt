@@ -1,0 +1,1 @@
+/home/guna/Documents/gabsid/projects/beldex-browser/beldex-browser/build/app/intermediates/cxx/RelWithDebInfo/3t35g5t4/obj/arm64-v8a

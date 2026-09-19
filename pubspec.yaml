@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.4.0+12 # 1.3.0+8
+version: 1.4.1+15 # 1.3.0+8
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
@@ -141,6 +141,8 @@ dependencies:
   #qr reader
   mobile_scanner: 7.0.1
 
+  image_picker: 1.1.0
+
   #audio_session: ^0.2.2
 
   #phone_state: #^3.0.0
@@ -184,6 +186,7 @@ flutter:
     - assets/icon/
     - assets/images/flags/
     - assets/images/ai-icons/
+    - assets/images/ai-icons/new/
     - assets/readability.js
     - assets/tldList.txt
     # - assets/images/Belnet_Text_White.png
@@ -205,6 +208,17 @@ flutter:
         - asset: fonts/Poppins-Regular.ttf
         - asset: fonts/Poppins-SemiBold.ttf
         - asset: assets/fonts/Poppins-ExtraLight.ttf
+    - family: Conthrax
+      fonts:
+        - asset: assets/fonts/Conthrax-SemiBold.otf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/RobotoMono-Light.ttf
+    - family: Inter 
+      fonts: 
+        - asset: assets/fonts/Inter_18pt-Regular.ttf
+
+          #weight: 400
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

@@ -201,6 +201,105 @@
 
 
 
+"searchusing": "Buscar usando",
+  "addTabToNewGroup": "Agregar pestaña a un nuevo grupo",
+  "invitePeople": "Invitar personas",
+  "uploadFromGallery": "Subir desde la galería",
+  "noQRCodeFound": "No se encontró código QR en la imagen",
+  "searchBarPosition": "Posición de la barra de búsqueda",
+  "choosethePosition": "Elija la posición de la barra de búsqueda",
+  "iPAddress": "Dirección IP",
+   "vpnIP": "IP de VPN",
+   "myIP": "Mi IP",
+   "marketUpdate": "Actualización del mercado",
+   "searchYourTabs": "Buscar en sus pestañas",
+   "newTabGroup": "Nuevo grupo de pestañas",
+   "selectTab": "Seleccionar pestaña",
+   "selectTabs": "Seleccionar pestañas",
+   "closeAllTabs": "Cerrar todas las pestañas",
+   "deleteTabGroup": "Eliminar grupo de pestañas",
+   "rename": "Cambiar nombre",
+   "renameGroup": "Cambiar nombre del grupo",
+   "ungroupTab": "Desagrupar pestaña",
+   "deleteGroup": "Eliminar grupo",
+   "addToTabGroup": "Añadir al grupo de pestañas",
+   "editGroupName": "Editar nombre del grupo",
+   "editGroupColor": "Editar color del grupo",
+   "closeTab": "Cerrar pestaña",
+   "doYouWantToUngroup": "¿De verdad quieres desagrupar este grupo de pestañas?",
+   "ungroupTabGroup": "Desagrupar grupo de pestañas",
+   "ungroup": "Desagrupar",
+   "deleteGroup": "Eliminar grupo",
+   "deletetabGroup": "Eliminar grupo de pestañas",
+   "thisActionWillPermenantClose": "Esta acción cerrará permanentemente las",
+   "inside": "dentro del grupo de pestañas seleccionado",
+   "thisCannotBeUndone": "Esta acción no se puede deshacer",
+   "addTo": "Añadir a",
+   "tabs": "Pestañas",
+   "done": "Listo",
+   "create": "Crear",
+   "groupColor": "Color del grupo",
+   "groupName": "Nombre del grupo",
+   "newTabGroup": "Nuevo grupo de pestañas",
+   "addtoNewTabGroup": "Añadir a un nuevo grupo de pestañas",
+   "tabGroups": "Grupos de pestañas",
+   "tabGroup": "Grupo de pestañas",
+   "tabsSelected": "Pestañas seleccionadas",
+   "privateResearch": "Ej. Investigación privada",
+   "deselectAll": "Deseleccionar todo",
+   "selected": "Seleccionadas",
+
+
+
+  "close": "Cerrar",
+
+"top": "Arriba",
+"bottom": "Abajo",
+
+
+"closeAllTabsConfirmation": "Esta acción cerrará permanentemente las {tabCount} pestañas dentro de «{tabGroupName}». Esta acción no se puede deshacer.",
+"@closeAllTabsConfirmation": {
+  "description": "Mensaje de confirmación al cerrar todas las pestañas de un grupo de pestañas",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+"changingNode": "Cambiar nodo..",
+"freeenameWebDomain" : "Dominio FreeName Web3",
+"enableFreeNameWeb" : "Habilitar compatibilidad con dominios FreeName Web3",
+"couldnotDownloadBootstrap" : "No se pudo descargar el archivo de arranque de Belnet. Compruebe su conexión e inténtelo de nuevo",
+"couldNotEstablishConnection" : "No se pudo establecer la conexión con Belnet. Inténtelo de nuevo",
+"theBelnetServiceNotStarted": "No se pudo iniciar el servicio Belnet. Inténtelo de nuevo",
+"exitNodeUnreachable" : "Nodo de salida inaccesible, reconectando",
+
+
+
+"tab": "Pestaña",
+"ungroupTabs": "Desagrupar pestañas",
+"closeGroup": "Cerrar grupo",
+"ungroupSelectedTabs": "¿Realmente quieres desagrupar las pestañas seleccionadas de ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Mensaje de confirmación al desagrupar las pestañas seleccionadas de un grupo de pestañas",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
+
 "beldexIsAnEcosystem": "Beldex es un ecosistema de aplicaciones descentralizadas y orientadas a preservar la confidencialidad. La aplicación del Navegador Beldex es una de las aplicaciones que componen este ecosistema, junto con BChat, BelNet y el protocolo Beldex. El Navegador Beldex es tu puerta de entrada a una experiencia en línea fluida y confidencial, donde tus datos te pertenecen solo a ti. Construido sobre una infraestructura blockchain robusta, el navegador Beldex garantiza confidencialidad y anonimato a sus usuarios.",
 "atBeldex": " \n En Beldex, creemos en empoderar a las personas otorgándoles el derecho fundamental de controlar su huella digital. El Navegador Beldex está diseñado para brindar un entorno en línea seguro y confidencial para que los usuarios puedan comunicarse e interactuar con el mundo digital.",
 "titlebns": "\nBNS",

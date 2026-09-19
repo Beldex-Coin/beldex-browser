@@ -531,6 +531,187 @@ class AppLocalizationsId extends AppLocalizations {
   String get searchEngineUpdated => 'Mesin pencari berhasil diperbarui!';
 
   @override
+  String get searchusing => 'Cari menggunakan';
+
+  @override
+  String get addTabToNewGroup => 'Tambahkan Tab ke grup baru';
+
+  @override
+  String get invitePeople => 'Undang orang';
+
+  @override
+  String get uploadFromGallery => 'Unggah dari galeri';
+
+  @override
+  String get noQRCodeFound => 'Tidak ada kode QR yang ditemukan dalam gambar';
+
+  @override
+  String get searchBarPosition => 'Posisi bilah pencarian';
+
+  @override
+  String get choosethePosition => 'Pilih posisi bilah pencarian';
+
+  @override
+  String get iPAddress => 'Alamat IP';
+
+  @override
+  String get vpnIP => 'IP VPN';
+
+  @override
+  String get myIP => 'IP Saya';
+
+  @override
+  String get marketUpdate => 'Pembaruan pasar';
+
+  @override
+  String get searchYourTabs => 'Cari tab Anda';
+
+  @override
+  String get newTabGroup => 'Grup Tab Baru';
+
+  @override
+  String get selectTab => 'Pilih tab';
+
+  @override
+  String get selectTabs => 'Pilih tab';
+
+  @override
+  String get deleteTabGroup => 'Hapus grup tab';
+
+  @override
+  String get rename => 'Ganti nama';
+
+  @override
+  String get renameGroup => 'Ganti Nama Grup';
+
+  @override
+  String get ungroupTab => 'Keluarkan tab dari grup';
+
+  @override
+  String get deleteGroup => 'Hapus Grup';
+
+  @override
+  String get addToTabGroup => 'Grup Tab Baru';
+
+  @override
+  String get editGroupName => 'Edit nama grup';
+
+  @override
+  String get editGroupColor => 'Edit warna grup';
+
+  @override
+  String get closeTab => 'Tutup tab';
+
+  @override
+  String get doYouWantToUngroup => 'Apakah Anda benar-benar ingin menghapus grup tab ini?';
+
+  @override
+  String get ungroupTabGroup => 'Hapus grup tab';
+
+  @override
+  String get ungroup => 'Hapus grup';
+
+  @override
+  String get deletetabGroup => 'Hapus Grup Tab';
+
+  @override
+  String get thisActionWillPermenantClose => 'This action will permanently close all';
+
+  @override
+  String get inside => 'inside';
+
+  @override
+  String get thisCannotBeUndone => 'This can not be undone';
+
+  @override
+  String get addTo => 'Tambahkan Ke';
+
+  @override
+  String get tabs => 'Tab';
+
+  @override
+  String get done => 'Selesai';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get groupColor => 'Warna grup';
+
+  @override
+  String get groupName => 'Nama grup';
+
+  @override
+  String get addtoNewTabGroup => 'Tambahkan ke grup tab baru';
+
+  @override
+  String get tabGroups => 'Grup tab';
+
+  @override
+  String get tabGroup => 'Grup tab';
+
+  @override
+  String get tabsSelected => 'Tab yang dipilih';
+
+  @override
+  String get privateResearch => 'mis. Riset Pribadi';
+
+  @override
+  String get deselectAll => 'Batalkan semua pilihan';
+
+  @override
+  String get selected => 'Dipilih';
+
+  @override
+  String get close => 'Tutup';
+
+  @override
+  String get top => 'atas';
+
+  @override
+  String get bottom => 'bawah';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Tindakan ini akan menutup secara permanen semua $tabCount tab di dalam “$tabGroupName”. Tindakan ini tidak dapat dibatalkan';
+  }
+
+  @override
+  String get changingNode => 'Mengubah Node..';
+
+  @override
+  String get freeenameWebDomain => 'Domain Web3 FreeName';
+
+  @override
+  String get enableFreeNameWeb => 'Aktifkan dukungan domain Web3 FreeName';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Tidak dapat mengunduh file bootstrap Belnet. Harap periksa koneksi Anda dan coba lagi';
+
+  @override
+  String get couldNotEstablishConnection => 'Tidak dapat membuat koneksi Belnet. Harap coba lagi';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Layanan Belnet tidak dapat dimulai. Harap coba lagi';
+
+  @override
+  String get exitNodeUnreachable => 'Node keluar tidak terjangkau, sedang menyambungkan kembali';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Batalkan pengelompokan tab';
+
+  @override
+  String get closeGroup => 'Tutup grup';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Apakah Anda yakin ingin membatalkan pengelompokan tab yang dipilih dari \$$tabGroupName?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex adalah sebuah ekosistem aplikasi terdesentralisasi yang menjaga privasi. Aplikasi Beldex Browser adalah salah satu bagian dari ekosistem ini, yang juga mencakup BChat, BelNet, dan protokol Beldex. Beldex Browser adalah gerbang Anda menuju pengalaman online yang mulus dan privat, di mana data Anda tetap menjadi milik Anda sendiri. Dibangun di atas infrastruktur blockchain yang kuat, Beldex Browser menjamin privasi dan anonimitas bagi para penggunanya.';
 
   @override

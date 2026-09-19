@@ -185,6 +185,102 @@
 
 
 
+
+
+"searchusing": "Αναζήτηση με χρήση",
+  "addTabToNewGroup": "Προσθήκη καρτέλας σε νέα ομάδα",
+  "invitePeople": "Πρόσκληση ατόμων",
+  "uploadFromGallery": "Μεταφόρτωση από τη συλλογή",
+  "noQRCodeFound": "Δεν βρέθηκε κωδικός QR στην εικόνα",
+  "searchBarPosition": "Θέση γραμμής αναζήτησης",
+  "choosethePosition": "Επιλέξτε τη θέση της γραμμής αναζήτησης",
+  "iPAddress": "Διεύθυνση IP",
+   "vpnIP": "IP VPN",
+   "myIP": "Η IP μου",
+   "marketUpdate": "Ενημέρωση αγοράς",
+   "searchYourTabs": "Αναζήτηση στις καρτέλες σας",
+   "newTabGroup": "Νέα ομάδα καρτελών",
+   "selectTab": "Επιλογή καρτέλας",
+   "selectTabs": "Επιλογή καρτελών",
+   "closeAllTabs": "Κλείσιμο όλων των καρτελών",
+   "deleteTabGroup": "Διαγραφή ομάδας καρτελών",
+   "rename": "Μετονομασία",
+   "renameGroup": "Μετονομασία ομάδας",
+   "ungroupTab": "Αφαίρεση καρτέλας από την ομάδα",
+   "deleteGroup": "Διαγραφή ομάδας",
+   "addToTabGroup": "Προσθήκη στην ομάδα καρτελών",
+   "editGroupName": "Επεξεργασία ονόματος ομάδας",
+   "editGroupColor": "Επεξεργασία χρώματος ομάδας",
+   "closeTab": "Κλείσιμο καρτέλας",
+   "doYouWantToUngroup": "Θέλετε πραγματικά να καταργήσετε την ομαδοποίηση αυτής της ομάδας καρτελών;",
+   "ungroupTabGroup": "Κατάργηση ομαδοποίησης ομάδας καρτελών",
+   "ungroup": "Κατάργηση ομαδοποίησης",
+   "deleteGroup": "Διαγραφή ομάδας",
+   "deletetabGroup": "Διαγραφή ομάδας καρτελών",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Προσθήκη σε",
+   "tabs": "Καρτέλες",
+   "done": "Τέλος",
+   "create": "Δημιουργία",
+   "groupColor": "Χρώμα ομάδας",
+   "groupName": "Όνομα ομάδας",
+   "newTabGroup": "Νέα ομάδα καρτελών",
+   "addtoNewTabGroup": "Προσθήκη σε νέα ομάδα καρτελών",
+   "tabGroups": "Ομάδες καρτελών",
+   "tabGroup": "Ομάδα καρτελών",
+   "tabsSelected": "Επιλεγμένες καρτέλες",
+   "privateResearch": "π.χ. Ιδιωτική έρευνα",
+   "deselectAll": "Αποεπιλογή όλων",
+   "selected": "Επιλεγμένο",
+
+
+   "close": "Κλείσιμο",
+   "top": " επάνω",
+   "bottom": "κάτω",
+
+
+
+  "closeAllTabsConfirmation":"Αυτή η ενέργεια θα κλείσει οριστικά και τις {tabCount} καρτέλες που βρίσκονται στην «{tabGroupName}». Αυτή η ενέργεια δεν μπορεί να αναιρεθεί",
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Αλλαγή κόμβου..",
+"freeenameWebDomain" : "Τομέας Web3 FreeName",
+"enableFreeNameWeb" : "Ενεργοποίηση υποστήριξης τομέα Web3 FreeName",
+"couldnotDownloadBootstrap" : "Δεν ήταν δυνατή η λήψη του αρχείου εκκίνησης του Belnet. Ελέγξτε τη σύνδεσή σας και δοκιμάστε ξανά",
+"couldNotEstablishConnection" : "Δεν ήταν δυνατή η δημιουργία σύνδεσης με το Belnet. Δοκιμάστε ξανά",
+"theBelnetServiceNotStarted": "Δεν ήταν δυνατή η εκκίνηση της υπηρεσίας Belnet. Δοκιμάστε ξανά",
+"exitNodeUnreachable" : "Ο κόμβος εξόδου δεν είναι προσβάσιμος, γίνεται επανασύνδεση",
+
+
+"tab": "Καρτέλα",
+"ungroupTabs": "Κατάργηση ομαδοποίησης καρτελών",
+"closeGroup": "Κλείσιμο ομάδας",
+"ungroupSelectedTabs": "Θέλετε σίγουρα να καταργήσετε την ομαδοποίηση των επιλεγμένων καρτελών από την ${tabGroupName};",
+"@ungroupSelectedTabs": {
+  "description": "Μήνυμα επιβεβαίωσης κατά την κατάργηση ομαδοποίησης επιλεγμένων καρτελών από μια ομάδα καρτελών",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
 "beldexIsAnEcosystem": "Το Beldex είναι ένα οικοσύστημα αποκεντρωμένων εφαρμογών που διατηρούν την ιδιωτικότητα. Η εφαρμογή του Προγράμματος περιήγησης Beldex είναι ένα από τα στοιχεία αυτού του οικοσυστήματος, το οποίο περιλαμβάνει επίσης εφαρμογές όπως το BChat, το BelNet και το πρωτόκολλο Beldex. Το Πρόγραμμα περιήγησης Beldex είναι η πύλη σας σε μια απρόσκοπτη και ιδιωτική εμπειρία στο διαδίκτυο, όπου τα δεδομένα σας παραμένουν αποκλειστικά δικά σας. Χτισμένο πάνω σε μια ισχυρή υποδομή blockchain, το πρόγραμμα περιήγησης Beldex διασφαλίζει ιδιωτικότητα και ανωνυμία για τους χρήστες του.",
 "atBeldex": " \n Στο Beldex, πιστεύουμε στην ενδυνάμωση των χρηστών μέσω του θεμελιώδους δικαιώματος να ελέγχουν το ψηφιακό τους αποτύπωμα. Το πρόγραμμα περιήγησης Beldex έχει σχεδιαστεί για να προσφέρει ένα ασφαλές και ιδιωτικό διαδικτυακό περιβάλλον, όπου οι χρήστες μπορούν να επικοινωνούν και να αλληλεπιδρούν με τον ψηφιακό κόσμο.",
 "titlebns": "\nBNS",

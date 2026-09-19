@@ -185,6 +185,103 @@
   "searchEngineUpdated": "Mesin pencari berhasil diperbarui!",
 
 
+
+ "searchusing": "Cari menggunakan",
+  "addTabToNewGroup": "Tambahkan Tab ke grup baru",
+  "invitePeople": "Undang orang",
+  "uploadFromGallery": "Unggah dari galeri",
+  "noQRCodeFound": "Tidak ada kode QR yang ditemukan dalam gambar",
+  "searchBarPosition": "Posisi bilah pencarian",
+  "choosethePosition": "Pilih posisi bilah pencarian",
+  "iPAddress": "Alamat IP",
+   "vpnIP": "IP VPN",
+   "myIP": "IP Saya",
+   "marketUpdate": "Pembaruan pasar",
+   "searchYourTabs": "Cari tab Anda",
+   "newTabGroup": "Grup tab baru",
+   "selectTab": "Pilih tab",
+   "selectTabs": "Pilih tab",
+   "closeAllTabs": "Tutup semua tab",
+   "deleteTabGroup": "Hapus grup tab",
+   "rename": "Ganti nama",
+   "renameGroup": "Ganti Nama Grup",
+   "ungroupTab": "Keluarkan tab dari grup",
+   "deleteGroup": "Hapus grup",
+   "addToTabGroup": "Grup Tab Baru",
+   "editGroupName": "Edit nama grup",
+   "editGroupColor": "Edit warna grup",
+   "closeTab": "Tutup tab",
+   "doYouWantToUngroup": "Apakah Anda benar-benar ingin menghapus grup tab ini?",
+   "ungroupTabGroup": "Hapus grup tab",
+   "ungroup": "Hapus grup",
+   "deleteGroup": "Hapus Grup",
+   "deletetabGroup": "Hapus Grup Tab",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Tambahkan Ke",
+   "tabs": "Tab",
+   "done": "Selesai",
+   "create": "Create",
+   "groupColor": "Warna grup",
+   "groupName": "Nama grup",
+   "newTabGroup": "Grup Tab Baru",
+   "addtoNewTabGroup": "Tambahkan ke grup tab baru",
+   "tabGroups": "Grup tab",
+   "tabGroup": "Grup tab",
+   "tabsSelected": "Tab yang dipilih",
+   "privateResearch": "mis. Riset Pribadi",
+   "deselectAll": "Batalkan semua pilihan",
+   "selected": "Dipilih",
+
+
+   "close": "Tutup",
+   "top": "atas",
+   "bottom": "bawah",
+
+
+
+  "closeAllTabsConfirmation": "Tindakan ini akan menutup secara permanen semua {tabCount} tab di dalam “{tabGroupName}”. Tindakan ini tidak dapat dibatalkan", 
+  "@closeAllTabsConfirmation": {
+    "description": "Confirmation message when closing all tabs in a tab group",
+    "placeholders": {
+      "tabCount": {
+        "type": "int"
+      },
+      "tabGroupName": {
+        "type": "String"
+      }
+    }
+  },
+
+
+
+
+"changingNode": "Mengubah Node..",
+"freeenameWebDomain" : "Domain Web3 FreeName",
+"enableFreeNameWeb" : "Aktifkan dukungan domain Web3 FreeName",
+"couldnotDownloadBootstrap" : "Tidak dapat mengunduh file bootstrap Belnet. Harap periksa koneksi Anda dan coba lagi",
+"couldNotEstablishConnection" : "Tidak dapat membuat koneksi Belnet. Harap coba lagi",
+"theBelnetServiceNotStarted": "Layanan Belnet tidak dapat dimulai. Harap coba lagi",
+"exitNodeUnreachable" : "Node keluar tidak terjangkau, sedang menyambungkan kembali",
+
+
+"tab": "Tab",
+"ungroupTabs": "Batalkan pengelompokan tab",
+"closeGroup": "Tutup grup",
+"ungroupSelectedTabs": "Apakah Anda yakin ingin membatalkan pengelompokan tab yang dipilih dari ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Pesan konfirmasi saat membatalkan pengelompokan tab yang dipilih dari grup tab",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 "beldexIsAnEcosystem": "Beldex adalah sebuah ekosistem aplikasi terdesentralisasi yang menjaga privasi. Aplikasi Beldex Browser adalah salah satu bagian dari ekosistem ini, yang juga mencakup BChat, BelNet, dan protokol Beldex. Beldex Browser adalah gerbang Anda menuju pengalaman online yang mulus dan privat, di mana data Anda tetap menjadi milik Anda sendiri. Dibangun di atas infrastruktur blockchain yang kuat, Beldex Browser menjamin privasi dan anonimitas bagi para penggunanya.",
 "atBeldex": " \n Di Beldex, kami percaya dalam memberdayakan individu dengan hak dasar untuk mengendalikan jejak digital mereka. Beldex Browser dirancang untuk menyediakan lingkungan online yang aman dan privat bagi pengguna untuk berkomunikasi dan berinteraksi dengan dunia digital.",
 "titlebns": "\nBNS",

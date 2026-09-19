@@ -185,6 +185,103 @@
 
 
 
+
+
+ "searchusing": "Iskanje z uporabo",
+  "addTabToNewGroup": "Dodaj zavihek v novo skupino",
+  "invitePeople": "Povabi osebe",
+  "uploadFromGallery": "Naloži iz galerije",
+  "noQRCodeFound": "na sliki ni najdene kode QR",
+  "searchBarPosition": "Položaj iskalne vrstice",
+  "choosethePosition": "Izberite položaj iskalne vrstice",
+  "iPAddress": "IP naslov",
+   "vpnIP": "IP VPN",
+   "myIP": "Moj IP",
+   "marketUpdate": "Posodobitev s trga",
+   "searchYourTabs": "Išči po zavihkih",
+   "newTabGroup": "Nova skupina zavihkov",
+   "selectTab": "Izberi zavihek",
+   "selectTabs": "Izberi zavihke",
+   "closeAllTabs": "Zapri vse zavihke",
+   "deleteTabGroup": "Izbriši skupino zavihkov",
+   "rename": "Preimenuj",
+   "renameGroup": "Preimenuj skupino",
+   "ungroupTab": "Razdruži zavihek",
+   "deleteGroup": "Izbriši skupino",
+   "addToTabGroup": "Dodaj v skupino zavihkov",
+   "editGroupName": "Uredi ime skupine",
+   "editGroupColor": "Uredi barvo skupine",
+   "closeTab": "Zapri zavihek",
+   "doYouWantToUngroup": "Ali res želite razdružiti to skupino zavihkov?",
+   "ungroupTabGroup": "Razdruži skupino zavihkov",
+   "ungroup": "Razdruži",
+   "deleteGroup": "Izbriši skupino",
+   "deletetabGroup": "Izbriši zavihek Skupina",
+   "thisActionWillPermenantClose": "This action will permanently close all",
+   "inside": "inside",
+   "thisCannotBeUndone": "This can not be undone",
+   "addTo": "Dodaj v",
+   "tabs": "Zavihki",
+   "done": "Končano",
+   "create": "Ustvari",
+   "groupColor": "Barva skupine",
+   "groupName": "Ime skupine",
+   "newTabGroup": "Nova skupina zavihkov",
+   "addtoNewTabGroup": "Dodaj v novo skupino zavihkov",
+   "tabGroups": "Skupine zavihkov",
+   "tabGroup": "Skupina zavihkov",
+   "tabsSelected": "Izbrane zavihke",
+   "privateResearch": "npr. Zasebna raziskava",
+   "deselectAll": "Prekliči izbor vseh",
+   "selected": "Izbrano",
+
+
+   "close": "Zapri",
+   "top": "zgoraj",
+   "bottom": "spodaj",
+
+
+
+  "closeAllTabsConfirmation": "To dejanje bo trajno zaprlo vse {tabCount} zavihke znotraj »{tabGroupName}«. Tega ni mogoče razveljaviti.",
+"@closeAllTabsConfirmation": {
+  "description": "Potrditveno sporočilo ob zapiranju vseh zavihkov v skupini zavihkov",
+  "placeholders": {
+    "tabCount": {
+      "type": "int"
+    },
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+"changingNode": "Spreminjanje vozlišča",
+"freeenameWebDomain" : "Domena Freename Web3",
+"enableFreeNameWeb" : "Omogoči podporo za domeno FreeName Web3",
+"couldnotDownloadBootstrap" : "Zagonske datoteke Belnet ni bilo mogoče prenesti. Preverite povezavo in poskusite znova",
+"couldNotEstablishConnection" : "Povezave Belnet ni bilo mogoče vzpostaviti. Poskusite znova",
+"theBelnetServiceNotStarted": "Storitve Belnet ni bilo mogoče zagnati. Poskusite znova",
+"exitNodeUnreachable" : "Izhodnega vozlišča ni mogoče doseči, ponovno se povezujem",
+
+
+"tab": "Zavihek",
+"ungroupTabs": "Razdruži zavihke",
+"closeGroup": "Zapri skupino",
+"ungroupSelectedTabs": "Ali ste prepričani, da želite razdružiti izbrane zavihke iz skupine ${tabGroupName}?",
+"@ungroupSelectedTabs": {
+  "description": "Potrditveno sporočilo ob razdruževanju izbranih zavihkov iz skupine zavihkov",
+  "placeholders": {
+    "tabGroupName": {
+      "type": "String"
+    }
+  }
+},
+
+
+
+
 "beldexIsAnEcosystem": "Beldex je ekosistem decentraliziranih aplikacij, ki ohranjajo zaupnost. Aplikacija Beldex Browser je ena izmed aplikacij v tem ekosistemu, ki vključuje tudi aplikacije, kot so BChat, BelNet in protokol Beldex. Brskalnik Beldex je vaš prehod do brezhibne in zaupne spletne izkušnje, kjer vaši podatki ostanejo samo vaši. Zgrajen na robustni infrastrukturi veriženja blokov brskalnik Beldex svojim uporabnikom zagotavlja zaupnost in anonimnost.",
 "atBeldex": " \n Pri Beldex verjamemo v opolnomočenje posameznikov s temeljno pravico do nadzora nad njihovim digitalnim odtisom. Brskalnik Beldex je zasnovan tako, da uporabnikom nudi varno in zaupno spletno okolje za komunikacijo in interakcijo z digitalnim svetom.",
 "titlebns": "\nBNS",

@@ -59,7 +59,7 @@ void updateScrnSecurity(bool newValue){
 
 Future<void> loadFromPrefs()async{
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  _scrnSecurity = prefs.getBool('scrnSecurity') ?? true;
+  _scrnSecurity = prefs.getBool('screenSecurity') ?? true;
    print('screenSecurity2-----> $_scrnSecurity');
   //notifyListeners();
   _adblock = prefs.getBool('adblock') ?? true;
@@ -74,7 +74,7 @@ Future<void> loadFromPrefs()async{
 Future<void> saveToPrefs()async{
   print('screenSecurity1-----> $_scrnSecurity');
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setBool('scrnSecurity', _scrnSecurity);
+  await prefs.setBool('screenSecurity', _scrnSecurity);
 
 }
 

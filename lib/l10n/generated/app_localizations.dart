@@ -1230,6 +1230,360 @@ abstract class AppLocalizations {
   /// **'Search engine updated successfully!'**
   String get searchEngineUpdated;
 
+  /// No description provided for @searchusing.
+  ///
+  /// In en, this message translates to:
+  /// **'Search using'**
+  String get searchusing;
+
+  /// No description provided for @addTabToNewGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Tab to new group'**
+  String get addTabToNewGroup;
+
+  /// No description provided for @invitePeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite people'**
+  String get invitePeople;
+
+  /// No description provided for @uploadFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload from gallery'**
+  String get uploadFromGallery;
+
+  /// No description provided for @noQRCodeFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No QR code found in image'**
+  String get noQRCodeFound;
+
+  /// No description provided for @searchBarPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Search bar position'**
+  String get searchBarPosition;
+
+  /// No description provided for @choosethePosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the position of the search bar'**
+  String get choosethePosition;
+
+  /// No description provided for @iPAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'IP Address'**
+  String get iPAddress;
+
+  /// No description provided for @vpnIP.
+  ///
+  /// In en, this message translates to:
+  /// **'VPN IP'**
+  String get vpnIP;
+
+  /// No description provided for @myIP.
+  ///
+  /// In en, this message translates to:
+  /// **'My IP'**
+  String get myIP;
+
+  /// No description provided for @marketUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Market update'**
+  String get marketUpdate;
+
+  /// No description provided for @searchYourTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search your tabs'**
+  String get searchYourTabs;
+
+  /// No description provided for @newTabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'New Tab group'**
+  String get newTabGroup;
+
+  /// No description provided for @selectTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Select tab'**
+  String get selectTab;
+
+  /// No description provided for @selectTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Tabs'**
+  String get selectTabs;
+
+  /// No description provided for @deleteTabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tab group'**
+  String get deleteTabGroup;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @renameGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename Group'**
+  String get renameGroup;
+
+  /// No description provided for @ungroupTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup tab'**
+  String get ungroupTab;
+
+  /// No description provided for @deleteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Group'**
+  String get deleteGroup;
+
+  /// No description provided for @addToTabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Tab group'**
+  String get addToTabGroup;
+
+  /// No description provided for @editGroupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit group name'**
+  String get editGroupName;
+
+  /// No description provided for @editGroupColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit group color'**
+  String get editGroupColor;
+
+  /// No description provided for @closeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Close tab'**
+  String get closeTab;
+
+  /// No description provided for @doYouWantToUngroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to ungroup this tab group?'**
+  String get doYouWantToUngroup;
+
+  /// No description provided for @ungroupTabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup tab group'**
+  String get ungroupTabGroup;
+
+  /// No description provided for @ungroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup'**
+  String get ungroup;
+
+  /// No description provided for @deletetabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete tab group'**
+  String get deletetabGroup;
+
+  /// No description provided for @thisActionWillPermenantClose.
+  ///
+  /// In en, this message translates to:
+  /// **'This action will permanently close all'**
+  String get thisActionWillPermenantClose;
+
+  /// No description provided for @inside.
+  ///
+  /// In en, this message translates to:
+  /// **'inside'**
+  String get inside;
+
+  /// No description provided for @thisCannotBeUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'This can not be undone'**
+  String get thisCannotBeUndone;
+
+  /// No description provided for @addTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Add To'**
+  String get addTo;
+
+  /// No description provided for @tabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Tabs'**
+  String get tabs;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @groupColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Group color'**
+  String get groupColor;
+
+  /// No description provided for @groupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get groupName;
+
+  /// No description provided for @addtoNewTabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to New tab group'**
+  String get addtoNewTabGroup;
+
+  /// No description provided for @tabGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Tab groups'**
+  String get tabGroups;
+
+  /// No description provided for @tabGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Tab group'**
+  String get tabGroup;
+
+  /// No description provided for @tabsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Tabs selected'**
+  String get tabsSelected;
+
+  /// No description provided for @privateResearch.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Private Research'**
+  String get privateResearch;
+
+  /// No description provided for @deselectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Deselect All'**
+  String get deselectAll;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @top.
+  ///
+  /// In en, this message translates to:
+  /// **'Top'**
+  String get top;
+
+  /// No description provided for @bottom.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottom'**
+  String get bottom;
+
+  /// Confirmation message when closing all tabs in a tab group
+  ///
+  /// In en, this message translates to:
+  /// **'This action will permanently close all {tabCount} tabs inside “{tabGroupName}”. This cannot be undone.'**
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName);
+
+  /// No description provided for @changingNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing Node..'**
+  String get changingNode;
+
+  /// No description provided for @freeenameWebDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'FreeName Web3 domain'**
+  String get freeenameWebDomain;
+
+  /// No description provided for @enableFreeNameWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable FreeName Web3 domain support'**
+  String get enableFreeNameWeb;
+
+  /// No description provided for @couldnotDownloadBootstrap.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the Belnet bootstrap file. Please check your connection and try again'**
+  String get couldnotDownloadBootstrap;
+
+  /// No description provided for @couldNotEstablishConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not establish Belnet connection. Please try again'**
+  String get couldNotEstablishConnection;
+
+  /// No description provided for @theBelnetServiceNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'The Belnet service could not be started. Please try again'**
+  String get theBelnetServiceNotStarted;
+
+  /// No description provided for @exitNodeUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit node unreachable, reconnecting'**
+  String get exitNodeUnreachable;
+
+  /// No description provided for @tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Tab'**
+  String get tab;
+
+  /// No description provided for @ungroupTabs.
+  ///
+  /// In en, this message translates to:
+  /// **'Ungroup tabs'**
+  String get ungroupTabs;
+
+  /// No description provided for @closeGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Close group'**
+  String get closeGroup;
+
+  /// Confirmation message when ungrouping selected tabs from a tab group
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to ungroup selected tabs from \${tabGroupName}?'**
+  String ungroupSelectedTabs(String tabGroupName);
+
   /// No description provided for @beldexIsAnEcosystem.
   ///
   /// In en, this message translates to:

@@ -531,6 +531,187 @@ class AppLocalizationsDe extends AppLocalizations {
   String get searchEngineUpdated => 'Suchmaschine erfolgreich aktualisiert!';
 
   @override
+  String get searchusing => 'Suche mit';
+
+  @override
+  String get addTabToNewGroup => 'Tab zu neuer Gruppe hinzufügen';
+
+  @override
+  String get invitePeople => 'Personen einladen';
+
+  @override
+  String get uploadFromGallery => 'Aus Galerie hochladen';
+
+  @override
+  String get noQRCodeFound => 'Kein QR-Code im Bild gefunden';
+
+  @override
+  String get searchBarPosition => 'Position der Suchleiste';
+
+  @override
+  String get choosethePosition => 'Position der Suchleiste auswählen';
+
+  @override
+  String get iPAddress => 'IP-Adresse';
+
+  @override
+  String get vpnIP => 'VPN-IP';
+
+  @override
+  String get myIP => 'Meine IP';
+
+  @override
+  String get marketUpdate => 'Markt-Update';
+
+  @override
+  String get searchYourTabs => 'Suchen Sie Ihre Tabs';
+
+  @override
+  String get newTabGroup => 'Neue Tab-Gruppe';
+
+  @override
+  String get selectTab => 'Tab auswählen';
+
+  @override
+  String get selectTabs => 'Tabs auswählen';
+
+  @override
+  String get deleteTabGroup => 'Tab-Gruppe löschen';
+
+  @override
+  String get rename => 'Umbenennen';
+
+  @override
+  String get renameGroup => 'Gruppe umbenennen';
+
+  @override
+  String get ungroupTab => 'Tab-Gruppierung aufheben';
+
+  @override
+  String get deleteGroup => 'Gruppe löschen';
+
+  @override
+  String get addToTabGroup => 'Zur Tab-Gruppe hinzufügen';
+
+  @override
+  String get editGroupName => 'Gruppennamen bearbeiten';
+
+  @override
+  String get editGroupColor => 'Gruppenfarbe bearbeiten';
+
+  @override
+  String get closeTab => 'Tab schließen';
+
+  @override
+  String get doYouWantToUngroup => 'Möchten Sie diese Tabgruppe wirklich aufheben?';
+
+  @override
+  String get ungroupTabGroup => 'Tabgruppe aufheben';
+
+  @override
+  String get ungroup => 'Gruppierung aufheben';
+
+  @override
+  String get deletetabGroup => 'Tabgruppe löschen';
+
+  @override
+  String get thisActionWillPermenantClose => 'Diese Aktion schließt alle';
+
+  @override
+  String get inside => 'dauerhaft';
+
+  @override
+  String get thisCannotBeUndone => 'Dies kann nicht rückgängig gemacht werden';
+
+  @override
+  String get addTo => 'Hinzufügen zu';
+
+  @override
+  String get tabs => 'Tabs';
+
+  @override
+  String get done => 'Fertig';
+
+  @override
+  String get create => 'Erstellen';
+
+  @override
+  String get groupColor => 'Gruppenfarbe';
+
+  @override
+  String get groupName => 'Gruppenname';
+
+  @override
+  String get addtoNewTabGroup => 'Zur neuen Tab-Gruppe hinzufügen';
+
+  @override
+  String get tabGroups => 'Tab-Gruppen';
+
+  @override
+  String get tabGroup => 'Tab-Gruppe';
+
+  @override
+  String get tabsSelected => 'Ausgewählte Tabs';
+
+  @override
+  String get privateResearch => 'z. B. Private Recherche';
+
+  @override
+  String get deselectAll => 'Auswahl aufheben';
+
+  @override
+  String get selected => 'Ausgewählt';
+
+  @override
+  String get close => 'Schließen';
+
+  @override
+  String get top => 'Oben';
+
+  @override
+  String get bottom => 'Unten';
+
+  @override
+  String closeAllTabsConfirmation(int tabCount, String tabGroupName) {
+    return 'Diese Aktion schließt alle $tabCount Tabs in „$tabGroupName“ dauerhaft. Dies kann nicht rückgängig gemacht werden.';
+  }
+
+  @override
+  String get changingNode => 'Knoten wechseln';
+
+  @override
+  String get freeenameWebDomain => 'FreeName Web3-Domäne';
+
+  @override
+  String get enableFreeNameWeb => 'FreeName Web3-Domänenunterstützung aktivieren';
+
+  @override
+  String get couldnotDownloadBootstrap => 'Die Belnet-Bootstrap-Datei konnte nicht heruntergeladen werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut';
+
+  @override
+  String get couldNotEstablishConnection => 'Belnet-Verbindung konnte nicht hergestellt werden. Bitte versuchen Sie es erneut';
+
+  @override
+  String get theBelnetServiceNotStarted => 'Der Belnet-Dienst konnte nicht gestartet werden. Bitte versuchen Sie es erneut';
+
+  @override
+  String get exitNodeUnreachable => 'Knoten nicht erreichbar, erneute Verbindung wird hergestellt';
+
+  @override
+  String get tab => 'Tab';
+
+  @override
+  String get ungroupTabs => 'Tabs aus Gruppe entfernen';
+
+  @override
+  String get closeGroup => 'Gruppe schließen';
+
+  @override
+  String ungroupSelectedTabs(String tabGroupName) {
+    return 'Möchtest du die ausgewählten Tabs wirklich aus \$$tabGroupName entfernen?';
+  }
+
+  @override
   String get beldexIsAnEcosystem => 'Beldex ist ein Ökosystem aus dezentralisierten Anwendungen, die die Vertraulichkeit der Nutzer wahren. Der Beldex Browser ist eine dieser Anwendungen und Teil dieses Ökosystems, zu dem auch BChat, BelNet und das Beldex-Protokoll gehören. Der Beldex Browser ist Ihr Tor zu einem nahtlosen und vertraulichen Online-Erlebnis, bei dem Ihre Daten ausschließlich Ihnen gehören. Basierend auf einer stabilen Blockchain-Infrastruktur gewährleistet der Beldex Browser Vertraulichkeit und Anonymität für seine Nutzer.';
 
   @override
