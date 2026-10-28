@@ -154,6 +154,8 @@ dependencies:
   cryptography: any
 
 
+  audio_waveforms: ^1.2.0
+
   flutter_localization: any
   intl: #^0.20.2
 
