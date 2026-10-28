@@ -143,6 +143,8 @@ dependencies:
 
   image_picker: 1.1.0
 
+  file_picker: 11.0.3
+
   #audio_session: ^0.2.2
 
   #phone_state: #^3.0.0
@@ -155,6 +157,9 @@ dependencies:
   flutter_localization: any
   intl: #^0.20.2
 
+
+  pdfx: 2.9.2
+  open_filex: 4.7.0
 
 dev_dependencies:
   flutter_test:

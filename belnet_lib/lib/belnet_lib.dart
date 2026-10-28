@@ -498,6 +498,122 @@ static Future<dynamic>  unmapExitNode(String swapNode) async {
   //     return false;
   //   }
   }
+
+   static Future<List<File>> pickImages({
+    required int maxImages,
+  }) async {
+    try {
+      final List<dynamic>? result =
+          await _methodChannel.invokeMethod<List<dynamic>>(
+        'pickMultipleImages',
+        {
+          'maxImages': maxImages,
+        },
+      );
+
+      if (result == null) {
+        return [];
+      }
+
+      return result
+          .map(
+            (path) => File(path.toString()),
+          )
+          .toList();
+
+    } catch (e) {
+      print(
+        'Image picker error: $e',
+      );
+
+      return [];
+    }
+  }
+
+  static Future<List<File>> pickFiles({
+  required int maxFiles,
+}) async {
+
+  try {
+
+    final List<dynamic>? result =
+        await _methodChannel.invokeMethod<List<dynamic>>(
+      'pickMultipleFiles',
+      {
+        'maxFiles': maxFiles,
+      },
+    );
+
+    if (result == null) {
+      return [];
+    }
+
+    return result
+        .map(
+          (path) => File(path.toString()),
+        )
+        .toList();
+
+  } catch (e) {
+
+    print(
+      'File picker error: $e',
+    );
+
+    return [];
+  }
+}
+
+
+
+static Future<bool> saveImageToGallery(
+  String base64Image,
+) async {
+
+  try {
+
+    final fileName =
+        'AI_Image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+    final result =
+        await _methodChannel.invokeMethod(
+      'saveImageToGallery',
+      {
+        'base64Image': base64Image,
+        'fileName': fileName,
+      },
+    );
+
+    if (result is Map) {
+
+      return result['success'] == true;
+    }
+
+    return false;
+
+  } catch (e) {
+
+    print(
+      'Save image to Gallery error: $e',
+    );
+
+    return false;
+  }
+}
+
+
+static Future<String> audioFileGen(String fileName)async{
+  final audioPath =
+    await _methodChannel.invokeMethod<String>(
+  'getTtsAudioPath',
+  {
+    'fileName': fileName,
+  },
+);
+
+ return audioPath!;
+}
+
 }
 
 
