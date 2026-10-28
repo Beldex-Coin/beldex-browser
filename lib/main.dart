@@ -10,6 +10,7 @@ import 'package:beldex_browser/security/api_key_initializer.dart';
 import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -260,6 +261,7 @@ NetworkReinitializer.start();
 ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
 ChangeNotifierProvider(create: (_)=> AppBarPositionProvider()..loadPreference()),
 ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
+ChangeNotifierProvider<ReadAloudController>(create: (_)=> ReadAloudController())
       ],
       child:
       // MaterialApp(
