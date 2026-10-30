@@ -4038,7 +4038,7 @@ Widget buildBox({
                           alignment:
                               Alignment.center,
           
-                          child: SvgPicture.asset('assets/imaages/ai-icons/new/Default_Image.svg', color: themeProvider.darkTheme ?  Color(0xff333333) : Color(0xffD4D4D4),),
+                          child: SvgPicture.asset('assets/images/ai-icons/new/Default_Image.svg', color: themeProvider.darkTheme ?  Color(0xff333333) : Color(0xffD4D4D4),),
                           // const Icon(
                           //   Icons.language,
                           //   size: 50,
