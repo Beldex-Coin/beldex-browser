@@ -683,9 +683,10 @@ Widget _invalidFilePreview(String fileName) {
                           ),),
                         ),
                         Spacer(),
-                       modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
-                       if(modelMessage.text.isNotEmpty){
-                        copyText(modelMessage.text,loc);
+                         _buildReadAloudButton(widget.modelMessage, themeProvider),
+                       widget.modelMessage.text.isNotEmpty && widget.modelMessage.text != StringConstants.retryMessage && widget.modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
+                       if(widget.modelMessage.text.isNotEmpty){
+                        copyText(widget.modelMessage.text,loc);
                        }
                         },
                          child: SvgPicture.asset(IconConstants.copyIconDark,color: Color(0xff8D8D8D),)):SizedBox()
@@ -693,37 +694,39 @@ Widget _invalidFilePreview(String fileName) {
                       ],
                      ),
                    ),
-                   modelMessage.text.isNotEmpty || modelMessage.image != null
-                   ? 
-                  MessageBody(
-                      isLoading: true,
-                      message: modelMessage,
-                      topLeft: 20,
-                      topRight: 20,
-                      bottomLeft: 20,
-                      model: model,
-                      bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
-                    )
-                  : 
-                  Center(
-                    child: Padding(
-                      padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
-                      child: Container(
-                        margin: EdgeInsets.only(top: 15),
-                        decoration: BoxDecoration(
-                         color://themeProvider.darkTheme ?
-                          Color(0xff333333),// : Color(0xffF3F3F3),
-                         borderRadius: BorderRadius.circular(20.0)
-                        ),
-                                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
-                                    child: LoadingAnimationWidget.waveDots(
-                      color://themeProvider.darkTheme ?
-                       Color(0xff8D8D8D),// : Color(0xffACACAC),
-                      size: 30,
-                                    ),
-                                  ),
-                    ),
-                  ),
+
+                    _buildModelMessage(widget.modelMessage,widget.currentResponseIndex,widget.lastResponseIndex,context),
+                  //  widget.modelMessage.text.isNotEmpty || widget.modelMessage.image != null
+                  //  ? 
+                  // MessageBody(
+                  //     isLoading: true,
+                  //     message: widget.modelMessage,
+                  //     topLeft: 20,
+                  //     topRight: 20,
+                  //     bottomLeft: 20,
+                  //     model: widget.model,
+                  //     bottomRight: 20, canAnimate: widget.currentResponseIndex == widget.lastResponseIndex,
+                  //   )
+                  // : 
+                  // Center(
+                  //   child: Padding(
+                  //     padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
+                  //     child: Container(
+                  //       margin: EdgeInsets.only(top: 15),
+                  //       decoration: BoxDecoration(
+                  //        color://themeProvider.darkTheme ?
+                  //         Color(0xff333333),// : Color(0xffF3F3F3),
+                  //        borderRadius: BorderRadius.circular(20.0)
+                  //       ),
+                  //                   padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+                  //                   child: LoadingAnimationWidget.waveDots(
+                  //     color://themeProvider.darkTheme ?
+                  //      Color(0xff8D8D8D),// : Color(0xffACACAC),
+                  //     size: 30,
+                  //                   ),
+                  //                 ),
+                  //   ),
+                  // ),
                  ],
                ),
             // ),
@@ -734,4 +737,503 @@ Widget _invalidFilePreview(String fileName) {
       ),
     );
   }
+  Widget _buildImageGeneratingMessage(ChatModel message) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+  return Padding(
+    padding: const EdgeInsets.only(
+      left: 15,
+      right: 15,
+      bottom: 10,
+      top: 10,
+    ),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: 280,
+        height: 280,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color(0xff333333).withOpacity(0.2),
+         // borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ImageGenerationLoader(themeProvider: themeProvider,
+                //size: 230,
+                                          gridSize:25,
+                //dotCount: 400,
+                color: //themeProvider.darkTheme ? 
+                Colors.grey, // : Colors.black,
+              ),
+            ),
+            Center(child: Text('Generating image...',style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Inter',color: Colors.white),))
+          ],
+        ),
+        // child: ClipRRect(
+        //   borderRadius: BorderRadius.circular(20),
+        //   child: Stack(
+        //     children: [
+
+        //       // ==================================================
+        //       // SHIMMER / IMAGE PLACEHOLDER
+        //       // ==================================================
+
+        //       Positioned.fill(
+        //         child: Container(
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(20),
+        //             gradient: LinearGradient(
+        //               begin: Alignment.topLeft,
+        //               end: Alignment.bottomRight,
+        //               colors: [
+        //                 Colors.white.withOpacity(0.04),
+        //                 Colors.white.withOpacity(0.10),
+        //                 Colors.white.withOpacity(0.04),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+
+        //       // ==================================================
+        //       // CENTRE LOADING
+        //       // ==================================================
+
+        //       Center(
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+
+        //             SizedBox(
+        //               width: 42,
+        //               height: 42,
+        //               child: CircularProgressIndicator(
+        //                 strokeWidth: 3,
+        //                 color: Colors.white.withOpacity(0.75),
+        //               ),
+        //             ),
+
+        //             const SizedBox(height: 16),
+
+        //             const Text(
+        //               "Creating image...",
+        //               style: TextStyle(
+        //                 color: Colors.white,
+        //                 fontSize: 14,
+        //                 fontWeight: FontWeight.w500,
+        //               ),
+        //             ),
+
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+      ),
+    ),
+  );
+}
+
+// Widget _buildGeneratedImage(ChatModel message) {
+Widget _buildGeneratedImage(
+  ChatModel message,
+  BuildContext context,
+) {
+  if (message.generatedImageBase64 == null ||
+      message.generatedImageBase64!.isEmpty) {
+    return const SizedBox();
+  }
+
+  try {
+    final bytes = base64Decode(
+      message.generatedImageBase64!,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+        top: 10,
+        bottom: 10,
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ==========================================
+            // GENERATED IMAGE + SHARE BUTTON
+            // ==========================================
+
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(20),
+            //   child: Stack(
+            //     children: [
+            //       // Generated image.
+            //       Image.memory(
+            //         bytes,
+            //         width: 280,
+            //         fit: BoxFit.cover,
+            //         gaplessPlayback: true,
+            //       ),
+
+            //       // Share button at the bottom-right.
+            //       Positioned(
+            //         right: 10,
+            //         bottom: 10,
+            //         child: Material(
+            //           color: const Color(0xCC222222),
+            //           shape: const CircleBorder(),
+            //           clipBehavior: Clip.antiAlias,
+            //           child: IconButton(
+            //             tooltip: 'Share image',
+            //             onPressed: () async {
+            //               await _shareGeneratedImage(
+            //                 message.generatedImageBase64!,
+            //               );
+            //             },
+            //             icon: const Icon(
+            //               Icons.share_rounded,
+            //               color: Colors.white,
+            //               size: 21,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+           ClipRRect(
+  borderRadius: BorderRadius.circular(20),
+  child: Stack(
+    children: [
+      // Generated image.
+      Image.memory(
+        bytes,
+        width: 280,
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+      ),
+
+      // Open the full-screen viewer when tapped.
+      Positioned.fill(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              _openGeneratedImageViewer(
+                context,
+                message,
+              );
+            },
+          ),
+        ),
+      ),
+
+      // Share button overlay at the bottom-right.
+      Positioned(
+        right: 10,
+        bottom: 10,
+        child: Material(
+          color: const Color(0xCC222222),
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: IconButton(
+            tooltip: 'Share image',
+            onPressed: () async {
+              await _shareGeneratedImage(
+                message.generatedImageBase64!,
+              );
+            },
+            icon: const Icon(
+              Icons.share_rounded,
+              color: Colors.white,
+              size: 21,
+            ),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+          ],
+        ),
+      ),
+    );
+  } catch (e) {
+    print(
+      'Generated image decode error: $e',
+    );
+
+    return const SizedBox();
+  }
+}
+
+void _openGeneratedImageViewer(
+  BuildContext context,
+  ChatModel message,
+) {
+  final base64Image = message.generatedImageBase64;
+
+  if (base64Image == null || base64Image.isEmpty) {
+    return;
+  }
+
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => GeneratedImageViewer(
+        base64Image: base64Image,
+
+        // Save to gallery.
+        onSave: () async {
+          final success = await BelnetLib.saveImageToGallery(
+            base64Image,
+          );
+
+          if (success) {
+            showMessage('Image saved to Gallery');
+          } else {
+            showMessage('Failed to save image');
+          }
+        },
+
+        // Share the generated image.
+        onShare: () async {
+          await _shareGeneratedImage(base64Image);
+        },
+      ),
+    ),
+  );
+}
+
+Future<void> _shareGeneratedImage(
+  String base64Image,
+) async {
+  try {
+    if (base64Image.isEmpty) {
+      showMessage('No image available to share');
+      return;
+    }
+
+    final Uint8List imageBytes = base64Decode(
+      base64Image,
+    );
+
+    // Get a temporary directory.
+    final tempDir = await getTemporaryDirectory();
+
+    // Create a unique image file.
+    final imageFile = File(
+      '${tempDir.path}/beldex_ai_image_${DateTime.now().microsecondsSinceEpoch}.png',
+    );
+
+    // Write the generated image to the file.
+    await imageFile.writeAsBytes(
+      imageBytes,
+      flush: true,
+    );
+
+    // Open the native sharing menu.
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [
+          XFile(
+            imageFile.path,
+            mimeType: 'image/png',
+          ),
+        ],
+      ),
+    );
+  } catch (e) {
+    debugPrint('Generated image share error: $e');
+    showMessage('Failed to share image');
+  }
+}
+
+Widget _buildModelMessage(
+  ChatModel modelMessage,
+  int currentResponseIndex,
+  int lastResponseIndex,BuildContext context
+) {
+ if (modelMessage.isGeneratingImage) {
+  return _buildImageGeneratingMessage(modelMessage);
+}
+
+if (modelMessage.isImageGeneration &&
+    modelMessage.generatedImageBase64 != null) {
+  return _buildGeneratedImage(modelMessage,context);
+}
+
+if (modelMessage.text.isNotEmpty) {
+  return Column(
+    children: [
+      MessageBody(
+        isLoading: true,
+        message: modelMessage,
+        topLeft: 20,
+        topRight: 20,
+        bottomLeft: 20,
+        bottomRight: 20,
+        model: widget.model,
+        canAnimate:
+            currentResponseIndex == lastResponseIndex,
+      ),
+      // Read aloud button / audio player
+      // if (!_isReading && !_isGeneratingAudio)
+      //   _buildReadAloudButton(modelMessage),
+
+      // // Audio controls
+      // _buildAudioPlayer(),
+       // ONLY the individual message button.
+        //
+        // The actual audio controller is NOT here.
+       
+        // _buildReadAloudButton(
+        //   modelMessage,
+        // ),
+    ],
+  );
+}
+
+return _buildTypingIndicator();
+}
+
+Widget _buildTypingIndicator() {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+        bottom: 10,
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(top: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xff333333),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 3,
+          horizontal: 15,
+        ),
+        child: LoadingAnimationWidget.waveDots(
+          color: const Color(0xff8D8D8D),
+          size: 30,
+        ),
+      ),
+    ),
+  );
+}
+
+
+
+Widget _buildReadAloudButton(
+  ChatModel message, DarkThemeProvider themeProvider
+) {
+  if (message.text.trim().isEmpty ||
+      message.isGeneratingImage ||
+      message.isImageGeneration ||
+      message.text ==
+          StringConstants.retryMessage ||
+      message.text ==
+          'The response has been interrupted') {
+    return const SizedBox.shrink();
+  }
+
+ final readAloudController = context.watch<ReadAloudController>();
+
+  final messageId = 'response_${widget.currentResponseIndex}';
+
+  // Check whether this response is the one currently being read aloud.
+  final isCurrentResponse =
+      readAloudController.activeMessageId == messageId;
+
+// Only allow interaction with a completed response when no other
+  // response is currently being read aloud, or this is the same response.
+  
+  // Highlight only the response currently being read aloud.
+  final isCurrentlySpeaking =
+      readAloudController.activeMessageId == messageId &&
+      readAloudController.isPlaying && !widget.model.isListening;
+
+  final iconColor = isCurrentlySpeaking
+      ? (themeProvider.darkTheme
+          ? const Color(0xffFFFFFF)
+          : const Color(0xff0B0B0B))
+      : const Color(0xff8D8D8D);
+
+ return GestureDetector(
+  onTap:message.isTypingComplete && !widget.model.isListening ? () {
+          context
+              .read<
+                  ReadAloudController>()
+              .playOrToggle(
+                messageId:
+                    'response_${widget.currentResponseIndex}',
+                text: message.text,
+              );
+        }: null,
+   child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            width: 24,height: 24,padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffFFFFFF)),
+                            child: SvgPicture.asset('assets/images/ai-icons/new/read_aloud.svg',color: iconColor
+                           // message.isTypingComplete ? themeProvider.darkTheme ? Color(0xffFFFFFF) : Color(0xff0B0B0B) : Color(0xff8D8D8D),
+                            )),
+ );
+
+
+  // return Padding(
+  //   padding: const EdgeInsets.only(
+  //     left: 15,
+  //     right: 15,
+  //     bottom: 10,
+  //   ),
+  //   child: Semantics(
+  //     button: true,
+  //     identifier:
+  //         'ai_read_aloud_button',
+  //     label: 'Read aloud',
+  //     child: GestureDetector(
+  //       onTap: () {
+  //         context
+  //             .read<
+  //                 ReadAloudController>()
+  //             .playOrToggle(
+  //               messageId:
+  //                   'response_${widget.currentResponseIndex}',
+  //               text: message.text,
+  //             );
+  //       },
+  //       child: Row(
+  //         mainAxisSize:
+  //             MainAxisSize.min,
+  //         children: [
+  //           const Icon(
+  //             Icons.volume_up_outlined,
+  //             size: 18,
+  //             color:
+  //                 Color(0xff8D8D8D),
+  //           ),
+  //           const SizedBox(
+  //             width: 6,
+  //           ),
+  //           const Text(
+  //             'Read aloud',
+  //             style: TextStyle(
+  //               fontFamily: 'Inter',
+  //               fontSize: 12,
+  //               color:
+  //                   Color(0xff8D8D8D),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   ),
+  // );
+}
 }
