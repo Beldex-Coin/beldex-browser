@@ -610,7 +610,7 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
                  (appBarPositionProvider.selectedPosition == AppBarPosition.top && groupProvider.totalOpenTabsCount != 0 //browserModel.webViewTabs.isNotEmpty
                   && vpnStatusProvider.canShowHomeScreen == false) ? FlexibleAppbar() : null, //BrowserAppBar() : null,
                 body: _buildWebViewTabsContent(),
-                floatingActionButton: vpnStatusProvider.showFAB && groupProvider.totalOpenTabsCount != 0  ? FloatingActionButton(
+                floatingActionButton: vpnStatusProvider.showFAB && !vpnStatusProvider.canShowHomeScreen && groupProvider.totalOpenTabsCount != 0  ? FloatingActionButton(
                   onPressed: (){
                    // if (!vpnStatusProvider.showFAB) return; // Prevent multiple taps
                     vpnStatusProvider.updateFAB(false);
@@ -646,7 +646,7 @@ if (vpnStatusProvider.canShowHomeScreen == true) {
               child:  Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                 groupProvider.totalOpenTabsCount != 0 || vpnStatusProvider.canShowHomeScreen ? _createProgressIndicator(groupProvider) : SizedBox(),
+                 groupProvider.totalOpenTabsCount != 0 || vpnStatusProvider.canShowHomeScreen ? _createProgressIndicator(groupProvider,vpnStatusProvider) : SizedBox(),
                   BrowserAppBar(),
                 ],
               ),
@@ -839,14 +839,14 @@ void hideContextMenu(InAppWebViewController? webViewController)async{
 
     var stackChildren = <Widget>[
       browserModel.getCurrentTab() ?? Container(),
-      vpnStatusProvider.canShowHomeScreen == false && appBarPositionProvider.selectedPosition == AppBarPosition.top  ? _createProgressIndicator(groupProvider) : Container()
+      vpnStatusProvider.canShowHomeScreen == false && appBarPositionProvider.selectedPosition == AppBarPosition.top  ? _createProgressIndicator(groupProvider,vpnStatusProvider) : Container()
     ];
 
     return Stack(
       children: stackChildren,
     );
   }
-Widget _createProgressIndicator(GroupProvider groupProvider) {
+Widget _createProgressIndicator(GroupProvider groupProvider,VpnStatusProvider vpnStatusProvider){
   return groupProvider.totalOpenTabsCount != 0 ? Selector<WebViewModel, double>(
     selector: (context, webViewModel) => webViewModel.progress,
     builder: (context, progress, child) {
@@ -856,6 +856,11 @@ Widget _createProgressIndicator(GroupProvider groupProvider) {
       if (clampedProgress >= 1.0) {
         return SizedBox.shrink(); // No progress bar at 100%
       }
+
+
+  if (vpnStatusProvider.canShowHomeScreen) {
+    return const SizedBox.shrink();
+  }
 
       return PreferredSize(
         preferredSize: const Size(double.infinity, 4.0),
