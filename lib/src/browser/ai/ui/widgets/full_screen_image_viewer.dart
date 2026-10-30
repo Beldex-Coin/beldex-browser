@@ -4,9 +4,12 @@
 import 'dart:io';
 
 import 'package:beldex_browser/src/browser/ai/ui/widgets/attachment_preview.dart';
+import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:provider/provider.dart';
 
 void showFullScreenImagePreview(
   BuildContext context,
@@ -54,6 +57,19 @@ class _FullScreenImageViewerState
     _pageController = PageController(
       initialPage: widget.initialIndex,
     );
+
+    // Show the status bar.
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+  );
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+    ),
+  );
   }
 
   @override
@@ -166,6 +182,7 @@ class _FullScreenImageViewerState
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
     return Material(
       color: Colors.black,
       child: SafeArea(
