@@ -7,6 +7,8 @@ import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/floating_read_aloud_player.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -272,17 +274,67 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
 
   Timer? typingTimer;
 
-
+late final ReadAloudController _summaryReadAloudController;
 
 @override
 void initState() {
   super.initState();
+
+model = ChatViewModel();
+_summaryReadAloudController = ReadAloudController();
+
+_summaryReadAloudController.addListener(
+    _onSummaryReadAloudChanged,
+  );
+
+
   WidgetsBinding.instance.addPostFrameCallback((_) {
     callSummaryApI(context);
   });
 }
 
 
+void _onSummaryReadAloudChanged() {
+  if (mounted) {
+    setState(() {});
+  }
+}
+
+String get readAloudText {
+  final parts = <String>[];
+
+  if (title.trim().isNotEmpty && title != 'Erroring') {
+    parts.add(title.trim());
+  }
+
+  // if(paragraph.trim().isNotEmpty){
+  //   parts.add(paragraph.trim());
+  // }
+
+  for (final bullet in bullets) {
+    if (bullet.trim().isNotEmpty) {
+      parts.add(
+        bullet.replaceFirst(
+          RegExp(r'^[-*•]\s*'),
+          '',
+        ),
+      );
+    }
+  }
+
+  return parts.join('\n\n');
+}
+
+Future<void> startSummaryReadAloud() async {
+  final text = readAloudText;
+
+  if (text.trim().isEmpty) return;
+
+  await _summaryReadAloudController.playOrToggle(
+    messageId: 'url_summary',
+    text: text,
+  );
+}
 
 
 
@@ -403,6 +455,8 @@ void callSummaryRetry(BuildContext context) async {
   @override
   void dispose() {
    // typingTimer?.cancel();
+    _summaryReadAloudController.dispose();
+  typingTimer?.cancel();
     super.dispose();
   }
 
@@ -474,6 +528,47 @@ void callSummaryRetry(BuildContext context) async {
                               ),
                             ),
                             Spacer(),
+                                                      GestureDetector(
+  onTap: () async {
+    if (urlSummaryProvider.isLoading) {
+      return;
+    }
+
+    final text = readAloudText.trim();
+
+    if (text.isEmpty || title == 'Erroring') {
+      debugPrint('Read Aloud: No summary text available.');
+      return;
+    }
+
+    debugPrint('Read Aloud: Starting summary playback.');
+    debugPrint('Read Aloud text: $text');
+
+    try {
+      await _summaryReadAloudController.playOrToggle(
+        messageId: 'url_summary',
+        text: text,
+      );
+    } catch (e, stackTrace) {
+      debugPrint('Summary Read Aloud error: $e');
+      debugPrint('$stackTrace');
+    }
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(
+      vertical: 8,
+      horizontal: 7,
+    ),
+    decoration:  BoxDecoration(
+      color:themeProvider.darkTheme ? Colors.transparent : Color(0xff222222),
+      border: Border.all(color: Color(0xffEBEBEB),width: 0.1)
+    ),
+    child: SvgPicture.asset(
+      'assets/images/ai-icons/new/read_aloud.svg',
+      color: Colors.white,
+    ),
+  ),
+),
                             GestureDetector(
                               onTap: () => Navigator.pop(context),
                               child: Container(
@@ -803,6 +898,18 @@ void callSummaryRetry(BuildContext context) async {
                         ),
                       )
                     : Container(),
+
+ if (_summaryReadAloudController.isVisible)
+  Positioned(
+    left: 12,
+    right: 12,
+    bottom: 70,
+    child: FloatingReadAloudPlayer(
+      model: model!,
+      controller: _summaryReadAloudController,
+    ),
+  ),
+
               ],
             );
           },
