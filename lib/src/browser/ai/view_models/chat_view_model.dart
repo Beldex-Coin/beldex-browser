@@ -1709,7 +1709,12 @@ Future<String> extractContentFromUrl(String url)async{
 }
 
 
+// randomly select model
+List<String> aiRandomModels = ['openai', 'gemini'];
 
+String getRandomItem(List<String> items) {
+  return items[Random().nextInt(items.length)];
+}
 
 
 
@@ -1723,6 +1728,14 @@ Future<String> extractContentFromUrl(String url)async{
 Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,String modelType= 'openai'}) async {
   File? sendFile = _imageFile;
  print('The Default Model type -----> $modelType');
+
+
+
+await initializeDailyAttachmentLimit();
+
+
+
+
   // Use the stored last message if regenerating, otherwise get from input field
   String messageToSend = userMessage ?? messageController.text;
   _lastUserMessage = messageToSend; // Save the last message
@@ -1763,17 +1776,53 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
 //       } 
 
 
+// ============================================================
+  // ATTACHMENTS
+  // ============================================================
+
+  List<File> sendFiles;
 
 
 
+  if (isRegenerate) {
+    ChatModel? lastUserMessage;
 
+    for (int i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role == Roles.user) {
+        lastUserMessage = messages[i];
+        break;
+      }
+    }
+
+    sendFiles = List<File>.from(
+      lastUserMessage?.images ?? <File>[],
+    );
+
+    print(
+      'REGENERATE: ${sendFiles.length} attachments',
+    );
+  } else {
+    sendFiles = List<File>.from(_imageFiles);
+
+    print(
+      'NEW REQUEST: ${sendFiles.length} attachments',
+    );
+  }
+
+
+
+// Capture the count before clearing the selected attachments.
+//
+// This is NOT added to the daily limit yet.
+// It will only be counted after a successful AI response.
+final int attachmentCountForRequest = sendFiles.length;
 
   if (!isRegenerate) {
     // Add a new user message only if it's a fresh request
     messages.add(ChatModel(
       text: messageToSend,
       role: Roles.user,
-      image: sendFile,
+      images: sendFiles,
       isTypingComplete: true,
       canShowRegenerate: false,
       isSummariseResult: false,
@@ -1781,6 +1830,8 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
   }
 
   _imageFile = null;
+   _imageFiles.clear();
+
 
   if (!isRegenerate) {
     // Add an empty AI response only if it's a fresh request
@@ -1790,7 +1841,13 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
       isTypingComplete: false,
       canShowRegenerate: false,
       isSummariseResult: false,
-      istyping: true
+      istyping: true,
+       // Image generation state
+        isImageGeneration: false,
+        isGeneratingImage: false,
+
+        generatedImageBase64: null,
+        generatedImageFile: null,
     ));
   }
 
@@ -1800,52 +1857,399 @@ Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,Stri
     ///"Note: If this content contains only url then provide general information about the domain from the given URL as summarise, such as its purpose, industry, or key features." 
   isTyping = true;
   String wrd = '';
-  // Listen to the streaming response and update existing message
-  _streamSubscription = apiRepository.sendTextForStreamWithModel(modelType,
-  messageToSend).listen((word) {
-    print('onData coming ---$word');
-    if (modelResponseIndex == null) return;
-    wrd = word;
-    messages[modelResponseIndex!].text += word; // Append words to existing text
-    updateUI();
-  }, onDone: () {
-    print('OnMessage Done--');
 
-    if(wrd == "Erroring"){
-      messages[modelResponseIndex!].text = StringConstants.retryMessage;
-      messages[modelResponseIndex!].isRetry = true;
-       messages[modelResponseIndex!].isTypingComplete = true;
-    messages[modelResponseIndex!].canShowRegenerate = false;
-    messages[modelResponseIndex!].istyping = false;
-    isTyping = false;
-    }else{
-       messages[modelResponseIndex!].isTypingComplete = true;
-    messages[modelResponseIndex!].canShowRegenerate = false;
-    messages[modelResponseIndex!].istyping = false;
-    messages[modelResponseIndex!].isRetry = false;
-    isTyping = false;
+
+ // ============================================================
+  // STREAM STATE
+  // ============================================================
+
+  bool hasError = false;
+  bool hasImage = false;
+
+  // ============================================================
+  // AI STREAM
+  // ============================================================
+
+String? intent;
+if (modelType != 'gemini' && modelType != 'openai') {
+  intent = await apiRepository.detectUserIntent(
+    userMessage: messageToSend,
+    modelType: modelType,
+  );
+
+  if (intent == 'image_generation') {
+    print('User requested image generation');
+  } else {
+    print('User requested a normal text response');
+  }
+}
+
+// Select the model to use for the request.
+final String selectedModel =
+    (modelType == 'mistral' || modelType == 'deepseek') &&
+           ( intent == 'image_generation'  || sendFiles.isNotEmpty)
+        ? getRandomItem(aiRandomModels)
+        : modelType;
+
+print('Original model: $modelType');
+print('Detected intent: $intent');
+print('Selected model: $selectedModel');
+
+
+
+  // Listen to the streaming response and update existing message
+   _streamSubscription =
+      apiRepository
+          .sendTextForStreamWithModel( selectedModel,
+            //'gemini',
+            messageToSend,
+            attachmentFiles: sendFiles,
+          )
+          .listen(
+    (event) {
+      if (modelResponseIndex == null) {
+        return;
+      }
+
+      final index = modelResponseIndex!;
+
+      final message = messages[index];
+
+      print(
+        "OPENAI EVENT ---> $event",
+      );
+
+      // ========================================================
+      // IMAGE GENERATION STARTED
+      // ========================================================
+
+      if (event == "__IMAGE_GENERATING__") {
+        message.isImageGeneration = true;
+        message.isGeneratingImage = true;
+
+        message.istyping = true;
+        message.isTypingComplete = false;
+
+        updateUI();
+
+        scrollMessages();
+
+        return;
+      }
+
+      // ========================================================
+      // PARTIAL IMAGE
+      // ========================================================
+      //
+      // IMPORTANT:
+      //
+      // Do NOT assign partial base64 to generatedImageBase64.
+      //
+      // A partial image may not be a valid PNG/JPEG yet and
+      // Image.memory() can throw:
+      //
+      // Invalid image data
+      //
+      // Just keep the loading state.
+      // ========================================================
+
+      if (event.startsWith("__IMAGE_PARTIAL__")) {
+        message.isImageGeneration = true;
+        message.isGeneratingImage = true;
+        message.istyping = true;
+
+        updateUI();
+
+        return;
+      }
+
+      // ========================================================
+      // FINAL IMAGE
+      // ========================================================
+
+      if (event.startsWith("__IMAGE_COMPLETE__")) {
+        final imageBase64 =
+            event.substring(
+          "__IMAGE_COMPLETE__".length,
+        );
+
+        if (imageBase64.isEmpty) {
+          return;
+        }
+
+        hasImage = true;
+
+        message.isImageGeneration = true;
+        message.isGeneratingImage = false;
+
+        // IMPORTANT:
+        // Only store the COMPLETE image.
+        message.generatedImageBase64 =
+            imageBase64;
+
+        message.generatedImageFile = null;
+
+        message.istyping = false;
+        message.isTypingComplete = true;
+        message.canShowRegenerate = false;
+        message.isRetry = false;
+
+        isTyping = false;
+
+        updateUI();
+
+        scrollMessages();
+
+        return;
+      }
+
+      // ========================================================
+      // IMAGE ERROR
+      // ========================================================
+
+      if (event == "__IMAGE_ERROR__") {
+        hasError = true;
+
+        message.isGeneratingImage = false;
+        message.isImageGeneration = true;
+
+        message.istyping = false;
+        message.isTypingComplete = true;
+
+        message.isRetry = true;
+        message.canShowRegenerate = false;
+
+        message.text =
+            StringConstants.retryMessage;
+
+        isTyping = false;
+
+        updateUI();
+
+        return;
+      }
+
+
+   if(event == "Erroring"){
+    message.istyping = false;
+        message.isTypingComplete = true;
+
+        message.isRetry = true;
+        message.canShowRegenerate = false;
+
+        message.text =
+            StringConstants.retryMessage;
+
+        isTyping = false;
+
+        updateUI();
+
+        return;
+   }
+
+
+
+      // ========================================================
+      // NORMAL TEXT
+      // ========================================================
+
+      message.text += event;
+
+      message.istyping = true;
+
+      updateUI();
+    },
+
+    // ==========================================================
+    // DONE  WORKING BEFORE ADD NEW 24 HOURS 
+    // ==========================================================
+
+    // onDone: () {
+    //   print(
+    //     "OpenAI response completed",
+    //   );
+
+    //   if (modelResponseIndex != null) {
+    //     final index = modelResponseIndex!;
+
+    //     final message = messages[index];
+
+    //     message.istyping = false;
+
+    //     message.isTypingComplete = true;
+
+    //     message.canShowRegenerate = false;
+
+    //     message.isGeneratingImage = false;
+
+    //     // Don't overwrite a successfully generated image.
+    //     if (hasImage) {
+    //       message.isImageGeneration = true;
+    //     }
+
+    //     if (hasError) {
+    //       message.isRetry = true;
+    //     }
+    //   }
+
+    //   isTyping = false;
+
+    //   updateUI();
+
+    //   scrollMessages();
+
+    //   _streamSubscription?.cancel();
+    //   _streamSubscription = null;
+    // },
+
+
+onDone: () async {
+  debugPrint('AI response stream completed');
+
+  bool responseSuccessful = false;
+
+  if (modelResponseIndex != null) {
+    final index = modelResponseIndex!;
+
+    final message = messages[index];
+
+    message.istyping = false;
+    message.isTypingComplete = true;
+    message.canShowRegenerate = false;
+    message.isGeneratingImage = false;
+
+    // A successfully generated image is a valid response.
+    if (hasImage) {
+      message.isImageGeneration = true;
     }
 
+    if (hasError) {
+      message.isRetry = true;
+    }
 
-    // messages[modelResponseIndex!].isTypingComplete = true;
-    // messages[modelResponseIndex!].canShowRegenerate = false;
-    // messages[modelResponseIndex!].istyping = false;
-    // isTyping = false;
-    scrollMessages(); // added 
+    // A response is successful if it contains text or a
+    // completed image, and no image-generation error occurred.
+    responseSuccessful = !hasError &&
+        (message.text.trim().isNotEmpty || hasImage);
+  }
+
+  isTyping = false;
+
+  // Count attachments ONLY for successful, new requests.
+  //
+  // Regeneration does not count previously sent attachments
+  // again.
+  if (!isRegenerate &&
+      responseSuccessful &&
+      attachmentCountForRequest > 0) {
+    try {
+      await _recordSuccessfulAttachments(
+        attachmentCountForRequest,
+      );
+    } catch (e) {
+      debugPrint(
+        'Failed to save attachment usage: $e',
+      );
+    }
+  }
+
+  updateUI();
+
+  scrollMessages();
+
+  _streamSubscription?.cancel();
+  _streamSubscription = null;
+},
+
+
+    // ==========================================================
+    // ERROR
+    // ==========================================================
+
+    onError: (error) {
+      print(
+        "OpenAI stream error: $error",
+      );
+
+      if (modelResponseIndex != null) {
+        final index = modelResponseIndex!;
+
+        final message = messages[index];
+
+        message.isGeneratingImage = false;
+        message.istyping = false;
+
+        message.isRetry = true;
+        message.isTypingComplete = true;
+
+        message.text = error.toString();
+      }
+
+      isTyping = false;
+
+      updateUI();
+
+      _streamSubscription?.cancel();
+      _streamSubscription = null;
+    },
+  );
+}
+
+Future<void> downloadGeneratedImage(ChatModel message) async {
+  try {
+    if (message.generatedImageBase64 == null ||
+        message.generatedImageBase64!.isEmpty) {
+      print("No generated image available");
+      return;
+    }
+
+    // Remove data URL prefix if present.
+    String base64Image = message.generatedImageBase64!;
+
+    if (base64Image.contains(",")) {
+      base64Image = base64Image.split(",").last;
+    }
+
+    final bytes = base64Decode(base64Image);
+
+    // Android Downloads directory
+    final downloadDirectory =
+        Directory("/storage/emulated/0/Download");
+
+    if (!await downloadDirectory.exists()) {
+      await downloadDirectory.create(
+        recursive: true,
+      );
+    }
+
+    final fileName =
+        "AI_Image_${DateTime.now().millisecondsSinceEpoch}.png";
+
+    final file = File(
+      "${downloadDirectory.path}/$fileName",
+    );
+
+    await file.writeAsBytes(
+      bytes,
+      flush: true,
+    );
+
+    print(
+      "Generated image saved: ${file.path}",
+    );
+
+    // Optional: keep reference in ChatModel
+    message.generatedImageFile = file;
 
     updateUI();
-    _streamSubscription?.cancel();
-  }, onError: (error) {
-     if (modelResponseIndex != null) {
-    messages[modelResponseIndex!].istyping = false;
-    messages[modelResponseIndex!].text = error.toString(); // Ensure error message is captured
+
+  } catch (e) {
+    print(
+      "Download generated image error: $e",
+    );
   }
-  
-     isTyping = false;
-    print("Error streaming response: $error");
-    _streamSubscription?.cancel();
-  });
 }
+
 
 void stopResponse() {
   _streamSubscription?.cancel();
