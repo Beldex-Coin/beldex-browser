@@ -1,3 +1,4 @@
+import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,14 @@ import 'dart:math' as math;
 
 
 class FloatingReadAloudPlayer extends StatelessWidget {
-  const FloatingReadAloudPlayer({
+  const FloatingReadAloudPlayer(
+    {
     super.key,
-    required this.controller,
+    required this.controller, required this.model,
   });
 
   final ReadAloudController controller;
+  final ChatViewModel model;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +98,7 @@ class FloatingReadAloudPlayer extends StatelessWidget {
                           //         ? Icons.pause_rounded
                           //         : Icons.play_arrow_rounded,
                       onTap:
-                          controller.isGeneratingAudio
+                          controller.isGeneratingAudio || model.isListening
                               ? null
                               : controller
                                   .togglePlayPause,
@@ -137,52 +140,45 @@ class FloatingReadAloudPlayer extends StatelessWidget {
                       width: 4,
                     ),
               
-                    Semantics(
-                      button: true,
-                      identifier:
-                          'ai_read_aloud_floating_speed',
-                      label:
-                          'Playback speed',
-                      child: GestureDetector(
-                        onTap:
-                            controller.isGeneratingAudio
-                                ? null
-                                : controller
-                                    .changePlaybackSpeed,
-                        child: 
-                         Container(
-          width: 30,
-          height: 30,
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: isDark
-                ? const Color(0xff222222)
-                : Color(0xffFFFFFF),
-            shape: BoxShape.circle,
-          ),
-           alignment:
-                              Alignment.center,
-                        // Container(
-                        //   height: 36,
-                        //   padding:
-                        //       const EdgeInsets
-                        //           .symmetric(
-                        //     horizontal: 9,
-                        //   ),
-                        //   alignment:
-                        //       Alignment.center,
-                          child: Text(
-                            '${controller.playbackSpeed % 1 == 0 ? controller.playbackSpeed.toInt() : controller.playbackSpeed}x',
-                            style:
-                                 TextStyle(
-                              fontFamily:
-                                  'Inter',
-                              fontSize: 11,
-                              fontWeight:
-                                  FontWeight.w700,
-                              color: isDark ? Color(0xffEBEBEB) :
-                                  Color(0xff0B0B0B),
-                            ),
+                    GestureDetector(
+                      onTap:
+                          controller.isGeneratingAudio
+                              ? null
+                              : controller
+                                  .changePlaybackSpeed,
+                      child: 
+                       Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? const Color(0xff222222)
+                                    : Color(0xffFFFFFF),
+                                shape: BoxShape.circle,
+                              ),
+                               alignment:
+                            Alignment.center,
+                      // Container(
+                      //   height: 36,
+                      //   padding:
+                      //       const EdgeInsets
+                      //           .symmetric(
+                      //     horizontal: 9,
+                      //   ),
+                      //   alignment:
+                      //       Alignment.center,
+                        child: Text(
+                          '${controller.playbackSpeed % 1 == 0 ? controller.playbackSpeed.toInt() : controller.playbackSpeed}x',
+                          style:
+                               TextStyle(
+                            fontFamily:
+                                'Inter',
+                            fontSize: 11,
+                            fontWeight:
+                                FontWeight.w700,
+                            color: isDark ? Color(0xffEBEBEB) :
+                                Color(0xff0B0B0B),
                           ),
                         ),
                       ),
@@ -254,30 +250,26 @@ class FloatingReadAloudPlayer extends StatelessWidget {
     
     required bool isDark
   }) {
-    return Semantics(
-      button: true,
-      identifier: identifier,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 30,
-          height: 30,
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: isDark
-                ? const Color(0xff222222)
-                : Color(0xffFFFFFF),
-            shape:filled ? BoxShape.rectangle : BoxShape.circle,
-          ),
-          child: SvgPicture.asset('assets/images/ai-icons/new/$icon',color:  isDark ? Colors.white : Colors.black)
-          //  Icon(
-          //   icon,
-          //   size: 21,
-          //   color: onTap == null
-          //       ? const Color(0xffAAAAAA)
-          //       : const Color(0xff222222),
-          // ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 30,
+        height: 30,
+        padding: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: isDark
+              ? const Color(0xff222222)
+              : Color(0xffFFFFFF),
+          shape:filled ? BoxShape.rectangle : BoxShape.circle,
         ),
+        child: SvgPicture.asset('assets/images/ai-icons/new/$icon',color:  isDark ? Colors.white : Colors.black)
+        //  Icon(
+        //   icon,
+        //   size: 21,
+        //   color: onTap == null
+        //       ? const Color(0xffAAAAAA)
+        //       : const Color(0xff222222),
+        // ),
       ),
     );
   }
