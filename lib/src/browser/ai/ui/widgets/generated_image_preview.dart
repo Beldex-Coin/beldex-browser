@@ -44,8 +44,8 @@ class GeneratedImageViewer extends StatelessWidget {
               top: 12,
               left: 12,
               child: Material(
-                color: Colors.black54,
-                shape: const CircleBorder(),
+                color:const Color(0xCC222222), //Colors.black54,
+                //shape: const CircleBorder(),
                 child: IconButton(
                   onPressed: () => Navigator.of(context).pop(),
                   icon: const Icon(
@@ -95,8 +95,8 @@ class GeneratedImageViewer extends StatelessWidget {
     required Future<void> Function() onPressed,
   }) {
     return Material(
-      color: const Color(0xFF292929),
-      borderRadius: BorderRadius.circular(16),
+      color: const Color(0xCC222222),//const Color(0xFF292929),
+     // borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(16),
@@ -119,7 +119,7 @@ class GeneratedImageViewer extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w500,fontFamily: 'Inter'
                 ),
               ),
             ],
