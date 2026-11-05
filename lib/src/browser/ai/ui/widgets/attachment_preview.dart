@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 
 String getOriginalFileName(String fileName) {
   return fileName.replaceFirst(
-    RegExp(r'^chat_\d+_\d+_'),
+    RegExp(r'^chat(?:img)?_\d+_\d+_'),
     '',
   );
 }
