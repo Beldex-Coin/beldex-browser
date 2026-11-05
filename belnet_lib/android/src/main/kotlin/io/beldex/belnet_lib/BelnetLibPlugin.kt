@@ -16,9 +16,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Matrix
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.media.ExifInterface
 import android.net.TrafficStats
 import android.net.Uri
 import android.net.VpnService
@@ -31,8 +37,10 @@ import android.os.SystemClock
 import android.provider.MediaStore
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.text.Html
 import android.util.Base64
 import android.util.Log
+import android.util.Xml
 import android.view.WindowManager
 import android.widget.Toast
 
@@ -56,9 +64,23 @@ import network.beldex.belnet.BelnetDaemon
 import network.beldex.belnet.ConnectionTools
 
 import org.json.JSONObject
+import org.xmlpull.v1.XmlPullParser
+
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.tom_roush.pdfbox.io.MemoryUsageSetting
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.pdmodel.encryption.InvalidPasswordException
+import com.tom_roush.pdfbox.text.PDFTextStripper
 
 import java.io.File
 import java.io.FileOutputStream
+import java.io.FilterInputStream
+import java.io.IOException
+import java.io.InputStream
+import java.nio.ByteBuffer
+import java.nio.charset.CharacterCodingException
+import java.nio.charset.CodingErrorAction
+import java.util.zip.ZipFile
 
 import kotlin.math.roundToLong
 
@@ -108,6 +130,78 @@ open class BelnetLibPlugin :
          */
         private const val MAX_UNKNOWN_FILE_SIZE =
             10L * 1024L * 1024L
+
+        // --------------------------------------------------------
+        // IMAGE SANITISING
+        // --------------------------------------------------------
+
+        /*
+         * Every image attachment is decoded and re-encoded before
+         * it can be sent, so EXIF / XMP / IPTC metadata (GPS,
+         * device make/model, capture time, thumbnails) is dropped.
+         *
+         * Files with this prefix are the only images the Dart side
+         * will upload (see OpenAIRepository._isSendableAttachment).
+         */
+        const val CLEAN_IMAGE_PREFIX = "chatimg_"
+
+        // Longest side of a cleaned image, in pixels.
+        private const val MAX_IMAGE_DIMENSION = 2048
+
+        private const val CLEAN_JPEG_QUALITY = 90
+
+        private val IMAGE_EXTENSIONS =
+            setOf("jpg", "jpeg", "png", "webp", "gif", "bmp", "heic", "heif")
+
+        // --------------------------------------------------------
+        // AI TEMPORARY FILES
+        // --------------------------------------------------------
+
+        // Read-aloud WAVs: "beldex_ai_<millis>.wav".
+        private val TTS_FILE_REGEX =
+            Regex("^beldex_ai_\\d+\\.wav$")
+
+        /*
+         * Files in cacheDir that belong to the AI chat and may be
+         * deleted on chat reset / app start.
+         */
+        private val AI_CACHE_FILE_PATTERNS = listOf(
+            // Attachment copies (documents) from the pickers.
+            Regex("^chat_\\d+_\\d+_.*"),
+            // Metadata-stripped images.
+            Regex("^${CLEAN_IMAGE_PREFIX}.*"),
+            // Per-document text files sent to the AI.
+            Regex("^chatdoc_\\d+_\\d+\\.txt$"),
+            // Read-aloud audio copied into the cache.
+            TTS_FILE_REGEX,
+            // Generated images written for the share sheet.
+            Regex("^beldex_ai_image_\\d+\\.png$"),
+            // image_picker camera captures: <uuid><digits>.jpg and
+            // the resized "scaled_" copy.
+            Regex(
+                "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-" +
+                        "[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\d*\\.(jpg|jpeg|png)$"
+            ),
+            Regex("^scaled_.*\\.(jpg|jpeg|png)$")
+        )
+
+        // --------------------------------------------------------
+        // DOCUMENT TEXT EXTRACTION
+        // --------------------------------------------------------
+
+        // Default and hard upper limit for extracted characters.
+        private const val DEFAULT_EXTRACT_MAX_CHARS = 60_000
+        private const val MAX_EXTRACT_CHARS = 1_000_000
+
+        // Max bytes read from one entry inside a docx/xlsx/pptx.
+        private const val MAX_ZIP_ENTRY_BYTES = 50L * 1024L * 1024L
+
+        // PdfBox keeps up to this much in memory, the rest in a
+        // temp file in the cache dir (deleted when closed).
+        private const val PDF_MAX_MAIN_MEMORY_BYTES = 16L * 1024L * 1024L
+
+        // Ignore cell references beyond column XFD.
+        private const val MAX_XLSX_COLUMNS = 16_384
     }
 
 
@@ -1715,6 +1809,197 @@ open class BelnetLibPlugin :
 
 
             // ====================================================
+            // DELETE AI TEMPORARY FILES
+            // ====================================================
+
+            "purgeAiTempFiles" -> {
+
+                val keepPaths =
+                    call.argument<List<String>>("keepPaths")
+                        ?.toSet()
+                        ?: emptySet()
+
+                Thread {
+
+                    val deleted =
+                        purgeAiTempFiles(keepPaths)
+
+                    Handler(Looper.getMainLooper()).post {
+                        result.success(deleted)
+                    }
+
+                }.start()
+            }
+
+
+            // ====================================================
+            // DELETE READ-ALOUD COPIES IN SHARED STORAGE
+            // ====================================================
+
+            "deleteTtsSharedCopies" -> {
+
+                Thread {
+
+                    val deleted =
+                        deleteTtsSharedCopies()
+
+                    Handler(Looper.getMainLooper()).post {
+                        result.success(deleted)
+                    }
+
+                }.start()
+            }
+
+
+            // ====================================================
+            // EXTRACT TEXT FROM A DOCUMENT (on device)
+            // ====================================================
+
+            "extractDocumentText" -> {
+
+                val path =
+                    call.argument<String>("path")
+
+                val maxChars =
+                    (call.argument<Int>("maxChars") ?: DEFAULT_EXTRACT_MAX_CHARS)
+                        .coerceIn(1, MAX_EXTRACT_CHARS)
+
+                if (path.isNullOrBlank()) {
+                    result.error(
+                        "INVALID_PATH",
+                        "No document path given.",
+                        null
+                    )
+                    return
+                }
+
+                val source = File(path)
+
+                // Only attachment copies in this app's cache.
+                val insideCache =
+                    try {
+                        source.canonicalPath.startsWith(
+                            context.cacheDir.canonicalPath + File.separator
+                        )
+                    } catch (e: Exception) {
+                        false
+                    }
+
+                if (!insideCache || !source.isFile) {
+                    result.error(
+                        "INVALID_PATH",
+                        "Document must be in the app cache.",
+                        null
+                    )
+                    return
+                }
+
+                Thread {
+
+                    var payload: Map<String, Any>? = null
+                    var errorCode = "FAILED"
+                    var errorMessage = "Document could not be read."
+
+                    try {
+
+                        payload =
+                            extractDocumentText(source, maxChars)
+
+                    } catch (e: ExtractionFailure) {
+
+                        errorCode = e.code
+                        errorMessage = e.message ?: errorMessage
+
+                    } catch (t: Throwable) {
+
+                        // Includes OutOfMemoryError. Never log the
+                        // document's name or contents.
+                        Log.e("BelnetLibPlugin", "Document text extraction failed", t)
+                    }
+
+                    val done = payload
+                    val code = errorCode
+                    val message = errorMessage
+
+                    Handler(Looper.getMainLooper()).post {
+                        if (done != null) {
+                            result.success(done)
+                        } else {
+                            result.error(code, message, null)
+                        }
+                    }
+
+                }.start()
+            }
+
+
+            // ====================================================
+            // SANITISE A SINGLE IMAGE (camera captures)
+            // ====================================================
+
+            "sanitizeImageFile" -> {
+
+                val path =
+                    call.argument<String>("path")
+
+                if (path.isNullOrBlank()) {
+                    result.error(
+                        "INVALID_PATH",
+                        "No image path given.",
+                        null
+                    )
+                    return
+                }
+
+                val source = File(path)
+
+                /*
+                 * Only accept files inside this app's cache
+                 * directory (where image_picker writes captures).
+                 */
+                val insideCache =
+                    try {
+                        source.canonicalPath.startsWith(
+                            context.cacheDir.canonicalPath + File.separator
+                        )
+                    } catch (e: Exception) {
+                        false
+                    }
+
+                if (!insideCache || !source.isFile) {
+                    result.error(
+                        "INVALID_PATH",
+                        "Image must be in the app cache.",
+                        null
+                    )
+                    return
+                }
+
+                Thread {
+
+                    val cleaned =
+                        sanitizeImage(source, 0, "camera")
+
+                    // The capture still carries EXIF (incl. GPS).
+                    source.delete()
+
+                    Handler(Looper.getMainLooper()).post {
+                        if (cleaned != null) {
+                            result.success(cleaned.absolutePath)
+                        } else {
+                            result.error(
+                                "IMAGE_CLEAN_FAILED",
+                                "Image metadata could not be removed.",
+                                null
+                            )
+                        }
+                    }
+
+                }.start()
+            }
+
+
+            // ====================================================
             // SAVE IMAGE TO GALLERY
             // ====================================================
 
@@ -2459,13 +2744,21 @@ open class BelnetLibPlugin :
         )
 
 
-        val filePaths =
-            mutableListOf<String>()
-
-
         val isImagePicker =
             requestCode ==
                     PHOTO_PICKER_REQUEST_CODE
+
+
+        /*
+         * Copying and re-encoding images is too slow for the main
+         * thread (up to 10 files), so do it in the background and
+         * post the result back. attachmentPickerResult stays set
+         * until then, which keeps a second picker from opening.
+         */
+        Thread {
+
+        val filePaths =
+            mutableListOf<String>()
 
 
         /*
@@ -2473,6 +2766,14 @@ open class BelnetLibPlugin :
          * one useful Toast instead of many Toasts.
          */
         val invalidMessages =
+            mutableListOf<String>()
+
+
+        /*
+         * Images whose metadata could not be removed. They are
+         * never returned to Flutter.
+         */
+        val cleanFailedNames =
             mutableListOf<String>()
 
 
@@ -2567,14 +2868,42 @@ open class BelnetLibPlugin :
                 }
 
 
+                is CopyResult.CleanFailed -> {
+
+                    cleanFailedNames.add(
+                        copyResult.fileName
+                    )
+                }
+
+
                 CopyResult.Failed -> {
 
                     Log.w(
                         "BelnetLibPlugin",
-                        "Failed to copy: $fileName"
+                        "Failed to copy attachment #$index"
                     )
                 }
             }
+        }
+
+
+        // ========================================================
+        // SHOW METADATA-CLEAN ERROR
+        // ========================================================
+
+        if (
+            cleanFailedNames.isNotEmpty()
+        ) {
+
+            showToast(
+                if (cleanFailedNames.size == 1) {
+                    "${cleanFailedNames.first()} could not be processed " +
+                            "and was not attached."
+                } else {
+                    "${cleanFailedNames.size} images could not be " +
+                            "processed and were not attached."
+                }
+            )
         }
 
 
@@ -2617,12 +2946,18 @@ open class BelnetLibPlugin :
         )
 
 
-        result.success(
-            filePaths
-        )
+        Handler(
+            Looper.getMainLooper()
+        ).post {
 
+            result.success(
+                filePaths
+            )
 
-        clearAttachmentPicker()
+            clearAttachmentPicker()
+        }
+
+        }.start()
     }
 
 
@@ -2640,6 +2975,15 @@ open class BelnetLibPlugin :
         data class TooLarge(
             val fileName: String,
             val maxSize: Long
+        ) : CopyResult()
+
+
+        /*
+         * The file is an image but its metadata could not be
+         * removed. It has been deleted and must not be sent.
+         */
+        data class CleanFailed(
+            val fileName: String
         ) : CopyResult()
 
 
@@ -2796,21 +3140,55 @@ open class BelnetLibPlugin :
                 }
 
 
+                // Do not log the path: it contains the user's file name.
                 Log.d(
                     "BelnetLibPlugin",
-                    "Attachment copied: ${outputFile.absolutePath}"
+                    "Attachment copied (${formatFileSize(totalBytes)})"
                 )
 
 
-                Log.d(
-                    "BelnetLibPlugin",
-                    "Attachment size: ${formatFileSize(totalBytes)}"
-                )
+                /*
+                 * Images may come from the photo picker OR the
+                 * generic file picker, so detect them by MIME type
+                 * and extension, not only by which picker was used.
+                 */
+                val looksLikeImage =
+                    isImage ||
+                            mimeType?.startsWith("image/") == true ||
+                            extension.lowercase() in IMAGE_EXTENSIONS
 
 
-                CopyResult.Success(
-                    outputFile.absolutePath
-                )
+                if (looksLikeImage) {
+
+                    val cleaned =
+                        sanitizeImage(
+                            outputFile,
+                            index,
+                            safeName
+                        )
+
+                    // The raw copy still has the original metadata.
+                    outputFile.delete()
+
+                    if (cleaned == null) {
+
+                        CopyResult.CleanFailed(
+                            originalName ?: "Selected image"
+                        )
+
+                    } else {
+
+                        CopyResult.Success(
+                            cleaned.absolutePath
+                        )
+                    }
+
+                } else {
+
+                    CopyResult.Success(
+                        outputFile.absolutePath
+                    )
+                }
 
             } catch (e: Exception) {
 
@@ -2828,6 +3206,1161 @@ open class BelnetLibPlugin :
             )
 
             CopyResult.Failed
+        }
+    }
+
+
+    // ============================================================
+    // AI TEMPORARY FILE CLEANUP
+    // ============================================================
+
+    /**
+     * Deletes AI chat temporary files from the app cache (attachment
+     * copies, cleaned images, camera captures, read-aloud WAVs, share
+     * images) and any read-aloud WAVs left in shared storage.
+     *
+     * [keepPaths] are skipped (e.g. the WAV that is playing now).
+     * Returns the number of files deleted.
+     */
+    private fun purgeAiTempFiles(
+        keepPaths: Set<String>
+    ): Int {
+
+        var deleted = 0
+
+        val keep =
+            keepPaths.mapNotNull { path ->
+                try {
+                    File(path).canonicalPath
+                } catch (e: Exception) {
+                    null
+                }
+            }.toSet()
+
+        try {
+
+            context.cacheDir.listFiles()?.forEach { file ->
+
+                if (!file.isFile) return@forEach
+
+                if (
+                    AI_CACHE_FILE_PATTERNS.none { pattern ->
+                        pattern.matches(file.name)
+                    }
+                ) {
+                    return@forEach
+                }
+
+                val canonical =
+                    try {
+                        file.canonicalPath
+                    } catch (e: Exception) {
+                        return@forEach
+                    }
+
+                if (canonical in keep) return@forEach
+
+                if (file.delete()) deleted++
+            }
+
+        } catch (e: Exception) {
+
+            Log.w("BelnetLibPlugin", "AI cache cleanup failed", e)
+        }
+
+        deleted += deleteTtsSharedCopies()
+
+        Log.d("BelnetLibPlugin", "AI temp files deleted: $deleted")
+
+        return deleted
+    }
+
+
+    /**
+     * Removes read-aloud WAVs that flutter_tts wrote to shared
+     * storage (synthesizeToFile with isFullPath = false):
+     *  - Android 10+: rows this app inserted into MediaStore Audio.
+     *  - Android 9 and below: files in the public Music directory.
+     */
+    private fun deleteTtsSharedCopies(): Int {
+
+        var deleted = 0
+
+        // ---- MediaStore rows (all versions; only our own rows) ----
+        try {
+
+            val collection =
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+
+            val ids =
+                mutableListOf<Long>()
+
+            context.contentResolver.query(
+                collection,
+                arrayOf(
+                    MediaStore.Audio.Media._ID,
+                    MediaStore.Audio.Media.DISPLAY_NAME
+                ),
+                "${MediaStore.Audio.Media.DISPLAY_NAME} LIKE ?",
+                arrayOf("beldex_ai_%.wav"),
+                null
+            )?.use { cursor ->
+
+                val idIndex =
+                    cursor.getColumnIndex(MediaStore.Audio.Media._ID)
+
+                val nameIndex =
+                    cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME)
+
+                while (cursor.moveToNext()) {
+
+                    if (idIndex < 0 || nameIndex < 0) break
+
+                    val name =
+                        cursor.getString(nameIndex) ?: continue
+
+                    // LIKE treats "_" as a wildcard; match exactly.
+                    if (TTS_FILE_REGEX.matches(name)) {
+                        ids.add(cursor.getLong(idIndex))
+                    }
+                }
+            }
+
+            for (id in ids) {
+
+                try {
+
+                    deleted +=
+                        context.contentResolver.delete(
+                            ContentUris.withAppendedId(collection, id),
+                            null,
+                            null
+                        )
+
+                } catch (e: Exception) {
+
+                    // e.g. a row from a previous install we no
+                    // longer own (RecoverableSecurityException).
+                    Log.w("BelnetLibPlugin", "Could not delete TTS row", e)
+                }
+            }
+
+        } catch (e: Exception) {
+
+            Log.w("BelnetLibPlugin", "TTS MediaStore cleanup failed", e)
+        }
+
+
+        // ---- Legacy public Music directory (Android 9 and below) --
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+
+            try {
+
+                @Suppress("DEPRECATION")
+                val musicDir =
+                    Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_MUSIC
+                    )
+
+                musicDir.listFiles()?.forEach { file ->
+
+                    if (
+                        file.isFile &&
+                        TTS_FILE_REGEX.matches(file.name) &&
+                        file.delete()
+                    ) {
+                        deleted++
+                    }
+                }
+
+            } catch (e: Exception) {
+
+                Log.w("BelnetLibPlugin", "Legacy TTS cleanup failed", e)
+            }
+        }
+
+        return deleted
+    }
+
+
+    // ============================================================
+    // DOCUMENT TEXT EXTRACTION (on device)
+    // ============================================================
+
+    /*
+     * Documents are never uploaded to an AI provider as files. Their
+     * text is extracted here, on the device, and only that text is
+     * sent. Nothing in this section uses the network.
+     */
+
+    private class ExtractionFailure(
+        val code: String,
+        message: String
+    ) : Exception(message)
+
+
+    /** Collects extracted text up to [maxChars]. */
+    private class TextBudget(
+        private val maxChars: Int
+    ) {
+
+        val text = StringBuilder()
+
+        var truncated = false
+            private set
+
+        val isFull: Boolean
+            get() = text.length >= maxChars
+
+        fun append(value: CharSequence) {
+
+            if (value.isEmpty()) return
+
+            val room = maxChars - text.length
+
+            if (room <= 0) {
+                truncated = true
+                return
+            }
+
+            if (value.length > room) {
+                text.append(value, 0, room)
+                truncated = true
+            } else {
+                text.append(value)
+            }
+        }
+
+        fun markTruncated() {
+            truncated = true
+        }
+    }
+
+
+    /**
+     * Stops reading a ZIP entry once it has produced more than
+     * [limit] bytes (protects against ZIP bombs).
+     */
+    private class BoundedInputStream(
+        input: InputStream,
+        private val limit: Long
+    ) : FilterInputStream(input) {
+
+        private var count = 0L
+
+        override fun read(): Int {
+            val b = super.read()
+            if (b >= 0) addCount(1)
+            return b
+        }
+
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
+            val n = super.read(b, off, len)
+            if (n > 0) addCount(n.toLong())
+            return n
+        }
+
+        private fun addCount(n: Long) {
+            count += n
+            if (count > limit) {
+                throw ExtractionFailure(
+                    "TOO_LARGE",
+                    "Document is too large to read."
+                )
+            }
+        }
+    }
+
+
+    /**
+     * Returns {"text", "truncated", "format"} or throws
+     * [ExtractionFailure] with a code the Dart side maps to a message.
+     */
+    private fun extractDocumentText(
+        file: File,
+        maxChars: Int
+    ): Map<String, Any> {
+
+        val format =
+            file.name.substringAfterLast('.', "").lowercase()
+
+        val budget = TextBudget(maxChars)
+
+        when (format) {
+
+            "txt", "csv", "tsv", "md", "json", "xml", "log" ->
+                budget.append(readTextFile(file))
+
+            "html", "htm" ->
+                budget.append(htmlToText(readTextFile(file)))
+
+            "pdf" ->
+                extractPdfText(file, budget)
+
+            "docx" ->
+                extractDocxText(file, budget)
+
+            "xlsx" ->
+                extractXlsxText(file, budget)
+
+            "pptx" ->
+                extractPptxText(file, budget)
+
+            "doc", "xls", "ppt" ->
+                throw ExtractionFailure(
+                    "LEGACY_FORMAT",
+                    "Old Office formats are not supported."
+                )
+
+            else ->
+                throw ExtractionFailure(
+                    "UNSUPPORTED",
+                    "This file type is not supported."
+                )
+        }
+
+        val text = normalizeExtractedText(budget.text.toString())
+
+        if (text.isBlank()) {
+            throw ExtractionFailure(
+                "NO_TEXT",
+                "No readable text found."
+            )
+        }
+
+        return mapOf(
+            "text" to text,
+            "truncated" to budget.truncated,
+            "format" to format
+        )
+    }
+
+
+    // ---- Plain text ------------------------------------------------
+
+    private fun readTextFile(file: File): String {
+
+        val bytes = file.readBytes()
+
+        // Byte-order marks.
+        if (
+            bytes.size >= 3 &&
+            bytes[0] == 0xEF.toByte() &&
+            bytes[1] == 0xBB.toByte() &&
+            bytes[2] == 0xBF.toByte()
+        ) {
+            return String(bytes, 3, bytes.size - 3, Charsets.UTF_8)
+        }
+
+        if (
+            bytes.size >= 2 &&
+            bytes[0] == 0xFF.toByte() &&
+            bytes[1] == 0xFE.toByte()
+        ) {
+            return String(bytes, 2, bytes.size - 2, Charsets.UTF_16LE)
+        }
+
+        if (
+            bytes.size >= 2 &&
+            bytes[0] == 0xFE.toByte() &&
+            bytes[1] == 0xFF.toByte()
+        ) {
+            return String(bytes, 2, bytes.size - 2, Charsets.UTF_16BE)
+        }
+
+        // A NUL byte early on means this is not a text file.
+        val probe = minOf(bytes.size, 8192)
+
+        for (i in 0 until probe) {
+            if (bytes[i] == 0.toByte()) {
+                throw ExtractionFailure(
+                    "NOT_TEXT",
+                    "File is not a text file."
+                )
+            }
+        }
+
+        return try {
+            Charsets.UTF_8.newDecoder()
+                .onMalformedInput(CodingErrorAction.REPORT)
+                .onUnmappableCharacter(CodingErrorAction.REPORT)
+                .decode(ByteBuffer.wrap(bytes))
+                .toString()
+        } catch (e: CharacterCodingException) {
+            // Not UTF-8: treat as Latin-1 so no bytes are lost.
+            String(bytes, Charsets.ISO_8859_1)
+        }
+    }
+
+
+    // ---- HTML ------------------------------------------------------
+
+    private fun htmlToText(html: String): String {
+
+        // Drop script/style blocks and comments before converting.
+        val cleaned =
+            html
+                .replace(
+                    Regex(
+                        "(?is)<(script|style|noscript|template)\\b[^>]*>.*?</\\1\\s*>"
+                    ),
+                    " "
+                )
+                .replace(Regex("(?s)<!--.*?-->"), " ")
+
+        // No ImageGetter: images are never loaded.
+        return fromHtmlCompat(cleaned)
+            .replace("￼", "")
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun fromHtmlCompat(html: String): String {
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT).toString()
+        } else {
+            Html.fromHtml(html).toString()
+        }
+    }
+
+
+    // ---- PDF -------------------------------------------------------
+
+    private fun extractPdfText(
+        file: File,
+        budget: TextBudget
+    ) {
+
+        if (!PDFBoxResourceLoader.isReady()) {
+            PDFBoxResourceLoader.init(context.applicationContext)
+        }
+
+        val document =
+            try {
+                PDDocument.load(
+                    file,
+                    MemoryUsageSetting.setupMixed(PDF_MAX_MAIN_MEMORY_BYTES)
+                )
+            } catch (e: InvalidPasswordException) {
+                throw ExtractionFailure(
+                    "ENCRYPTED",
+                    "PDF is password-protected."
+                )
+            } catch (e: IOException) {
+                throw ExtractionFailure(
+                    "CORRUPT",
+                    "PDF could not be opened."
+                )
+            }
+
+        document.use { doc ->
+
+            val stripper = PDFTextStripper()
+            stripper.setSortByPosition(true)
+
+            val pageCount = doc.getNumberOfPages()
+
+            for (page in 1..pageCount) {
+
+                if (budget.isFull) {
+                    budget.markTruncated()
+                    break
+                }
+
+                stripper.setStartPage(page)
+                stripper.setEndPage(page)
+
+                budget.append(stripper.getText(doc))
+                budget.append("\n")
+            }
+        }
+    }
+
+
+    // ---- Office Open XML (docx / xlsx / pptx) ----------------------
+
+    private fun openZip(file: File): ZipFile {
+
+        return try {
+            ZipFile(file)
+        } catch (e: IOException) {
+            // e.g. an old .doc renamed to .docx.
+            throw ExtractionFailure(
+                "CORRUPT",
+                "Document could not be opened."
+            )
+        }
+    }
+
+
+    /**
+     * Opens [name] inside [zip] as an XML pull parser and runs
+     * [block]. Returns null if the entry does not exist.
+     */
+    private fun <T> readZipXml(
+        zip: ZipFile,
+        name: String,
+        block: (XmlPullParser) -> T
+    ): T? {
+
+        val entry = zip.getEntry(name) ?: return null
+
+        BoundedInputStream(
+            zip.getInputStream(entry),
+            MAX_ZIP_ENTRY_BYTES
+        ).use { stream ->
+
+            val parser = Xml.newPullParser()
+
+            // Keep prefixes ("w:t", "a:t") in tag names.
+            parser.setFeature(
+                XmlPullParser.FEATURE_PROCESS_NAMESPACES,
+                false
+            )
+
+            parser.setInput(stream, null)
+
+            return block(parser)
+        }
+    }
+
+
+    /** Walks [parser] until the end, or until [budget] is full. */
+    private fun walkXml(
+        parser: XmlPullParser,
+        budget: TextBudget,
+        onStart: (String) -> Unit,
+        onEnd: (String) -> Unit
+    ) {
+
+        var event = parser.eventType
+
+        while (event != XmlPullParser.END_DOCUMENT) {
+
+            if (budget.isFull) {
+                budget.markTruncated()
+                return
+            }
+
+            if (event == XmlPullParser.START_TAG) {
+                onStart(parser.name)
+            } else if (event == XmlPullParser.END_TAG) {
+                onEnd(parser.name)
+            }
+
+            event = parser.next()
+        }
+    }
+
+
+    private fun extractDocxText(
+        file: File,
+        budget: TextBudget
+    ) {
+
+        openZip(file).use { zip ->
+
+            readZipXml(zip, "word/document.xml") { parser ->
+
+                walkXml(
+                    parser,
+                    budget,
+                    onStart = { tag ->
+                        when (tag) {
+                            "w:t" -> budget.append(parser.nextText())
+                            "w:tab" -> budget.append("\t")
+                            "w:br", "w:cr" -> budget.append("\n")
+                        }
+                    },
+                    onEnd = { tag ->
+                        if (tag == "w:p") budget.append("\n")
+                    }
+                )
+
+            } ?: throw ExtractionFailure(
+                "CORRUPT",
+                "Not a valid Word document."
+            )
+        }
+    }
+
+
+    private fun extractPptxText(
+        file: File,
+        budget: TextBudget
+    ) {
+
+        openZip(file).use { zip ->
+
+            val slideRegex = Regex("^ppt/slides/slide(\\d+)\\.xml$")
+
+            val slides =
+                zip.entries().asSequence()
+                    .mapNotNull { entry ->
+                        slideRegex.find(entry.name)
+                            ?.groupValues
+                            ?.get(1)
+                            ?.toIntOrNull()
+                            ?.let { number -> number to entry.name }
+                    }
+                    .sortedBy { it.first }
+                    .toList()
+
+            if (slides.isEmpty()) {
+                throw ExtractionFailure(
+                    "CORRUPT",
+                    "Not a valid PowerPoint file."
+                )
+            }
+
+            for ((number, entryName) in slides) {
+
+                if (budget.isFull) {
+                    budget.markTruncated()
+                    break
+                }
+
+                budget.append("Slide $number\n")
+
+                readZipXml(zip, entryName) { parser ->
+
+                    walkXml(
+                        parser,
+                        budget,
+                        onStart = { tag ->
+                            when (tag) {
+                                "a:t" -> budget.append(parser.nextText())
+                                "a:br" -> budget.append("\n")
+                            }
+                        },
+                        onEnd = { tag ->
+                            if (tag == "a:p") budget.append("\n")
+                        }
+                    )
+                }
+
+                budget.append("\n")
+            }
+        }
+    }
+
+
+    private fun extractXlsxText(
+        file: File,
+        budget: TextBudget
+    ) {
+
+        openZip(file).use { zip ->
+
+            // ---- Shared strings ----------------------------------
+            val sharedStrings = mutableListOf<String>()
+
+            readZipXml(zip, "xl/sharedStrings.xml") { parser ->
+
+                var current: StringBuilder? = null
+                var inPhonetic = false
+                var event = parser.eventType
+
+                while (event != XmlPullParser.END_DOCUMENT) {
+
+                    if (event == XmlPullParser.START_TAG) {
+                        when (parser.name) {
+                            "si" -> current = StringBuilder()
+                            "rPh" -> inPhonetic = true
+                            "t" -> {
+                                val text = parser.nextText()
+                                val target = current
+                                if (target != null && !inPhonetic) {
+                                    target.append(text)
+                                }
+                            }
+                        }
+                    } else if (event == XmlPullParser.END_TAG) {
+                        when (parser.name) {
+                            "rPh" -> inPhonetic = false
+                            "si" -> {
+                                sharedStrings.add(current?.toString() ?: "")
+                                current = null
+                            }
+                        }
+                    }
+
+                    event = parser.next()
+                }
+            }
+
+
+            // ---- Sheet names and files ---------------------------
+            val relTargets = mutableMapOf<String, String>()
+
+            readZipXml(zip, "xl/_rels/workbook.xml.rels") { parser ->
+
+                var event = parser.eventType
+
+                while (event != XmlPullParser.END_DOCUMENT) {
+
+                    if (
+                        event == XmlPullParser.START_TAG &&
+                        parser.name == "Relationship"
+                    ) {
+                        val id = parser.getAttributeValue(null, "Id")
+                        val target = parser.getAttributeValue(null, "Target")
+                        if (id != null && target != null) {
+                            relTargets[id] = target
+                        }
+                    }
+
+                    event = parser.next()
+                }
+            }
+
+            val sheets = mutableListOf<Pair<String, String>>()
+
+            readZipXml(zip, "xl/workbook.xml") { parser ->
+
+                var event = parser.eventType
+
+                while (event != XmlPullParser.END_DOCUMENT) {
+
+                    if (
+                        event == XmlPullParser.START_TAG &&
+                        parser.name == "sheet"
+                    ) {
+                        val name =
+                            parser.getAttributeValue(null, "name") ?: "Sheet"
+                        val relId =
+                            parser.getAttributeValue(null, "r:id")
+                        val target =
+                            relId?.let { relTargets[it] }
+
+                        if (target != null) {
+                            val path =
+                                if (target.startsWith("/")) {
+                                    target.removePrefix("/")
+                                } else {
+                                    "xl/" + target.removePrefix("./")
+                                }
+                            sheets.add(name to path)
+                        }
+                    }
+
+                    event = parser.next()
+                }
+            }
+
+            if (sheets.isEmpty()) {
+                throw ExtractionFailure(
+                    "CORRUPT",
+                    "Not a valid Excel file."
+                )
+            }
+
+
+            // ---- Cells -------------------------------------------
+            for ((sheetName, sheetPath) in sheets) {
+
+                if (budget.isFull) {
+                    budget.markTruncated()
+                    break
+                }
+
+                budget.append("Sheet: $sheetName\n")
+
+                readZipXml(zip, sheetPath) { parser ->
+
+                    val row = mutableListOf<String>()
+                    var cellType: String? = null
+                    var cellColumn = -1
+                    var cellValue = ""
+
+                    walkXml(
+                        parser,
+                        budget,
+                        onStart = { tag ->
+                            when (tag) {
+                                "row" -> row.clear()
+                                "c" -> {
+                                    cellType = parser.getAttributeValue(null, "t")
+                                    cellColumn = columnIndex(
+                                        parser.getAttributeValue(null, "r")
+                                    )
+                                    cellValue = ""
+                                }
+                                "v" -> {
+                                    val raw = parser.nextText()
+                                    cellValue =
+                                        when (cellType) {
+                                            "s" -> raw.trim().toIntOrNull()
+                                                ?.let { sharedStrings.getOrNull(it) }
+                                                ?: ""
+                                            "b" -> if (raw.trim() == "1") "TRUE" else "FALSE"
+                                            else -> raw
+                                        }
+                                }
+                                "t" -> {
+                                    // Inline strings: <c t="inlineStr"><is><t>
+                                    if (cellType == "inlineStr") {
+                                        cellValue += parser.nextText()
+                                    }
+                                }
+                            }
+                        },
+                        onEnd = { tag ->
+                            when (tag) {
+                                "c" -> {
+                                    val column =
+                                        if (cellColumn >= 0) cellColumn else row.size
+                                    while (row.size < column) row.add("")
+                                    if (row.size == column) {
+                                        row.add(cellValue)
+                                    } else {
+                                        row[column] = cellValue
+                                    }
+                                }
+                                "row" -> {
+                                    if (row.any { it.isNotBlank() }) {
+                                        budget.append(
+                                            row.joinToString("\t").trimEnd() + "\n"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+
+                budget.append("\n")
+            }
+        }
+    }
+
+
+    /** "C12" -> 2 (zero-based). Returns -1 if missing. */
+    private fun columnIndex(reference: String?): Int {
+
+        if (reference.isNullOrEmpty()) return -1
+
+        var index = 0
+        var seenLetter = false
+
+        for (ch in reference) {
+            if (ch in 'A'..'Z') {
+                index = index * 26 + (ch - 'A' + 1)
+                seenLetter = true
+            } else {
+                break
+            }
+        }
+
+        // Guard against nonsense references creating huge rows.
+        return if (seenLetter && index in 1..MAX_XLSX_COLUMNS) index - 1 else -1
+    }
+
+
+    private fun normalizeExtractedText(text: String): String {
+
+        return text
+            .replace("\r\n", "\n")
+            .replace('\r', '\n')
+            // Control characters other than tab and newline.
+            .replace(Regex("[\\u0000-\\u0008\\u000B\\u000C\\u000E-\\u001F\\u007F]"), "")
+            .replace(Regex("[ \\t]+\\n"), "\n")
+            .replace(Regex("\\n{3,}"), "\n\n")
+            .trim()
+    }
+
+
+    // ============================================================
+    // SANITISE IMAGE (strip EXIF / XMP / IPTC)
+    // ============================================================
+
+    /**
+     * Decodes [source] to pixels and writes a brand-new JPEG.
+     *
+     * Bitmap.compress() writes no EXIF, XMP, IPTC, ICC-embedded
+     * comments or thumbnails, so GPS position, camera make/model,
+     * serial numbers and capture time are all dropped. The EXIF
+     * orientation is applied to the pixels first so the cleaned
+     * image is not shown rotated.
+     *
+     * Transparent images are flattened onto white; animated GIFs
+     * keep their first frame. HEIC/HEIF only decodes on Android 9+.
+     *
+     * Returns null if the image cannot be decoded, encoded or
+     * verified. The caller must then NOT send the original.
+     */
+    private fun sanitizeImage(
+        source: File,
+        index: Int,
+        baseName: String
+    ): File? {
+
+        var output: File? = null
+
+        // Only used by `finally` to free whatever bitmap is current.
+        var toRecycle: Bitmap? = null
+
+        try {
+
+            // ---- 1. Read dimensions only -------------------------
+            val bounds =
+                BitmapFactory.Options().apply {
+                    inJustDecodeBounds = true
+                }
+
+            BitmapFactory.decodeFile(
+                source.absolutePath,
+                bounds
+            )
+
+            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
+                Log.w("BelnetLibPlugin", "Image could not be decoded")
+                return null
+            }
+
+
+            // ---- 2. Decode with subsampling (limits memory) ------
+            var sampleSize = 1
+
+            while (
+                maxOf(bounds.outWidth, bounds.outHeight) /
+                (sampleSize * 2) >= MAX_IMAGE_DIMENSION
+            ) {
+                sampleSize *= 2
+            }
+
+            val decodeOptions =
+                BitmapFactory.Options().apply {
+                    inSampleSize = sampleSize
+                    inPreferredConfig = Bitmap.Config.ARGB_8888
+                }
+
+            val decoded: Bitmap =
+                BitmapFactory.decodeFile(
+                    source.absolutePath,
+                    decodeOptions
+                ) ?: return null
+
+            /*
+             * `current` is non-null, so it can be used inside
+             * lambdas without a smart cast (Kotlin 1.9 rejects smart
+             * casts on vars captured by a closure).
+             */
+            var current: Bitmap = decoded
+            toRecycle = current
+
+
+            // ---- 3. Apply EXIF orientation to the pixels ---------
+            val orientation =
+                try {
+                    ExifInterface(source.absolutePath)
+                        .getAttributeInt(
+                            ExifInterface.TAG_ORIENTATION,
+                            ExifInterface.ORIENTATION_NORMAL
+                        )
+                } catch (e: Exception) {
+                    ExifInterface.ORIENTATION_NORMAL
+                }
+
+            current = replaceBitmap(
+                current,
+                applyExifOrientation(current, orientation)
+            )
+            toRecycle = current
+
+
+            // ---- 4. Scale to the final size ----------------------
+            val longest = maxOf(current.width, current.height)
+
+            if (longest > MAX_IMAGE_DIMENSION) {
+
+                val scale =
+                    MAX_IMAGE_DIMENSION.toFloat() / longest
+
+                current = replaceBitmap(
+                    current,
+                    Bitmap.createScaledBitmap(
+                        current,
+                        (current.width * scale).toInt().coerceAtLeast(1),
+                        (current.height * scale).toInt().coerceAtLeast(1),
+                        true
+                    )
+                )
+                toRecycle = current
+            }
+
+
+            // ---- 5. Flatten transparency (JPEG has no alpha) -----
+            if (current.hasAlpha()) {
+
+                val withAlpha = current
+
+                val flat =
+                    Bitmap.createBitmap(
+                        withAlpha.width,
+                        withAlpha.height,
+                        Bitmap.Config.ARGB_8888
+                    )
+
+                val canvas = Canvas(flat)
+                canvas.drawColor(Color.WHITE)
+                canvas.drawBitmap(withAlpha, 0f, 0f, null)
+
+                current = replaceBitmap(withAlpha, flat)
+                toRecycle = current
+            }
+
+
+            // ---- 6. Encode a new file ----------------------------
+            val outFile =
+                File(
+                    context.cacheDir,
+                    "${CLEAN_IMAGE_PREFIX}${System.currentTimeMillis()}" +
+                            "_${index}_${baseName}.jpg"
+                )
+
+            output = outFile
+
+            val toEncode: Bitmap = current
+
+            val encoded =
+                FileOutputStream(outFile).use { stream ->
+                    toEncode.compress(
+                        Bitmap.CompressFormat.JPEG,
+                        CLEAN_JPEG_QUALITY,
+                        stream
+                    )
+                }
+
+            if (!encoded || outFile.length() == 0L) {
+                outFile.delete()
+                return null
+            }
+
+
+            // ---- 7. Verify nothing identifying survived ----------
+            if (!hasNoIdentifyingMetadata(outFile)) {
+                Log.w("BelnetLibPlugin", "Metadata still present after re-encode")
+                outFile.delete()
+                return null
+            }
+
+            return outFile
+
+        } catch (t: Throwable) {
+
+            // Includes OutOfMemoryError on very large images.
+            Log.e("BelnetLibPlugin", "Image sanitise failed", t)
+
+            output?.delete()
+
+            return null
+
+        } finally {
+
+            toRecycle?.recycle()
+        }
+    }
+
+
+    /**
+     * Recycles [old] when [new] is a different Bitmap instance
+     * (createBitmap/createScaledBitmap can return the same one).
+     */
+    private fun replaceBitmap(
+        old: Bitmap,
+        new: Bitmap
+    ): Bitmap {
+
+        if (new !== old) {
+            old.recycle()
+        }
+
+        return new
+    }
+
+
+    private fun applyExifOrientation(
+        bitmap: Bitmap,
+        orientation: Int
+    ): Bitmap {
+
+        val matrix = Matrix()
+
+        when (orientation) {
+            ExifInterface.ORIENTATION_FLIP_HORIZONTAL ->
+                matrix.setScale(-1f, 1f)
+            ExifInterface.ORIENTATION_ROTATE_180 ->
+                matrix.setRotate(180f)
+            ExifInterface.ORIENTATION_FLIP_VERTICAL ->
+                matrix.setScale(1f, -1f)
+            ExifInterface.ORIENTATION_TRANSPOSE -> {
+                matrix.setRotate(90f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_ROTATE_90 ->
+                matrix.setRotate(90f)
+            ExifInterface.ORIENTATION_TRANSVERSE -> {
+                matrix.setRotate(-90f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_ROTATE_270 ->
+                matrix.setRotate(-90f)
+            else ->
+                return bitmap
+        }
+
+        return Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.width,
+            bitmap.height,
+            matrix,
+            true
+        )
+    }
+
+
+    /**
+     * Defence in depth: re-read the encoded file and make sure the
+     * tags that identify a person, place, device or time are gone.
+     */
+    private fun hasNoIdentifyingMetadata(
+        file: File
+    ): Boolean {
+
+        return try {
+
+            val exif = ExifInterface(file.absolutePath)
+
+            val identifyingTags = listOf(
+                ExifInterface.TAG_GPS_LATITUDE,
+                ExifInterface.TAG_GPS_LONGITUDE,
+                ExifInterface.TAG_GPS_ALTITUDE,
+                ExifInterface.TAG_GPS_TIMESTAMP,
+                ExifInterface.TAG_MAKE,
+                ExifInterface.TAG_MODEL,
+                ExifInterface.TAG_DATETIME,
+                ExifInterface.TAG_DATETIME_ORIGINAL,
+                ExifInterface.TAG_DATETIME_DIGITIZED,
+                ExifInterface.TAG_SOFTWARE,
+                ExifInterface.TAG_ARTIST,
+                ExifInterface.TAG_COPYRIGHT,
+                ExifInterface.TAG_IMAGE_DESCRIPTION,
+                ExifInterface.TAG_USER_COMMENT
+            )
+
+            identifyingTags.none { tag ->
+                !exif.getAttribute(tag).isNullOrBlank()
+            } && !exif.hasThumbnail()
+
+        } catch (e: Exception) {
+
+            // A freshly encoded JPEG that cannot be parsed is
+            // suspicious; fail closed.
+            false
         }
     }
 
@@ -3810,6 +5343,27 @@ open class BelnetLibPlugin :
                                     copied =
                                         true
                                 }
+
+
+                            /*
+                             * flutter_tts wrote this WAV into the
+                             * shared Music collection, where other
+                             * apps can read it. We have our private
+                             * copy now, so remove the shared one.
+                             */
+                            try {
+                                context.contentResolver.delete(
+                                    contentUri,
+                                    null,
+                                    null
+                                )
+                            } catch (e: Exception) {
+                                Log.w(
+                                    "BelnetLibPlugin",
+                                    "Could not delete shared TTS copy",
+                                    e
+                                )
+                            }
                         }
                     }
                 }

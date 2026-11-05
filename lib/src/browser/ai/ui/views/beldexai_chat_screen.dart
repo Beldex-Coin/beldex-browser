@@ -14,6 +14,7 @@ import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/attachment_preview.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/floating_read_aloud_player.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
+import 'package:beldex_browser/src/browser/ai/security/ai_temp_files.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/full_screen_image_viewer.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/message_pair.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/pop_up_menu.dart';
@@ -286,6 +287,15 @@ basicSetting(ChatViewModel model,WebViewModel webViewModel,AIModelProvider aiMod
         checkSummariseString(webViewModel, model);
         model.isTyping = false;
         model.clearAttachments();
+
+        // Chat was reset: remove its temporary files, but keep the
+        // WAV that read-aloud may still be playing.
+        final playingAudio = mounted
+            ? context.read<ReadAloudController>().currentAudioPath
+            : null;
+        AiTempFiles.purge(
+          keepPaths: [if (playingAudio != null) playingAudio],
+        );
 
         //getWordSearch(model);
        // _controller.addListener(_onSheetDrag);
@@ -614,6 +624,10 @@ void dispose() {
                                           child: GestureDetector(
                                             onTap: ()async {
                                                 await readAloudController.close();
+
+                                             // Chat erased: delete its temporary files.
+                                             model.clearAttachments();
+                                             await AiTempFiles.purge();
           
                                                 if (!context.mounted) return;
           

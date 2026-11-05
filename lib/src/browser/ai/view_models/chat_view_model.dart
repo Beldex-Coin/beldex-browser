@@ -9,6 +9,7 @@ import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/enums/roles.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/ai/repositories/openai_repository.dart';
+import 'package:beldex_browser/src/browser/ai/security/document_text.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/base_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
@@ -1181,7 +1182,8 @@ await initializeDailyAttachmentLimit();
 
     final XFile? pickedFile = await picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 85,
+      // No imageQuality: resizing makes image_picker leave a second,
+      // EXIF-tagged copy in the cache. sanitizeImage re-encodes anyway.
     );
 
     if (pickedFile == null) return;
@@ -1811,6 +1813,48 @@ await initializeDailyAttachmentLimit();
 
 
 
+  // ============================================================
+  // DOCUMENTS -> TEXT (on device)
+  // ============================================================
+  //
+  // Documents (PDF, TXT, DOCX, ...) are never uploaded as files. Their
+  // text is extracted here and only that text is sent. If any document
+  // cannot be read, nothing is sent.
+
+  List<ExtractedDocument> extractedDocuments = const [];
+
+  try {
+    extractedDocuments = await DocumentTextExtractor.extractAll(sendFiles);
+  } on DocumentExtractionException catch (e) {
+    showMessage(e.userMessage);
+
+    if (isRegenerate) {
+      // Replace the loading placeholder with the reason.
+      final index = modelResponseIndex;
+      if (index != null && index >= 0 && index < messages.length) {
+        messages[index] = ChatModel(
+          role: Roles.model,
+          text: e.userMessage,
+          isTypingComplete: true,
+          canShowRegenerate: false,
+          isSummariseResult: false,
+        );
+      }
+    } else if (messageController.text.isEmpty) {
+      // Give the user their text back; attachments stay selected so
+      // they can remove the one that failed.
+      messageController.text = messageToSend;
+    }
+
+    isTyping = false;
+    updateUI();
+    return;
+  }
+
+  // Only (metadata-stripped) images are passed on as files.
+  final List<File> imageAttachments =
+      sendFiles.where(DocumentTextExtractor.isImage).toList();
+
 // Capture the count before clearing the selected attachments.
 //
 // This is NOT added to the daily limit yet.
@@ -1903,7 +1947,9 @@ print('Selected model: $selectedModel');
           .sendTextForStreamWithModel( selectedModel,
             //'gemini',
             messageToSend,
-            attachmentFiles: sendFiles,
+            // Images only; documents go as extracted text.
+            attachmentFiles: imageAttachments,
+            documents: extractedDocuments,
           )
           .listen(
     (event) {
