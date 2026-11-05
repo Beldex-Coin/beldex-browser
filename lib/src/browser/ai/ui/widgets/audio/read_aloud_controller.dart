@@ -5,6 +5,7 @@ import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 
 // Keep your existing BelnetLib import.
 //import 'package:beldex_browser/src/.../belnet_lib.dart';
@@ -21,6 +22,15 @@ class ReadAloudController extends ChangeNotifier
   String? _activeMessageId;
 
   int _operationId = 0;
+
+  /// WAV currently loaded in the player (private cache).
+  String? _currentAudioPath;
+
+  /// WAV being synthesised right now (may be abandoned on cancel).
+  String? _pendingAudioPath;
+
+  /// Path of the WAV in use, so cleanup can skip it.
+  String? get currentAudioPath => _currentAudioPath;
 
   bool _isReading = false;
   bool _isGeneratingAudio = false;
@@ -427,10 +437,20 @@ _playerStateSubscription =
         'TTS FILE NAME: $fileName',
       );
 
+      /*
+       * Write straight into the app's private cache (isFullPath =
+       * true). With isFullPath = false, flutter_tts puts the WAV in
+       * the shared Music collection, where other apps can read the
+       * AI reply as audio.
+       */
+      final cacheDir = await getTemporaryDirectory();
+      final privatePath = '${cacheDir.path}/$fileName';
+      _pendingAudioPath = privatePath;
+
       final result = await _flutterTts.synthesizeToFile(
         cleanText,
-        fileName,
-        false,
+        privatePath,
+        true,
       );
 
       print(
@@ -466,8 +486,32 @@ _playerStateSubscription =
       // GET AUDIO FILE PATH
       // --------------------------------------------------------
 
-      final audioPath =
-          await BelnetLib.audioFileGen(fileName);
+      String? audioPath;
+
+      final privateFile = File(privatePath);
+
+      if (await privateFile.exists() && await privateFile.length() > 0) {
+        audioPath = privatePath;
+      } else {
+        /*
+         * Fallback for engines that cannot write to the given path:
+         * the shared-storage flow. audioFileGen copies the WAV into
+         * the cache and deletes the shared copy.
+         */
+        print('TTS private write failed, using shared-storage fallback');
+
+        await _flutterTts.synthesizeToFile(cleanText, fileName, false);
+
+        if (operation != _operationId) {
+          unawaited(BelnetLib.deleteTtsSharedCopies());
+          return;
+        }
+
+        await Future.delayed(const Duration(milliseconds: 300));
+
+        audioPath = await BelnetLib.audioFileGen(fileName);
+        _pendingAudioPath = audioPath;
+      }
 
       print(
         'TTS CACHE PATH: $audioPath',
@@ -545,6 +589,14 @@ _playerStateSubscription =
 // --------------------------------------------------------
 // LOAD AUDIO
 // --------------------------------------------------------
+
+// The previous reply's WAV is no longer needed once we switch.
+final previousAudioPath = _currentAudioPath;
+_currentAudioPath = audioPath;
+_pendingAudioPath = null;
+if (previousAudioPath != null && previousAudioPath != audioPath) {
+  unawaited(_deleteAudioFile(previousAudioPath));
+}
 
 final loadedDuration = await _audioPlayer.setFilePath(
   audioPath,
@@ -951,6 +1003,11 @@ Future<void> close() async {
   // Invalidate any ongoing audio generation or playback operation.
   ++_operationId;
 
+  // Capture now: a new read started while we await below must keep
+  // its own file.
+  final String? closingAudioPath = _currentAudioPath;
+  final String? closingPendingPath = _pendingAudioPath;
+
   // Hide the floating player immediately.
   _activeMessageId = null;
   _isReading = false;
@@ -991,7 +1048,29 @@ Future<void> close() async {
 
   notifyListeners();
 
+  // The player is stopped, so its audio files can go.
+  await _deleteAudioFile(closingAudioPath);
+  await _deleteAudioFile(closingPendingPath);
+  if (_currentAudioPath == closingAudioPath) _currentAudioPath = null;
+  if (_pendingAudioPath == closingPendingPath) _pendingAudioPath = null;
+
+  // Belt and braces for the shared-storage fallback.
+  await BelnetLib.deleteTtsSharedCopies();
+
   print('Read Aloud: player closed');
+}
+
+/// Deletes a read-aloud WAV in the app cache. Ignores errors.
+Future<void> _deleteAudioFile(String? path) async {
+  if (path == null || path.isEmpty) return;
+  try {
+    final file = File(path);
+    if (await file.exists()) {
+      await file.delete();
+    }
+  } catch (e) {
+    print('Read Aloud: could not delete audio file: $e');
+  }
 }
 
 /// Stops the current response and closes the floating player.
