@@ -37,6 +37,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
 import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
+import 'package:beldex_browser/src/browser/ai/security/ai_temp_files.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -167,6 +168,10 @@ const String channelDescription = 'Beldex Browser';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Remove AI temp files left by the previous session (attachments,
+  // camera captures, read-aloud audio incl. shared-storage copies).
+  unawaited(AiTempFiles.purge());
   await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
   await FlutterDownloader.registerCallback(downloadCallback);
   await SharedPreferences.getInstance();
