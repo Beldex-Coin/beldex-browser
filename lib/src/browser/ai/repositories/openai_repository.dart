@@ -8,6 +8,8 @@ import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:dio/dio.dart';
+import 'package:beldex_browser/src/browser/ai/security/document_text.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -462,6 +464,97 @@ $userMessage
 
 
 
+// ====================================================================
+// ATTACHMENT PRIVACY
+// ====================================================================
+
+static const Set<String> _imageExtensions = {
+  'jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'heic', 'heif',
+};
+
+/// Must match CLEAN_IMAGE_PREFIX in BelnetLibPlugin.kt.
+static const String _cleanImagePrefix = 'chatimg_';
+
+String _extensionOf(File file) {
+  final name = file.uri.pathSegments.isNotEmpty
+      ? file.uri.pathSegments.last
+      : file.path;
+  final dot = name.lastIndexOf('.');
+  return dot == -1 ? '' : name.substring(dot + 1).toLowerCase();
+}
+
+/// Last line of defence before upload: an image is only sent if it
+/// is a file the native sanitiser produced (metadata stripped) and it
+/// lives in this app's cache directory. Anything else is dropped, so
+/// a new code path that forgets to sanitise cannot leak EXIF/GPS.
+Future<bool> _isSendableAttachment(File file) async {
+  if (!_imageExtensions.contains(_extensionOf(file))) {
+    // Documents are never uploaded as files: their text is extracted
+    // on the device and passed in `documents` instead.
+    return false;
+  }
+
+  final name = file.uri.pathSegments.isNotEmpty
+      ? file.uri.pathSegments.last
+      : '';
+
+  if (!name.startsWith(_cleanImagePrefix)) {
+    return false;
+  }
+
+  try {
+    final cacheDir = await getTemporaryDirectory();
+    final cachePath = await cacheDir.resolveSymbolicLinks();
+    final filePath = await file.resolveSymbolicLinks();
+    return filePath.startsWith('$cachePath${Platform.pathSeparator}');
+  } catch (_) {
+    return false;
+  }
+}
+
+
+
+/// Reads one document's text file for sending and deletes it.
+///
+/// Only files written by DocumentTextExtractor are accepted: a .txt
+/// with the "chatdoc_" prefix inside this app's cache. Returns the
+/// base64 contents, or null if the file is missing or not one of ours.
+Future<String?> _readDocumentTextFile(ExtractedDocument document) async {
+  final file = document.textFile;
+
+  try {
+    final segments = file.uri.pathSegments;
+    final name = segments.isNotEmpty ? segments.last : '';
+
+    if (!name.startsWith(DocumentTextExtractor.textFilePrefix) ||
+        !name.endsWith('.txt')) {
+      print("Document text file rejected (not ours)");
+      return null;
+    }
+
+    final cacheDir = await getTemporaryDirectory();
+    final cachePath = await cacheDir.resolveSymbolicLinks();
+    final filePath = await file.resolveSymbolicLinks();
+
+    if (!filePath.startsWith('$cachePath${Platform.pathSeparator}')) {
+      print("Document text file rejected (outside cache)");
+      return null;
+    }
+
+    final bytes = await file.readAsBytes();
+    return base64Encode(bytes);
+  } catch (e) {
+    print("Document text file could not be read");
+    return null;
+  } finally {
+    // The text is in memory now; the file is no longer needed.
+    try {
+      if (await file.exists()) await file.delete();
+    } catch (_) {}
+  }
+}
+
+
 /// Store history for each model separately
    Map<String, List<Map<String, dynamic>>> _history = {
     "openai": [],
@@ -476,6 +569,9 @@ $userMessage
   File? attachmentFile,
   List<File>? attachmentFiles,
   AttachmentType? attachmentType,
+  // Text extracted on the device from attached documents. Documents
+  // themselves are never uploaded.
+  List<ExtractedDocument>? documents,
 }
   ) async* {
     cancelToken = CancelToken();
@@ -629,13 +725,20 @@ case "openai":
     // ============================================================
 
     if (attachmentFiles != null && attachmentFiles.isNotEmpty) {
+      int attachmentNumber = 0;
+
       for (final attachmentFile in attachmentFiles) {
         if (!await attachmentFile.exists()) {
-          print(
-            "File does not exist: ${attachmentFile.path}",
-          );
+          print("Attachment missing, skipped");
           continue;
         }
+
+        if (!await _isSendableAttachment(attachmentFile)) {
+          print("Unsanitised image blocked, not sent");
+          continue;
+        }
+
+        attachmentNumber++;
 
         final extension = attachmentFile.path
             .split('.')
@@ -679,93 +782,50 @@ case "openai":
             "detail": "auto",
           });
 
-          print(
-            "OpenAI image attached: ${attachmentFile.path}",
-          );
+          print("OpenAI image attached (#$attachmentNumber)");
         }
 
-        // ========================================================
-        // DOCUMENT / FILE
-        // ========================================================
-
+        // Documents never reach this point (see _isSendableAttachment):
+        // they are sent as text extracted on the device, below.
         else {
-          String? mimeType;
-
-          switch (extension) {
-            case "pdf":
-              mimeType = "application/pdf";
-              break;
-
-            case "txt":
-              mimeType = "text/plain";
-              break;
-
-            case "csv":
-              mimeType = "text/csv";
-              break;
-
-            case "json":
-              mimeType = "application/json";
-              break;
-
-            case "xml":
-              mimeType = "application/xml";
-              break;
-
-            case "html":
-            case "htm":
-              mimeType = "text/html";
-              break;
-
-            case "doc":
-              mimeType = "application/msword";
-              break;
-
-            case "docx":
-              mimeType =
-                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-              break;
-
-            case "xls":
-              mimeType = "application/vnd.ms-excel";
-              break;
-
-            case "xlsx":
-              mimeType =
-                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-              break;
-
-            case "ppt":
-              mimeType = "application/vnd.ms-powerpoint";
-              break;
-
-            case "pptx":
-              mimeType =
-                  "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-              break;
-
-            default:
-              print(
-                "Unsupported OpenAI attachment type: $extension",
-              );
-              continue;
-          }
-
-          content.add({
-            "type": "input_file",
-            "filename":
-                attachmentFile.path.split('/').last,
-            "file_data":
-                "data:$mimeType;base64,$base64Data",
-          });
-
-          print(
-            "OpenAI file attached: ${attachmentFile.path}",
-          );
+          continue;
         }
       }
     } else {
       print("NO ATTACHMENT");
+    }
+
+    // ============================================================
+    // DOCUMENTS (one text file per document, extracted on device)
+    // ============================================================
+
+    if (documents != null && documents.isNotEmpty) {
+
+      content.add({
+        "type": "input_text",
+        "text": DocumentTextExtractor.instructionsFor(documents),
+      });
+
+      for (final document in documents) {
+
+        final String? base64Text =
+            await _readDocumentTextFile(document);
+
+        if (base64Text == null) {
+          // Never send a partial set of documents.
+          await DocumentTextExtractor.deleteTextFiles(documents);
+          yield "Erroring";
+          return;
+        }
+
+        content.add({
+          "type": "input_file",
+          "filename": document.providerFileName,
+          "file_data": "data:text/plain;base64,$base64Text",
+        });
+      }
+
+      print("OpenAI document text files attached: ${documents.length}");
     }
 
     // ============================================================
@@ -808,8 +868,16 @@ Automatically decide which response type is appropriate.
       "tools": [
         {
           "type": "image_generation",
+
+          // Generated images are 1K: 1024 x 1024 pixels.
+          "size": "1024x1024",
         }
       ],
+
+      // Do not keep this conversation (or its attachments and
+      // generated images) on OpenAI's servers. The Responses API
+      // stores responses by default.
+      "store": false,
 
       "stream": true,
     };
@@ -817,7 +885,6 @@ Automatically decide which response type is appropriate.
     print("========================================");
     print("OPENAI REQUEST");
     print("Content items: ${content.length}");
-    print("Request data: $requestData");
     print("========================================");
 
     // ============================================================
@@ -1684,8 +1751,10 @@ case "gemini":
   final String geminiModel =
       "gemini-3.1-flash-image";
 
+  // v1beta: generationConfig.imageConfig (image size) is only
+  // accepted on the v1beta endpoint.
   final String apiUrl =
-      "https://generativelanguage.googleapis.com/v1/models/"
+      "https://generativelanguage.googleapis.com/v1beta/models/"
       "$geminiModel:generateContent"
       "?key=${ApiKeyManager.instance.getKey('gemini')}";
 
@@ -1724,10 +1793,14 @@ case "gemini":
 
         if (!await attachmentFile.exists()) {
 
-          print(
-            "Gemini file does not exist: "
-            "${attachmentFile.path}",
-          );
+          print("Gemini attachment missing, skipped");
+
+          continue;
+        }
+
+        if (!await _isSendableAttachment(attachmentFile)) {
+
+          print("Unsanitised image blocked, not sent");
 
           continue;
         }
@@ -1736,21 +1809,8 @@ case "gemini":
         // File information
         // --------------------------------------------------------
 
-        final String fileName =
-            attachmentFile.path
-                .split('/')
-                .last;
-
         final String extension =
-            attachmentFile.path
-                .split('.')
-                .last
-                .toLowerCase();
-
-        print(
-          "GEMINI ATTACHMENT: "
-          "$fileName",
-        );
+            _extensionOf(attachmentFile);
 
         // --------------------------------------------------------
         // Read file
@@ -1761,10 +1821,7 @@ case "gemini":
 
         if (bytes.isEmpty) {
 
-          print(
-            "Gemini attachment is empty: "
-            "$fileName",
-          );
+          print("Gemini attachment is empty, skipped");
 
           continue;
         }
@@ -1784,10 +1841,7 @@ case "gemini":
             _getGeminiMimeType(extension);
 
         print(
-          "GEMINI ATTACHMENT: "
-          "$fileName | "
-          "$mimeType | "
-          "${bytes.length} bytes",
+          "GEMINI ATTACHMENT: $mimeType | ${bytes.length} bytes",
         );
 
         // --------------------------------------------------------
@@ -1801,6 +1855,39 @@ case "gemini":
           },
         });
       }
+    }
+
+    // ============================================================
+    // DOCUMENTS (one text file per document, extracted on device)
+    // ============================================================
+
+    if (documents != null && documents.isNotEmpty) {
+
+      parts.add({
+        "text": DocumentTextExtractor.instructionsFor(documents),
+      });
+
+      for (final document in documents) {
+
+        final String? base64Text =
+            await _readDocumentTextFile(document);
+
+        if (base64Text == null) {
+          // Never send a partial set of documents.
+          await DocumentTextExtractor.deleteTextFiles(documents);
+          yield "__IMAGE_ERROR__";
+          return;
+        }
+
+        parts.add({
+          "inlineData": {
+            "mimeType": "text/plain",
+            "data": base64Text,
+          },
+        });
+      }
+
+      print("Gemini document text files attached: ${documents.length}");
     }
 
     // ============================================================
