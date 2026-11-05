@@ -1937,14 +1937,11 @@ case "gemini":
           "IMAGE",
         ],
 
-        // Optional.
-        // You can remove this if you don't need fixed dimensions.
-        // "responseFormat": {
-        //   "image": {
-        //     "aspectRatio": "1:1",
-        //     "imageSize": "1K",
-        //   }
-        // },
+        // Generated images are 1K: 1024 x 1024 pixels (1:1).
+        "imageConfig": {
+          "aspectRatio": "1:1",
+          "imageSize": "1K",
+        },
       },
     };
 
