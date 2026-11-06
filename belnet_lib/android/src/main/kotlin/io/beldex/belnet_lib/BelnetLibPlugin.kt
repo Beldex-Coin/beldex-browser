@@ -25,6 +25,8 @@ import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.ExifInterface
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.TrafficStats
 import android.net.Uri
 import android.net.VpnService
@@ -1809,6 +1811,18 @@ open class BelnetLibPlugin :
 
 
             // ====================================================
+            // IS THIS APP'S TRAFFIC ON A VPN RIGHT NOW?
+            // ====================================================
+
+            "isVpnTransportActive" -> {
+
+                result.success(
+                    isVpnTransportActive()
+                )
+            }
+
+
+            // ====================================================
             // DELETE AI TEMPORARY FILES
             // ====================================================
 
@@ -3205,6 +3219,47 @@ open class BelnetLibPlugin :
             )
 
             CopyResult.Failed
+        }
+    }
+
+
+    // ============================================================
+    // VPN TRANSPORT CHECK
+    // ============================================================
+
+    /**
+     * True when this app's active network is a VPN. Belnet's
+     * VpnService only admits this app (addAllowedApplication), so
+     * together with IsRunning() this means our sockets go through
+     * the tunnel. When Belnet drops, Android silently falls back to
+     * the normal network, which is what the AI guard must catch.
+     */
+    private fun isVpnTransportActive(): Boolean {
+
+        return try {
+
+            val cm =
+                context.getSystemService(
+                    Context.CONNECTIVITY_SERVICE
+                ) as ConnectivityManager
+
+            val network =
+                cm.activeNetwork
+                    ?: return false
+
+            val caps =
+                cm.getNetworkCapabilities(network)
+                    ?: return false
+
+            caps.hasTransport(
+                NetworkCapabilities.TRANSPORT_VPN
+            )
+
+        } catch (e: Exception) {
+
+            Log.w("BelnetLibPlugin", "VPN transport check failed", e)
+
+            false
         }
     }
 

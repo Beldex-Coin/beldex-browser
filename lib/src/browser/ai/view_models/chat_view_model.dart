@@ -1633,6 +1633,14 @@ Future<bool> _belnetReadyOrNotify({
 }
 
 Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType,AppLocalizations loc, {String? sumText, bool isRegenerate = false}) async {
+    // On regenerate, show the notice in the loading bubble that
+    // regenerateSummarization left, instead of below it.
+    if (!await _belnetReadyOrNotify(
+      replaceMessageAt: isRegenerate ? modelResponseIndex : null,
+    )) {
+      return;
+    }
+
     String summariseUrlText = sumText ?? summariseText ?? "";
 
     if (!isRegenerate) {
