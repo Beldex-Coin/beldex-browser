@@ -27,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:velocity_x/velocity_x.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
+import 'package:beldex_browser/src/browser/ai/ui/widgets/safe_markdown_image.dart';
 
 // class ChatScreen extends StatefulWidget {
 //   const ChatScreen({super.key});
@@ -737,6 +738,8 @@ void callSummaryRetry(BuildContext context) async {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: md.Markdown(
+                                          // AI text: never auto-load images (exfiltration risk).
+                                          sizedImageBuilder: blockedMarkdownImage,
                                               data:
                                               title,
                                               shrinkWrap: true,
@@ -761,6 +764,8 @@ void callSummaryRetry(BuildContext context) async {
                                       children: [
                                         if (title.isNotEmpty)
                                         md.Markdown(
+                                            // AI text: never auto-load images (exfiltration risk).
+                                            sizedImageBuilder: blockedMarkdownImage,
                                             data:title.startsWith('-')
                                                 ? title.substring(1).trim()
                                                 : '',
@@ -834,6 +839,8 @@ void callSummaryRetry(BuildContext context) async {
                                                     //         fontSize: 16)),
                                                     Expanded(
                                                       child: md.Markdown(
+                                                          // AI text: never auto-load images (exfiltration risk).
+                                                          sizedImageBuilder: blockedMarkdownImage,
                                                         data: bullet,
                                                         shrinkWrap: true,
                                                         padding: EdgeInsets.zero,

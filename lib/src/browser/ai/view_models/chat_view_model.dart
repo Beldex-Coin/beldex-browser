@@ -1188,7 +1188,18 @@ await initializeDailyAttachmentLimit();
 
     if (pickedFile == null) return;
 
-    final file = File(pickedFile.path);
+    // image_picker keeps the capture's EXIF (incl. GPS). Re-encode it
+    // natively into a "chatimg_" file: only those images are allowed
+    // to be sent (see OpenAIRepository._isSendableAttachment), so an
+    // uncleaned photo would be silently dropped at send time.
+    final File? file = await BelnetLib.sanitizeImage(
+      File(pickedFile.path),
+    );
+
+    if (file == null) {
+      showMessage('The photo could not be processed and was not attached.');
+      return;
+    }
 
     // Recheck after the asynchronous picker operation.
     if (!canAddMoreImages) {
@@ -1670,7 +1681,7 @@ Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType
         //  Ensure function properly waits for API call before handling response
         isTyping = false;
         messages.removeAt(messages.length - 1); // Remove loading indicator
-         print("I am Printing the response ------$response");
+         print('I am Printing the response [content not logged]');
         // if(!isSummariseCancelled){
           if (response.isEmpty || response == 'Erroring') {
             //  Show retry only if API explicitly fails
