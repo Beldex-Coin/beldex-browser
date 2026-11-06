@@ -548,7 +548,8 @@ GlobalKey tabInkWellsKey = GlobalKey();
 
  displayHomePage(VpnStatusProvider vpnStatusProvider,InAppWebViewController webViewController,TtsProvider ttsProvider) async{
                 vpnStatusProvider.updateCanShowHomeScreen(true);
-                          await webViewController?.stopLoading();
+                
+                          await webViewController.stopLoading();
                           vpnStatusProvider.updateFAB(false);
                          ttsProvider.updateTTSDisplayStatus(false);
 
@@ -1832,8 +1833,13 @@ void _popupMenuChoiceAction(String choice) async {
     final appBarPositionProvider = Provider.of<AppBarPositionProvider>(context,listen: false); 
     switch (choice) {
        case PopupMenuActions.NEW_TAB:
+      if (browserModel.isFindingOnPage){
+        webViewModel.findInteractionController?.clearMatches();
+            browserModel.updateFindOnPage(false);                
+       }
        if(canEnabled(appBarPositionProvider,bottomNavigationProvider) ){
          vpnStatusProvider.updateCanShowHomeScreen(false);
+
         addNewTab();
        }
        

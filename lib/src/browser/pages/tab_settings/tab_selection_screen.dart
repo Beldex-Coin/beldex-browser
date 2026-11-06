@@ -125,7 +125,7 @@ class TabSelectionScreen
           await provider.closeSelectedTabs(
             context,
           );
-           Navigator.pop(context);
+           //Navigator.pop(context);
               }
           
               /// ADD TO GROUP

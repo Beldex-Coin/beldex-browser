@@ -10,6 +10,7 @@ import 'package:beldex_browser/security/api_key_initializer.dart';
 import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/ai/ai_model_provider.dart';
 import 'package:beldex_browser/src/browser/ai/di/locator.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
 import 'package:beldex_browser/src/browser/app_bar/sample_popup.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -36,6 +37,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_styles.dart';
 import 'package:beldex_browser/src/widget/downloads/download_notifications.dart';
 import 'package:beldex_browser/src/widget/downloads/download_prov.dart';
 import 'package:belnet_lib/belnet_lib.dart';
+import 'package:beldex_browser/src/browser/ai/security/ai_temp_files.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -164,8 +166,34 @@ const String channelDescription = 'Beldex Browser';
 
 
 
-void main() async {
+void main() {
+  // Release builds keep no app logs: print() and debugPrint() reach
+  // logcat, which other tools and bug reports can read, and the AI
+  // code would otherwise log prompts, replies, voice transcripts and
+  // page content. Debug and profile builds log as before.
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
+
+  // Everything (bindings, runApp, callbacks) runs inside this zone, so
+  // its print() is silenced too. ensureInitialized() and runApp() must
+  // stay in the same zone.
+  runZoned(
+    _appMain,
+    zoneSpecification: kReleaseMode
+        ? ZoneSpecification(
+            print: (Zone self, ZoneDelegate parent, Zone zone, String line) {},
+          )
+        : null,
+  );
+}
+
+Future<void> _appMain() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Remove AI temp files left by the previous session (attachments,
+  // camera captures, read-aloud audio incl. shared-storage copies).
+  unawaited(AiTempFiles.purge());
   await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
   await FlutterDownloader.registerCallback(downloadCallback);
   await SharedPreferences.getInstance();
@@ -260,6 +288,7 @@ NetworkReinitializer.start();
 ChangeNotifierProvider(create: (_)=> BottomNavigationProvider()),
 ChangeNotifierProvider(create: (_)=> AppBarPositionProvider()..loadPreference()),
 ChangeNotifierProvider<TunnelHealthProvider>(create: (_)=> TunnelHealthProvider()),
+ChangeNotifierProvider<ReadAloudController>(create: (_)=> ReadAloudController())
       ],
       child:
       // MaterialApp(

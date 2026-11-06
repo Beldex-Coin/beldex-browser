@@ -393,112 +393,109 @@ Widget defaultSearchEngineList(DarkThemeProvider themeProvider) {
                 ),
               ),
               trailing: addSearchEngineProvider
-            .isUserEngine(addSearchEngineProvider.allEngines[index]) ? Semantics(
-              label: 'options',
-              child: PopupMenuButton<String>(
-                 menuPadding: EdgeInsets.zero,
-                         color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9):  Color(0xffEBEBEB).withOpacity(0.9),
-  elevation: 0,
-  shadowColor: Colors.transparent,
-  surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :  Color(0xffEBEBEB).withOpacity(0.9),
-       // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
-        constraints: BoxConstraints(
-                  maxWidth: 220,
-                 ),
-             // icon: SvgPicture.asset('assets/images/ai-icons/new/threedot.svg',color:themeProvider.darkTheme ? Colors.white : Colors.black),// Icon(Icons.more_horiz,
-                  //color: themeProvider.darkTheme ? Colors.white : Colors.black),
-        //onSelected: _popupMenuChoiceAction,
-        offset: Offset(0, 47),
-        shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.zero,
-    side: BorderSide(
-      color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
-      width: 1,
-    ),
-  ),
-              //    color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
-              //       surfaceTintColor:
-              // themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
-              //       elevation: 14,
-              onSelected: (value) {
-                final engine =
-                    addSearchEngineProvider.allEngines[index];
-              
-                if (value == 'edit') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          AddSearchEngineScreen(editEngine: engine),
-                    ),
-                  );
-                }
-              
-                if (value == 'delete') {
-                 
-                  addSearchEngineProvider.removeSessionEngineIfSelected(engine);
-                      addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
-                                      
-                      /// If deleted engine was selected → reset to Google
-                      if (engine.name == settings.searchEngine.name) {
-                        settings.searchEngine = GoogleSearchEngine;
-                        browserModel.updateSettings(settings);
-                        browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
-                      }
-                 
-                  // addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
-              
-                  // /// If deleted engine was selected → reset to Google
-                  // if (engine.name == settings.searchEngine.name) {
-                  //   settings.searchEngine = GoogleSearchEngine;
-                  //   browserModel.updateSettings(settings);
-                  //   browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
-                  // }
-                }
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: 'edit',
-                  height: 35,
-                  padding: EdgeInsets.zero,
-                  child: GlassSettingPanel(
-                     color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
-                    child: Container(
-                      height: 35,
-                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                      child: 
-                      Row(
-                        children: [
-                          //Icon(Icons.edit,color: Colors.transparent,),
-                          SizedBox(width: 8),
-                          Text(loc.edit,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
-                        ],
-                      ),
+            .isUserEngine(addSearchEngineProvider.allEngines[index]) ? PopupMenuButton<String>(
+               menuPadding: EdgeInsets.zero,
+                       color:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9):  Color(0xffEBEBEB).withOpacity(0.9),
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              surfaceTintColor:themeProvider.darkTheme ? Color(0xff222222).withOpacity(0.9) :  Color(0xffEBEBEB).withOpacity(0.9),
+                   // color:  themeProvider.darkTheme ?const Color(0xff282836) :const Color(0xffF3F3F3),
+                    constraints: BoxConstraints(
+                maxWidth: 220,
+               ),
+                         // icon: SvgPicture.asset('assets/images/ai-icons/new/threedot.svg',color:themeProvider.darkTheme ? Colors.white : Colors.black),// Icon(Icons.more_horiz,
+                //color: themeProvider.darkTheme ? Colors.white : Colors.black),
+                    //onSelected: _popupMenuChoiceAction,
+                    offset: Offset(0, 47),
+                    shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: BorderSide(
+                  color:themeProvider.darkTheme ? Color(0xff333333) :  Color(0xffD4D4D4), //.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+            //    color: themeProvider.darkTheme ? const Color(0xff282836) : const Color(0xffF3F3F3),
+            //       surfaceTintColor:
+            // themeProvider.darkTheme ? const Color(0xff282836) :const Color(0xffF3F3F3),
+            //       elevation: 14,
+            onSelected: (value) {
+              final engine =
+                  addSearchEngineProvider.allEngines[index];
+            
+              if (value == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        AddSearchEngineScreen(editEngine: engine),
+                  ),
+                );
+              }
+            
+              if (value == 'delete') {
+               
+                addSearchEngineProvider.removeSessionEngineIfSelected(engine);
+                    addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
+                                    
+                    /// If deleted engine was selected → reset to Google
+                    if (engine.name == settings.searchEngine.name) {
+                      settings.searchEngine = GoogleSearchEngine;
+                      browserModel.updateSettings(settings);
+                      browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
+                    }
+               
+                // addSearchEngineProvider.removeSearchEngine(engine,settings,browserModel);
+            
+                // /// If deleted engine was selected → reset to Google
+                // if (engine.name == settings.searchEngine.name) {
+                //   settings.searchEngine = GoogleSearchEngine;
+                //   browserModel.updateSettings(settings);
+                //   browserModel.updateIconValue(GoogleSearchEngine.assetIcon);
+                // }
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'edit',
+                height: 35,
+                padding: EdgeInsets.zero,
+                child: GlassSettingPanel(
+                   color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+                  child: Container(
+                    height: 35,
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                    child: 
+                    Row(
+                      children: [
+                        //Icon(Icons.edit,color: Colors.transparent,),
+                        SizedBox(width: 8),
+                        Text(loc.edit,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                      ],
                     ),
                   ),
                 ),
-                PopupMenuItem(
-                  value: 'delete',
-                  height: 35,
-                  padding: EdgeInsets.zero,
-                  child: GlassSettingPanel(
-                     color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
-                    child: Container(
-                      height: 35,
-                      padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                      child: Row(
-                        children: [
-                         // Icon(Icons.delete,color: Colors.transparent,),
-                          SizedBox(width: 8),
-                          Text(loc.delete,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
-                        ],
-                      ),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                height: 35,
+                padding: EdgeInsets.zero,
+                child: GlassSettingPanel(
+                   color:themeProvider.darkTheme ? Color(0xFF222222).withOpacity(0.5) : Color(0xffEBEBEB).withOpacity(0.7),
+                  child: Container(
+                    height: 35,
+                    padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                    child: Row(
+                      children: [
+                       // Icon(Icons.delete,color: Colors.transparent,),
+                        SizedBox(width: 8),
+                        Text(loc.delete,style: TextStyle(fontFamily: 'Inter',fontSize: 14 ,color: themeProvider.darkTheme ? Color(0xffEBEBEB) : Color(0xff0B0B0B)),),
+                      ],
                     ),
                   ),
                 ),
-              ],
-                      ),
-            ): SizedBox.shrink(),
+              ),
+            ],
+                    ): SizedBox.shrink(),
             );
           },
         ),

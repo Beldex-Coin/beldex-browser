@@ -498,6 +498,228 @@ static Future<dynamic>  unmapExitNode(String swapNode) async {
   //     return false;
   //   }
   }
+
+   static Future<List<File>> pickImages({
+    required int maxImages,
+  }) async {
+    try {
+      final List<dynamic>? result =
+          await _methodChannel.invokeMethod<List<dynamic>>(
+        'pickMultipleImages',
+        {
+          'maxImages': maxImages,
+        },
+      );
+
+      if (result == null) {
+        return [];
+      }
+
+      return result
+          .map(
+            (path) => File(path.toString()),
+          )
+          .toList();
+
+    } catch (e) {
+      print(
+        'Image picker error: $e',
+      );
+
+      return [];
+    }
+  }
+
+  /// Whether this app's active network is a VPN (Android).
+  /// Returns false on error or where not implemented.
+  static Future<bool> get isVpnTransportActive async {
+    try {
+      final bool? active =
+          await _methodChannel.invokeMethod<bool>('isVpnTransportActive');
+      return active ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Deletes AI chat temporary files: attachment copies, cleaned
+  /// images, camera captures, read-aloud WAVs (cache and shared
+  /// storage) and share-sheet images. Files in [keepPaths] are kept.
+  /// Returns how many files were deleted.
+  static Future<int> purgeAiTempFiles({
+    List<String> keepPaths = const [],
+  }) async {
+    try {
+      final int? deleted = await _methodChannel.invokeMethod<int>(
+        'purgeAiTempFiles',
+        {
+          'keepPaths': keepPaths,
+        },
+      );
+      return deleted ?? 0;
+    } catch (e) {
+      print('AI temp purge error: $e');
+      return 0;
+    }
+  }
+
+  /// Deletes read-aloud WAVs that the TTS engine left in shared
+  /// media storage.
+  static Future<int> deleteTtsSharedCopies() async {
+    try {
+      final int? deleted =
+          await _methodChannel.invokeMethod<int>('deleteTtsSharedCopies');
+      return deleted ?? 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  /// Extracts plain text from a document attachment, on the device.
+  ///
+  /// Supports PDF, TXT, CSV, TSV, MD, JSON, XML, LOG, HTML, DOCX, XLSX
+  /// and PPTX. Returns `{'text': String, 'truncated': bool,
+  /// 'format': String}`.
+  ///
+  /// Throws [PlatformException] whose `code` is one of: UNSUPPORTED,
+  /// LEGACY_FORMAT, NO_TEXT, ENCRYPTED, NOT_TEXT, TOO_LARGE, CORRUPT,
+  /// INVALID_PATH or FAILED (also thrown where there is no native
+  /// implementation).
+  static Future<Map<String, dynamic>> extractDocumentText(
+    File file, {
+    required int maxChars,
+  }) async {
+    try {
+      final result =
+          await _methodChannel.invokeMapMethod<String, dynamic>(
+        'extractDocumentText',
+        {
+          'path': file.path,
+          'maxChars': maxChars,
+        },
+      );
+
+      if (result == null) {
+        throw PlatformException(code: 'FAILED');
+      }
+
+      return result;
+    } on MissingPluginException {
+      throw PlatformException(code: 'FAILED');
+    }
+  }
+
+  /// Re-encodes [image] natively so EXIF / XMP metadata (GPS,
+  /// device, capture time) is removed. The original file is deleted.
+  ///
+  /// Returns the cleaned file, or `null` if the image could not be
+  /// cleaned (including on platforms without a native implementation).
+  /// Callers must not send the original when this returns `null`.
+  static Future<File?> sanitizeImage(File image) async {
+    try {
+      final String? cleanedPath =
+          await _methodChannel.invokeMethod<String>(
+        'sanitizeImageFile',
+        {
+          'path': image.path,
+        },
+      );
+
+      if (cleanedPath == null || cleanedPath.isEmpty) {
+        return null;
+      }
+
+      return File(cleanedPath);
+    } catch (e) {
+      print('Image sanitise error: $e');
+      return null;
+    }
+  }
+
+  static Future<List<File>> pickFiles({
+  required int maxFiles,
+}) async {
+
+  try {
+
+    final List<dynamic>? result =
+        await _methodChannel.invokeMethod<List<dynamic>>(
+      'pickMultipleFiles',
+      {
+        'maxFiles': maxFiles,
+      },
+    );
+
+    if (result == null) {
+      return [];
+    }
+
+    return result
+        .map(
+          (path) => File(path.toString()),
+        )
+        .toList();
+
+  } catch (e) {
+
+    print(
+      'File picker error: $e',
+    );
+
+    return [];
+  }
+}
+
+
+
+static Future<bool> saveImageToGallery(
+  String base64Image,
+) async {
+
+  try {
+
+    final fileName =
+        'AI_Image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+    final result =
+        await _methodChannel.invokeMethod(
+      'saveImageToGallery',
+      {
+        'base64Image': base64Image,
+        'fileName': fileName,
+      },
+    );
+
+    if (result is Map) {
+
+      return result['success'] == true;
+    }
+
+    return false;
+
+  } catch (e) {
+
+    print(
+      'Save image to Gallery error: $e',
+    );
+
+    return false;
+  }
+}
+
+
+static Future<String> audioFileGen(String fileName)async{
+  final audioPath =
+    await _methodChannel.invokeMethod<String>(
+  'getTtsAudioPath',
+  {
+    'fileName': fileName,
+  },
+);
+
+ return audioPath!;
+}
+
 }
 
 

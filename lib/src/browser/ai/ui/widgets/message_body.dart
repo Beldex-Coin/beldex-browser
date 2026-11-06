@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'dart:io';
 
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
@@ -15,6 +16,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
+import 'package:beldex_browser/src/browser/ai/ui/widgets/safe_markdown_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +51,7 @@ class _MessageBodyState extends State<MessageBody> {
  String textChars = "";
   Timer? typingTimer;
 bool canStop = false;
-Dio dio = Dio();
+Dio dio = createAiDio();
 
 @override
   void initState() {
@@ -161,6 +163,9 @@ Future<bool> _hasInternetAccess() async {
     return false; // No Internet (VPN, Firewall, or DNS issue)
   } on TimeoutException catch (_) {
     return false; // Timeout means no internet
+  } catch (_) {
+    // DioException, including a Belnet guard refusal.
+    return false;
   }
 }
 
@@ -228,6 +233,8 @@ setNewModel(AIModelProvider aiModelProvider)async{
              Padding(
                padding: const EdgeInsets.only(left:15.0,right:15.0),
                child: md.Markdown(
+                   // AI text: never auto-load images (exfiltration risk).
+                   sizedImageBuilder: blockedMarkdownImage,
                            data:widget.message.text,
                            shrinkWrap: true,
                            padding: EdgeInsets.zero,
