@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'package:beldex_browser/constants_key.dart';
 import 'package:beldex_browser/security/api_key_manager.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -43,7 +44,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
 
 
       // Step 3: Send content to OpenAI for summarization
-      final openAiResponse = await http.post(
+      final openAiResponse = await aiHttp.post(
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
    
 
     try {
-      final response = await http.post(
+      final response = await aiHttp.post(
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',

@@ -49,7 +49,7 @@ class _MessageBodyState extends State<MessageBody> {
  String textChars = "";
   Timer? typingTimer;
 bool canStop = false;
-Dio dio = Dio();
+Dio dio = createAiDio();
 
 @override
   void initState() {
@@ -161,6 +161,9 @@ Future<bool> _hasInternetAccess() async {
     return false; // No Internet (VPN, Firewall, or DNS issue)
   } on TimeoutException catch (_) {
     return false; // Timeout means no internet
+  } catch (_) {
+    // DioException, including a Belnet guard refusal.
+    return false;
   }
 }
 

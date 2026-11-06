@@ -71,23 +71,50 @@ AIModelType getRandomModel() {
 }
 
 
+// Show the "connect Belnet" notice once, not on every keystroke.
+bool _belnetNoticeShown = false;
+
+void _notifyBelnetRequired() {
+  if (_belnetNoticeShown) return;
+  _belnetNoticeShown = true;
+  showMessage(BelnetGuard.aiBlockedMessage);
+}
+
 Future<Map<String, dynamic>?> callRandomAIModel(String engineName) async {
+  // Fail closed: never send the engine name to an AI provider
+  // outside the Belnet tunnel.
+  if (!await BelnetGuard.isTunnelUp()) {
+    _notifyBelnetRequired();
+    return null;
+  }
+
+  _belnetNoticeShown = false;
+
   final selectedModel = getRandomModel();
 
   print("Random Model Selected: $selectedModel");
 
-  switch (selectedModel) {
-    case AIModelType.chatgpt:
-      return await callChatGPT(engineName);
+  try {
+    switch (selectedModel) {
+      case AIModelType.chatgpt:
+        return await callChatGPT(engineName);
 
-    case AIModelType.deepseek:
-      return await callDeepSeek(engineName);
+      case AIModelType.deepseek:
+        return await callDeepSeek(engineName);
 
-    case AIModelType.mistral:
-      return await callMistral(engineName);
+      case AIModelType.mistral:
+        return await callMistral(engineName);
 
-    case AIModelType.gemini:
-      return await fetchEngineDataFromGemini(engineName);
+      case AIModelType.gemini:
+        return await fetchEngineDataFromGemini(engineName);
+    }
+  } catch (e) {
+    if (BelnetGuard.isTunnelDownError(e)) {
+      _notifyBelnetRequired();
+    } else {
+      debugPrint('Search engine AI lookup failed: $e');
+    }
+    return null;
   }
 }
 
@@ -257,7 +284,7 @@ Return JSON for: "$engineName"
       }
     };
 
-    final res = await http.post(
+    final res = await aiHttp.post(
       url,
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(payload),
@@ -317,7 +344,7 @@ Return JSON for: "$engineName"
 Future<Map<String, dynamic>?> callChatGPT(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.openai.com/v1/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('openai')}",
@@ -355,7 +382,7 @@ Future<Map<String, dynamic>?> callChatGPT(
 Future<Map<String, dynamic>?> callDeepSeek(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.deepseek.com/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('deepseek')}",
@@ -398,7 +425,7 @@ Future<Map<String, dynamic>?> callDeepSeek(
 Future<Map<String, dynamic>?> callMistral(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.mistral.ai/v1/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('mistral')}",

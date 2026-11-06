@@ -8,6 +8,7 @@ import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:dio/dio.dart';
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'package:beldex_browser/src/browser/ai/security/document_text.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +36,7 @@ class OpenAIRepository {
 
 
 
-Dio dio = Dio();
+Dio dio = createAiDio();
   CancelToken cancelToken = CancelToken(); // Create a new cancel token
 
   static StreamSubscription? _subscription;
@@ -166,7 +167,7 @@ catch (e) {
 Future<String> sendText(String text) async {
   String responseText = "";
   try {
-    final response = await http.post(
+    final response = await aiHttp.post(
       Uri.parse(APIClass.OPENAI_API_URL),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -225,7 +226,7 @@ Future<String> sendText(String text) async {
 Future<String> sendTextForSummarise(String text) async {
   String responseText = "";
   try {
-    final response = await http.post(
+    final response = await aiHttp.post(
       Uri.parse(APIClass.OPENAI_API_URL),
       headers: {
         'Content-Type': 'application/json',
@@ -272,7 +273,7 @@ Future<String> sendTextForSummarise(String text) async {
 Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
   try {
       // Step 3: Send content to OpenAI for summarization
-      final openAiResponse = await http.post(
+      final openAiResponse = await aiHttp.post(
         Uri.parse(APIClass.OPENAI_API_URL),
         headers: {
           'Content-Type': 'application/json',
@@ -321,7 +322,7 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
 
 //For stream with multi-AI 
 
- static final Dio _dio = Dio();
+ static final Dio _dio = createAiDio();
   //static const String _apiKey = "YOUR_OPENAI_API_KEY";
   //static StreamSubscription? _subscription;
 
@@ -1976,7 +1977,7 @@ case "gemini":
     //yield "__IMAGE_GENERATING__";
 
     final response =
-        await Dio().post<Map<String, dynamic>>(
+        await createAiDio().post<Map<String, dynamic>>(
       apiUrl,
 
       options: Options(

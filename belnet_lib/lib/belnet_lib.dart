@@ -530,6 +530,18 @@ static Future<dynamic>  unmapExitNode(String swapNode) async {
     }
   }
 
+  /// Whether this app's active network is a VPN (Android).
+  /// Returns false on error or where not implemented.
+  static Future<bool> get isVpnTransportActive async {
+    try {
+      final bool? active =
+          await _methodChannel.invokeMethod<bool>('isVpnTransportActive');
+      return active ?? false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// Deletes AI chat temporary files: attachment copies, cleaned
   /// images, camera captures, read-aloud WAVs (cache and shared
   /// storage) and share-sheet images. Files in [keepPaths] are kept.

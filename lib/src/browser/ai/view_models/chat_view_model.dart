@@ -16,6 +16,7 @@ import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:belnet_lib/belnet_lib.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -154,6 +155,11 @@ bool get isTyping => _isTyping;
 
 // Summarise in floating action button
 Future<void> getSummariseForFloatingActionButton(WebViewModel webViewModel)async{
+   if (!await BelnetGuard.isTunnelUp()) {
+     sumResponse = BelnetGuard.aiBlockedMessage;
+     updateUI();
+     return;
+   }
    String response = await apiRepository.fetchAndSummarize('', webViewModel);
    sumResponse = response;
    updateUI();
@@ -1567,6 +1573,60 @@ Future<void> pickFile() async {
 // }
 
 
+
+// ====================================================================
+// BELNET FAIL-CLOSED CHECK
+// ====================================================================
+
+/// Call before starting any AI request. If Belnet is not connected,
+/// nothing is sent: a notice is added to the chat, the user's text is
+/// put back in the input box, and this returns false.
+///
+/// The Dio/http guard (security/belnet_guard.dart) still blocks every
+/// request on its own; this check only makes the refusal visible.
+Future<bool> _belnetReadyOrNotify({
+  String? restoreInput,
+  int? replaceMessageAt,
+}) async {
+  if (await BelnetGuard.isTunnelUp()) return true;
+
+  final notice = ChatModel(
+    text: BelnetGuard.aiBlockedMessage,
+    role: Roles.model,
+    isTypingComplete: true,
+    canShowRegenerate: false,
+    isRetry: false,
+    istyping: false,
+    isSummariseResult: false,
+  );
+
+  final int? replaceAt = replaceMessageAt;
+
+  if (replaceAt != null && replaceAt >= 0 && replaceAt < messages.length) {
+    // Regenerate/retry left a loading bubble here: show the notice in it.
+    messages[replaceAt] = notice;
+  } else {
+    final bool alreadyShown = messages.isNotEmpty &&
+        messages.last.role == Roles.model &&
+        messages.last.text == BelnetGuard.aiBlockedMessage;
+
+    if (!alreadyShown) {
+      messages.add(notice);
+    }
+  }
+
+  if (restoreInput != null &&
+      restoreInput.isNotEmpty &&
+      messageController.text.isEmpty) {
+    messageController.text = restoreInput;
+  }
+
+  isTyping = false;
+  updateUI();
+  scrollMessages();
+  return false;
+}
+
 Future<void> getTextAndSummariseInfo(WebViewModel webViewModel, String modelType,AppLocalizations loc, {String? sumText, bool isRegenerate = false}) async {
     String summariseUrlText = sumText ?? summariseText ?? "";
 
@@ -1728,6 +1788,15 @@ String getRandomItem(List<String> items) {
 //String? _lastUserMessage; // Store the last user message
 
 Future<void> getTextForUser({String? userMessage, bool isRegenerate = false,String modelType= 'openai'}) async {
+  // Fail closed before touching the message list, attachments or
+  // documents, so nothing is lost or extracted when Belnet is down.
+  if (!await _belnetReadyOrNotify(
+    restoreInput: isRegenerate ? null : (userMessage ?? messageController.text),
+    replaceMessageAt: isRegenerate ? modelResponseIndex : null,
+  )) {
+    return;
+  }
+
   File? sendFile = _imageFile;
  print('The Default Model type -----> $modelType');
 
@@ -2377,7 +2446,7 @@ void checkNetworkConnectivity(AppLocalizations loc)async{
   // }
 }
 
-Dio dio = Dio();
+Dio dio = createAiDio();
 
 Future<bool> _hasInternetAccess() async {
   try {
@@ -2393,6 +2462,9 @@ Future<bool> _hasInternetAccess() async {
     return false; // No Internet (VPN, Firewall, or DNS issue)
   } on TimeoutException catch (_) {
     return false; // Timeout means no internet
+  } catch (_) {
+    // DioException, including a Belnet guard refusal.
+    return false;
   }
 }
 
@@ -2420,6 +2492,8 @@ Future<bool> _hasInternetAccess() async {
 // For Ask Beldex AI
 
 Future<void> getTextFromAskBeldexAI(String question, WebViewModel webViewModel,String modelType) async {
+  if (!await _belnetReadyOrNotify()) return;
+
   try {
     // Strict URL detection regex (only detects URLs with "http://" or "https://")
     // final urlRegex = RegExp(
@@ -2557,6 +2631,10 @@ Future<void> getTextFromAskBeldexAI(String question, WebViewModel webViewModel,S
 
 
   Future<void> getTextAndImageInfo() async {
+    if (!await _belnetReadyOrNotify(restoreInput: messageController.text)) {
+      return;
+    }
+
     File? sendFile;
     sendFile = imageFile;
     messages.add(ChatModel(

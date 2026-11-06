@@ -6,6 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 
 class ParagraphData {
   final String originalText;
@@ -446,7 +447,7 @@ String normalizedImageUrl(String url) {
     });
 
     try {
-      final response = await http.post(
+      final response = await aiHttp.post(
         Uri.parse('$geminiApiUrl?key=$geminiApiKey'),
         headers: {'Content-Type': 'application/json'},
         body: body,
