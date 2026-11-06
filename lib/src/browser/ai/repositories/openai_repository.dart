@@ -62,6 +62,9 @@ Stream<String> sendTextForStream(String userMessage) async* {
       cancelToken: cancelToken,
       data: jsonEncode({
         "model": 'gpt-5.4',//"gpt-4-turbo",
+        // Do not keep this conversation on OpenAI's servers
+        // (Chat Completions are stored by default).
+        "store": false,
         "messages": [
           {"role": "system", "content": "You are a helpful assistant. provide in bullet points if response more than 2 sentences"},
           {"role": "user", "content": userMessage}
@@ -177,6 +180,9 @@ Future<String> sendText(String text) async {
          
       jsonEncode({
         "model": 'gpt-5.4',//"gpt-4o-mini", // Replace with the desired model
+        // Do not keep this conversation on OpenAI's servers
+        // (Chat Completions are stored by default).
+        "store": false,
         "messages": [
           {"role": "user", "content": text}
         ],
@@ -234,6 +240,9 @@ Future<String> sendTextForSummarise(String text) async {
       },
       body:utf8.encode( jsonEncode({
         "model": 'gpt-5.4',//"gpt-4o-mini", // Replace with the desired model
+        // Do not keep this conversation on OpenAI's servers
+        // (Chat Completions are stored by default).
+        "store": false,
         "messages": [
           {"role": "user", "content": "$text summarise this webpage in bullet points"}
         ],
@@ -281,6 +290,9 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         },
         body: jsonEncode({
           'model': 'gpt-5.4', //'gpt-4o-mini',//'gpt-3.5-turbo',
+          // Do not keep this conversation on OpenAI's servers
+          // (Chat Completions are stored by default).
+          'store': false,
           'messages': [
             {'role': 'system', 'content': 'Summarize the following webpage in bullet dot points:'},
             {'role': 'user', 'content': '${webViewModel.url} summarise this webpage' //extractedContent  
@@ -2493,6 +2505,9 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
         };
         body = {
           'model': 'gpt-5.4',//'gpt-4-turbo',
+          // Do not keep this conversation on OpenAI's servers
+          // (Chat Completions are stored by default).
+          'store': false,
           'messages': [
              {'role': 'system', 'content': 'You are nice assistant.Provide response in bullet points:'},
             {'role': 'user', 'content': text}

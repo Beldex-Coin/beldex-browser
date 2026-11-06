@@ -52,6 +52,9 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         },
         body: jsonEncode({
           'model': 'gpt-5.4',//'gpt-4o-mini',//'gpt-3.5-turbo',
+          // Do not keep this conversation on OpenAI's servers
+          // (Chat Completions are stored by default).
+          'store': false,
           'messages': [
             {'role': 'system', 'content': 'Summarize the following webpage in bullet dot points:'},
             {'role': 'user', 'content': '${webViewModel.url} summarise this webpage' //extractedContent  
@@ -109,6 +112,9 @@ Future<String> fetchAndSummarize(String url, WebViewModel webViewModel) async {
         },
         body: jsonEncode({
           'model': 'gpt-5.4',//'gpt-4o-mini', // Or 'gpt-4' if you have access
+          // Do not keep this conversation on OpenAI's servers
+          // (Chat Completions are stored by default).
+          'store': false,
           'messages': [
             {'role': 'system', 'content': 'You are a helpful assistant.'},
             {'role': 'user', 'content': message},

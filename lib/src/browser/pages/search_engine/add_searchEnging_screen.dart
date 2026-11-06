@@ -14,6 +14,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'package:provider/provider.dart';
 
 enum AIModelType {
@@ -352,6 +353,9 @@ Future<Map<String, dynamic>?> callChatGPT(
       },
       body: jsonEncode({
         "model": 'gpt-5.4',//"gpt-4-turbo",
+        // Do not keep this conversation on OpenAI's servers
+        // (Chat Completions are stored by default).
+        "store": false,
         "messages": [
           {
             "role": "user",
