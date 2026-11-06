@@ -276,6 +276,16 @@ bool _isRestrictedUrl(String text) {
     previousExtent = currentExtent;
   }
 
+/// Deletes the AI chat's temporary files (attachment copies, cleaned
+/// images, document text files, camera captures, read-aloud audio).
+/// Attachments selected for the next message, which have not been sent
+/// yet, are kept so the user doesn't lose them.
+Future<void> _deleteChatTempFiles(ChatViewModel model) {
+  return AiTempFiles.purge(
+    keepPaths: model.imageFiles.map((file) => file.path).toList(),
+  );
+}
+
 basicSetting(ChatViewModel model,WebViewModel webViewModel,AIModelProvider aiModelProvider)async{
   openAIRepository.cancelRequest();
    model.stopResponse();
@@ -679,6 +689,9 @@ void dispose() {
                                          openAIRepository.clearHistory();
                                          model.messageController.clear();  
                                          checkSummariseString(webViewModel, model);
+
+                                         // New chat: delete the old chat's temp files now.
+                                         _deleteChatTempFiles(model);
                                           });
                                              await readAloudController.close();
                                             
@@ -733,8 +746,16 @@ void dispose() {
                                                           break;
                                                           case AIChatPopupMenuActions.DELETE_CHAT:
                                                           if(model.messages.isNotEmpty){
+                                                             // Stop any reply still streaming in.
+                                                             openAIRepository.cancelRequest();
+                                                             model.stopResponse();
                                                              await readAloudController.close(); 
                                                             model.messages = []; //.clear();
+                                                             model.isTyping = false;
+                                                             openAIRepository.clearHistory();
+
+                                                             // Delete the chat's temp files now.
+                                                             await _deleteChatTempFiles(model);
                                                              showMessage(loc.chatDeleted);}
                                                           break;
                                                          }

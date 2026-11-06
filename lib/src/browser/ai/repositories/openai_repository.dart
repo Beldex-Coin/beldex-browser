@@ -1244,7 +1244,7 @@ String fullContent = '';
                 "role": "assistant",
                 "content": fullContent,
               });
-              print('Stored in history: $fullContent');
+              print('Stored in history [content not logged]');
             }
             print('Stream ended with [DONE]');
             continue;
@@ -1255,7 +1255,7 @@ String fullContent = '';
             print('Parsed JSON: $json');
             final content = json['choices']?[0]?['delta']?['content']?.toString() ?? '';
             if (content.isNotEmpty) {
-              print('Yielding content: "$content"'); // Log with quotes to see boundaries
+              print('Yielding content [content not logged]'); // Log with quotes to see boundaries
               fullContent += content;
               yield content; // Yield content as a single chunk
             } else {
@@ -1493,7 +1493,7 @@ String fullContent = '';
                 "role": "assistant",
                 "content": fullContent,
               });
-              print('Stored in history: $fullContent');
+              print('Stored in history [content not logged]');
             }
             print('Stream ended with [DONE]');
             continue;
@@ -1504,7 +1504,7 @@ String fullContent = '';
             print('Parsed JSON: $json');
             final content = json['choices']?[0]?['delta']?['content']?.toString() ?? '';
             if (content.isNotEmpty) {
-              print('Yielding content: "$content"'); // Log with quotes to see boundaries
+              print('Yielding content [content not logged]'); // Log with quotes to see boundaries
               fullContent += content;
               yield content; // Yield content as a single chunk
             } else {

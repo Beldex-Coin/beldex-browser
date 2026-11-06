@@ -314,7 +314,7 @@ Future<void> _methodHandler(MethodCall call) async {
           final url = match.group(1)?.replaceAll('"', '').replaceAll("'", '') ?? '';
           final normalizedUrl = normalizeUrl(url);
           if (isImageUrl(url) && !seenUrls.contains(normalizedUrl)) {
-            print('Found unique background image: tag=$tag, src=$url, normalized=$normalizedUrl');
+            print('Found unique background image: tag [content not logged]');
             currentImages.add({'src': url, 'alt': ''});
             seenUrls.add(normalizedUrl);
           }
