@@ -166,7 +166,29 @@ const String channelDescription = 'Beldex Browser';
 
 
 
-void main() async {
+void main() {
+  // Release builds keep no app logs: print() and debugPrint() reach
+  // logcat, which other tools and bug reports can read, and the AI
+  // code would otherwise log prompts, replies, voice transcripts and
+  // page content. Debug and profile builds log as before.
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
+
+  // Everything (bindings, runApp, callbacks) runs inside this zone, so
+  // its print() is silenced too. ensureInitialized() and runApp() must
+  // stay in the same zone.
+  runZoned(
+    _appMain,
+    zoneSpecification: kReleaseMode
+        ? ZoneSpecification(
+            print: (Zone self, ZoneDelegate parent, Zone zone, String line) {},
+          )
+        : null,
+  );
+}
+
+Future<void> _appMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Remove AI temp files left by the previous session (attachments,
