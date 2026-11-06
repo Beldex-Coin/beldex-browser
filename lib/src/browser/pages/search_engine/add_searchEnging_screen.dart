@@ -163,7 +163,7 @@ Future<Map<String, dynamic>?> callRandomAIModel(String engineName) async {
     setState(() {
       if (homepageurl.isNotEmpty) {
         final url = Uri.parse(homepageurl.trim());
-        debugPrint('Search Engine host ${url.toString()}');
+        debugPrint('Search Engine host [content not logged]');
 
         iconUrl =
             'https://www.google.com/s2/favicons?sz=64&domain_url=${url.host}';
@@ -292,7 +292,7 @@ Return JSON for: "$engineName"
     );
 
     if (res.statusCode != 200) {
-      debugPrint("Gemini API error: ${res.body}");
+      debugPrint('Gemini API error [content not logged]');
       return null;
     }
 
@@ -448,7 +448,7 @@ Future<Map<String, dynamic>?> callMistral(
     );
 
     if (res.statusCode != 200) {
-      debugPrint("Mistral HTTP error: ${res.body}");
+      debugPrint('Mistral HTTP error [content not logged]');
       return null;
     }
 

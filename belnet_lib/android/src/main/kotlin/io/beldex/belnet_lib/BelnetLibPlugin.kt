@@ -2821,7 +2821,7 @@ open class BelnetLibPlugin :
 
                 Log.w(
                     "BelnetLibPlugin",
-                    "File rejected: $fileName " +
+                    "Attachment rejected: " +
                             "size=${formatFileSize(fileSize)} " +
                             "limit=${formatMaxSize(maxSize)}"
                 )
@@ -3114,7 +3114,6 @@ open class BelnetLibPlugin :
                                 Log.w(
                                     "BelnetLibPlugin",
                                     "Attachment exceeded limit while copying: " +
-                                            "$fileName " +
                                             "${formatFileSize(totalBytes)} > " +
                                             formatMaxSize(maxFileSize)
                                 )
@@ -3201,7 +3200,7 @@ open class BelnetLibPlugin :
 
             Log.e(
                 "BelnetLibPlugin",
-                "Failed to copy attachment: $uri",
+                "Failed to copy attachment",
                 e
             )
 
@@ -4581,7 +4580,7 @@ open class BelnetLibPlugin :
 
             Log.w(
                 "BelnetLibPlugin",
-                "Unable to get file size from metadata: $uri",
+                "Unable to get file size from metadata",
                 e
             )
         }
@@ -4612,7 +4611,7 @@ open class BelnetLibPlugin :
 
             Log.w(
                 "BelnetLibPlugin",
-                "Unable to get AssetFileDescriptor size: $uri",
+                "Unable to get AssetFileDescriptor size",
                 e
             )
         }

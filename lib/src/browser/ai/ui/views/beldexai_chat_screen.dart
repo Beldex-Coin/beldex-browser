@@ -214,13 +214,13 @@ bool isYahooConsentPage = host.contains("consent.yahoo.") || host.contains("guce
     bool containsUrl = match != null;
 
     String? extractedUrl = containsUrl ? match!.group(0) : null;
-     print('The Real Data -----> ${widget.searchWord} ---- $extractedUrl');
+     print('The Real Data [content not logged]');
      //model.getTextFromAskAI(searchWord);
       if(containsUrl){
-        print('The Real Data 22-----> ${widget.searchWord} ---- $extractedUrl');
+        print('The Real Data 22 [content not logged]');
         model.getTextFromAskBeldexAI(extractedUrl!,webViewModel,aiModelProvider.selectedModel);
       } else{
-        print('The Real Data 333-----> ${widget.searchWord} ---- $extractedUrl');
+        print('The Real Data 333 [content not logged]');
         model.getTextForUser(userMessage: widget.searchWord,modelType:aiModelProvider.selectedModel);
       } 
     model.isSummariseAvailable = false;
@@ -1589,7 +1589,7 @@ void dispose() {
             // --------------------------------------------------
             // SEND MESSAGE
             // --------------------------------------------------
-            debugPrint('MESSAGE BEFORE SEND: "$userMessage"');
+            debugPrint('MESSAGE BEFORE SEND [content not logged]');
 
             model.getTextForUser(
               userMessage: userMessage,
@@ -1792,8 +1792,7 @@ Widget _buildMessageTextField(
                                         selection.end,
                                         value.text!,
                                       );
-                                      print(
-                                          'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                      print('text [content not logged]');
                                       model.messageController.text = newText;
                                     //   if(model.messageController.text.trim().isEmpty || containsUrl(model.messageController.text)){
                                     //     print("The User Message Contains Url 1");
@@ -1841,8 +1840,7 @@ Widget _buildMessageTextField(
                                       findOnPageText.replaceRange(
                                           selection.start, selection.end, '');
                                     
-                                                                  print(
-                                      'Cut value Editable Text ---> $findOnPageText -- $newFindOnPageText -- $newText');
+                                                                  print('Cut value Editable Text [content not logged]');
                                                                    model.messageController.text =
                                       findOnPageText; //newFindOnPageText;
                                                                 }
@@ -1898,8 +1896,7 @@ Widget _buildMessageTextField(
                                       selection.end,
                                       value.text!,
                                     );
-                                    print(
-                                        'text --> $text\n selection --> $selection\n newtext --> $newText');
+                                    print('text [content not logged]');
                                      model.messageController.text = newText;
                                     final newSelection = TextSelection.collapsed(
                                       offset: selection.start + value.text!.length,

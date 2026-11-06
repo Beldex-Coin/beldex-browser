@@ -199,21 +199,21 @@ Future<String> sendText(String text) async {
       final Map<String, dynamic> responseData =  jsonDecode(decodeResponse);
       // Extracting the response content
       responseText = responseData["choices"]?[0]?["message"]?["content"] ?? "";
-      log("OpenAI Chat - Content: $responseText ------- ${utf8.decode(response.bodyBytes)}");
+      log('OpenAI Chat - Content [content not logged]');
       // Handle finish reason if needed
       final String finishReason = responseData["choices"]?[0]?["finish_reason"] ?? "";
       if (finishReason != "stop") {
         responseText = "Invalid Query"; // Replace with a constant if needed
       }
     } else {
-      log("OpenAI Chat - Error: ${response.body}");
+      log('OpenAI Chat - Error [content not logged]');
       responseText = "Error: ${response.reasonPhrase}";
     }
   } catch (e) {
     log("OpenAI Chat - Exception: $e");
     responseText = "Error: $e";
   }
-  log("OpenAI Chat - Final Response: $responseText ");
+  log('OpenAI Chat - Final Response [content not logged]');
   return responseText;   
   }
 
@@ -255,21 +255,21 @@ Future<String> sendTextForSummarise(String text) async {
       final Map<String, dynamic> responseData = jsonDecode(decodeResponse);
       // Extracting the response content
       responseText = responseData["choices"]?[0]?["message"]?["content"] ?? "";
-      log("OpenAI Chat - Content: $responseText");
+      log('OpenAI Chat - Content [content not logged]');
       // Handle finish reason if needed
       final String finishReason = responseData["choices"]?[0]?["finish_reason"] ?? "";
       if (finishReason != "stop") {
         responseText = "Invalid Query"; // Replace with a constant if needed
       }
     } else {
-      log("OpenAI Chat - Error: ${response.body}");
+      log('OpenAI Chat - Error [content not logged]');
       responseText = "Error: ${response.reasonPhrase}";
     }
   } catch (e) {
     log("OpenAI Chat - Exception: $e");
     responseText = "Error: $e";
   }
-  log("OpenAI Chat - Final Response: $responseText");
+  log('OpenAI Chat - Final Response [content not logged]');
   return responseText;
 
    
@@ -1137,9 +1137,7 @@ Automatically decide which response type is appropriate.
               "response.failed") {
             streamError = true;
 
-            print(
-              "OPENAI RESPONSE FAILED: $jsonData",
-            );
+            print('OPENAI RESPONSE FAILED [content not logged]');
 
             yield "__IMAGE_ERROR__";
           }
@@ -1151,9 +1149,7 @@ Automatically decide which response type is appropriate.
           else if (eventType == "error") {
             streamError = true;
 
-            print(
-              "OPENAI STREAM ERROR: $jsonData",
-            );
+            print('OPENAI STREAM ERROR [content not logged]');
 
             yield "Erroring";
           }
@@ -1224,7 +1220,7 @@ String fullContent = '';
   final utf8Decoder = Utf8Decoder(allowMalformed: true);
     await for (var data in response.data!.stream) {
       buffer += utf8Decoder.convert(data);
-      print('Raw chunk (buffer): $buffer');
+      print('Raw chunk (buffer) [content not logged]');
 
       List<String> lines = buffer.split('\n');
       if (!buffer.endsWith('\n')) {
@@ -1237,10 +1233,10 @@ String fullContent = '';
         line = line.trim();
         if (line.isEmpty) continue;
 
-        print('Processing line: $line');
+        print('Processing line [content not logged]');
         if (line.startsWith('data: ')) {
           String jsonString = line.substring(6);
-          print('SSE data: $jsonString');
+          print('SSE data [content not logged]');
 
           if (jsonString == '[DONE]') {
             if (fullContent.isNotEmpty) {
@@ -1473,7 +1469,7 @@ String fullContent = '';
   final utf8Decoder = Utf8Decoder(allowMalformed: true);
     await for (var data in response.data!.stream) {
       buffer += utf8Decoder.convert(data);
-      print('Raw chunk (buffer): $buffer');
+      print('Raw chunk (buffer) [content not logged]');
 
       List<String> lines = buffer.split('\n');
       if (!buffer.endsWith('\n')) {
@@ -1486,10 +1482,10 @@ String fullContent = '';
         line = line.trim();
         if (line.isEmpty) continue;
 
-        print('Processing line: $line');
+        print('Processing line [content not logged]');
         if (line.startsWith('data: ')) {
           String jsonString = line.substring(6);
-          print('SSE data: $jsonString');
+          print('SSE data [content not logged]');
 
           if (jsonString == '[DONE]') {
             if (fullContent.isNotEmpty) {
@@ -2108,9 +2104,7 @@ case "gemini":
 
       if (text.isNotEmpty) {
 
-        print(
-          "GEMINI TEXT RESPONSE: $text",
-        );
+        print('GEMINI TEXT RESPONSE [content not logged]');
 
         fullContent += text;
 
@@ -2466,7 +2460,7 @@ source: """
           })();
         """,);
    
-print('The response of the data coming from url $pageContent');
+print('The response of the data coming from url [content not logged]');
    String resp = //urlList.contains(url) ?
     await summaryWithUrls("${StringConstants.askSummaryForContent}.[$pageContent]", //"Please summarize the following content in a natural, well-structured paragraph format,start with title opt for the summarise content,only necessary content can be display in bullet points as well strucred sentences, similar to how a human would summarize an article. Ensure that the summary maintains coherence, captures key points, and flows naturally without just listing topics.[$pageContent]",
     modelType,"");
@@ -2514,7 +2508,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
           ],
           //'max-token': 4096
         };
-        print('The Request data passed $text');
+        print('The Request data passed [content not logged]');
         break;
 
       case 'mistral':
@@ -2576,7 +2570,7 @@ Future<String> summaryWithUrls(String text, String model,String pageContent)asyn
       );
        print("The response from the models direct---$model");
 
-       print("The response from the models directly ---- ${response.data}");
+       print('The response from the models directly [content not logged]');
       if (response.statusCode == 200) {
         return _parseResponse(response.data, model);
       } else {

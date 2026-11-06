@@ -558,9 +558,7 @@ String finalText;
 
 
 
-    print(
-      '[VOICE] FINAL TEXT: "$finalText"',
-    );
+    print('[VOICE] FINAL TEXT [content not logged]');
 
     // Put the final transcription into the TextField.
     messageController.value =
@@ -726,11 +724,7 @@ Future<void> _listenForSession(int sessionId) async {
 
         final words = result.recognizedWords.trim();
 
-        print(
-          '[VOICE] RESULT '
-          'final=${result.finalResult} '
-          'words="$words"',
-        );
+        print('[VOICE] RESULT final [content not logged]');
 
         if (words.isNotEmpty) {
           _recognizedText = words;
@@ -2030,9 +2024,7 @@ print('Selected model: $selectedModel');
 
       final message = messages[index];
 
-      print(
-        "OPENAI EVENT ---> $event",
-      );
+      print('OPENAI EVENT [content not logged]');
 
       // ========================================================
       // IMAGE GENERATION STARTED

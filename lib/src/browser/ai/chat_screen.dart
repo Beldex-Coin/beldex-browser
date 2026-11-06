@@ -356,7 +356,7 @@ void callSummaryApI(BuildContext context) async {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
-      print('BELDEX AI API CALL RESPONSE --- $response');
+      print('BELDEX AI API CALL RESPONSE [content not logged]');
 
       if (response.isNotEmpty) {
         _parseResponse(response);
@@ -386,7 +386,7 @@ void _parseResponse(String response) {
  copyResult = bullets.isNotEmpty ? "${bullets.join('\n')}" : '$title';
 
 
-  print('BELDEX AI API Title --- $title');
+  print('BELDEX AI API Title [content not logged]');
   print('BELDEX AI API Bullets --- $bullets');
 
   setState(() {});
@@ -435,7 +435,7 @@ void callSummaryRetry(BuildContext context) async {
 
    // WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
-      print('BELDEX AI API CALL RESPONSE --- $response');
+      print('BELDEX AI API CALL RESPONSE [content not logged]');
 
       if (response.isNotEmpty) {
         _parseResponse(response);
@@ -542,7 +542,7 @@ void callSummaryRetry(BuildContext context) async {
     }
 
     debugPrint('Read Aloud: Starting summary playback.');
-    debugPrint('Read Aloud text: $text');
+    debugPrint('Read Aloud text [content not logged]');
 
     try {
       await _summaryReadAloudController.playOrToggle(

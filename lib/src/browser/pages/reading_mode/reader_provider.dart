@@ -154,7 +154,7 @@ Future<void> _methodHandler(MethodCall call) async {
   // Extract title
   final title = document.querySelector('title');
   if (title != null && title.text.trim().isNotEmpty) {
-    print('Found title: ${title.text.trim()}');
+    print('Found title [content not logged]');
     result.add(ParagraphData(
       originalText: title.text.trim(),
       translatedText: title.text.trim(),
@@ -211,7 +211,7 @@ Future<void> _methodHandler(MethodCall call) async {
     final normalizedSrc = normalizeUrl(src);
     final alt = node.attributes[altAttr] ?? node.attributes['alt'] ?? '';
     if (src.isNotEmpty && isImageUrl(src) && !seenUrls.contains(normalizedSrc)) {
-      print('Found unique image: tag=${node.localName}, src=$src, normalized=$normalizedSrc, alt=$alt, attr=$srcAttr');
+      print('Found unique image: tag [content not logged]');
       currentImages.add({'src': src, 'alt': alt});
       seenUrls.add(normalizedSrc);
     }
@@ -224,7 +224,7 @@ Future<void> _methodHandler(MethodCall call) async {
     if (text.isEmpty) {
       text = '[Images]';
     }
-    print('Adding paragraph: text="$text", images=$currentImages');
+    print('Adding paragraph: text [content not logged]');
     result.add(ParagraphData(
       originalText: text,
       translatedText: text,
@@ -271,7 +271,7 @@ Future<void> _methodHandler(MethodCall call) async {
                 .split(',')
                 .map((s) => s.trim().split(' ')[0])
                 .firstWhere((url) => normalizeUrl(url) == normalizedUrl, orElse: () => normalizedUrl);
-            print('Found unique image from srcset: tag=$tag, src=$originalUrl, normalized=$normalizedUrl, alt=${node.attributes['alt'] ?? ''}');
+            print('Found unique image from srcset: tag [content not logged]');
             currentImages.add({'src': originalUrl, 'alt': node.attributes['alt'] ?? ''});
             seenUrls.add(normalizedUrl);
           }
@@ -295,7 +295,7 @@ Future<void> _methodHandler(MethodCall call) async {
                 .split(',')
                 .map((s) => s.trim().split(' ')[0])
                 .firstWhere((url) => normalizeUrl(url) == normalizedUrl, orElse: () => normalizedUrl);
-            print('Found unique image from source srcset: src=$originalUrl, normalized=$normalizedUrl, alt=${node.attributes['alt'] ?? ''}');
+            print('Found unique image from source srcset: src [content not logged]');
             currentImages.add({'src': originalUrl, 'alt': node.attributes['alt'] ?? ''});
             seenUrls.add(normalizedUrl);
           }
