@@ -83,6 +83,9 @@ android {
 
 dependencies {
 	//implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+	// On-device text extraction from PDF attachments (Apache-2.0).
+	implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
 }
 
 task cleanNativeLibs(type: Delete) {

@@ -437,6 +437,7 @@ class ItemListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<DarkThemeProvider>(context);
     final vpnStatusProvider = Provider.of<VpnStatusProvider>(context);
+    final browserModel = Provider.of<BrowserModel>(context);
     // final displayImagePath = (isDarkTheme && darkImagePath != null)
     //     ? darkImagePath!
     //     : (isDarkTheme ? imagePath : (lightImagePath ?? imagePath));
@@ -444,6 +445,7 @@ class ItemListWidget extends StatelessWidget {
     return GestureDetector(
       onTap: (){
        vpnStatusProvider.updateCanShowHomeScreen(false);
+              browserModel.showTabScroller = false;
        addNewTab(context,url: WebUri(link));
       },
       child: GlassAppTile(icon:themeProvider.darkTheme ? imagePath :

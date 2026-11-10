@@ -7,6 +7,8 @@ import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/network_model.dart';
 import 'package:beldex_browser/src/browser/ai/ui/views/base_views.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/floating_read_aloud_player.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/browser_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
@@ -25,6 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:velocity_x/velocity_x.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart' as md;
+import 'package:beldex_browser/src/browser/ai/ui/widgets/safe_markdown_image.dart';
 
 // class ChatScreen extends StatefulWidget {
 //   const ChatScreen({super.key});
@@ -272,17 +275,67 @@ class _SummariseUrlResultState extends State<SummariseUrlResult> {
 
   Timer? typingTimer;
 
-
+late final ReadAloudController _summaryReadAloudController;
 
 @override
 void initState() {
   super.initState();
+
+model = ChatViewModel();
+_summaryReadAloudController = ReadAloudController();
+
+_summaryReadAloudController.addListener(
+    _onSummaryReadAloudChanged,
+  );
+
+
   WidgetsBinding.instance.addPostFrameCallback((_) {
     callSummaryApI(context);
   });
 }
 
 
+void _onSummaryReadAloudChanged() {
+  if (mounted) {
+    setState(() {});
+  }
+}
+
+String get readAloudText {
+  final parts = <String>[];
+
+  if (title.trim().isNotEmpty && title != 'Erroring') {
+    parts.add(title.trim());
+  }
+
+  // if(paragraph.trim().isNotEmpty){
+  //   parts.add(paragraph.trim());
+  // }
+
+  for (final bullet in bullets) {
+    if (bullet.trim().isNotEmpty) {
+      parts.add(
+        bullet.replaceFirst(
+          RegExp(r'^[-*•]\s*'),
+          '',
+        ),
+      );
+    }
+  }
+
+  return parts.join('\n\n');
+}
+
+Future<void> startSummaryReadAloud() async {
+  final text = readAloudText;
+
+  if (text.trim().isEmpty) return;
+
+  await _summaryReadAloudController.playOrToggle(
+    messageId: 'url_summary',
+    text: text,
+  );
+}
 
 
 
@@ -304,7 +357,7 @@ void callSummaryApI(BuildContext context) async {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
-      print('BELDEX AI API CALL RESPONSE --- $response');
+      print('BELDEX AI API CALL RESPONSE [content not logged]');
 
       if (response.isNotEmpty) {
         _parseResponse(response);
@@ -334,7 +387,7 @@ void _parseResponse(String response) {
  copyResult = bullets.isNotEmpty ? "${bullets.join('\n')}" : '$title';
 
 
-  print('BELDEX AI API Title --- $title');
+  print('BELDEX AI API Title [content not logged]');
   print('BELDEX AI API Bullets --- $bullets');
 
   setState(() {});
@@ -383,7 +436,7 @@ void callSummaryRetry(BuildContext context) async {
 
    // WidgetsBinding.instance.addPostFrameCallback((_) {
       final response = urlSummaryProvider.summaryText;
-      print('BELDEX AI API CALL RESPONSE --- $response');
+      print('BELDEX AI API CALL RESPONSE [content not logged]');
 
       if (response.isNotEmpty) {
         _parseResponse(response);
@@ -403,6 +456,8 @@ void callSummaryRetry(BuildContext context) async {
   @override
   void dispose() {
    // typingTimer?.cancel();
+    _summaryReadAloudController.dispose();
+  typingTimer?.cancel();
     super.dispose();
   }
 
@@ -474,6 +529,47 @@ void callSummaryRetry(BuildContext context) async {
                               ),
                             ),
                             Spacer(),
+                                                      GestureDetector(
+  onTap: () async {
+    if (urlSummaryProvider.isLoading) {
+      return;
+    }
+
+    final text = readAloudText.trim();
+
+    if (text.isEmpty || title == 'Erroring') {
+      debugPrint('Read Aloud: No summary text available.');
+      return;
+    }
+
+    debugPrint('Read Aloud: Starting summary playback.');
+    debugPrint('Read Aloud text [content not logged]');
+
+    try {
+      await _summaryReadAloudController.playOrToggle(
+        messageId: 'url_summary',
+        text: text,
+      );
+    } catch (e, stackTrace) {
+      debugPrint('Summary Read Aloud error: $e');
+      debugPrint('$stackTrace');
+    }
+  },
+  child: Container(
+    padding: const EdgeInsets.symmetric(
+      vertical: 8,
+      horizontal: 7,
+    ),
+    decoration:  BoxDecoration(
+      color:themeProvider.darkTheme ? Colors.transparent : Color(0xff222222),
+      border: Border.all(color: Color(0xffEBEBEB),width: 0.1)
+    ),
+    child: SvgPicture.asset(
+      'assets/images/ai-icons/new/read_aloud.svg',
+      color: Colors.white,
+    ),
+  ),
+),
                             GestureDetector(
                               onTap: () => Navigator.pop(context),
                               child: Container(
@@ -642,6 +738,8 @@ void callSummaryRetry(BuildContext context) async {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: md.Markdown(
+                                          // AI text: never auto-load images (exfiltration risk).
+                                          sizedImageBuilder: blockedMarkdownImage,
                                               data:
                                               title,
                                               shrinkWrap: true,
@@ -666,6 +764,8 @@ void callSummaryRetry(BuildContext context) async {
                                       children: [
                                         if (title.isNotEmpty)
                                         md.Markdown(
+                                            // AI text: never auto-load images (exfiltration risk).
+                                            sizedImageBuilder: blockedMarkdownImage,
                                             data:title.startsWith('-')
                                                 ? title.substring(1).trim()
                                                 : '',
@@ -739,6 +839,8 @@ void callSummaryRetry(BuildContext context) async {
                                                     //         fontSize: 16)),
                                                     Expanded(
                                                       child: md.Markdown(
+                                                          // AI text: never auto-load images (exfiltration risk).
+                                                          sizedImageBuilder: blockedMarkdownImage,
                                                         data: bullet,
                                                         shrinkWrap: true,
                                                         padding: EdgeInsets.zero,
@@ -803,6 +905,18 @@ void callSummaryRetry(BuildContext context) async {
                         ),
                       )
                     : Container(),
+
+ if (_summaryReadAloudController.isVisible)
+  Positioned(
+    left: 12,
+    right: 12,
+    bottom: 70,
+    child: FloatingReadAloudPlayer(
+      model: model!,
+      controller: _summaryReadAloudController,
+    ),
+  ),
+
               ],
             );
           },

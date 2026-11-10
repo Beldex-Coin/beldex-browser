@@ -14,6 +14,7 @@ import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:beldex_browser/src/browser/ai/security/belnet_guard.dart';
 import 'package:provider/provider.dart';
 
 enum AIModelType {
@@ -71,23 +72,50 @@ AIModelType getRandomModel() {
 }
 
 
+// Show the "connect Belnet" notice once, not on every keystroke.
+bool _belnetNoticeShown = false;
+
+void _notifyBelnetRequired() {
+  if (_belnetNoticeShown) return;
+  _belnetNoticeShown = true;
+  showMessage(BelnetGuard.aiBlockedMessage);
+}
+
 Future<Map<String, dynamic>?> callRandomAIModel(String engineName) async {
+  // Fail closed: never send the engine name to an AI provider
+  // outside the Belnet tunnel.
+  if (!await BelnetGuard.isTunnelUp()) {
+    _notifyBelnetRequired();
+    return null;
+  }
+
+  _belnetNoticeShown = false;
+
   final selectedModel = getRandomModel();
 
   print("Random Model Selected: $selectedModel");
 
-  switch (selectedModel) {
-    case AIModelType.chatgpt:
-      return await callChatGPT(engineName);
+  try {
+    switch (selectedModel) {
+      case AIModelType.chatgpt:
+        return await callChatGPT(engineName);
 
-    case AIModelType.deepseek:
-      return await callDeepSeek(engineName);
+      case AIModelType.deepseek:
+        return await callDeepSeek(engineName);
 
-    case AIModelType.mistral:
-      return await callMistral(engineName);
+      case AIModelType.mistral:
+        return await callMistral(engineName);
 
-    case AIModelType.gemini:
-      return await fetchEngineDataFromGemini(engineName);
+      case AIModelType.gemini:
+        return await fetchEngineDataFromGemini(engineName);
+    }
+  } catch (e) {
+    if (BelnetGuard.isTunnelDownError(e)) {
+      _notifyBelnetRequired();
+    } else {
+      debugPrint('Search engine AI lookup failed: $e');
+    }
+    return null;
   }
 }
 
@@ -135,7 +163,7 @@ Future<Map<String, dynamic>?> callRandomAIModel(String engineName) async {
     setState(() {
       if (homepageurl.isNotEmpty) {
         final url = Uri.parse(homepageurl.trim());
-        debugPrint('Search Engine host ${url.toString()}');
+        debugPrint('Search Engine host [content not logged]');
 
         iconUrl =
             'https://www.google.com/s2/favicons?sz=64&domain_url=${url.host}';
@@ -257,14 +285,14 @@ Return JSON for: "$engineName"
       }
     };
 
-    final res = await http.post(
+    final res = await aiHttp.post(
       url,
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(payload),
     );
 
     if (res.statusCode != 200) {
-      debugPrint("Gemini API error: ${res.body}");
+      debugPrint('Gemini API error [content not logged]');
       return null;
     }
 
@@ -317,7 +345,7 @@ Return JSON for: "$engineName"
 Future<Map<String, dynamic>?> callChatGPT(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.openai.com/v1/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('openai')}",
@@ -325,6 +353,9 @@ Future<Map<String, dynamic>?> callChatGPT(
       },
       body: jsonEncode({
         "model": 'gpt-5.4',//"gpt-4-turbo",
+        // Do not keep this conversation on OpenAI's servers
+        // (Chat Completions are stored by default).
+        "store": false,
         "messages": [
           {
             "role": "user",
@@ -355,7 +386,7 @@ Future<Map<String, dynamic>?> callChatGPT(
 Future<Map<String, dynamic>?> callDeepSeek(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.deepseek.com/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('deepseek')}",
@@ -398,7 +429,7 @@ Future<Map<String, dynamic>?> callDeepSeek(
 Future<Map<String, dynamic>?> callMistral(
     String engineName) async {
   try {
-    final res = await http.post(
+    final res = await aiHttp.post(
       Uri.parse("https://api.mistral.ai/v1/chat/completions"),
       headers: {
         "Authorization": "Bearer ${ApiKeyManager.instance.getKey('mistral')}",
@@ -417,7 +448,7 @@ Future<Map<String, dynamic>?> callMistral(
     );
 
     if (res.statusCode != 200) {
-      debugPrint("Mistral HTTP error: ${res.body}");
+      debugPrint('Mistral HTTP error [content not logged]');
       return null;
     }
 
