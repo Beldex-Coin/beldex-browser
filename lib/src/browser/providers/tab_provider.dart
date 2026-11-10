@@ -1325,44 +1325,231 @@ void selectAllTabs() {
   notifyListeners();
 }
 
+// Future<void> closeSelectedTabs(
+//   BuildContext context,
+// ) async {
+
+//   if (browserProvider == null) {
+//     return;
+//   }
+
+//   final browser =
+//       browserProvider!;
+
+//   final tabs =
+//       List<WebViewModel>.from(
+//     selectedTabs,
+//   );
+
+//   /// REMOVE TABS FROM GROUPS
+//   for (final group in groups) {
+
+//     group.tabs.removeWhere(
+
+//       (groupTab) => tabs.any(
+//         (selected) =>
+//             selected.uuid ==
+//             groupTab.uuid,
+//       ),
+//     );
+//   }
+
+//   /// REMOVE EMPTY GROUPS
+//   groups.removeWhere(
+//     (g) => g.tabs.isEmpty,
+//   );
+
+//   notifyListeners();
+
+//   /// EXIT SELECTION MODE
+//   disableSelectionMode();
+
+//   Navigator.pop(context);
+
+//   await Future.delayed(
+//     const Duration(milliseconds: 300),
+//   );
+
+//   /// CLOSE TABS
+//   for (final tab in tabs) {
+
+//     final index =
+//         browser.webViewTabs.indexWhere(
+//       (e) =>
+//           e.webViewModel.uuid ==
+//           tab.uuid,
+//     );
+
+//     if (index == -1) continue;
+
+//     try {
+
+//       await Future.delayed(
+//         const Duration(
+//           milliseconds: 120,
+//         ),
+//       );
+
+//       browser.closeTab(index);
+
+//     } catch (_) {}
+//   }
+
+//   notifyListeners();
+// }
+
+
 Future<void> closeSelectedTabs(
   BuildContext context,
 ) async {
-
-  if (browserProvider == null) {
+  if (browserProvider == null || selectedTabs.isEmpty) {
     return;
   }
 
-  final browser =
-      browserProvider!;
+  final browser = browserProvider!;
 
-  final tabs =
-      List<WebViewModel>.from(
-    selectedTabs,
-  );
+  final selectedIds = selectedTabs
+      .map((tab) => tab.uuid)
+      .toSet();
 
-  /// REMOVE TABS FROM GROUPS
+  // --------------------------------------------------
+  // 1. Identify fully selected groups FIRST.
+  //    These groups must be preserved and frozen.
+  // --------------------------------------------------
+
+  final groupsToFreeze = groups.where((group) {
+    return group.tabs.isNotEmpty &&
+        group.tabs.every(
+          (tab) => selectedIds.contains(tab.uuid),
+        );
+  }).toList();
+
+  final frozenGroupIds = groupsToFreeze
+      .map((group) => group.id)
+      .toSet();
+
+  final frozenTabIds = groupsToFreeze
+      .expand((group) => group.tabs)
+      .map((tab) => tab.uuid)
+      .toSet();
+
+  // --------------------------------------------------
+  // 2. Only permanently close selected tabs that do
+  //    NOT belong to a group being frozen.
+  // --------------------------------------------------
+
+  final tabsToClose = selectedTabs
+      .where(
+        (tab) => !frozenTabIds.contains(tab.uuid),
+      )
+      .toList();
+
+  final tabsToCloseIds = tabsToClose
+      .map((tab) => tab.uuid)
+      .toSet();
+
+  // --------------------------------------------------
+  // 3. Find a safe tab BEFORE freezing groups or
+  //    permanently closing tabs.
+  // --------------------------------------------------
+
+  final currentTab = browser.getCurrentTab();
+  final currentTabId = currentTab?.webViewModel.uuid;
+
+  final currentTabWillBeHidden =
+      currentTabId != null &&
+      frozenTabIds.contains(currentTabId);
+
+  final currentTabWillBeClosed =
+      currentTabId != null &&
+      tabsToCloseIds.contains(currentTabId);
+
+  if (currentTabWillBeHidden || currentTabWillBeClosed) {
+    // Priority 1: An outside tab that will remain open.
+    var safeIndex = browser.webViewTabs.indexWhere(
+      (tab) {
+        final id = tab.webViewModel.uuid;
+
+        final belongsToGroup = groups.any(
+          (group) => group.tabs.any(
+            (groupTab) => groupTab.uuid == id,
+          ),
+        );
+
+        return !belongsToGroup &&
+            !tabsToCloseIds.contains(id) &&
+            !frozenTabIds.contains(id);
+      },
+    );
+
+    // Priority 2: A tab in another open group that
+    // is neither selected for closure nor being frozen.
+    if (safeIndex == -1) {
+      safeIndex = browser.webViewTabs.indexWhere(
+        (tab) {
+          final id = tab.webViewModel.uuid;
+
+          if (tabsToCloseIds.contains(id) ||
+              frozenTabIds.contains(id)) {
+            return false;
+          }
+
+          return groups.any(
+            (group) =>
+                !group.isClosed &&
+                !frozenGroupIds.contains(group.id) &&
+                group.tabs.any(
+                  (groupTab) => groupTab.uuid == id,
+                ),
+          );
+        },
+      );
+    }
+
+    // Switch before changing group visibility or closing tabs.
+    if (safeIndex != -1) {
+      browser.showTab(safeIndex);
+    }
+  }
+
+  // --------------------------------------------------
+  // 4. Freeze selected groups.
+  //    Never delete their saved tabs.
+  // --------------------------------------------------
+
+  for (final group in groupsToFreeze) {
+    group.isClosed = true;
+  }
+
+  // --------------------------------------------------
+  // 5. Remove individually selected tabs from groups.
+  //    Keep all tabs belonging to frozen groups.
+  // --------------------------------------------------
+
   for (final group in groups) {
+    if (frozenGroupIds.contains(group.id)) {
+      continue;
+    }
 
     group.tabs.removeWhere(
-
-      (groupTab) => tabs.any(
-        (selected) =>
-            selected.uuid ==
-            groupTab.uuid,
-      ),
+      (tab) => tabsToCloseIds.contains(tab.uuid),
     );
   }
 
-  /// REMOVE EMPTY GROUPS
+  // Remove only groups that became empty because
+  // individual tabs were permanently selected.
   groups.removeWhere(
-    (g) => g.tabs.isEmpty,
+    (group) =>
+        !frozenGroupIds.contains(group.id) &&
+        group.tabs.isEmpty,
   );
 
-  notifyListeners();
+  // --------------------------------------------------
+  // 6. Clear selection and close the selection dialog.
+  // --------------------------------------------------
 
-  /// EXIT SELECTION MODE
   disableSelectionMode();
+  notifyListeners();
 
   Navigator.pop(context);
 
@@ -1370,34 +1557,40 @@ Future<void> closeSelectedTabs(
     const Duration(milliseconds: 300),
   );
 
-  /// CLOSE TABS
-  for (final tab in tabs) {
+  // --------------------------------------------------
+  // 7. Permanently close individual selected tabs.
+  //    Frozen group tabs are excluded from this list.
+  // --------------------------------------------------
 
-    final index =
-        browser.webViewTabs.indexWhere(
-      (e) =>
-          e.webViewModel.uuid ==
-          tab.uuid,
+  for (final tab in tabsToClose) {
+    final index = browser.webViewTabs.indexWhere(
+      (item) => item.webViewModel.uuid == tab.uuid,
     );
 
-    if (index == -1) continue;
+    if (index == -1) {
+      continue;
+    }
 
     try {
-
       await Future.delayed(
-        const Duration(
-          milliseconds: 120,
-        ),
+        const Duration(milliseconds: 120),
       );
 
-      browser.closeTab(index);
+      // Recalculate because indices can change.
+      final currentIndex = browser.webViewTabs.indexWhere(
+        (item) => item.webViewModel.uuid == tab.uuid,
+      );
 
-    } catch (_) {}
+      if (currentIndex != -1) {
+        browser.closeTab(currentIndex);
+      }
+    } catch (e) {
+      debugPrint('Error closing selected tab: $e');
+    }
   }
 
   notifyListeners();
 }
-
 
 Future<void> closeSingleTab(
   BuildContext context,

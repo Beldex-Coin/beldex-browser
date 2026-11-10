@@ -1,22 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:beldex_browser/l10n/generated/app_localizations.dart';
 import 'package:beldex_browser/src/browser/ai/constants/color_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/icon_constants.dart';
 import 'package:beldex_browser/src/browser/ai/constants/string_constants.dart';
 import 'package:beldex_browser/src/browser/ai/models/chat_model.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/attachment_preview.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/audio/read_aloud_controller.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/full_screen_image_viewer.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/generated_image_preview.dart';
+import 'package:beldex_browser/src/browser/ai/ui/widgets/image_generation_loader.dart';
 import 'package:beldex_browser/src/browser/ai/ui/widgets/message_body.dart';
 import 'package:beldex_browser/src/browser/ai/view_models/chat_view_model.dart';
 import 'package:beldex_browser/src/browser/models/webview_model.dart';
 import 'package:beldex_browser/src/browser/pages/tab_settings/glassmorph_widget.dart';
 import 'package:beldex_browser/src/utils/show_message.dart';
 import 'package:beldex_browser/src/utils/themes/dark_theme_provider.dart';
+import 'package:belnet_lib/belnet_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdfx/pdfx.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class MessagePair extends StatelessWidget {
+class MessagePair extends StatefulWidget {
   const MessagePair({
     super.key,
     required this.userMessage,
@@ -31,6 +43,17 @@ class MessagePair extends StatelessWidget {
   final int currentResponseIndex;
   final int lastResponseIndex;
 
+
+
+  @override
+  State<MessagePair> createState() => _MessagePairState();
+}
+
+class _MessagePairState extends State<MessagePair> {
+
+  bool _isSharing = false;
+
+
 bool containsUrl(String text) {
   // Regular expression for detecting URLs
   final urlRegex = RegExp(
@@ -40,7 +63,6 @@ bool containsUrl(String text) {
 
   return urlRegex.hasMatch(text);
 }
-
 
 copyText(String text,AppLocalizations loc){
  Clipboard.setData(ClipboardData(text:removeSpecialFormatting(text)));
@@ -68,8 +90,6 @@ String removeSpecialFormatting(String text) {
   return cleanText;
 }
 
-static bool _isSharing = false;
-
   // Debounce function to handle share action
   Future<void> _shareContent(String userMessage, String modelMessage) async {
     if (_isSharing) return; // Ignore if already sharing
@@ -91,6 +111,352 @@ static bool _isSharing = false;
       print('Share dismissed');
     }
   }
+
+
+ 
+Widget _buildImagePreview(ChatModel message) {
+  final files = message.images;
+
+  if (files == null || files.isEmpty) {
+    return const SizedBox.shrink();
+  }
+
+  if (files.length == 1) {
+    return Container(
+        height: 70,width: 70,
+        child: AttachmentPreview(file: files[0],
+                onTap: (){
+                  showFullScreenImagePreview(
+                        context,
+                        files,
+                        0,
+                      );
+                }),
+    );
+  }
+
+  if (files.length == 2) {
+    return SizedBox(
+    width: 140,
+    height: 70,
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: files.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: EdgeInsets.only(
+            right: index == 0 ? 4 : 0,
+          ),
+          child: SizedBox(
+            width: 70,
+            height: 70,
+            child: AttachmentPreview(file: files[index],
+                onTap: (){
+                  showFullScreenImagePreview(
+                        context,
+                        files,
+                        index,
+                      );
+                }),
+          ),
+        );
+      },
+    ),
+  );
+  }
+
+  final displayCount = files.length > 4 ? 4 : files.length;
+
+
+
+
+  return SizedBox(
+     width: 115,
+  height: 115,
+    child: GridView.builder(
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: displayCount,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 2,
+        mainAxisSpacing: 2,
+      ),
+      itemBuilder: (context, index) {
+        final showMore = index == 3 && files.length > 4;
+    
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+               AttachmentPreview(file: files[index],
+                onTap: (){
+                  showFullScreenImagePreview(
+                        context,
+                        files,
+                        index,
+                      );
+                }),
+            
+            //_attachmentItem(files[index]),
+            if (showMore)
+              GestureDetector(
+                onTap: (){
+                    showFullScreenImagePreview(
+                        context,
+                        files,
+                        index,
+                      );
+                },
+                child: Container(
+                  color: Colors.black54,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '+${files.length - 4}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    ),
+  );
+}
+Widget _attachmentItem(File file) {
+  final filePath = file.path.toLowerCase();
+  final fileName = file.path.split('/').last;
+
+  return GestureDetector(
+    behavior: HitTestBehavior.opaque,
+    onTap: () {
+      _openAttachment(file);
+    },
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: _isImageExtension(filePath)
+          ? Image.file(
+              file,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _invalidFilePreview(fileName);
+              },
+            )
+          : _buildAttachmentFilePreview(fileName, filePath),
+    ),
+  );
+}
+
+
+Future<void> _openAttachment(
+  File file, {
+  List<File>? allFiles,
+  int initialIndex = 0,
+}) async {
+  final filePath = file.path.toLowerCase();
+
+  if (_isImageExtension(filePath)) {
+    final images = allFiles
+            ?.where((f) => _isImageExtension(f.path.toLowerCase()))
+            .toList() ??
+        [file];
+
+    final imageIndex = images.indexWhere(
+      (f) => f.path == file.path,
+    );
+
+    showFullScreenImagePreview(
+      context,
+      images,
+      imageIndex >= 0 ? imageIndex : 0,
+    );
+    return;
+  }
+
+  if (filePath.endsWith('.pdf')) {
+    await _openPdfPreview(file);
+    return;
+  }
+
+  try {
+    final result = await OpenFilex.open(file.path);
+    debugPrint('Open attachment result: ${result.message}');
+  } catch (e) {
+    debugPrint('Unable to open attachment: $e');
+  }
+}
+Future<void> _openPdfPreview(File file) async {
+  await showDialog<void>(
+    context: context,
+    builder: (dialogContext) {
+      return Dialog.fullscreen(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(file.path.split('/').last),
+            leading: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.pop(dialogContext),
+            ),
+          ),
+          body: PdfView(
+            controller: PdfController(
+              document: PdfDocument.openFile(file.path),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget _buildAttachmentFilePreview(
+  String fileName,
+  String filePath,
+) {
+  final extension = filePath.split('.').last;
+
+  IconData icon = Icons.insert_drive_file_outlined;
+  Color iconColor = Colors.blueGrey;
+
+  if (extension == 'pdf') {
+    icon = Icons.picture_as_pdf;
+    iconColor = Colors.red;
+  } else if (['doc', 'docx'].contains(extension)) {
+    icon = Icons.description;
+    iconColor = Colors.blue;
+  } else if (['xls', 'xlsx', 'csv'].contains(extension)) {
+    icon = Icons.table_chart;
+    iconColor = Colors.green;
+  } else if (['ppt', 'pptx'].contains(extension)) {
+    icon = Icons.slideshow;
+    iconColor = Colors.orange;
+  } else if (extension == 'txt') {
+    icon = Icons.text_snippet;
+  }
+
+  return Container(
+    color: Colors.grey.shade100,
+    padding: const EdgeInsets.all(6),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 28,
+          color: iconColor,
+        ),
+        const SizedBox(height: 5),
+        Text(
+          fileName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 10,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+bool _isImageExtension(String filePath) {
+  return filePath.endsWith('.jpg') ||
+      filePath.endsWith('.jpeg') ||
+      filePath.endsWith('.png') ||
+      filePath.endsWith('.webp') ||
+      filePath.endsWith('.gif') ||
+      filePath.endsWith('.bmp') ||
+      filePath.endsWith('.heic') ||
+      filePath.endsWith('.heif');
+}
+
+// Widget _filePreview(String fileName) {
+//   return Container(
+//     color: Colors.grey.shade100,
+//     padding: const EdgeInsets.all(10),
+//     child: Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         const Icon(
+//           Icons.insert_drive_file_outlined,
+//           size: 32,
+//         ),
+//         const SizedBox(height: 6),
+//         Text(
+//           fileName,
+//           maxLines: 2,
+//           overflow: TextOverflow.ellipsis,
+//           textAlign: TextAlign.center,
+//           style: const TextStyle(fontSize: 11),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+Widget _filePreview(
+  String fileName, {
+  IconData icon = Icons.insert_drive_file_outlined,
+  Color iconColor = Colors.blueGrey,
+  Color? backgroundColor,
+}) {
+  return Container(
+    color: backgroundColor ?? Colors.grey.shade100,
+    padding: const EdgeInsets.all(6),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 28,
+          color: iconColor,
+        ),
+        const SizedBox(height: 5),
+        Text(
+          fileName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 10,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _invalidFilePreview(String fileName) {
+  return Container(
+    color: Colors.grey.shade100,
+    alignment: Alignment.center,
+    padding: const EdgeInsets.all(8),
+    child: const Icon(
+      Icons.broken_image_outlined,
+      color: Colors.grey,
+      size: 30,
+    ),
+  );
+}
+
+// Widget _invalidFilePreview(String fileName) {
+//   return Container(
+//     color: Colors.grey.shade100,
+//     alignment: Alignment.center,
+//     padding: const EdgeInsets.all(8),
+//     child: const Icon(
+//       Icons.broken_image_outlined,
+//       color: Colors.grey,
+//       size: 30,
+//     ),
+//   );
+// }
 
 
   @override
@@ -131,16 +497,16 @@ static bool _isSharing = false;
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0),
                         child: GestureDetector(
-                          onTap: ()=> copyText(userMessage.text,loc),
+                          onTap: ()=> copyText(widget.userMessage.text,loc),
                           child: SvgPicture.asset(IconConstants.copyIconDark,color: Color(0xff8D8D8D),)),
                       ),
         
                         Padding(
                           padding: const EdgeInsets.only(left:10.0,),
                           child: Visibility(
-                            visible: userMessage.text.isNotEmpty && modelMessage.text.isNotEmpty ,
+                            visible: widget.userMessage.text.isNotEmpty && widget.modelMessage.text.isNotEmpty ,
                             child: GestureDetector(
-                            onTap: _isSharing ? null : ()=> _shareContent(userMessage.text, modelMessage.text),
+                            onTap: _isSharing ? null : ()=> _shareContent(widget.userMessage.text, widget.modelMessage.text),
                           //   ()async{
                           //     //Share.share('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}', subject:'');
                           //  ShareResult result =  await Share.shareWithResult('You:\n${userMessage.text}\nBeldex AI:\n${modelMessage.text}');
@@ -152,7 +518,31 @@ static bool _isSharing = false;
                     ],
                    ),
                  
-               userMessage.text.contains(webviewModel.title.toString()) || userMessage.text.contains('null - Summarise page') ? Column(
+                  widget.userMessage.images?.isNotEmpty == true  //userMessage.images?.length != 0
+                 ? Container(
+        padding: const EdgeInsets.all(3),
+        margin: const EdgeInsets.only(top: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50.withOpacity(0.1),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: _buildImagePreview(widget.userMessage),
+      )
+//                   Container(
+//   height: 115,
+//   width: 115,
+//   padding: EdgeInsets.all(3),
+//   margin: EdgeInsets.only(top: 10),
+//   decoration: BoxDecoration(
+//     color: Colors.grey.shade50.withOpacity(0.1),
+//     //borderRadius: BorderRadius.circular(10),
+//   ),
+//   clipBehavior: Clip.antiAlias,
+//   child: _buildImagePreview(widget.userMessage),
+// )
+: SizedBox.shrink(),
+
+ widget.userMessage.text.contains(webviewModel.title.toString()) || widget.userMessage.text.contains('null - Summarise page') ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
@@ -191,9 +581,9 @@ static bool _isSharing = false;
                     )
                   ],
                  ):
-                 Padding(
+                widget.userMessage.text.isNotEmpty ? Padding(
                    padding: const EdgeInsets.symmetric(vertical :8.0),
-                   child: SelectableText(userMessage.text,
+                   child: SelectableText(widget.userMessage.text,
                    style: TextStyle( fontSize: 14,
                     fontFamily: 'Inter'),
                      contextMenuBuilder: (
@@ -239,7 +629,7 @@ static bool _isSharing = false;
             Share.share(
               selectedText.isNotEmpty
                   ? selectedText
-                  : userMessage.text,
+                  : widget.userMessage.text,
             );
 
             editableTextState.hideToolbar();
@@ -248,11 +638,9 @@ static bool _isSharing = false;
         ),
       ],
     );
-  },
-                    
-                    
+  },    
                     ),
-                 ),
+                 ): SizedBox.shrink(),
               //      MessageBody(
               //   isLoading: false,
               //   message: userMessage,
@@ -295,9 +683,10 @@ static bool _isSharing = false;
                           ),),
                         ),
                         Spacer(),
-                       modelMessage.text.isNotEmpty && modelMessage.text != StringConstants.retryMessage && modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
-                       if(modelMessage.text.isNotEmpty){
-                        copyText(modelMessage.text,loc);
+                         _buildReadAloudButton(widget.modelMessage, themeProvider),
+                       widget.modelMessage.text.isNotEmpty && widget.modelMessage.text != StringConstants.retryMessage && widget.modelMessage.text != 'The response has been interrupted' ? GestureDetector(onTap: (){
+                       if(widget.modelMessage.text.isNotEmpty){
+                        copyText(widget.modelMessage.text,loc);
                        }
                         },
                          child: SvgPicture.asset(IconConstants.copyIconDark,color: Color(0xff8D8D8D),)):SizedBox()
@@ -305,37 +694,39 @@ static bool _isSharing = false;
                       ],
                      ),
                    ),
-                   modelMessage.text.isNotEmpty || modelMessage.image != null
-                   ? 
-                  MessageBody(
-                      isLoading: true,
-                      message: modelMessage,
-                      topLeft: 20,
-                      topRight: 20,
-                      bottomLeft: 20,
-                      model: model,
-                      bottomRight: 20, canAnimate: currentResponseIndex == lastResponseIndex,
-                    )
-                  : 
-                  Center(
-                    child: Padding(
-                      padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
-                      child: Container(
-                        margin: EdgeInsets.only(top: 15),
-                        decoration: BoxDecoration(
-                         color://themeProvider.darkTheme ?
-                          Color(0xff333333),// : Color(0xffF3F3F3),
-                         borderRadius: BorderRadius.circular(20.0)
-                        ),
-                                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
-                                    child: LoadingAnimationWidget.waveDots(
-                      color://themeProvider.darkTheme ?
-                       Color(0xff8D8D8D),// : Color(0xffACACAC),
-                      size: 30,
-                                    ),
-                                  ),
-                    ),
-                  ),
+
+                    _buildModelMessage(widget.modelMessage,widget.currentResponseIndex,widget.lastResponseIndex,context),
+                  //  widget.modelMessage.text.isNotEmpty || widget.modelMessage.image != null
+                  //  ? 
+                  // MessageBody(
+                  //     isLoading: true,
+                  //     message: widget.modelMessage,
+                  //     topLeft: 20,
+                  //     topRight: 20,
+                  //     bottomLeft: 20,
+                  //     model: widget.model,
+                  //     bottomRight: 20, canAnimate: widget.currentResponseIndex == widget.lastResponseIndex,
+                  //   )
+                  // : 
+                  // Center(
+                  //   child: Padding(
+                  //     padding:const EdgeInsets.only(left:15.0,right:15.0,bottom: 10),
+                  //     child: Container(
+                  //       margin: EdgeInsets.only(top: 15),
+                  //       decoration: BoxDecoration(
+                  //        color://themeProvider.darkTheme ?
+                  //         Color(0xff333333),// : Color(0xffF3F3F3),
+                  //        borderRadius: BorderRadius.circular(20.0)
+                  //       ),
+                  //                   padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 15),
+                  //                   child: LoadingAnimationWidget.waveDots(
+                  //     color://themeProvider.darkTheme ?
+                  //      Color(0xff8D8D8D),// : Color(0xffACACAC),
+                  //     size: 30,
+                  //                   ),
+                  //                 ),
+                  //   ),
+                  // ),
                  ],
                ),
             // ),
@@ -346,4 +737,503 @@ static bool _isSharing = false;
       ),
     );
   }
+  Widget _buildImageGeneratingMessage(ChatModel message) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+  return Padding(
+    padding: const EdgeInsets.only(
+      left: 15,
+      right: 15,
+      bottom: 10,
+      top: 10,
+    ),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        width: 280,
+        height: 280,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color(0xff333333).withOpacity(0.2),
+         // borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ImageGenerationLoader(themeProvider: themeProvider,
+                //size: 230,
+                                          gridSize:25,
+                //dotCount: 400,
+                color: //themeProvider.darkTheme ? 
+                Colors.grey, // : Colors.black,
+              ),
+            ),
+            Center(child: Text('Generating image...',style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Inter',color: Colors.white),))
+          ],
+        ),
+        // child: ClipRRect(
+        //   borderRadius: BorderRadius.circular(20),
+        //   child: Stack(
+        //     children: [
+
+        //       // ==================================================
+        //       // SHIMMER / IMAGE PLACEHOLDER
+        //       // ==================================================
+
+        //       Positioned.fill(
+        //         child: Container(
+        //           decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(20),
+        //             gradient: LinearGradient(
+        //               begin: Alignment.topLeft,
+        //               end: Alignment.bottomRight,
+        //               colors: [
+        //                 Colors.white.withOpacity(0.04),
+        //                 Colors.white.withOpacity(0.10),
+        //                 Colors.white.withOpacity(0.04),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+
+        //       // ==================================================
+        //       // CENTRE LOADING
+        //       // ==================================================
+
+        //       Center(
+        //         child: Column(
+        //           mainAxisSize: MainAxisSize.min,
+        //           children: [
+
+        //             SizedBox(
+        //               width: 42,
+        //               height: 42,
+        //               child: CircularProgressIndicator(
+        //                 strokeWidth: 3,
+        //                 color: Colors.white.withOpacity(0.75),
+        //               ),
+        //             ),
+
+        //             const SizedBox(height: 16),
+
+        //             const Text(
+        //               "Creating image...",
+        //               style: TextStyle(
+        //                 color: Colors.white,
+        //                 fontSize: 14,
+        //                 fontWeight: FontWeight.w500,
+        //               ),
+        //             ),
+
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+      ),
+    ),
+  );
+}
+
+// Widget _buildGeneratedImage(ChatModel message) {
+Widget _buildGeneratedImage(
+  ChatModel message,
+  BuildContext context,
+) {
+  if (message.generatedImageBase64 == null ||
+      message.generatedImageBase64!.isEmpty) {
+    return const SizedBox();
+  }
+
+  try {
+    final bytes = base64Decode(
+      message.generatedImageBase64!,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+        top: 10,
+        bottom: 10,
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ==========================================
+            // GENERATED IMAGE + SHARE BUTTON
+            // ==========================================
+
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(20),
+            //   child: Stack(
+            //     children: [
+            //       // Generated image.
+            //       Image.memory(
+            //         bytes,
+            //         width: 280,
+            //         fit: BoxFit.cover,
+            //         gaplessPlayback: true,
+            //       ),
+
+            //       // Share button at the bottom-right.
+            //       Positioned(
+            //         right: 10,
+            //         bottom: 10,
+            //         child: Material(
+            //           color: const Color(0xCC222222),
+            //           shape: const CircleBorder(),
+            //           clipBehavior: Clip.antiAlias,
+            //           child: IconButton(
+            //             tooltip: 'Share image',
+            //             onPressed: () async {
+            //               await _shareGeneratedImage(
+            //                 message.generatedImageBase64!,
+            //               );
+            //             },
+            //             icon: const Icon(
+            //               Icons.share_rounded,
+            //               color: Colors.white,
+            //               size: 21,
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
+           ClipRRect(
+  borderRadius: BorderRadius.circular(20),
+  child: Stack(
+    children: [
+      // Generated image.
+      Image.memory(
+        bytes,
+        width: 280,
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+      ),
+
+      // Open the full-screen viewer when tapped.
+      Positioned.fill(
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              _openGeneratedImageViewer(
+                context,
+                message,
+              );
+            },
+          ),
+        ),
+      ),
+
+      // Share button overlay at the bottom-right.
+      Positioned(
+        right: 10,
+        bottom: 10,
+        child: Material(
+          color: const Color(0xCC222222),
+          shape: const CircleBorder(),
+          clipBehavior: Clip.antiAlias,
+          child: IconButton(
+            tooltip: 'Share image',
+            onPressed: () async {
+              await _shareGeneratedImage(
+                message.generatedImageBase64!,
+              );
+            },
+            icon: const Icon(
+              Icons.share_rounded,
+              color: Colors.white,
+              size: 21,
+            ),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+          ],
+        ),
+      ),
+    );
+  } catch (e) {
+    print(
+      'Generated image decode error: $e',
+    );
+
+    return const SizedBox();
+  }
+}
+
+void _openGeneratedImageViewer(
+  BuildContext context,
+  ChatModel message,
+) {
+  final base64Image = message.generatedImageBase64;
+
+  if (base64Image == null || base64Image.isEmpty) {
+    return;
+  }
+
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => GeneratedImageViewer(
+        base64Image: base64Image,
+
+        // Save to gallery.
+        onSave: () async {
+          final success = await BelnetLib.saveImageToGallery(
+            base64Image,
+          );
+
+          if (success) {
+            showMessage('Image saved to Gallery');
+          } else {
+            showMessage('Failed to save image');
+          }
+        },
+
+        // Share the generated image.
+        onShare: () async {
+          await _shareGeneratedImage(base64Image);
+        },
+      ),
+    ),
+  );
+}
+
+Future<void> _shareGeneratedImage(
+  String base64Image,
+) async {
+  try {
+    if (base64Image.isEmpty) {
+      showMessage('No image available to share');
+      return;
+    }
+
+    final Uint8List imageBytes = base64Decode(
+      base64Image,
+    );
+
+    // Get a temporary directory.
+    final tempDir = await getTemporaryDirectory();
+
+    // Create a unique image file.
+    final imageFile = File(
+      '${tempDir.path}/beldex_ai_image_${DateTime.now().microsecondsSinceEpoch}.png',
+    );
+
+    // Write the generated image to the file.
+    await imageFile.writeAsBytes(
+      imageBytes,
+      flush: true,
+    );
+
+    // Open the native sharing menu.
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [
+          XFile(
+            imageFile.path,
+            mimeType: 'image/png',
+          ),
+        ],
+      ),
+    );
+  } catch (e) {
+    debugPrint('Generated image share error: $e');
+    showMessage('Failed to share image');
+  }
+}
+
+Widget _buildModelMessage(
+  ChatModel modelMessage,
+  int currentResponseIndex,
+  int lastResponseIndex,BuildContext context
+) {
+ if (modelMessage.isGeneratingImage) {
+  return _buildImageGeneratingMessage(modelMessage);
+}
+
+if (modelMessage.isImageGeneration &&
+    modelMessage.generatedImageBase64 != null) {
+  return _buildGeneratedImage(modelMessage,context);
+}
+
+if (modelMessage.text.isNotEmpty) {
+  return Column(
+    children: [
+      MessageBody(
+        isLoading: true,
+        message: modelMessage,
+        topLeft: 20,
+        topRight: 20,
+        bottomLeft: 20,
+        bottomRight: 20,
+        model: widget.model,
+        canAnimate:
+            currentResponseIndex == lastResponseIndex,
+      ),
+      // Read aloud button / audio player
+      // if (!_isReading && !_isGeneratingAudio)
+      //   _buildReadAloudButton(modelMessage),
+
+      // // Audio controls
+      // _buildAudioPlayer(),
+       // ONLY the individual message button.
+        //
+        // The actual audio controller is NOT here.
+       
+        // _buildReadAloudButton(
+        //   modelMessage,
+        // ),
+    ],
+  );
+}
+
+return _buildTypingIndicator();
+}
+
+Widget _buildTypingIndicator() {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+        bottom: 10,
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(top: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xff333333),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 3,
+          horizontal: 15,
+        ),
+        child: LoadingAnimationWidget.waveDots(
+          color: const Color(0xff8D8D8D),
+          size: 30,
+        ),
+      ),
+    ),
+  );
+}
+
+
+
+Widget _buildReadAloudButton(
+  ChatModel message, DarkThemeProvider themeProvider
+) {
+  if (message.text.trim().isEmpty ||
+      message.isGeneratingImage ||
+      message.isImageGeneration ||
+      message.text ==
+          StringConstants.retryMessage ||
+      message.text ==
+          'The response has been interrupted') {
+    return const SizedBox.shrink();
+  }
+
+ final readAloudController = context.watch<ReadAloudController>();
+
+  final messageId = 'response_${widget.currentResponseIndex}';
+
+  // Check whether this response is the one currently being read aloud.
+  final isCurrentResponse =
+      readAloudController.activeMessageId == messageId;
+
+// Only allow interaction with a completed response when no other
+  // response is currently being read aloud, or this is the same response.
+  
+  // Highlight only the response currently being read aloud.
+  final isCurrentlySpeaking =
+      readAloudController.activeMessageId == messageId &&
+      readAloudController.isPlaying && !widget.model.isListening;
+
+  final iconColor = isCurrentlySpeaking
+      ? (themeProvider.darkTheme
+          ? const Color(0xffFFFFFF)
+          : const Color(0xff0B0B0B))
+      : const Color(0xff8D8D8D);
+
+ return GestureDetector(
+  onTap:message.isTypingComplete && !widget.model.isListening ? () {
+          context
+              .read<
+                  ReadAloudController>()
+              .playOrToggle(
+                messageId:
+                    'response_${widget.currentResponseIndex}',
+                text: message.text,
+              );
+        }: null,
+   child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            width: 24,height: 24,padding: EdgeInsets.all(3),
+                            decoration: BoxDecoration(color: themeProvider.darkTheme ? Color(0xff222222) : Color(0xffFFFFFF)),
+                            child: SvgPicture.asset('assets/images/ai-icons/new/read_aloud.svg',color: iconColor
+                           // message.isTypingComplete ? themeProvider.darkTheme ? Color(0xffFFFFFF) : Color(0xff0B0B0B) : Color(0xff8D8D8D),
+                            )),
+ );
+
+
+  // return Padding(
+  //   padding: const EdgeInsets.only(
+  //     left: 15,
+  //     right: 15,
+  //     bottom: 10,
+  //   ),
+  //   child: Semantics(
+  //     button: true,
+  //     identifier:
+  //         'ai_read_aloud_button',
+  //     label: 'Read aloud',
+  //     child: GestureDetector(
+  //       onTap: () {
+  //         context
+  //             .read<
+  //                 ReadAloudController>()
+  //             .playOrToggle(
+  //               messageId:
+  //                   'response_${widget.currentResponseIndex}',
+  //               text: message.text,
+  //             );
+  //       },
+  //       child: Row(
+  //         mainAxisSize:
+  //             MainAxisSize.min,
+  //         children: [
+  //           const Icon(
+  //             Icons.volume_up_outlined,
+  //             size: 18,
+  //             color:
+  //                 Color(0xff8D8D8D),
+  //           ),
+  //           const SizedBox(
+  //             width: 6,
+  //           ),
+  //           const Text(
+  //             'Read aloud',
+  //             style: TextStyle(
+  //               fontFamily: 'Inter',
+  //               fontSize: 12,
+  //               color:
+  //                   Color(0xff8D8D8D),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   ),
+  // );
+}
 }
